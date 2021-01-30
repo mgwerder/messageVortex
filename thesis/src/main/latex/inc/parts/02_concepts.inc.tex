@@ -109,7 +109,7 @@ Zero trust is not an academically defined concept. It is widely misused by many 
 	\end{enumerate}
 \end{quote}
 
-This concept applies to security and no to anonymity. We, therefore, had to adopt this concept, not violating anonymity.
+This concept applies to security and not to anonymity. We, therefore, had to adopt this concept, not violating anonymity.
 \begin{enumerate}
 	\item Ensure that all resources are accessed securely regardless of location\\
 	We make sure that control over the security-relevant parameters remains at all times within the originator of a message. Violation of transport security should not be possible by malfunctioning or poorly configured nodes.
@@ -235,7 +235,7 @@ We evaluated the most common cipher modes for suitability. For \MessageVortex, w
 	\item PCBC (Propagation Cypher Block Chaining)\\
 	CBC extends the encryption by XORing, not the ciphertext but a xor result of ciphertext and plaintext. This modification denies parallel decryption and random access compared to CBC.
 	\item EAX\\      
-	EAX has been broken in 2012\cite{minematsu2013attacks} and is therefore rejected for our use.
+	EAX has been broken in 2012\cite{minematsu2013attacks} and is, therefore, rejected for our use.
 	\item CFB (Cypher Feedback)
 	CFB is specified in \cite{dworkin2001recommendation} and works precisely as CBC with the difference that the plain text is XORed and the initialization vector, or the preceding cipher result is encrypted. CFB does not support parallel encryption as the ciphertext input from the prior operation is required for an encryption round. CFB does, however, allow parallel decryption and random access.
 	\item OFB\\

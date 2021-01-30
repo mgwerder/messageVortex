@@ -300,7 +300,9 @@ We assume the example routing graph, as shown in \cref{fig:messageGraphPaths}.
 From an inside perspective, we may take additional information into account. First, if an adversary has control over a routing node, he is aware of all operations carried out by this node. He knows the immediate sender and the immediate recipient of any immediately subsequent messages. If the adversary has control over two or more adjacent \VortexNodes{}, he is able to collapse the operations into one big workspace with the combined operations, whereas the message transfer may be reflected in a simple mapping operation. He is also able to identify subsequent messages using the same \defref{eID}s as messages of the same RBB. He is, however, unable to tell whether or not two subsequent incoming \VortexMessages{} for the same \defref{eID} belong to the same or to two different messages. If the same RBB maintains multiple \defref{eID}s simultaneously on the same routing node, the node is unable to match those \defref{eID}s to the same RBB as they share no common properties. In a worst-case scenario, this means that all routing nodes chosen by the RBB, with the exception of the sender node and the final recipient node,  are under the control of an adversary. This would effectively collapse an interaction graph to a reduced graph, as shown in \cref{fig:reducedMessageGraphPaths}. An adversary learns that there are two adjacent nodes to his network (node 0 and 1). Such an adversary is, however, unable to tell whether node 0 was an initial sender, as any incoming message into node 0, regardless of its source or timing, may have been the cause for the original message sending. Arguing the same way, we may say that either node 0 or 1 cannot be the recipient for sure as any other outgoing message, regardless of timing or size, may have been triggered by the incoming target, and the final recipient may be any subsequent node.
 
 \begin{figure*}[!t]\centering
-	\includegraphics[width=1\textwidth]{inc/reducedMessageGraphPaths}
+	\resizebox{.9\linewidth}{!}{
+		\input{inc/reducedGraphs.inc.tex}
+	}
 	\caption{A randomly generated graph assuming that all nodes except node 0 and 1 are collaborating.}
 	\label{fig:reducedMessageGraphPaths}
 \end{figure*}
@@ -309,7 +311,7 @@ We, therefore, can tell that we do need trust in the sending and receiving node 
 
 \subsection{Denial of Service Attacks}
 \subsubsection{Censorship}
-Whereas traditional censorship is widely regarded as selective information filtering and alteration, very repressive censorship can even include denial of information flows in general. Any anonymity system not offering the possibility to hide in legitimate information flows, therefore not censorship-resistant.
+Whereas traditional censorship is widely regarded as selective information filtering and alteration, very repressive censorship can even include denial of information flows in general. Any anonymity system not offering the possibility to hide in legitimate information flows, therefore, not censorship-resistant.
 
 \subsubsection{Denial of service}
 An adversary may flood the system in two ways.
@@ -420,7 +422,9 @@ As the communication pattern is defined by the RBB and not always the same, it i
 %%% Manual float placement
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[ht]
-	\centering\includegraphics[width=0.7\columnwidth]{inc/messagePaths}
+	\centering\resizebox{.95\linewidth}{!}{
+		\input{inc/flowAnalysis.inc.tex}
+	}
 	\caption{A possible path of a VortexMessage}
 	\label{fig:messagePaths}
 \end{figure}

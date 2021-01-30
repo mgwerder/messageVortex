@@ -1,0 +1,112 @@
+\begin{tikzpicture}[scale=0.5,every node/.append style={transform shape}]
+  	\tikzset{
+		nodestyle/.style={fill=nodecolor,rounded corners=3pt,anchor=center,draw=black,thick,general shadow={fill=nodeshadow,shadow xshift=\shadowshift,shadow yshift=\shadowshift}},
+		astyle/.style={-{Latex[length=3.5mm,width=2mm]},thick},
+		astyleunrelated/.style={draw=unrelatedcolor,-{Latex[length=3.5mm,width=2mm]},thick},
+		astylerevunrelated/.style={draw=unrelatedcolor,{Latex[length=3.5mm,width=2mm]}-,thick}
+	}
+			
+	\begin{scope}[y=30pt,x=40pt,scale=2.5,yshift=80,every node/.append style={transform shape}]
+			\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n0) {0};
+			\draw[nodestyle,fill=endnodecolor] (1,0) rectangle +(0.4,0.45) node[pos=0.5] (n1) {1};
+			\draw[nodestyle] (2,0) rectangle +(0.4,0.45) node[pos=0.5] (n2) {2};
+			\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n3) {3};
+			\draw[nodestyle] (4,0) rectangle +(0.4,0.45) node[pos=0.5] (n4) {4};
+			\draw[nodestyle] (5,0) rectangle +(0.4,0.45) node[pos=0.5] (n5) {5};
+			\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n6) {6};
+			\node[left = 0mm of n0] (nm0) {};
+			\node[below of=n0, node distance=8cm] (n0Ground) {};
+			\node[below of=n1, node distance=8cm] (n1Ground) {};
+			\node[below of=n2, node distance=8cm] (n2Ground) {};
+			\node[below of=n3, node distance=8cm] (n3Ground) {};
+			\node[below of=n4, node distance=8cm] (n4Ground) {};
+			\node[below of=n5, node distance=8cm] (n5Ground) {};
+			\node[below of=n6, node distance=8cm] (n6Ground) {};
+			\node[below of=nm0,node distance=8cm] (nm0Ground) {};
+			% lines down
+			\draw (n0) -- (n0Ground);
+			\draw (n1) -- (n1Ground);
+			\draw (n2) -- (n2Ground);
+			\draw (n3) -- (n3Ground);
+			\draw (n4) -- (n4Ground);
+			\draw (n5) -- (n5Ground);
+			\draw (n6) -- (n6Ground);
+			% lines down
+			\draw (n0) -- (n0Ground);
+			\draw (n1) -- (n1Ground);
+			\draw (n2) -- (n2Ground);
+			\draw (n3) -- (n3Ground);
+			\draw (n4) -- (n4Ground);
+			\draw (n5) -- (n5Ground);
+			\draw (n6) -- (n6Ground);
+			%arrows
+			\draw[astyle] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+			\draw[astyle] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+			\draw[astyle] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+			\draw[astyle] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+			\draw[astyle] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+			\draw[astyle] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+			\draw[astyle] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+			\draw[astyle] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+			\draw[astyle] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+			\draw[astyle] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+			\draw[astyle] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+			\draw[astyle] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+	\end{scope}
+	
+	\begin{scope}[x=0.75pt,y=1pt,xshift=29cm,yshift=-11.5cm,every node/.append style={transform shape}]
+		%Place a vortex node 
+		\node [nodestyle,scale=5,fill=startnodecolor] at (140.5,319) (nn00) {\tiny 0};
+		\node[nodestyle,scale=5] at (347,117) (nn13) {\tiny 3};		
+		\node[nodestyle,scale=5] at (347,229)  (nn13a) {\tiny 3};		
+		\node[nodestyle,scale=5] at (347,419)  (nn13b) {\tiny 3};		
+		\node[nodestyle,scale=5] at (380,531)  (nn1o) {\tiny others};		
+		\node[nodestyle,scale=5] at (495,229)  (nn25) {\tiny 5};		
+		\node[nodestyle,scale=5] at (495,419)  (nn25a) {\tiny 5};		
+		\node[nodestyle,scale=5,fill=endnodecolor] at (765,229)  (nn31) {\tiny 1};		
+		\node[nodestyle,scale=5,fill=startnodecolor] at (765,419)  (nn30) {\tiny 0};		
+
+		\draw[astyle]   (nn00.east) -- (nn13.west) ;
+		\draw[astyle]   (nn00.east) -- (nn13a.west) ;
+		\draw[astyle]   (nn00.east) -- (nn13b.west) ;
+		\draw[astyle]   (nn00.east) -- (nn1o.west) ;
+
+		\draw[astyle]   (nn13) -- +(300,0) -- (nn31) ;
+		\draw[astyle]   (nn13a)  -- (nn25) ;
+		\draw[astyle]   (nn13b)  -- (nn25a) ;
+
+		\draw[astyle]   (nn25) -- (nn31) ;
+
+		\draw[astyle]   (nn00)  -- +(500,0) -- (nn31) ;
+
+		\draw[astyle]   (nn25a) -- (nn30) ;
+		
+		% unrelated traffic
+		\draw[astyleunrelated]   (nn30) -- +(80,80) ;
+		\draw[astyleunrelated]   (nn30) -- +(80,-80) ;
+		\draw[astylerevunrelated]   (nn30) -- +(-80,-80) ;
+		\draw[astyleunrelated]   (nn31) -- +(80,80) ;
+		\draw[astyleunrelated]   (nn31) -- +(80,-80) ;
+		\draw[astylerevunrelated]   (nn31) -- +(-100,-40) ;
+		\draw[astylerevunrelated]   (nn00) -- +(-100,-40) ;
+		
+
+	\end{scope}
+	
+	\draw[thick,astyle,draw=red] (25,-1) -- +(5,0) node[pos=0.5,above,color=red] {Extracted paths};
+	
+	\begin{scope}[x=0.75pt,y=0.75pt,xshift=25cm,yshift=-4.5cm,scale=1.4]
+		\node[nodestyle,fill=startnodecolor] (ln1) {0} node [right= of ln1] {\LARGE Start node};
+		\node[below= of ln1,nodestyle,fill=endnodecolor] (ln2) {1} node[right= of ln2] {\LARGE End node};
+		\node[below= of ln2,nodestyle,fill=nodecolor] (ln3) {n} node[right= of ln3] {\LARGE Routing node};
+		\node [below= of ln3]  (ln4) {}; \draw[astyle] ($(ln4.west)+(-5,0)$)  -- +(30,0); \node[right= of ln4] {\LARGE Related traffic};
+		\node [below= of ln4]  (ln5) {}; \draw[astyleunrelated] ($(ln5.west)+(-5,0)$)  -- +(30,0); \node[right= of ln5] (lne) {\LARGE Unrelated traffic};
+		\draw[black,thick] ($(ln1.north west)+(-20,15)$)  rectangle ($(lne.south east)+(10,-10)$);
+	\end{scope}
+
+\end{tikzpicture}

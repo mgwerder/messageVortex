@@ -7,7 +7,7 @@
 \part{Implementation}\label{sec:implementation}
 The implementation differs from the academic model in some details. It is foremost more precise than the academic model. Furthermore, it requires a strict definition of the implementation to guarantee the interoperability between different implementations.
 
-This section focuses therefore on the details of the reference implementation. In \cref{sec:selection}, we explain the selection of algorithms used by the protocol in general. We then focus on the implementation of the transport (\cref{sec:transportImplementation}), blending (\cref{sec:blendingImplementation}), routing (\cref{sec:routingImplementation}), and accounting (\cref{sec:accountingImplementation}) layers. We then have a look at the usability (\cref{sec:usabilityImplementation}) and efficiency (\cref{sec:transportImplementation}). Aspects relevant to the implementations' usability and efficiency are covered in \cref{sec:usabilityImplementation} and \cref{sec:usabilityImplementation}.
+This section focuses on the details of the reference implementation. In \cref{sec:selection}, we explain the selection of algorithms used by the protocol in general. We then focus on the implementation of the transport (\cref{sec:transportImplementation}), blending (\cref{sec:blendingImplementation}), routing (\cref{sec:routingImplementation}), and accounting (\cref{sec:accountingImplementation}) layers. We then have a look at the usability (\cref{sec:usabilityImplementation}) and efficiency (\cref{sec:transportImplementation}). Aspects relevant to the implementations' usability and efficiency are covered in \cref{sec:usabilityImplementation} and \cref{sec:usabilityImplementation}.
 
 \chapter[Selecting Algorithms, Encodings, and Protocols]{Selection of Algorithms, Encodings, and Protocols}\label{sec:selection}
 In this chapter, we choose the following mandatory supported algorithms:
@@ -343,7 +343,7 @@ The main disadvantage of a message transport protocol is that this protocol is n
 \subsubsection*{Web Application Messaging Protocol (WAMP)}
 WAMP is a web-sockets based protocol destined to enable M2M communication. Like MQTT, it is publish respectively subscribe oriented. Unlike MQTT, it allows remote procedure calls (RPC).
 
-The WAMP protocol is not widely adopted (Ct1: Widely Adopted), but it is reliable on a per-node base (Ct2: Reliable). Due to its RPC based capability, unlike MQTT, a routing like capability could be implemented. Symmetrical protocol behavior is therefore not available but could be built in relatively easily.
+The WAMP protocol is not widely adopted (Ct1: Widely Adopted), but it is reliable on a per-node base (Ct2: Reliable). Due to its RPC based capability, unlike MQTT, a routing like capability could be implemented. Symmetrical protocol behavior is, therefore, not available but could be built in relatively easily.
 
 \subsubsection*{XMPP (jabber)}
 XMPP (originally named Jabber) is a synchronous message protocol used in the Internet. It is specified in the documents RFC6120\cite{rfc6120}, RFC6121\cite{rfc6121}, RFC3922\cite{rfc3922}, and RFC3923\cite{rfc3923}. The protocol is a very advanced chat protocol featuring numeros levels of security including end-to-end signing and object encryption\cite{rfc3923}. There is also a stream initiation extension for transferring files between endpoints \cite{xep0096}.
@@ -375,7 +375,7 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 Both protocols are not widely adopted within the Internet domain. There are gateways providing bridging functionalities to the SMS/MMS services. However, the protocol itself is insignificant on the Internet itself. 
 
 \subsection{Results}
-We have shown that all common M2M protocols failed mainly at Ct3 as there is no need for message routing. In M2M communication, contacting foreign machines is not common. Therefore M2M protocols are typically using static M2M communication over prepared channels. Such behavior is, however, unsuitable for a generic messaging protocol.
+We have shown that all common M2M protocols failed mainly at Ct3 as there is no need for message routing. In M2M communication, contacting foreign machines is not common. In consequence, M2M protocols are typically using static M2M communication over prepared channels. Such behavior is, however, unsuitable for a generic messaging protocol.
 
 Pure storage protocols fail at the same criteria as they typically have a defined set of data sources and data sinks. Additionally, at least the data sources are typically limited in number. Such constraints make those protocols unsuitable again.
 
@@ -410,7 +410,7 @@ Email supports a conglomerate of protocols. Looking at the client-side, we will 
 
 For an ideal implementation, we would do the following: Organize our \MessageVortex{} mails in a separate account. The account is accessed through a local proxy relaying our ``ordinary outgoing mails'' through the SMTP server of our regular provider and all \MessageVortex{} related traffic through the provider of our \MessageVortex{} mailbox. Keeping the two mailboxes separate is sensible and important, as we will see in \cref{sec:operation}. The housekeeping on the account used for \MessageVortex{} is done automatically and in a sensible way, comparable to a human (e.g., handle draft, sent, and trash bin folders sensibly and keep all mails in a flat structure deleting old emails from time to time). The proxy transparently merges the mails from the regular and the \MessageVortex{} account. This proxy mechanism keeps the messages apart on the transport layer but offers a unified look at the data.
 
-We could not find any scientific data regarding what type of traffic or attachment is common on the Internet. We, therefore, tried to analyze the email logs (SMTP) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in \cref{tab:emailAttachments}.
+We could not find any scientific data regarding what type of traffic or attachment is common on the Internet. We, therefore, tried to analyze the email logs (SMTP) of a mail provider. We were scanning $500k$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in \cref{tab:emailAttachments}.
 \begin{table}[ht]
 	%    \centering\scriptsize
 	
@@ -426,7 +426,7 @@ We could not find any scientific data regarding what type of traffic or attachme
 		application/msword                                                          &    3.1\\
 		application/octet-stream                                                    &    3.0\\
 		application/pkcs7-signature                                                 &    2.3\\
-		application/vnd.\ldots.wordprocessingml.document                            &     1.4\\
+		application/vnd.\ldots.wordprocessingml.document                            &    1.4\\
 		message/disposition-notification                                            &    1.1\\
 		application/vnd.ms-excel                                                    &    0.8\\
 		application/vnd.\ldots.spreadsheetml.sheet                                  &    0.6\\
@@ -680,10 +680,9 @@ If verification is successful, the message is authenticated but not necessarily 
 
 If the identity is not temporary, header requests are executed upon authorization. The only header request executed on a temporary \defref{eID} is a $createIdentity$ request. 
 
-\begin{figure*}[ht]
-	\centering
-	\includegraphics[height=0.75\textheight]{inc/flowchart_message_receiving}
-	\caption{flow diagram showing processing of outgoing messages}
+\begin{figure*}[ht]\centering
+	\resizebox{0.95\textwidth}{!}{\input{inc/flowReceiving.inc.tex}}
+	\caption{Flow diagram showing processing of outgoing messages}
 	\label{fig:msgReceiveProcessing}
 \end{figure*}
 
@@ -694,10 +693,9 @@ In this section, we focus on the creation of new messages sent to the next-hop r
 
 A message sending is triggered by a routing block in the workspace, as shown in \cref{fig:msgSendProcessing}. The assembly instructions are processed to collect the payload blocks. Then the encryption is applied to the message and passed on to the blending layer for processing.
 
-\begin{figure*}[ht]
-	\centering
-	\includegraphics[width=0.90\textwidth]{inc/flowchart_message_sending}
-	\caption{flow diagram showing processing of outgoing messages}
+\begin{figure*}[ht]\centering
+	\resizebox{0.95\textwidth}{!}{\input{inc/flowSending.inc.tex}}
+	\caption{Flow diagram showing processing of outgoing messages}
 	\label{fig:msgSendProcessing}
 \end{figure*}
 
@@ -846,9 +844,9 @@ Usability is one of the foremost criteria for user acceptance. As we have no cha
 These schemes are discussed in the next section. After that, we address the problem of linking to user agents and transparency issues.
 
 \section{Addressing and address representations}
-An endpoint always requires a public key and a transport endpoint. As we have no central infrastructure, we need a defined way to exchange addresses. These addresses need to be uniquely identifiable and have to work with clients. In this section, we focus, therefore, on the implementation details of such an address.
+An endpoint always requires a public key and a transport endpoint. As we have no central infrastructure, we need a defined way to exchange addresses. These addresses need to be uniquely identifiable and have to work with clients. In this section, we focus on the implementation details of such an address.
 
-If we want to use common email or XMPP clients, we must support an address format compatible with the client but produces no collisions with ordinary addresses. Luckily experiments showed that clients are not very restrictive in the acceptance of addresses. Most clients required either an at sign between two letters or, additionally, at least a dot in the domain part of the address. \cite{rfc5321} and \cite{rfc5322} specify the format for email addresses and \cite{rfc6120} does the same for XMPP. For both formats, a double dot (``..'') in the local part is illegal. Clients do not seem to catch this exception. We, therefore, defined our addresses as follows.
+If we want to use common email or XMPP clients, we must support an address format compatible with the client but produces no collisions with ordinary addresses. Luckily experiments showed that clients are not very restrictive in the acceptance of addresses. Most clients required either an at sign between two letters or, additionally, at least a dot in the domain part of the address. \cite{rfc5321} and \cite{rfc5322} specify the format for email addresses and \cite{rfc6120} does the same for XMPP. For both formats, a double dot (``..'') in the local part is illegal. Clients do not seem to catch this exception. We defined our addresses as follows.
 
 
 For email:
@@ -944,7 +942,7 @@ While this is considered a minor issue as it is very likely that nodes will firs
 \subsection{Minimizing the Memory Footprint of Message Processing}
 To limit the memory footprint of message processing, we reduced the information relevant to be kept in memory by structuring the message accordingly. A node may first extract the first header block, which is equivalent to the block size of the cipher used to encrypt the header block. If the message is invalid due to a non-existent message, we may stop there. We then start decoding the header prefix block, and if successful, the header, which is typically less than 1KB in size unless it contains a routing block. Each routing block is $~1 \frac{KB}{hop}$ in size (assuming a 2048 bit asymmetric key). Only the first couple of bytes have to be read, and the vast majority may then be streamed as it is mainly a binary, encrypted blob containing subsequent hops. All subsequent blocks (routing and payload blocks) are not required to be kept in memory simultaneously. Instead, we may stream them into a data structure on persistent storage. Operations on the payload block are suitable for streaming processing either. For $encryption$ and $split/merge$ operations this is obvious. the transformation and retransformation of the $redundancy$ operations may be done with a lookup table. It requires, however, 256 KB on disk for a $GF(2^{16})$ transformation. The matrix operations are comparably small again as they may be carried out on an element per element base with simple, calculable lookups. 
 
-We may therefore conclude that while a workspace may require considerable storage for storing all payload and routing blocks, the processing of a message can be done in a very memory efficient manner if required. We may execute all calculations on payload blocks in a streamed manner, and all blocks required for routing are either very small or may be streamed again.
+We may, therefore, conclude that while a workspace may require considerable storage for storing all payload and routing blocks, the processing of a message can be done in a very memory efficient manner if required. We may execute all calculations on payload blocks in a streamed manner, and all blocks required for routing are either very small or may be streamed again.
 
 
 

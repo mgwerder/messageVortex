@@ -1,121 +1,55 @@
-%\documentclass[border={0.2pt 0.2pt 0.2pt 0.2pt}, 10pt]{standalone} %Adjust the font size here.
-%%\documentclass[convert={density=300,size=1080x800,outext=.png}]{standalone}
-%\usepackage{physics}
-%\usepackage{amsmath}
-%\usepackage{tikz}
-%\usepackage{mathdots}
-%\usepackage{yhmath}
-%\usepackage{cancel}
-%\usepackage{color}
-%\usepackage{siunitx}
-%\usepackage{array}
-%\usepackage{multirow}
-%\usepackage{amssymb}
-%\usepackage{gensymb}
-%\usepackage{tabularx}
-%\usepackage{booktabs}
-%\usetikzlibrary{fadings}
-%\usetikzlibrary{patterns}
-%\usetikzlibrary{shadows.blur}
-%\usetikzlibrary{shapes}
-%\usepackage{newcent}
-
-%\begin{document}
-
-\gdef\shadowshift{-3pt}
 \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
 
 \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
 \path (0,1095);
+\tikzset{
+	op/.style={fill=operationcolor  ,fill opacity=1,general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }},
+	aop/.style={color=black  ,draw opacity=1,fill=atomicopcolor  ,fill opacity=1,rounded corners=10pt,general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }}
+}
 
 % Hexagon
-\draw  [fill={rgb, 255:red, 255; green, 226; blue, 226 }  ,fill opacity=1 ][general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }] (1047.25,629.75) -- (804.63,1049.99) -- (319.38,1049.99) -- (76.75,629.75) -- (319.37,209.51) -- (804.63,209.51) -- cycle ;
-% Rounded Rect [id:dp0867630424874597] 
-\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 217; green, 248; blue, 217 }  ,fill opacity=1 ][general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }] (194.5,445.5) .. controls (194.5,440.25) and (198.75,436) .. (204,436) -- (920,436) .. controls (925.25,436) and (929.5,440.25) .. (929.5,445.5) -- (929.5,487.5) .. controls (929.5,492.75) and (925.25,497) .. (920,497) -- (204,497) .. controls (198.75,497) and (194.5,492.75) .. (194.5,487.5) -- cycle ;
-% Rounded Rect [id:dp38494687553831364] 
-\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1][fill={rgb, 255:red, 217; green, 248; blue, 217 }  ,fill opacity=1 ][general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }] (194.5,583.5) .. controls (194.5,578.25) and (198.75,574) .. (204,574) -- (920,574) .. controls (925.25,574) and (929.5,578.25) .. (929.5,583.5) -- (929.5,625.5) .. controls (929.5,630.75) and (925.25,635) .. (920,635) -- (204,635) .. controls (198.75,635) and (194.5,630.75) .. (194.5,625.5) -- cycle ;
-% Rounded Rect [id:dp74012435569296] 
-\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1][fill={rgb, 255:red, 217; green, 248; blue, 217 }  ,fill opacity=1 ][general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }] (209.5,748.23) .. controls (209.5,741.47) and (214.97,736) .. (221.73,736) -- (281.27,736) .. controls (288.03,736) and (293.5,741.47) .. (293.5,748.23) -- (293.5,802.27) .. controls (293.5,809.03) and (288.03,814.5) .. (281.27,814.5) -- (221.73,814.5) .. controls (214.97,814.5) and (209.5,809.03) .. (209.5,802.27) -- cycle ;
+\draw [op]  (1047.25,629.75) -- (804.63,1049.99) -- (319.38,1049.99) -- (76.75,629.75) -- (319.37,209.51) -- (804.63,209.51) -- cycle ;
+% padding
+\draw  [aop] (197,433) rectangle +(730,63) node[pos=.5,scale=2] {merge and unpadding};
+\draw [color=black,draw opacity=1,Latex- ]   (927,464) -- +(150,0)  node[scale=2,right] {$blocksize\left( E^K\right), m, n$};
+% Reed-Solomon
+\draw  [aop] (197,571) rectangle +(730,63) node  [pos=.5,xscale=2,yscale=2] {inverse Reed-Solomon ($m$ of $n$)};;
+\draw [color=black,draw opacity=1,Latex- ]   (927,600) -- +(150,0)  node[scale=2,right] {$m, n$};
+% Encryption
+\draw  [aop] (210,731) rectangle +(80,80) node  [pos=.5,xscale=2,yscale=2] {$D^{K_{1}}$};;
 % Rounded Rect [id:dp39595322897920915] 
-\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 217; green, 248; blue, 217 }  ,fill opacity=1 ][general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }] (313.5,748.23) .. controls (313.5,741.47) and (318.97,736) .. (325.73,736) -- (385.27,736) .. controls (392.03,736) and (397.5,741.47) .. (397.5,748.23) -- (397.5,802.27) .. controls (397.5,809.03) and (392.03,814.5) .. (385.27,814.5) -- (325.73,814.5) .. controls (318.97,814.5) and (313.5,809.03) .. (313.5,802.27) -- cycle ;
+\draw  [aop] (320,731) rectangle +(80,80) node  [pos=.5,xscale=2,yscale=2] {$D^{K_{2}}$};;
 % Rounded Rect [id:dp9203187961126249] 
-\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 217; green, 248; blue, 217 }  ,fill opacity=1 ][general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }] (690.5,748.23) .. controls (690.5,741.47) and (695.97,736) .. (702.73,736) -- (792.27,736) .. controls (799.03,736) and (804.5,741.47) .. (804.5,748.23) -- (804.5,802.27) .. controls (804.5,809.03) and (799.03,814.5) .. (792.27,814.5) -- (702.73,814.5) .. controls (695.97,814.5) and (690.5,809.03) .. (690.5,802.27) -- cycle ;
+\draw  [aop] (710,731) rectangle +(80,80) node  [pos=.5,xscale=2,yscale=2] {$D^{K_{n-1}}$};;
 % Rounded Rect [id:dp04533791276255883] 
-\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 217; green, 248; blue, 217 }  ,fill opacity=1 ][general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }] (822.5,748.23) .. controls (822.5,741.47) and (827.97,736) .. (834.73,736) -- (894.27,736) .. controls (901.03,736) and (906.5,741.47) .. (906.5,748.23) -- (906.5,802.27) .. controls (906.5,809.03) and (901.03,814.5) .. (894.27,814.5) -- (834.73,814.5) .. controls (827.97,814.5) and (822.5,809.03) .. (822.5,802.27) -- cycle ;
+\draw  [aop] (825,731) rectangle +(80,80) node  [pos=.5,xscale=2,yscale=2] {$D^{K_{n}}$};;
+% Encryption parameters
+\draw [color=black,draw opacity=1,Latex- ]   (905,771) -- +(165,0)  node[scale=2,right] {$D, K_{1\ldots n}$};
 % Straight Lines [id:da558112223996015] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1,Latex- ]   (249.25,635) -- (249.25,732.5) ;
-% Straight Lines [id:da5084622051111518] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1,Latex- ]   (355.5,635) -- (355.5,732.5) ;
+\draw [color=black,draw opacity=1,Latex- ]   (249.25,635) -- (249.25,732.5)node[pos=.5,anchor=west,scale=2] {$C_1$} ;
+\draw [color=black,draw opacity=1,Latex- ]   (355.5,635) -- (355.5,732.5)    node[pos=.5,anchor=west,scale=2] {$C_2$} ;
+\draw [color=black,draw opacity=1,Latex- ]   (747.5,635) -- (747.5,732.5)    node[pos=.5,anchor=west,scale=2] {$C_{n-1}$}  ;
+\draw [color=black,draw opacity=1,Latex- ]   (864.5,635) -- (864.5,732.5)    node[pos=.5,anchor=west,scale=2] {$C_{n}$}  ;
 % Straight Lines [id:da4420452948696929] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1,Latex- ]   (355.5,814.5) -- (355.5,880) ;
-% Straight Lines [id:da8415428021752316] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1,Latex- ]   (249.25,814.5) -- (249.25,880) ;
-% Straight Lines [id:da43845551494307955] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1,Latex- ]   (747.5,635) -- (747.5,732.5) ;
-% Straight Lines [id:da3424652767242906] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1,Latex- ]   (864.5,635) -- (864.5,732.5) ;
-% Straight Lines [id:da9824431567233618] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ,Latex-]   (864.5,814.5) -- (864.5,880) ;
-% Straight Lines [id:da9786342569348638] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ,Latex-]   (747.5,814.5) -- (747.5,880) ;
+\draw [color=black,draw opacity=1,Latex- ]   (249.25,814.5) -- (249.25,880) node[pos=.5,anchor=west,scale=2] {$I_1$} ;;
+\draw [color=black,draw opacity=1,Latex- ]   (355.5,814.5) -- (355.5,880) node[pos=.5,anchor=west,scale=2] {$I_2$} ;
+\draw [color=black,draw opacity=1,Latex- ]   (864.5,814.5) -- (864.5,880) node[pos=.5,anchor=west,scale=2] {$I_n$} ;
+\draw [color=black,draw opacity=1,Latex- ]   (747.5,814.5) -- (747.5,880) node[pos=.5,anchor=west,scale=2] {$I_{n-1}$} ;
 % Straight Lines [id:da6048645248706304] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ,Latex-]   (286.5,497) -- (286.5,571) ;
-% Straight Lines [id:da9292810965517964] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ,Latex-]   (427.5,497) -- (427.5,571) ;
-% Straight Lines [id:da1804486569548669] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1,Latex- ]   (668.5,497) -- (668.5,571) ;
-% Straight Lines [id:da9933288491058514] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1,Latex- ]   (808.5,497) -- (808.5,571) ;
+\draw [color=black,draw opacity=1,Latex- ]   (286.5,497) -- (286.5,571) node[pos=.5,anchor=west,scale=2] {$B_1$} ;
+\draw [color=black,draw opacity=1,Latex- ]   (427.5,497) -- (427.5,571) node[pos=.5,anchor=west,scale=2] {$B_2$}  ;
+\draw [color=black,draw opacity=1,Latex- ]   (668.5,497) -- (668.5,571) node[pos=.5,anchor=west,scale=2] {$B_{n-m-1}$} ;
+\draw [color=black,draw opacity=1,Latex- ]   (808.5,497) -- (808.5,571) node[pos=.5,anchor=west,scale=2] {$B_{n-m}$} ;
 % Straight Lines [id:da7320413335979341] 
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ,Latex-]   (560.5,379) -- (560.5,433) ;
+\draw [color=black,draw opacity=1,Latex- ]   (560.5,379) -- (560.5,433) node[pos=.5,anchor=west,scale=2] {$O$};
 % Dotted line between encryption blocks
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]  [dash pattern={on 1.5pt off 7.51pt}]  (416,775.25) -- (676.5,775.25) ;
-% Dotted line between B blocks
-\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]  [dash pattern={on 1.5pt off 7.51pt}]  (470,532) -- (655,532) ;
+\draw [color=black,draw opacity=1,line width=1.5,dash pattern={on 1.5pt off 7.51pt}]  (475,532) -- (655,532) ;
+\draw [color=black,draw opacity=1,line width=1.5,dash pattern={on 1.5pt off 7.51pt}]  (420,775.25) -- (676.5,775.25) ;
 
 % Text Node
 \draw (561.25,361.5) node  [xscale=2,yscale=2] [align=left] {Output};
 % Text Node
-\draw (578.92,404.5) node  [xscale=2,yscale=2]  {$O$};
-% Text Node
-\draw (309.92,535.5) node  [xscale=2,yscale=2]  {$B_{1}$};
-% Text Node
-\draw (561.25,466.5) node  [xscale=2,yscale=2] [align=left] {Merging and truncating};
-% Text Node
-\draw (561.25,604.5) node  [xscale=2,yscale=2] [align=left] {inverse Reed-Solomon with $m$ blocks};
-% Text Node
-\draw (448.92,535.5) node  [xscale=2,yscale=2]  {$B_{2}$};
-% Text Node
-\draw (726.5,535.5) node  [xscale=2,yscale=2]  {$B_{n-m-1}$};
-% Text Node
-\draw (850.5,535.5) node  [xscale=2,yscale=2]  {$B_{n-m}$};
-% Text Node
-\draw (268.92,685.25) node  [xscale=2,yscale=2]  {$C_{1}$};
-% Text Node
-\draw (377.92,685.25) node  [xscale=2,yscale=2]  {$C_{2}$};
-% Text Node
-\draw (783.92,685.25) node  [xscale=2,yscale=2]  {$C_{n-1}$};
-% Text Node
-\draw (888.92,685.25) node  [xscale=2,yscale=2]  {$C_{n}$};
-% Text Node
-\draw (251.5,775.25) node  [xscale=2,yscale=2]  {$D^{k_{1}}$};
-% Text Node
-\draw (355.5,775.25) node  [xscale=2,yscale=2]  {$D^{k_{2}}$};
-% Text Node
-\draw (747.5,775.25) node  [xscale=2,yscale=2]  {$D^{k_{n-1}}$};
-% Text Node
-\draw (864.5,775.25) node  [xscale=2,yscale=2]  {$D^{k_{n}}$};
-% Text Node
-\draw (271.92,848.75) node  [xscale=2,yscale=2]  {$I_{1}$};
-% Text Node
-\draw (375.92,848.75) node  [xscale=2,yscale=2]  {$I_{2}$};
-% Text Node
-\draw (784.92,848.75) node  [xscale=2,yscale=2]  {$I_{n-1}$};
-% Text Node
-\draw (887.92,848.75) node  [xscale=2,yscale=2]  {$I_{n}$};
-% Text Node
 \draw (561.25,915.5) node  [xscale=2,yscale=2] [align=left] {Input};
 
-\end{tikzpicture}
 
-%\end{document}
+\end{tikzpicture}

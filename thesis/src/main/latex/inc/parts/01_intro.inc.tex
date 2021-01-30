@@ -39,7 +39,7 @@ People with a ``bad'', ``unsuitable'', or ``non-conformant'' information footpri
 
 We design in this work a new protocol. This protocol allows message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``\MessageVortex''. The protocol is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are in the transfer. This behavior allows media breaches (at least on a protocol level) and makes the analysis even harder.
 
-The new protocol allows secure communication without the need to trust the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers' regular traffic does, therefore, increase the noise in which hidden information has to be searched. 
+The new protocol allows secure communication without the need to trust the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers' regular traffic does increase the noise in which hidden information has to be searched. 
 
 The protocol's primary goal is to enable freedom of speech, as defined in Article 19 of the International Covenant on Civil and Political Rights (ICCPR)\cite{iccpr}.
 \begin{quote}
@@ -83,7 +83,7 @@ We cannot state that data packets we are sending pass only through countries acc
 
 To enable freedom of speech, we need a mean of transport for messages which keep sender and recipient anonymous to an adversary.
 
-We feel that this work is needed as much work in the anonymity field focus on the aspect of ``how to achieve anonymity'' and analyze it against the means of an adversary, which is simple and technocratically based. In this work, we define an adversary that is observing or disrupting communication but can suppress the use of technology. Therefore, the focus is not only to create a protocol for anonymity but to create a protocol that has to be undetectable.
+We feel that this work is needed as much work in the anonymity field focus on the aspect of ``how to achieve anonymity'' and analyze it against the means of an adversary, which is simple and technocratically based. In this work, we define an adversary that is observing or disrupting communication but he may also suppress the use of technology. Therefore, the focus is not only to create a protocol for anonymity but to create a protocol that has to be undetectable.
 
 \chapter{Our Contribution}
 This thesis contributes to anonymization with an asynchronous messaging protocol called \MessageVortex.
@@ -129,7 +129,7 @@ Based on this central question, there are several sub-questions grouped around v
 \section{Cryptography \label{sec:encNot}}
 The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and hashing. To use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information, we write it in boldface. To express the content of the tuple, we use angular brackets $\splitatcommas{\mathbf{L\langle normalAddress,vortexAddress\rangle }}$. If we want Messages encrypted with multiple keys do list the used keys as a comma-separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
 
-For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
+For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
 
 As notation for asymetric encryption we use $E^{K^{1}_a}(\mathbf{M})$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^p_a$. The asymmetric decryption is noted as $D^{K^{-1}_a}(\mathbf{M})$.
 

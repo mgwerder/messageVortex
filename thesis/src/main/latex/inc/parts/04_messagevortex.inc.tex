@@ -170,7 +170,7 @@ We need a requirement guaranteeing the unlinkability between the sender and reci
 	A system must be able to anonymize sender and recipient at any point of the transport layer and any point within the system unless on the senders' or the recipients' node.
 \end{requirement}
 
-Unobservability requires, according to \cite{anonTerminology}, that an item of interest (\defref{IoI}) is undetectable from an uninvolved entity and anonymous for the involved entities. We therefore require anonymization as a property.
+Unobservability requires, according to \cite{anonTerminology}, that an item of interest (\defref{IoI}) is undetectable from an uninvolved entity and anonymous for the involved entities. We, therefore, require anonymization as a property.
 
 As a result of the architecture of today's common networks, the anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. By combining it with encryption, we may even achieve a simple form of a sender and receiver pseudonymity, even for a weak outside observer. This has been done in cypherpunk remailers (see \cref{sec:remailersAndMixnets}). If cascading more relay like infrastructures and combining it with cryptography, we may achieve sender and receiver anonymity. When introducing anonymous remailing endpoints, we may additionally achieve both simultaneously. These are the standard approaches in remailers and mixes. We have seen real-world attacks on such systems in the past, and some were successful (e.g., \cite{penetClosure}). 
 
@@ -415,7 +415,17 @@ Each \defref{eID} has a lifetime, a maximum number of messages to be processed, 
 
 This system guarantees that a sender must invest considerable work (in terms of CPU time required) prior to using resources of a \VortexNode. A \VortexNode{} may raise the complexity of its puzzles when having a  high load. This allows for a single user to still obtain an \defref{eID} while increasing costs for an attacker considerably. Even if someone floods a node with new \defref{eID}s, already created \defref{eID}s are not affected as their \defref{workspace} has already been allocated.
 
-The \defref{workspace} itself contains chunks of the messages (payload blocks) mapped to \defref{ID}s and \defref{operation}s. The \defref{operation}s transform one or more source \defref{ID}s onto one or more target \defref{ID}s. Any of these payload blocks may be assigned to a subsequent message as payload block by a routing block. An \defref{operation} or a payload block share the lifetime of the respective message header. If \defref{operation}s overlap in output blocks the newest \defref{operation} (arrived latest) wins. Arriving \VortexMessages{} map their payloads onto \defref{ID}s of the respective \defref{workspace} of the \defref{eID}. to allow such mapping the first IDs are special \defref{ID}s either mapping to the \defref{ID} 0 (message for local delivery) or \defref{ID}s 1-127 (always reflect the current message [ingoing or outgoing]).
+\begin{figure}[ht]
+	\centering\resizebox{.95\linewidth}{!}{
+		\input{inc/workspace.inc.tex}
+	}
+	\caption{Simplified outline of  workspace}
+	\label{fig:workspace}
+	% MIssing revision
+\end{figure}
+
+
+The \defref{workspace} (see \cref{fig:workspace}) itself contains chunks of the messages (payload blocks) mapped to \defref{ID}s and \defref{operation}s. The \defref{operation}s transform one or more source \defref{ID}s onto one or more target \defref{ID}s. Any of these payload blocks may be assigned to a subsequent message as payload block by a routing block. An \defref{operation} or a payload block share the lifetime of the respective message header. If \defref{operation}s overlap in output blocks the newest \defref{operation} (arrived latest) wins. Arriving \VortexMessages{} map their payloads onto \defref{ID}s of the respective \defref{workspace} of the \defref{eID}. to allow such mapping the first IDs are special \defref{ID}s either mapping to the \defref{ID} 0 (message for local delivery) or \defref{ID}s 1-127 (always reflect the current message [ingoing or outgoing]).
 
 This concept has certain downsides related to the expiry of \defref{eID}s. We will address them in \cref{sec:newEID} and \ref{sec:replaceMURB}.
 
@@ -572,10 +582,12 @@ A \VortexMessage{} is built by combining multiple loosely interconnected blocks.
 Figure~\ref{fig:messageOutline} shows an outline of the block structure of a message destined to $host_o$. For a mathematical representation, see \cref{fig:mathMessage}.
 
 \begin{figure}[ht]
-	\includegraphics[width=\textwidth]{inc/blockLayoutSimplified}
-	$\splitatcommas{\langle \mathbf{MPREFIX_o}, E_{K_{peer_{o+1}}}\left( \mathbf{HPREFIX_o}, \mathbf{HEADER_o}^{K_{sender_o}}, \mathbf{ROUTING_o}^{K_{sender_o}}, payload* \right) \rangle}$
+	\centering\resizebox{.95\linewidth}{!}{
+		\input{inc/vortexMessage.inc.tex}
+	}
 	\caption{Simplified message outline visually and in math}
 	\label{fig:messageOutline}
+	% MIssing revision
 \end{figure}
 
 The first block is the message prefix block $\mathbf{MPREFIX_o}$, which has been encrypted with the public key of the receiving node $K^1_{host_o}$. This block contains the key for decrypting the whole rest of the message. Each PREFIX block contains a symmetrical ey and the specification on how to encrypt or decrypt with it (mode, padding, IV, and other possibly required parameters) in ASN.1 encoding. 
@@ -671,7 +683,7 @@ These operations build the core of the routing capabilities of a node. The opera
 
 The operation itself is shown in \cref{fig:addRedundancyOperation}. 
 \begin{figure}[ht]\centering
-	\resizebox{0.45\textwidth}{!}{\input{inc/addRedundancyOp.inc.tex}}
+	\resizebox{0.48\textwidth}{!}{\input{inc/addRedundancyOp.inc.tex}}
 	\resizebox{0.45\textwidth}{!}{\input{inc/removeRedundancyOp.inc.tex}}
 	\caption{Outline of the addRedundancy and removeRedundancy operation}
 	\label{fig:addRedundancyOperation}
@@ -765,7 +777,7 @@ The $splitPayload$ operation shown in \cref{fig:mergeOperation} splits a payload
 \end{itemize}
 
 \begin{figure}[ht]\centering
-	\resizebox{0.35\textwidth}{!}{\input{inc/split.inc.tex}}
+	\resizebox{0.43\textwidth}{!}{\input{inc/split.inc.tex}}
 	\resizebox{0.35\textwidth}{!}{\input{inc/merge.inc.tex}}
 	\caption{Outline of the splitPayload and mergePayload operation}
 	\label{fig:mergeOperation}
