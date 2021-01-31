@@ -9,7 +9,7 @@ The implementation differs from the academic model in some details. It is foremo
 
 This section focuses on the details of the reference implementation. In \cref{sec:selection}, we explain the selection of algorithms used by the protocol in general. We then focus on the implementation of the transport (\cref{sec:transportImplementation}), blending (\cref{sec:blendingImplementation}), routing (\cref{sec:routingImplementation}), and accounting (\cref{sec:accountingImplementation}) layers. We then have a look at the usability (\cref{sec:usabilityImplementation}) and efficiency (\cref{sec:transportImplementation}). Aspects relevant to the implementations' usability and efficiency are covered in \cref{sec:usabilityImplementation} and \cref{sec:usabilityImplementation}.
 
-\chapter[Selecting Algorithms, Encodings, and Protocols]{Selection of Algorithms, Encodings, and Protocols}\label{sec:selection}
+\chapter{Algorithms, Encodings, and Protocols Selection}\label{sec:selection}
 In this chapter, we choose the following mandatory supported algorithms:
 \begin{itemize}
 	\item Encoding: ASN.1
@@ -63,7 +63,7 @@ In this protocol, a lot of encryption and hashing algorithms have to be used. We
 We decided to define fixed key sizes for symmetric ciphers as we went with block ciphers. We encode the key length in the parameters for the asymmetric ciphers as they are due to their differences far more often flexible.
 
 \begin{figure}[ht]
-	\lstinputlisting[linerange={6-100},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
+	\lstinputlisting[linerange={18-84},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
 	\caption{Definition of the structures related to ciphers}
 	\label{fig:defCiphers}
 \end{figure}
@@ -125,7 +125,7 @@ This allows categorizing the used algorithms to a strength. This list, however, 
 We evaluated the most common cipher modes for suitability. For \MessageVortex, we focussed on modes with parallelizable, random access modes that do not do authentication. Besides the characteristics mentioned before, the main focus was on whether there is an open implementation available in java, which is reasonably tested.
 
 \begin{figure}[ht]
-	\lstinputlisting[linerange={101-113},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
+	\lstinputlisting[linerange={86-95},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
 	\caption{Enumeration definition of modes in ASN.1 with support requirements.}
 	\label{fig:defModes}
 \end{figure}

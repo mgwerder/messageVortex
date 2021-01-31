@@ -4,17 +4,18 @@
 \path (0,1095);
 \tikzset{
 	op/.style={fill=operationcolor  ,fill opacity=1,general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }},
-	aop/.style={color=black  ,draw opacity=1,fill=atomicopcolor  ,fill opacity=1,rounded corners=10pt,general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }}
+	aop/.style={color=black  ,draw opacity=1,fill=atomicopcolor  ,fill opacity=1,rounded corners=10pt,general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }},
+	astyle/.style={-{Latex[length=2.5mm,width=1.5mm]},semithick},
+	revastyle/.style={{Latex[length=2.5mm,width=1.5mm]}-,semithick},
 }
-
 % Hexagon
 \draw [op]  (1047.25,629.75) -- (804.63,1049.99) -- (319.38,1049.99) -- (76.75,629.75) -- (319.37,209.51) -- (804.63,209.51) -- cycle ;
 % padding
 \draw  [aop] (197,433) rectangle +(730,63) node[pos=.5,scale=2] {merge and unpadding};
-\draw [color=black,draw opacity=1,Latex- ]   (927,464) -- +(150,0)  node[scale=2,right] {$blocksize\left( E^K\right), m, n$};
+\draw [revastyle]   (927,464) -- +(150,0)  node[scale=2,right] {$[C1, C2]$};
 % Reed-Solomon
 \draw  [aop] (197,571) rectangle +(730,63) node  [pos=.5,xscale=2,yscale=2] {inverse Reed-Solomon ($m$ of $n$)};;
-\draw [color=black,draw opacity=1,Latex- ]   (927,600) -- +(150,0)  node[scale=2,right] {$m, n$};
+\draw [revastyle ]   (927,600) -- +(150,0)  node[scale=2,right] {$m, n$};
 % Encryption
 \draw  [aop] (210,731) rectangle +(80,80) node  [pos=.5,xscale=2,yscale=2] {$D^{K_{1}}$};;
 % Rounded Rect [id:dp39595322897920915] 
@@ -24,24 +25,24 @@
 % Rounded Rect [id:dp04533791276255883] 
 \draw  [aop] (825,731) rectangle +(80,80) node  [pos=.5,xscale=2,yscale=2] {$D^{K_{n}}$};;
 % Encryption parameters
-\draw [color=black,draw opacity=1,Latex- ]   (905,771) -- +(165,0)  node[scale=2,right] {$D, K_{1\ldots n}$};
+\draw [revastyle ]   (905,771) -- +(165,0)  node[scale=2,right] {$D, K_{1\ldots n}$};
 % Straight Lines [id:da558112223996015] 
-\draw [color=black,draw opacity=1,Latex- ]   (249.25,635) -- (249.25,732.5)node[pos=.5,anchor=west,scale=2] {$C_1$} ;
-\draw [color=black,draw opacity=1,Latex- ]   (355.5,635) -- (355.5,732.5)    node[pos=.5,anchor=west,scale=2] {$C_2$} ;
-\draw [color=black,draw opacity=1,Latex- ]   (747.5,635) -- (747.5,732.5)    node[pos=.5,anchor=west,scale=2] {$C_{n-1}$}  ;
-\draw [color=black,draw opacity=1,Latex- ]   (864.5,635) -- (864.5,732.5)    node[pos=.5,anchor=west,scale=2] {$C_{n}$}  ;
+\draw [revastyle ]   (249.25,635) -- (249.25,732.5)node[pos=.5,anchor=west,scale=2] {$C_1$} ;
+\draw [revastyle ]   (355.5,635) -- (355.5,732.5)    node[pos=.5,anchor=west,scale=2] {$C_2$} ;
+\draw [revastyle ]   (747.5,635) -- (747.5,732.5)    node[pos=.5,anchor=west,scale=2] {$C_{n-1}$}  ;
+\draw [revastyle ]   (864.5,635) -- (864.5,732.5)    node[pos=.5,anchor=west,scale=2] {$C_{n}$}  ;
 % Straight Lines [id:da4420452948696929] 
-\draw [color=black,draw opacity=1,Latex- ]   (249.25,814.5) -- (249.25,880) node[pos=.5,anchor=west,scale=2] {$I_1$} ;;
-\draw [color=black,draw opacity=1,Latex- ]   (355.5,814.5) -- (355.5,880) node[pos=.5,anchor=west,scale=2] {$I_2$} ;
-\draw [color=black,draw opacity=1,Latex- ]   (864.5,814.5) -- (864.5,880) node[pos=.5,anchor=west,scale=2] {$I_n$} ;
-\draw [color=black,draw opacity=1,Latex- ]   (747.5,814.5) -- (747.5,880) node[pos=.5,anchor=west,scale=2] {$I_{n-1}$} ;
+\draw [revastyle ]   (249.25,814.5) -- (249.25,880) node[pos=.5,anchor=west,scale=2] {$I_1$} ;;
+\draw [revastyle ]   (355.5,814.5) -- (355.5,880) node[pos=.5,anchor=west,scale=2] {$I_2$} ;
+\draw [revastyle ]   (864.5,814.5) -- (864.5,880) node[pos=.5,anchor=west,scale=2] {$I_n$} ;
+\draw [revastyle ]   (747.5,814.5) -- (747.5,880) node[pos=.5,anchor=west,scale=2] {$I_{n-1}$} ;
 % Straight Lines [id:da6048645248706304] 
-\draw [color=black,draw opacity=1,Latex- ]   (286.5,497) -- (286.5,571) node[pos=.5,anchor=west,scale=2] {$B_1$} ;
-\draw [color=black,draw opacity=1,Latex- ]   (427.5,497) -- (427.5,571) node[pos=.5,anchor=west,scale=2] {$B_2$}  ;
-\draw [color=black,draw opacity=1,Latex- ]   (668.5,497) -- (668.5,571) node[pos=.5,anchor=west,scale=2] {$B_{n-m-1}$} ;
-\draw [color=black,draw opacity=1,Latex- ]   (808.5,497) -- (808.5,571) node[pos=.5,anchor=west,scale=2] {$B_{n-m}$} ;
+\draw [revastyle ]   (286.5,497) -- (286.5,571) node[pos=.5,anchor=west,scale=2] {$B_1$} ;
+\draw [revastyle ]   (427.5,497) -- (427.5,571) node[pos=.5,anchor=west,scale=2] {$B_2$}  ;
+\draw [revastyle ]   (668.5,497) -- (668.5,571) node[pos=.5,anchor=west,scale=2] {$B_{n-m-1}$} ;
+\draw [revastyle ]   (808.5,497) -- (808.5,571) node[pos=.5,anchor=west,scale=2] {$B_{n-m}$} ;
 % Straight Lines [id:da7320413335979341] 
-\draw [color=black,draw opacity=1,Latex- ]   (560.5,379) -- (560.5,433) node[pos=.5,anchor=west,scale=2] {$O$};
+\draw [revastyle ]   (560.5,379) -- (560.5,433) node[pos=.5,anchor=west,scale=2] {$O$};
 % Dotted line between encryption blocks
 \draw [color=black,draw opacity=1,line width=1.5,dash pattern={on 1.5pt off 7.51pt}]  (475,532) -- (655,532) ;
 \draw [color=black,draw opacity=1,line width=1.5,dash pattern={on 1.5pt off 7.51pt}]  (420,775.25) -- (676.5,775.25) ;
