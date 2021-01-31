@@ -15,7 +15,7 @@ clean:
 
 dirs:
 	@-for i in aux bbl bcf; do find . -name "*.$i" -exec rm \{} \; ;done
-	@-mkdir -p $(OUTDIR) $(INTERDIR)/rfc 2>/dev/null 
+	@-mkdir -p $(OUTDIR) $(INTERDIR) $(INTERDIR)/rfc 2>/dev/null 
 	
 prepInterdir:
 	@cp ../rfc/target/xml2rfc/*.pdf $(INTERDIR)/rfc
