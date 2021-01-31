@@ -6,7 +6,7 @@
 \part{Analysis of \MessageVortex}\label{sec:analysis}
 In \cref{sec:adversary}, we described two different kinds of adversaries. These adversaries do require different properties to be fulfilled. 
 
-An observing adversary is the less restricting one. While this adversary is observing all traffic, he is not disrupting communication. Instead, he uses all available information to collect data about all items of interest (\defref{IoI}). He may do this, for example, by collecting inside or outside information about all message flows he may encounter. He may use this information and assign it to certain individuals or groups of individuals.
+An observing adversary is the less restricting one. While this adversary is observing all traffic, he is not disrupting communication. Instead, he uses all available information to collect data about all items of interest (\defref{IoI}). He may do this, for example, by collecting inside or outside information about all message flows he may encounter. He may use this information and assign it to specific individuals or groups of individuals.
 
 A censoring attacker is far more dangerous to our system as he does not only observe the system, but he may systematically suppress freedom of speech and all technology related to it. As he has the means and the technical know-how, he may try, apart from observing, to discover systems communicating illegally either by observation or by infiltration of systems. He may furthermore track down individuals within its reach and prosecute them. All other illegal system participants may be either identified and blacklisted or even attacked either by infiltrating their systems or by effectively launching DoS attacks against those systems.
 
@@ -20,13 +20,13 @@ Static attacks typically address weaknesses within a protocol design. The follow
 
 A \VortexMessage{} itself is crafted in such a way that for a routing node, only minimal effort is sufficient to get a short-lived pseudonym (\defref{eID}) of the sending party of a transmission. The Operations $ K_{msgN}=D^{K^{1}_{host}}\left(P\right)$ and $HEADER=D^{K_{msgN}}\left(H\right)$ are sufficient to identify message senders. Unknown Senders may be discarded without further processing. Known senders may be identified as legitimate and processed further. Known misbehaving identities and message duplicates may be discarded. In section{sec:analysisBlendingAndTransport}, we will emphasize on approaches allowing identification and censorship of \VortexMessages{} and \VortexNodes.
 
-Bugging and tagging attacks are similar in terms that both try to follow a message to its final recipient. While the goal is similar, the approaches are completely different.
+Bugging and tagging attacks are similar in terms that both try to follow a message to its final recipient. While the goal is similar, the approaches are entirely different.
 
 We refer to a bugging attack as an attack, which discloses the recipient by forcing him to do a disclosing action. Such an action may be the lookup of an unusual DNS record, verification of some identifiable data (e.g., an OCSP request to verify a certificate), or downloading an external image induced by an attacker.
 
 A tagging attack allows an adversary to follow an attribute of a message through a network and, thus, uncover members of a network, subsequent messages, or even a final recipient.
 
-Static information leaking of the protocol is another possibility of how an adversary may learn \defref{IoI}s on a network. Routing nodes are a vital part of any anonymity network. The easiest assumption is to trust nodes. In our case, we explicitly distrust routing nodes. This means that we have to identify and judge upon the footprint of available information to such routing nodes, which is done in \cref{sec:staticAnalysis}. Especially in an environment of a censoring adversary, the undetectability of a \VortexNode{} is crucial, as any detectability may lead to a shutdown or even repression. We will look in \cref{sec:analysisBlendingAndTransport} how to identify involved messages and nodes.
+Static information leaking of the protocol is another possibility of how an adversary may learn \defref{IoI}s on a network. Routing nodes are a vital part of any anonymity network. The most comfortable assumption is to trust nodes. In our case, we explicitly distrust routing nodes. This means that we have to identify and judge upon the footprint of available information to such routing nodes, which is done in \cref{sec:staticAnalysis}. Especially in an environment of a censoring adversary, the undetectability of a \VortexNode{} is crucial, as any detectability may lead to a shutdown or even repression. We will look in \cref{sec:analysisBlendingAndTransport} how to identify involved messages and nodes.
 
 \section{Dynamic Attacks}
 Dynamic attacks usually involve an active adversary injecting malicious traffic. They are quite often paired with statistical approaches to discover properties of the system otherwise not available to an observer. 
@@ -61,7 +61,7 @@ As a router is free to process the operations of identity, he may discard an eph
 \section{Analysis of the Blending and Transport Layer}\label{sec:analysisBlendingAndTransport}
 The blending layer is one of the key factors for confidentiality in an environment affected by a censoring adversary. We refer to the confidentiality of the presence of a \VortexNode{} as detectability. Detectability of messages and systems, in consequence, leads to the ability of censorship by an adversary. We assume that general censorship on the transport layer (e.g., by blocking all SMTP traffic) is not an option.
 
-In an environment of an observing adversary, confidentiality regarding the presence of messages is not required, as we defined in those environments to be legal to use \MessageVortex. In such environments, plain embedding may be used at any time.
+In an observing adversary environment, confidentiality regarding the presence of messages is not required, as we defined in those environments to be legal to use \MessageVortex. In such environments, plain embedding may be used at any time.
 
 \subsection{Identifying a \VortexMessage{} Endpoint}
 Depending on the blending method, a single, identifiable message is sufficient to identify a \VortexNode. Detectability depends on various factors, such as:
@@ -650,12 +650,5 @@ A payload block should always have a single representation only once when travel
 \subsection{Anonymity}
 Anonymity is greatly dependent on the routing block's quality and the chosen anonymity set for a single message and a communication tuple over time. 
 
-\subsubsection{Size of the Anonymity Set}
+\subsubsection*{Size of the Anonymity Set}
 The requirement for an anonymity set is dependent on jurisdictional restrictions. In some of the more restrictive countries, no one can be held guilty for an action that may not be credibly assigned to him alone. In other jurisdictions, it is possible to be held liable for actions just because of an identified membership in a group. This makes it essential that message traffic and the crafting of the blending is under the sole control of the sender. He needs to create an anonymity-set sufficiently large and spanning enough jurisdictions to create sufficient anonymity for his situation.
-
-
-
-
-
-
-

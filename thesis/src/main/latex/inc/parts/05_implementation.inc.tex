@@ -49,7 +49,7 @@ For all algorithms, we apply the following criteria:
 	\item Always focus on common standards
 	\item Focus on interoperability when selecting standards
 	\item Focus on efficiency (wherever possible use simple, parallelizable algorithms)
-	\item When sensible and possible chose at least two unrelated algorithms (e.g., cryptographic algorithms or MACs)
+	\item When sensible and possible chose at least two unrelated algorithms (e.g., cryptographic algorithms or MACs) based on different mathematical problems
 \end{itemize}
 
 \section{Encoding Scheme}
@@ -60,7 +60,7 @@ On the downside, ASN-1 encoding is, unlike XML, not human readable. As we hide t
 \section{Cipher Selection}
 In this protocol, a lot of encryption and hashing algorithms have to be used. We should explain the choice of these algorithms. 
 
-We decided to define fixed key sizes for symmetric ciphers as we went with block ciphers. We encode the key length in the asymmetric ciphers' parameters as they are due to their differences far more often flexible.
+We decided to define fixed key sizes for symmetric ciphers as we went with block ciphers. We encode the key length in the asymmetric ciphers' parameters due to their differences far more often flexible.
 
 \begin{figure}[ht]
 	\lstinputlisting[linerange={18-84},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
@@ -122,7 +122,7 @@ Within the implementation, we assigned algorithms to a security strength level:
 This allows categorizing the used algorithms to a strength. This list, however, should only serve the purpose of selecting algorithms for people without cryptological know-how.
 
 \section{Mode Selections}
-We evaluated the most common cipher modes for suitability. For \MessageVortex, we focussed on modes with parallelizable, random access modes that do not do authentication. Besides the characteristics mentioned before, the main focus was on whether there is an open implementation available in java, which is reasonably tested.
+We evaluated the most common cipher modes for suitability. For \MessageVortex, we focussed on modes with parallelizable, random access modes that do not do authentication. Besides the characteristics mentioned before, the main focus was on whether there is an open implementation in java, which is reasonably tested.
 
 \begin{figure}[ht]
 	\lstinputlisting[linerange={86-95},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
@@ -132,7 +132,7 @@ We evaluated the most common cipher modes for suitability. For \MessageVortex, w
 
 Figure~\ref{fig:defModes} shows the selected paddings and their requirement level.
 
-Very important was that we quite often re-encrypt already encrypted content. As a result, we had not excluded algorithms such as ECB.
+Very important was that we quite often re-encrypt already encrypted content. In theory, a partially broken mode is much less problematic when encrypting already random content. However, these flaws are obvious to a crypto savvy person but are not regular knowledge. By always choosing the same mode and only use onionizing schemes, the flaw remains. To avoid this, we eradicated modes such as ECB despite the fact that their simplicity could have been a gain for the protocol if properly handled.
 
 \begin{itemize}
 	\item ECB (Electronic Code Book)\\
@@ -240,14 +240,14 @@ The following sections list common Internet protocols. We analyze those protocol
 
 We will identify SMTP and XMPP as good transport layer protocols for the \MessageVortex{} approach, as they have all required properties.
 
-All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the protocol's suiting as a transport layer. The findings of this section are listed in \cref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible. We then apply the previously referenced criteria and concisely summarize the protocol's suiting as a transport layer. The findings of this section are listed in \cref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
 
 All sections are structured the same way. 
 \begin{itemize}
 	\item Description\\
 	We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible.
 	\item Apply criteria\\\\
-	We then apply the previously referenced criteria and make a concise summary of the protocol's suiting as a transport layer. The findings of this section are listed in \cref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+	We then apply the previously referenced criteria and concisely summarize the protocol's suiting as a transport layer. The findings of this section are listed in \cref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
 \end{itemize} 
 
 \subsection{Applied Criteria\label{sec:transportCriteria}}
@@ -481,7 +481,7 @@ Embedding works the same as with email with the same supported blending options.
 The blending layer may generate decoy messages analog to the messages generated in the case of email. Some adoptions in terms of texts might be advisable.
 
 \section{Distributed Configuration and Runtime Store of processing content}
-A distributed storage is advisable if working as a reliable service. This is why we defined ASN.1 structures for all elements kept in memory as shown in \cref{fig:defConfig}. Wisely applied, they may be used to store in a transport storage for access of a redundant set of devices, all maintaining the same set of data. 
+A distributed storage is advisable if working as a reliable service. This is why we defined ASN.1 structures for all elements kept in memory as shown in listing~\ref{fig:defConfig}. Wisely applied, they may be used to store in a transport storage for access of a redundant set of devices, all maintaining the same set of data. 
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-NonProtocolBlocks.asn}
@@ -528,9 +528,9 @@ In this section, we describe the extraction of a \VortexMessage{} by the blendin
 \subsection{Plain Embedding}
 In this section we explain $plainEmbedding$ and how \VortexMessages{} with $plainEmbedding$ may be extracted. This embedding is mainly suitable for simple, observable message transferal.
 
-The $plainEmbedding$ is a simple embedding replacing parts of the original file with the content of the \VortexMessage. To maintain the header information, we introduced an offset as a set of fixed values. Plain embedding is simply detectable. While offset and chunking may allow us to maintain a valid file structure, the original content of the file is normally destroyed. We use plain embedding mainly for our experiments. We used a specialized blending layer for better readability using unchunked, plain embedding with an offset of $0$. The decoy message is the ASN.1 block representation of the encoded block. The chosen encoding simplified to see the inner workings of the protocol. For production use, we apply F5 embedding with a generated payload. The blending layer's current implementation employing plain embedding is thus not suitable for production use as the messages remain identifiable or at least suspicious.
+The $plainEmbedding$ is a simple embedding replacing parts of the original file with the content of the \VortexMessage. To maintain the header information, we introduced an offset as a set of fixed values. Plain embedding is simply detectable. While offset and chunking may allow us to maintain a valid file structure, the file's original content is normally destroyed. We use plain embedding mainly for our experiments. We used a specialized blending layer for better readability using unchunked, plain embedding with an offset of $0$. The decoy message is the ASN.1 block representation of the encoded block. The chosen encoding simplified to see the inner workings of the protocol. For production use, we apply F5 embedding with a generated payload. The blending layer's current implementation employing plain embedding is not suitable for production use as the messages remain identifiable or suspicious.
 
-\subsubsection*{Chunking of Plain Embedded Messages}\label{sec:chunkingPlain}~\\
+\subsubsection*{Chunking of Plain Embedded Messages}\label{sec:chunkingPlain}
 In this section, we describe the chunked embedding into plain messages. Chunking is done by pre-pending two numeric values to a data chunk. The first number (modulo the remaining number of bytes of the file) reflects the chunk's size immediately following the second value. The second value (again modulo the same number)  reflects the number of bytes to be skipped after the chunk for getting to the next header.
 
 Each value is encoded in one to four bytes forming an integer value. The first seven bits are the least significant bits of the value. If the eight-bit is set, we signal an additional relevant octet. The second and third byte (if any) are interpreted equivalently. The fourth byte is always interpreted without any signal bit. Instead, the full eight bits are used as the most significant bit in that case. All bits collected together are interpreted as an integer value. This value is taken modulo the remaining bytes of the file, starting with the first byte of the first header value. The chain formed by these headers have no terminator and may surpass the file end.
@@ -584,10 +584,7 @@ Table~\ref{tab:chunkingExamples} shows some valid chunking header bytes and thei
 	\egroup
 \end{table*}
 
-
 When plain embedding messages, we have the problem that most of the files have recurring logical structures. Such structures should not be broken when embedding in plain as such embedding as it would leak in an easily detectable manner the presence of a broken file.
-
-
 
 \subsection{Implementation of F5 Blending}
 In this section, we introduce the implementation of F5 blending. It is a better blending than the rather simple $plainBlending$ discussed in the previous section. At the same time, F5 is very old (\citeyear{f5} and has not been broken. In the reference implementation of F5 was a detectable unintentional double compression\cite{steganalysisf5}. The authors of the reference implementation fixed this issue \cite{F5broken}, and we were unable to find newer breaches. Newer derivates, such as nsF5\cite{fridrich2007statistically} or MSET\cite{hosseini2015modification}, were proposed. However, we did not consider these as candidates as an appropriate reference implementation seemed to be unavailable.
@@ -607,19 +604,19 @@ Depending on the current quota (messages) and the identity status (temporary or 
 \section{Decoy Content Generation}
 The decoy content of a message is an important part of the \MessageVortex{} system. It creates meaningful content for the traffic to be hidden within.
 
-By using F5 or similar mechanisms for blending, we decided to make sure that our content does not have to pass a Turing test. Normal email conversations are two way and have many properties such as references to previous messages and similar contexts. In order not to fall into such traps, we use common machine-generated one-way messages with generated images. Examples of such messages are password recovery requests with Gravatars or monitoring messages with generated graphs (such as current running processes on a system). Such messages are easy to generate in various sizes and are machine-generated for obvious reasons.
+Using F5 or similar mechanisms for blending, we decided to make sure that our content does not have to pass a Turing test. Normal email conversations are two way and have many properties such as references to previous messages and similar contexts. In order not to fall into such traps, we use common machine-generated one-way messages with generated images. Examples of such messages are password recovery requests with Gravatars or monitoring messages with generated graphs (such as current running processes on a system). Such messages are easy to generate in various sizes and are machine-generated for obvious reasons.
 
 To make it harder for an attacker to identify the context of messages, the sending address on the transport media should not be equal to the receiving address. this makes the generation of interaction graphs much harder, as we will see in \cref{sec:analysisInteractionGraphs}.
 
 \chapter{Routing Layer Implementation}\label{sec:routingImplementation}
-In this chapter, we describe the routing layer as our main workhorse for processing \VortexMessages. The routing layer keeps a workspace for each \defref{eID} and discards old or unused entries. When receiving routing blocks, it processes those and generates new messages. We, furthermore, shed light on some decisions specific to our implementation, such as encoding formats or message layout.
+In this chapter, we describe the routing layer as our main workhorse for processing \VortexMessages. The routing layer keeps a workspace for each \defref{eID} and discards old or unused entries. When receiving routing blocks, it processes those and generates new messages. Furthermore, we shed light on some decisions specific to our implementation, such as encoding formats or message layout.
 
 \section{ASN.1 DER encoding scheme for \VortexMessages}
 Originally, we implemented the protocol as XML encoded messages. This encoding had, however, several flaws. First, the huge amount of encrypted data within the document made the messages bulky and, at the same time, lose one of its main strengths: readability for humans. The encoding required for binary data caused messages to increase ion size due to their onionized structure. 
 
 Furthermore, some XML features, such as external entities or the possibility to define tags, introduced a series of new possible attacks such as DoS attacks (e.g., a Billion Laughs) or information-stealing attacks (e.g., XXE attacks). Furthermore, XML structures are hard to sign and have many possible ways of layouting data. 
 
-To counter these downsides, we reimplemented our client with ASN.1 based DER encoding. This type of encoding fits well the purpose of encrypted structures and is commonly used for related tasks such as key storage or signing messages and certificates.
+To counter these downsides, we reimplemented our client with ASN.1 based DER encoding. This type of encoding fits well with encrypted structures and is commonly used for related tasks such as key storage or signing messages and certificates.
 
 DER encoding of ASN.1 structures even enables us to foresee the content of an encoded message down to each bit. This is important as it enables in-depth analysis of message flows, as we will see in \cref{sec:diagnosisOfMessagePath}.
 
@@ -659,7 +656,7 @@ The workspace itself contains payload blocks assigned to workspace IDs. The ID s
 \end{table*}
 
 
-\subsection{Processing of Incoming Messages\label{sec:processingIncommingMessages}}
+\subsection{Processing of Incoming Messages}\label{sec:processingIncommingMessages}
 In this section, we focus on the operations carried out by a routing layer on each message extracted by the blending layer. 
 
 A message extracted by the blending layer is passed to the routing layer for further processing. The source of the message (e.g., protocol of the message or sender address) is irrelevant and discarded by the blending layer. 
@@ -688,7 +685,7 @@ If the identity is not temporary, header requests are executed upon authorizatio
 
 As soon as the header requests are executed, the content is processed. The routing block operations are added to the workspace, and the mapping operations remain in the routing combo. 
 
-\subsection{Processing of Outgoing Messages\label{sec:processingOutgoingMessages}}
+\subsection{Processing of Outgoing Messages}\label{sec:processingOutgoingMessages}
 In this section, we focus on the creation of new messages sent to the next-hop router. The message creation is triggered in a timed manner based on the content of the $RoutingCombo$ and then passed to the blending layer for blending.
 
 A message sending is triggered by a routing block in the workspace, as shown in \cref{fig:msgSendProcessing}. The assembly instructions are processed to collect the payload blocks. Then the encryption is applied to the message and passed on to the blending layer for processing.
@@ -943,7 +940,3 @@ While this is considered a minor issue as it is very likely that nodes will firs
 To limit the memory footprint of message processing, we reduced the information relevant to be kept in memory by structuring the message accordingly. A node may first extract the first header block, which is equivalent to the block size of the cipher used to encrypt the header block. If the message is invalid due to a non-existent message, we may stop there. We then start decoding the header prefix block, and if successful, the header, which is typically less than 1KB in size unless it contains a routing block. Each routing block is $~1 \frac{KB}{hop}$ in size (assuming a 2048 bit asymmetric key). Only the first couple of bytes have to be read, and the vast majority may then be streamed as it is mainly a binary, encrypted blob containing subsequent hops. All subsequent blocks (routing and payload blocks) are not required to be kept in memory simultaneously. Instead, we may stream them into a data structure on persistent storage. Operations on the payload block are suitable for streaming processing either. For $encryption$ and $split/merge$ operations this is obvious. the transformation and retransformation of the $redundancy$ operations may be done with a lookup table. It requires, however, 256 KB on disk for a $GF(2^{16})$ transformation. The matrix operations are comparably small again as they may be carried out on an element per element base with simple, calculable lookups. 
 
 We may, therefore, conclude that while a workspace may require considerable storage for storing all payload and routing blocks, the processing of a message can be done in a very memory efficient manner if required. We may execute all calculations on payload blocks in a streamed manner, and all blocks required for routing are either very small or may be streamed again.
-
-
-
-

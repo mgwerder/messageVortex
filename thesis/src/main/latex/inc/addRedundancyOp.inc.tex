@@ -13,12 +13,13 @@
 \draw [op]  (1047.25,629.75) -- (804.63,1049.99) -- (319.38,1049.99) -- (76.75,629.75) -- (319.37,209.51) -- (804.63,209.51) -- cycle ;
 % padding
 \draw  [aop] (197,433) rectangle +(730,63) node[pos=.5,scale=2] {padding and splitting};
-\draw [revastyle ]   (197,464) -- +(-150,0)  node[scale=2,left] {\begin{minipage}{2.5cm}\raggedleft $[C1], [C2]$ $blocksize\left( E^K\right)$\end{minipage}};
+\draw [revastyle ]   (197,454) -- +(-150,0)  node[scale=2,left] {\begin{minipage}{2.5cm}\raggedleft $[C1], [C2]$ $blocksize\left( E^K\right),$ $R_t, s$\end{minipage}};
 % Reed-Solomon
 \draw  [aop] (197,571) rectangle +(730,63) node  [pos=.5,xscale=2,yscale=2] {Reed-Solomon ($m$ of $n$)};;
 \draw [revastyle]   (197,600) -- +(-150,0-68)  node[scale=2,left] {$m, n$};
 \draw [revastyle]   (197,600) -- +(-150,-68)  node[scale=2,left] {$m, n$};
 \draw [revastyle]   (197,464) -- +(-150,068)  ;
+\draw [revastyle]   (197,610) -- +(-150,0)  node[scale=2,left] {$\omega$};
 % Encryption
 \draw  [aop] (210,731) rectangle +(80,80) node  [pos=.5,xscale=2,yscale=2] {$E^{K_{1}}$};;
 % Rounded Rect [id:dp39595322897920915] 
