@@ -55,12 +55,12 @@ For all algorithms, we apply the following criteria:
 \section{Encoding Scheme}
 As encoding scheme, we specified ASN.1\cite{dis19878824}. It is more compact than the initially selected XML-Standard and is very common in telecommunication and encryption (e.g., the representation of X509 is in ASN.1). To maintain interoperability, we choose DER encoding as it has precisely one possible representation for every value. Such a strict definition of encoding is important when dong signing or solving puzzles in our case and is required to diagnose message paths.
 
-On the downside, ASN-1 encoding is, unlike XML, not human readable. As we hide the messages anyway, we considered this a minor flaw, as we need to have an always extracting program to see the messages' content.
+On the downside, ASN-1 encoding is, unlike XML, not human readable. As we hide the messages, we considered this a minor flaw, as we need to have an always extracting program to see the messages' content.
 
 \section{Cipher Selection}
 In this protocol, a lot of encryption and hashing algorithms have to be used. We should explain the choice of these algorithms. 
 
-We decided to define fixed key sizes for symmetric ciphers as we went with block ciphers. We encode the key length in the parameters for the asymmetric ciphers as they are due to their differences far more often flexible.
+We decided to define fixed key sizes for symmetric ciphers as we went with block ciphers. We encode the key length in the asymmetric ciphers' parameters as they are due to their differences far more often flexible.
 
 \begin{figure}[ht]
 	\lstinputlisting[linerange={18-84},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
@@ -176,13 +176,13 @@ A plain text stream may have any length. Since we always encrypt in blocks of a 
 
 We have chosen for the paddings outlined in \cref{fig:defPaddings} to be supported.
 \begin{figure}[ht]
-	\lstinputlisting[linerange={116-123},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
+	\lstinputlisting[linerange={97-104},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
 	\caption{Enumeration definition of paddings in ASN.1 with support requirements.}
 	\label{fig:defPaddings}
 \end{figure}
 
 \subsection{RSAES-PKCS1-v1\_5 and RSAES-OAEP}
-This padding is the older of the paddings standardized for PKCS1. It is basically a prefix of two bytes followed by a padding set of non-zero bytes and then terminated by a zero byte and then followed by the message. This padding may give a clue if decryption was successful or not. RSAES-OAEP ist the newer of the two padding standards 
+This padding is the older of the paddings standardized for PKCS1. It is basically a prefix of two bytes followed by a padding set of non-zero bytes and then terminated by a zero byte and then followed by the message. This padding may give a clue if decryption was successful or not. RSAES-OAEP is the newer of the two padding standards 
 
 \subsection{PKCS7} 
 This padding is the standard used in many places when applying symmetric encryption up to 256 bits key length. The free bytes in the last cipher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of available data at the end of the block. All other bytes are defined but not needed.
@@ -341,7 +341,7 @@ The protocol does partially satisfy the first criteria (Ct1: Widely Adopted). Th
 The main disadvantage of a message transport protocol is that this protocol is not (like HTTP) symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. 
 
 \subsubsection*{Web Application Messaging Protocol (WAMP)}
-WAMP is a web-sockets based protocol destined to enable M2M communication. Like MQTT, it is publish respectively subscribe oriented. Unlike MQTT, it allows remote procedure calls (RPC).
+WAMP is a web-sockets based protocol destined to enable M2M communication. Like MQTT, the protocol is publish/subscribe oriented. Unlike MQTT, it allows remote procedure calls (RPC).
 
 The WAMP protocol is not widely adopted (Ct1: Widely Adopted), but it is reliable on a per-node base (Ct2: Reliable). Due to its RPC based capability, unlike MQTT, a routing like capability could be implemented. Symmetrical protocol behavior is, therefore, not available but could be built in relatively easily.
 
@@ -514,7 +514,7 @@ The embedding supports some properties. A receiving host chooses the supported p
 	\label{lst:embeddingSpecs}
 \end{lstfloat}
 
-Both specifications allow embedding of a \VortexMessage{} and are described in the following section. A byte stream is extracted in both cases consisting of a prefix block containing the peer key $K_{peer_o}$ immediately followed by the symmetrically encrypted InnerMessageBlock as described in \cref{fig:defOuterBlocks}. The string is not necessarily terminated correctly. The presence of a valid PrefixBlock signals an existing \VortexMessage{} to the blending layer. That way, we make sure that the size of a potential message leaks its presence. To detect the presence of a \VortexMessage{}, the hosts private key $K^{-1}_{host_o}$ for decoding the is required. 
+Both specifications allow embedding of a \VortexMessage{} and are described in the following section. A byte stream is extracted in both cases consisting of a prefix block containing the peer key $K_{peer_o}$ immediately followed by the symmetrically encrypted InnerMessageBlock as described in \cref{fig:defOuterBlocks}. The string is not necessarily terminated correctly. The presence of a valid PrefixBlock signals an existing \VortexMessage{} on the blending layer. That way, we make sure that the size of a potential message leaks its presence. To detect the presence of a \VortexMessage{}, the hosts private key $K^{-1}_{host_o}$ for decoding the is required. 
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={50-84},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
@@ -533,7 +533,7 @@ The $plainEmbedding$ is a simple embedding replacing parts of the original file 
 \subsubsection*{Chunking of Plain Embedded Messages}\label{sec:chunkingPlain}~\\
 In this section, we describe the chunked embedding into plain messages. Chunking is done by pre-pending two numeric values to a data chunk. The first number (modulo the remaining number of bytes of the file) reflects the chunk's size immediately following the second value. The second value (again modulo the same number)  reflects the number of bytes to be skipped after the chunk for getting to the next header.
 
-Each value is encoded in one to four bytes forming an integer value. The first seven bits are the least significant bits of the value. If the eight-bit is set, we signal an additional relevant octet. The second and third byte (if any) are interpreted equivalently. The fourth byte is always interpreted without any signal bit. Instead, the full eight bits are used as the most significant bit in that case. All bits collected together form an integer value. This value is taken modulo the remaining bytes of the file, starting with the first byte of the first header value. The chain formed by these headers have no terminator and may surpass the file end.
+Each value is encoded in one to four bytes forming an integer value. The first seven bits are the least significant bits of the value. If the eight-bit is set, we signal an additional relevant octet. The second and third byte (if any) are interpreted equivalently. The fourth byte is always interpreted without any signal bit. Instead, the full eight bits are used as the most significant bit in that case. All bits collected together are interpreted as an integer value. This value is taken modulo the remaining bytes of the file, starting with the first byte of the first header value. The chain formed by these headers have no terminator and may surpass the file end.
 
 The byte layout is chosen so that any byte sequence, from two to eight bytes, forms a valid chunk header. The lack of termination guarantees that no information leaks through the interpretation of any header.
 
@@ -592,7 +592,7 @@ When plain embedding messages, we have the problem that most of the files have r
 \subsection{Implementation of F5 Blending}
 In this section, we introduce the implementation of F5 blending. It is a better blending than the rather simple $plainBlending$ discussed in the previous section. At the same time, F5 is very old (\citeyear{f5} and has not been broken. In the reference implementation of F5 was a detectable unintentional double compression\cite{steganalysisf5}. The authors of the reference implementation fixed this issue \cite{F5broken}, and we were unable to find newer breaches. Newer derivates, such as nsF5\cite{fridrich2007statistically} or MSET\cite{hosseini2015modification}, were proposed. However, we did not consider these as candidates as an appropriate reference implementation seemed to be unavailable.
 
-F5 hides its information in JPEG, BMP, and GIF images by matrix encoding its information in the image data. According to \cite{f5} it has a capacity exceeding 13\% of the steganograms' size.
+F5 hides its information in JPEG, BMP, and GIF images by matrix encoding its information in the image data. According to \cite{f5}, it has a capacity exceeding 13\% of the steganograms' size.
 
 The implementation of F5 uses a ``password'' for the initialization of the random number generator. Without this password, the extracted message is random. As a \VortexMessage{} is encrypted, we were unable in our analysis to differentiate random output from a \VortexMessage. Only decoding with the host key $K^{-1}_{host_o}$ resulted in detecting a \VortexMessage.
 

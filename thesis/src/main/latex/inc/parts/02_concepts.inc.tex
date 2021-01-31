@@ -45,7 +45,7 @@ The problem is that under normal circumstances, $k$ is either not constant or de
 \section{\texorpdfstring{$\ell$}{l}-Diversity}
 In \cite{machanavajjhala2007diversity} an extended model of $k$-anonymity is introduced. In this paper, the authors emphasize that it is possible to break a $k$-anonymity set if additional information is available, which may be merged into a data set so that a distinct entity can be filtered from the $k$-anonymity set. In other words, if an anonymity set is too tightly specified, additional background information might be sufficient to identify a specific entity in an anonymity set.
 
-It might be arguable that a $k$-anonymity in which a member is not implicitly $k$-anonymous still is sufficient for $k$-anonymity in its sense. However, the point made in this work is right and is taken into account. Their approach is to introduce an amount of invisible diversity into $k$-anonymous sets so that common background knowledge is no longer sufficient to isolate a single member.
+It might be arguable that a $k$-anonymity in which a member is not implicitly $k$-anonymous still is sufficient for $k$-anonymity in its sense. However, the point made in this work is right and is taken into account. Their approach is to introduce an amount of invisible diversity into $k$-anonymous sets, so that common background knowledge is no longer sufficient to isolate a single member.
 
 \section{\texorpdfstring{$t$}{t}-Closeness}
 While $\ell$-diversity protects the identity of an entity, it does not prevent information gain. A subject which is in a class has the same attributes. This is where $t$-closeness\cite{li2007t} comes into play. $t$-closeness is defined as follows:
@@ -57,7 +57,7 @@ While $\ell$-diversity protects the identity of an entity, it does not prevent i
 While in statistics working with cases and exact figures, we may, possibly, identify the distance between attributes of a class for a single set of classes reflecting a defined distribution at a given point in time. Whenever we look at a varying set of characteristics, such metric seemed to us as non-practical value. We, therefore, discarded this value as a metric for our protocol.
 
 \section{Zero Knowledge Proofs}
-In \cite{goldwasser1989knowledge} and later \cite{de1987non} the authors introduce Zero-Knowledge Proofs (ZKP), which allow to proof the knowledge of a secret without revealing any detail about the secret itself. Other authors further broadened this concept by allowing to proof that calculations (e.g., shuffles) have been carried out accordingly. ZKPs are a powerful companion in today's anonymity systems to detect cheating nodes.
+In \cite{goldwasser1989knowledge} and later \cite{de1987non} the authors introduce Zero-Knowledge Proofs (ZKP), which allow proving the knowledge of a secret without revealing any detail about the secret itself. Other authors further broadened this concept by allowing proof that calculations (e.g., shuffles) have been carried out accordingly. ZKPs are a powerful companion in today's anonymity systems to detect cheating nodes.
 
 Their downsides are typically a high computational and bandwidth consumption for the proof and possibly a complex interaction between the prover and the verifier.
 
@@ -66,7 +66,7 @@ We tried to secure the computation of our routing operations with ZKPs and faile
 \section{Censorship}
 As a definition for censorship, we take
 \begin{quote}
-	Censorship: The cyclical suppression, banning, expurgation, or editing by an individual, institution, group or government that enforce or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group or government deems obscene and ``utterly without redeeming social value,'' as determined by ``contemporary community standards.''
+	Censorship: The cyclical suppression, banning, expurgation, or editing by an individual, institution, group, or government that enforces or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group, or government deems obscene and ``utterly without redeeming social value,'' as determined by ``contemporary community standards.''
 \end{quote}
 
 The definition is attributed to Chuck Stone, Professor at the School of Journalism and Mass Communication, University of North Carolina. Please note that ``Self Censorship'' (not expressing something in fear of consequences) is a form of censorship too.
@@ -95,7 +95,7 @@ In our design, this is the job covered by the blending layer, which is generatin
 \section{Single Use Reply Blocks and Multi-Use Reply Blocks}
 Chaum first introduced the use of reply blocks in \cite{CHAUM1}. In general, a routing block is a structure allowing to send a message to someone without knowing the targets' real address. Reply blocks may be differentiated into two classes ``Single Use Reply Blocks'' (SURBs)  and ``Multi-Use Reply Blocks'' (MURBs). SURBs may be used once, while MURBs may be used a limited or unlimited number of times. 
 
-Our research discovered that if a routing protocol is reproducible, an adversary may use the traffic generated by a MURB to identify some of the message's properties. Depending on the type of attack, the block has to be repeated very often. For this reason, we limited the number of replays to a low number. The concept is that we have, in our case, a routing block, which might be used up to $n$ times ($0<n<127$). It is easily representable in a byte integer (signed or unsigned) on any system. It is big enough to support human communication sensibly and is big enough to add not too much overhead when rerequesting more MURBs. The number should not be too big because if a MURB is reused, the same traffic pattern is generated, making the system susceptible to statistical attacks.
+Our research discovered that if a routing protocol is reproducible, an adversary may use the traffic generated by a MURB to identify some of the message's properties. Depending on the type of attack, the block has to be repeated very often. For this reason, we limited the number of replays to a low number. The concept is that we have, in our case, a routing block, which might be used up to $n$ times ($0<n<127$). It is easily representable in a byte integer (signed or unsigned) on any system. It is big enough to support human communication sensibly and is big enough to add not too much overhead when re-requesting more MURBs. The number should not be too big because if a MURB is reused, the same traffic pattern is generated, making the system susceptible to statistical attacks.
 
 \section{Zero Trust}\label{sec:zeroTrust}
 Zero trust is not an academically defined concept. It is widely misused by many marketing departments of well-known devices and applications related to security. The first citation of the idea was in \cite{kindervag2010no} where \citeauthor{kindervag2010no} introduced this concept.
@@ -180,7 +180,7 @@ When looking for well-researched algorithms basing on different mathematical pro
 	\item RSA\\
 	In \citeyear{Rivest:1978:MOD:359340.359342} the authors \citeauthor{Rivest:1978:MOD:359340.359342} published with \cite{Rivest:1978:MOD:359340.359342} a paper which did revolutionize cryptography for years. In their paper, the authors described an encryption method later to be called RSA, which required a key pair ($K_a$) referenced as public ($K^{1}_a$) and private keys ($K^{-1}_a$). This system's novelty was that anything encrypted with the public key was only decryptable with the private key and vice versa.
 	
-	RSA is up until the day of writing this paper not publicly know to be broken (unless a too small key size is used). However -- \citeauthor{Shor97polynomial-timealgorithms} described in \citeyear{Shor97polynomial-timealgorithms} an algorithm which should enable quantum computers to break RSA far faster than done with traditional computers. In the \cref{sec:keySize} we do elaborate these effects further.
+	RSA is up until the day of writing this paper not publicly know to be broken (unless a too small key size is used). However -- \citeauthor{Shor97polynomial-timealgorithms} described in \citeyear{Shor97polynomial-timealgorithms} an algorithm that should enable quantum computers to break RSA far faster than done with traditional computers. In the \cref{sec:keySize} we do elaborate these effects further.
 	\item ECC\\
 	The elliptic curves were independently suggested by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve cryptography started to be widely deployed in the public space in 2006. Since then, it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC, has the advantage of far shorter key sizes for the same grade of security.
 	\item McEliece\\
@@ -225,7 +225,7 @@ The cipher mode defines how multiple blocks encrypted with the same key are hand
 	Authentication guarantees that the deciphered plaintext has been unmodified since encryption. It does not make a statement over the identity of the party encrypting the text. Such an identifying authentication is referred to as signcryption.
 \end{itemize}
 
-We evaluated the most common cipher modes for suitability. For \MessageVortex, we focussed on modes with parallelizable, random access modes and do not do authentication. Besides the characteristics mentioned above, the main focus was on whether there is an open implementation in java, which is reasonably tested.
+We evaluated the most common cipher modes for suitability. For \MessageVortex, we focussed on modes with parallelizable, random access modes and did not do authentication. Besides the characteristics mentioned above, the main focus was on whether there is an open implementation in java, which is reasonably tested.
 
 \begin{itemize}
 	\item ECB (Electronic Code Book)\\
@@ -296,7 +296,7 @@ A plain text stream may have any length. Since we always encrypt in blocks of a 
 Different paddings are used at the end of a cipher stream to indicate how many bytes belong to the decrypted stream.
 
 \subsection{RSAES-PKCS1-v1\_5 and RSAES-OAEP}
-This padding is the older of the paddings standardized for PKCS1. It is basically a prefix of two bytes followed by a padding set of non-zero bytes and then terminated by a zero byte and then followed by the message. This patting may give a clue if decryption was successful or not. RSAES-OAEP ist the newer of the two padding standards 
+This padding is the older of the paddings standardized for PKCS1. It is basically a prefix of two bytes followed by a padding set of non-zero bytes and then terminated by a zero byte and then followed by the message. This patting may give a clue if decryption was successful or not. RSAES-OAEP is the newer of the two padding standards 
 
 \subsection{PKCS7} 
 This padding is the standard used in many places when applying symmetric encryption up to 256 bits key length. The free bytes in the last cipher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of available data at the end of the block. All other bytes are defined but not needed.
@@ -334,7 +334,7 @@ The original term of covert channels was defined by \citeauthor{Lampson73anote}\
 	Not intended for information transfer at all, such as the service program's effect on system load.
 \end{quote}
 
-This was defined  in such a way to distinguish the message flow from 
+This was defined  in such a way as to distinguish the message flow from 
 
 \begin{quote}
 	Legitimate channels used by the confined service, such as the bill.
@@ -343,7 +343,7 @@ This was defined  in such a way to distinguish the message flow from
 The use of a legitimate channel such as \defref{SMTP} and hide information within this specific channel is not a usage of a covert channel. We refer to this as channel exploitation.
 
 \section{Steganography}
-Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current}, we get a very rough overview. As some of the types and algorithms address specific steganography topics (e.g., some hide from automatic detection and others address a human message stream auditor), we must choose carefully. In our specific case, the main idea is to hide within the sheer mass of Internet traffic. As a human auditor screening all messages is considered a minor threat, we will focus on machine-based censorship. Most of the images sent in \defref{SMTP} are jpg images (see \cref{tab:emailAttachments} on page \pageref{tab:emailAttachments}). We limited our search to algorithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
+Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current}, we get a very rough overview. As some of the types and algorithms address specific steganography topics (e.g., some hide from automatic detection and others address a human message stream auditor), we must choose carefully. In our specific case, the main idea is to hide within the sheer mass of Internet traffic. A human auditor screening all messages within a jurisdiction is considered a minor threat for obvious reasons. We will, therefore,  focus on machine-based censorship. Most of the images sent in \defref{SMTP} are jpg images (see \cref{tab:emailAttachments} on page \pageref{tab:emailAttachments}). We limited our search to algorithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
 
 After reviewing the options, we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm that attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the image's recompression. This issue was caused only due to a problem in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness.
 
@@ -385,9 +385,9 @@ First, a censoring adversary requires high bandwidth. All traffic of a jurisdict
 
 Secondly, the target must be identifiable on a technical level (e.g., IP address) as content-based filtering is only feasible with unencrypted or weakly protected systems. This technical identification is challenging as systems may change their addresses dynamically either due to cloud-related elasticity or due to an incomplete view of a distributed system (e.g., only a Loadbalancer is visible). An IP is, therefore, not necessarily synonymous with a single user or server. 
 
-When looking at the client-side, clients are often hidden behind a network address translation (NAT) or a proxy collapsing all users onto a single IP address. The same applies to the server-side, where cloud washing and reverse proxy infrastructures optimize bandwidth usage. Sometimes, In-depth information or insight into a protocol may help narrow down a user (e.g., by a set cookie or a fingerprint). When using encrypted connections, ordinary attackers have trouble doing a Man in the Middle (MitM) attack. This may be doable for a larger attacker on a state or internet service provider (ISP) level. To do so, such an adversary requires access to a publicly accepted CA, creating fake certificates for the attacker. It may be safely assumed that such access is given considering the standard set of CAs, which is trusted nowadays (depending on the delivered trust store we found between 100 and 200 root CAs).
+When looking at the client-side, clients are often hidden behind a network address translation (NAT) or a proxy collapsing all users onto a single IP address. The same applies to the server-side, where cloud washing and reverse proxy infrastructures optimize bandwidth usage. Sometimes, In-depth information or insight into a protocol may help narrow down a user (e.g., by a set cookie or a fingerprint). When using encrypted connections, ordinary attackers have trouble doing a Man in the Middle (MitM) attack. This may be doable for a larger attacker on a state or internet service provider (ISP) level. To do so, such an adversary requires access to a publicly accepted CA, creating fake certificates for the attacker. It may be safely assumed that such access is given considering the standard set of CAs, which is trusted nowadays (depending on the delivered trust store, we found between 100 and 200 root CAs).
 
-Identifying a target is especially hard if a target comprises multiple possible targets from which some may be valid. This is the case when using a reverse proxy and using the same platform for numerous purposes. Streaming or movie platforms may contain content that should be banned from a censors' point of view and content that comprises legitimate content such as educational material. From the censors' point-of-view, this content can not be reasonably split. This since typically only the provider of the service can do selective censoring on the system. This is why governments try to shift the responsibility of censorship to the providers by establishing self-censorship. 
+Identifying a target is especially hard if a target comprises multiple possible targets from which some may be valid. This is the case when using a reverse proxy and using the same platform for numerous purposes. Streaming or movie platforms may contain content that should be banned from a censors' point of view and content that comprises legitimate content such as educational material. From the censors' point-of-view, this content can not be reasonably split. This since typically, only the provider of the service can do selective censoring on the system. This is why governments try to shift the responsibility of censorship to the providers by establishing self-censorship. 
 
 \subsection{Making Systems Unavailable by Interfering with System Traffic}
 Censoring may be done in more subtle or less abusive ways, such as traffic shaping or content moderation. We already outlined that the platform provider usually does content moderation. This is either done by allowing an entity to control the platform directly or indirectly to apply censorship or use legal means to force the platform into self-censorship.
@@ -400,7 +400,7 @@ Other means of censorship are:
 \end{itemize}
 
 \section{Spread Spectrum in Networking Protocols}
-Another way of sending information anonymously is ``spread spectrum'' transmission. In spread spectrum transmission, a radio signal is distributed in the frequency domain. This makes it hard for an adversary to identify and disrupt those radio signals in question. 
+Another possibility of sending anonymous information is ``spread spectrum'' transmission. In spread spectrum transmission, a radio signal is distributed in the frequency domain. This makes it hard for an adversary to identify and disrupt those radio signals in question. 
 
 While in use when doing radio-electric transmission, the spread spectrum is very uncommon in network protocols. We could employ multiple protocols and packet types to transmit data. Unlike in radio signals, such data is always available as discrete information pieces, and an adversary may choose to block them at any point. Unlike in radio transmission, where the available spectrum is almost indefinite and not fully blockable by practical means, full censorship does not oppose a problem. We may simply completely disrupt all communication by not routing it anymore.
 

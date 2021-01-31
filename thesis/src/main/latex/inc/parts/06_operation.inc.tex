@@ -27,7 +27,7 @@ To allow storage of \MessageVortex{} addresses in standard messaging programs su
 
 The suffix ``@localhost'' makes sure that any non-participating server does not route a \VortexMessage{} unintentionally. The doubly dotted notation is not RFC compliant but was accepted by all tested client address books. The address is, however, not a valid SMTP address due to its double-dotted notation. We selected this representation to differentiate \MessageVortex{} addresses from valid email addresses.
 
-The main downside of \MessageVortex{} addresses is that they are no longer readable by a human. The main reason for this is the public key, which is required. We may abstract this further by allowing clear-text requests on the primary email address for the public key. The \MessageVortex{} account must then answer such requests with the valid \MessageVortex{} address.
+The main downside of \MessageVortex{} addresses is that they are no longer readable by a human. The main reason for this is the public key, which is required. We may abstract this further by allowing clear-text requests on the primary email address for the public key. The \MessageVortex{} account must answer such requests with the valid \MessageVortex{} address.
 
 The $smtpUrl$ is representing the address in a standard way, which makes it suitable for QR codes and intent filters on Android.
 
@@ -94,7 +94,7 @@ We have to follow certain rules when building routing blocks. The rules are:
 		\item Timing patterns in messages.\\
 		Suppose we define fixed patterns of how a message has to be delivered (e.g., a message has to be delivered within a certain time or a payload block does expire in a workspace within a certain amount of time) and publish these as general rules. In that case, we allow an attacker to identify such timing patterns of the net and draw precise lines which observed transport messages might be involved in a message transfer. By omitting such definitions and allowing each \defref{RBB} to define these values to themselves without communicating them, we make it harder to analyze the system by timing patterns.
 		\item Operation patterns.\\
-		By defining operations use in a fixed pattern (e.g., first, distribute a message over five independent message paths sized $n$), we would give clues to an adversary where in this pattern he is located and how close he is in regards to the beginning or the end. A difference in the patterns for message traffic and decoy traffic may result in the identification of decoy traffic.
+		By defining operations use in a fixed pattern (e.g., first, distribute a message over five independent message paths sized $n$), we would give clues to an adversary where in this pattern he is located and how close he is in regards to the beginning or end. A difference in the patterns for message traffic and decoy traffic may result in the identification of decoy traffic.
 		\item Message patterns.\\
 		Always communicating in the same pattern of messages (regardless of the timing), for example, always creating a full communication mesh with all parties of the anonymity set, is an identifiable property that an adversary may use to identify involved \VortexNodes{} from the outside.
 		\item Patterns in size or content of the payloads.\\
@@ -123,7 +123,7 @@ Strategies may include:
 	\item Focusing on the distribution of the message parts.\\
 	A sender applying an $addRedundancy(m,n)$ operation on a message before sending is safe unless $n-m$ node in independent message paths collaborate and have full knowledge of all keys and operations (including the ones applied on the senders' node) as the resulting equation system would have any possible solution (in length and appearance) up to the size of all $n-m$ blocks.
 	\item Focusing on diagnose-ability.\\
-	By deploying diagnosis payload blocks on subsequent nodes instead of just leaving them in the workspace of a node, the possibility of falsifying the result of a diagnosis based on the assumption that the first delivered block belongs to a message and diagnosis is made retrospectively when detecting a problem, is eradicated.
+	By deploying diagnosis payload blocks on subsequent nodes instead of just leaving them in the workspace of a node, the possibility of falsifying the result of a diagnosis based on the assumption that the first delivered block belongs to a message and diagnosis is made retrospectively when detecting a problem is eradicated.
 \end{itemize}
 
 The algorithm itself does not really matter as long as it guarantees the properties at the beginning of this section.
