@@ -51,14 +51,14 @@ public class HeaderRequestIncreaseTransferQuota extends HeaderRequest implements
    * @param ae            the structure to be parsed
    * @throws IOException  if the structure does not parse to the respective block
    */
-  public HeaderRequestIncreaseTransferQuota(ASN1Encodable ae) throws IOException {
+  public HeaderRequestIncreaseTransferQuota(ASN1Encodable ae) {
     this();
     if (ae != null) {
       parse(ae);
     }
   }
 
-  protected void parse(ASN1Encodable ae) {
+  protected final void parse(ASN1Encodable ae) {
     ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
     int i = 0;
     quota = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();

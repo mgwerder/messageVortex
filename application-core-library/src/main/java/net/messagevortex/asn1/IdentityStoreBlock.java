@@ -24,6 +24,7 @@ package net.messagevortex.asn1;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
@@ -371,8 +372,9 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
   public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
-    sb.append(prefix).append("  -- ").append(getUrl()).append(CRLF);
-    sb.append(prefix).append("  -- size: ").append(getUrl().length()).append(CRLF);
+    String url = getUrl();
+    sb.append(prefix).append("  -- ").append(url).append(CRLF);
+    sb.append(prefix).append("  -- size: ").append(url.length()).append(CRLF);
     sb.append(prefix).append("  -- encoded size: ").append(
             toAsn1Object(DumpType.ALL_UNENCRYPTED).getEncoded().length
     ).append(CRLF);

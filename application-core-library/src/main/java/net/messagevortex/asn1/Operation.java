@@ -24,8 +24,6 @@ package net.messagevortex.asn1;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 
@@ -36,22 +34,51 @@ public abstract class Operation extends AbstractBlock implements Serializable {
 
   public static final long serialVersionUID = 100000000012L;
 
-  public static final int SPLIT_PAYLOAD = 150;
-  public static final int MERGE_PAYLOAD = 160;
-  public static final int ENCRYPT_PAYLOAD = 300;
-  public static final int DECRYPT_PAYLOAD = 310;
-  public static final int ADD_REDUNDANCY = 400;
-  public static final int REMOVE_REDUNDANCY = 410;
-  public static final int MAP = 1001;
+  enum Operations {
+    SPLIT_PAYLOAD(150, new SplitPayloadOperation()),
+    MERGE_PAYLOAD(160, new MergePayloadOperation()),
+    ENCRYPT_PAYLOAD(300, new EncryptPayloadOperation()),
+    DECRYPT_PAYLOAD(310, new DecryptPayloadOperation()),
+    ADD_REDUNDANCY(400, new AddRedundancyOperation()),
+    REMOVE_REDUNDANCY(410, new RemoveRedundancyOperation()),
+    MAP(1001, new MapBlockOperation());
 
-  private static final Map<Integer, Operation> operations = new HashMap<>();
-  private static boolean initInProgress = false;
+    int id;
+    Operation operation;
+
+    Operations(int id, Operation operation) {
+      this.id = id;
+      this.operation = operation;
+    }
+
+    int getId() {
+      return id;
+    }
+
+    Operation getFactory() {
+      return operation;
+    }
+
+    /***
+     * <p>Look up an algorithm by id.</p>
+     *
+     * @param id     the idto be looked up
+     * @return the algorithm or null if not known
+     */
+    public static Operations getById(int id) {
+      for (Operations e : values()) {
+        if (e.id == id) {
+          return e;
+        }
+      }
+      return null;
+    }
+  }
 
   private int tagNumber = -1;
 
   /* constructor */
   Operation() {
-    init();
   }
 
   /***
@@ -63,35 +90,11 @@ public abstract class Operation extends AbstractBlock implements Serializable {
    * @throws IOException if no operations have been registered or an unknown tag number is detected
    */
   public static Operation getInstance(ASN1Encodable object) throws IOException {
-    synchronized (operations) {
-      if (operations.isEmpty()) {
-        init();
-      }
-      int tag = ASN1TaggedObject.getInstance(object).getTagNo();
-      if (operations.get(tag) == null) {
-        throw new IOException("unknown tag for choice detected");
-      }
-      return operations.get(tag).getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
+    int tag = ASN1TaggedObject.getInstance(object).getTagNo();
+    if (Operations.getById(tag) == null || Operations.getById(tag).getFactory() == null) {
+      throw new IOException("unknown tag for choice detected");
     }
-  }
-
-  /***
-   * <p>Registers all standard operations.</p>
-   */
-  private static void init() {
-    synchronized (operations) {
-      if (operations.isEmpty() && !initInProgress) {
-        initInProgress = true;
-        operations.put(SPLIT_PAYLOAD, new SplitPayloadOperation());
-        operations.put(MERGE_PAYLOAD, new MergePayloadOperation());
-        operations.put(ENCRYPT_PAYLOAD, new EncryptPayloadOperation());
-        operations.put(DECRYPT_PAYLOAD, new DecryptPayloadOperation());
-        operations.put(ADD_REDUNDANCY, new AddRedundancyOperation());
-        operations.put(REMOVE_REDUNDANCY, new RemoveRedundancyOperation());
-        operations.put(MAP, new MapBlockOperation());
-        initInProgress = false;
-      }
-    }
+    return Operations.getById(tag).getFactory().getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
   }
 
   /***
@@ -105,7 +108,7 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   public abstract Operation getNewInstance(ASN1Encodable asn1Encodable) throws IOException;
 
   /***
-   * <p>sets the ag number to be set when ancoding the operation.</p>
+   * <p>sets the ag number to be set when encoding the operation.</p>
    *
    * @param newTagNumber the new tag number to be set
    */

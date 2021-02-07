@@ -100,7 +100,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     parse(b, decryptionKey);
   }
 
-  protected void parse(byte[] p, AsymmetricKey decryptionKey) throws IOException {
+  protected final void parse(byte[] p, AsymmetricKey decryptionKey) throws IOException {
     try (ASN1InputStream aIn = new ASN1InputStream(p)) {
       parse(aIn.readObject(), decryptionKey);
       if (identity == null) {

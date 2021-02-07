@@ -52,14 +52,13 @@ public class MergePayloadOperation extends Operation implements Serializable {
    * <p>Create object from ASN.1 code.</p>
    *
    * @param object the ASN.1 code
-   * @throws IOException if parsing of ASN.1 code fails
    */
-  public MergePayloadOperation(ASN1Encodable object) throws IOException {
+  public MergePayloadOperation(ASN1Encodable object) {
     parse(object);
   }
 
   @Override
-  protected final void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) {
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
     int i = 0;
     originalFirstId = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();

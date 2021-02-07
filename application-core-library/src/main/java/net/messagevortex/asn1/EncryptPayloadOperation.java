@@ -51,7 +51,7 @@ public class EncryptPayloadOperation extends AbstractCryptPayloadOperation imple
     if (key == null) {
       key = new SymmetricKey();
     }
-    setTagNumber(ENCRYPT_PAYLOAD);
+    setTagNumber(Operation.Operations.ENCRYPT_PAYLOAD.getId());
     this.originalId = sourceBlock;
     this.newId = targetBlock;
     this.key = key;

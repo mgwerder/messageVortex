@@ -46,9 +46,8 @@ public class HeaderRequestQueryQuota extends HeaderRequest implements Serializab
    * <p>Creates a request block from the ASN.1 structure.</p>
    *
    * @param ae            the structure to be parsed
-   * @throws IOException  if the structure does not parse to the respective block
    */
-  public HeaderRequestQueryQuota(ASN1Encodable ae) throws IOException {
+  public HeaderRequestQueryQuota(ASN1Encodable ae) {
     this();
     if (ae != null) {
       parse(ae);
