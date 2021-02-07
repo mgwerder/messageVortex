@@ -28,6 +28,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -212,8 +213,8 @@ public class IdentityStore extends AbstractBlock
     LOGGER.log(Level.FINE, "done getAnonSet()");
     return ret;
   }
-  
-  protected void parse(byte[] p) throws IOException {
+
+  protected final void parse(byte[] p) throws IOException {
     try (ASN1InputStream aIn = new ASN1InputStream(p)) {
       parse(aIn.readObject());
     }
@@ -250,7 +251,7 @@ public class IdentityStore extends AbstractBlock
    * @throws IOException if node address is not contained in identity store
    */
   public void removeAddress(String nodeAddress) throws IOException {
-    List<String> rem = new Vector<>();
+    List<String> rem = new ArrayList<>();
     if (nodeAddress != null) {
       nodeAddress = nodeAddress.toLowerCase();
     }

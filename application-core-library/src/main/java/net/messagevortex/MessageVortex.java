@@ -314,7 +314,9 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.INFO, "shutting down " + es.getKey());
       es.getValue().shutdownDaemon();
     }
-    
+
+    // remove all entries from identity store
+    identityStore.clear();
     DummyTransportTrx.clearDummyEndpoints();
     LOGGER.log(Level.INFO, "******* shutdown complete *******");
     return 0;

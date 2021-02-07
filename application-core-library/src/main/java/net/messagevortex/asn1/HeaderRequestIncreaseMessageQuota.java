@@ -58,7 +58,7 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest implements 
     }
   }
 
-  protected final void parse(ASN1Encodable ae) throws IOException {
+  protected final void parse(ASN1Encodable ae) {
     ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
     int i = 0;
     quota = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
