@@ -136,10 +136,10 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   
   @CommandLine.Option(names = {"--element"},
           description = "the affected element")
-  private final int elementIndex = -1;
+  private int elementIndex = -1;
   @CommandLine.Option(names = {"--value"},
           description = "number of elements for a key (requires --element)")
-  private final int value = -1;
+  private int value = -1;
   
   /**
    * Worker thread class to claculate a new specific asymmetric key.
