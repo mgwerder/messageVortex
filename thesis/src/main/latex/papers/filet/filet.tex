@@ -309,10 +309,6 @@
 % http://www.ctan.org/pkg/urlclassifi
 % Basically, \url{my_url_here}.
 
-
-
-
-
 % *** Do not adjust lengths that control margins, column widths, etc. ***
 % *** Do not use packages that alter fonts (such as pslatex).         ***
 % There should be no need to do such things with IEEEtran.cls V1.6 and later.
@@ -335,6 +331,10 @@
 
 \usepackage{fixfoot}
 
+
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,arrows.meta,backgrounds,shapes.geometric,shadows.blur}
+\tikzset{background rectangle/.style={fill=black!10}, show background rectangle}
 
 \begin{document}
 %
@@ -961,7 +961,7 @@ The $decryptPayload$ operation decrypts a payload block $pb_1$ symmetrically res
 These operations build the core of the mixing operations. The operation allows to add to a message redundancy information or to rebuild a block from a chosen set of information. 
 
 \begin{figure}[ht]\centering
-	\includegraphics[width=0.5\columnwidth]{addRedundancyOp}
+	\resizebox{0.9\columnwidth}{!}{\input{../../inc/addRedundancyOp.inc.tex}}
 	\caption{Outline of the addRedundancy operation}
 	\label{fig:addRedundancyOperation}
 \end{figure}
