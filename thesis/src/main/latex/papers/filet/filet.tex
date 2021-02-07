@@ -336,6 +336,30 @@
 \usepackage{fixfoot}
 
 
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,arrows.meta,backgrounds,shapes.geometric,shadows.blur}
+\tikzset{background rectangle/.style={fill=black!10}, show background rectangle}
+\gdef\shadowshift{-3pt}
+\definecolor{operationcolor}{RGB}{255,226,226}
+\definecolor{endoperationcolor}{RGB}{255,255,226}
+\definecolor{atomicopcolor}{RGB}{217,248,217}
+\definecolor{senderkeycolor}{RGB}{159, 216, 255 }
+\definecolor{payloadcolor}{RGB}{233,45,64}
+\definecolor{peerkeycolor}{RGB}{217,248, 217}
+\definecolor{hostkeycolor}{RGB}{190,217, 232}
+\definecolor{layercolor}{RGB}{190,217, 232}
+\definecolor{nodecolor}{RGB}{132, 151, 176}
+\definecolor{startnodecolor}{RGB}{192, 151, 176}
+\definecolor{endnodecolor}{RGB}{132, 211, 176}
+\definecolor{nodeshadow}{RGB}{107, 107, 107}
+\definecolor{hostIdentitycolor}{RGB}{255, 226, 226 }
+\definecolor{transportcolor}{RGB}{220,20,20}
+\definecolor{flowColor}{RGB}{ 79,136, 187}
+\definecolor{flowBorderColor}{RGB}{ 79,116, 167}
+\definecolor{unrelatedcolor}{RGB}{20,220,20}
+
+
+
 \begin{document}
 %
 % paper title
@@ -961,7 +985,7 @@ The $decryptPayload$ operation decrypts a payload block $pb_1$ symmetrically res
 These operations build the core of the mixing operations. The operation allows to add to a message redundancy information or to rebuild a block from a chosen set of information. 
 
 \begin{figure}[ht]\centering
-	\includegraphics[width=0.5\columnwidth]{addRedundancyOp}
+	\resizebox{0.8\textwidth}{!}{\input{../../inc/addRedundancyOp.inc.tex}}
 	\caption{Outline of the addRedundancy operation}
 	\label{fig:addRedundancyOperation}
 \end{figure}
