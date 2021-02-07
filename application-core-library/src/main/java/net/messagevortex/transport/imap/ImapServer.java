@@ -147,11 +147,7 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     super.shutdown();
     doGarbageCollection(true);
     for (ImapConnection ic : connSet) {
-      try {
-        ic.shutdown();
-      } catch (IOException ioe) {
-        // safe to ignore as we shut dow all connects anyway
-      }
+      ic.shutdown();
     }
     // cleanup set
     doGarbageCollection(true);
