@@ -94,7 +94,8 @@ public abstract class Operation extends AbstractBlock implements Serializable {
     if (Operations.getById(tag) == null || Operations.getById(tag).getFactory() == null) {
       throw new IOException("unknown tag for choice detected");
     }
-    return Operations.getById(tag).getFactory().getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
+    return Operations.getById(tag).getFactory()
+        .getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
   }
 
   /***

@@ -1,9 +1,9 @@
 package net.messagevortex.test;
 
-/**
+/*
  * Test all classes related to parsing/handling ASN.1 data.
  *
-  */
+ */
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;

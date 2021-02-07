@@ -36,12 +36,12 @@ public enum EllipticCurveType {
   
   static EllipticCurveType def = SECP521R1;
   
-  private int id;
+  private final int id;
   private EllipticCurveType courveType;
-  private String txt;
-  private Algorithm alg;
-  private SecurityLevel secLevel;
-  private int keySize;
+  private final String txt;
+  private final Algorithm alg;
+  private final SecurityLevel secLevel;
+  private final int keySize;
   
   EllipticCurveType(int id, String txt, int keySize, Algorithm alg, SecurityLevel level) {
     this.id = id;

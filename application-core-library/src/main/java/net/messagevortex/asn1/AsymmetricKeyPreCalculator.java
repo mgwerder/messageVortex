@@ -136,10 +136,10 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   
   @CommandLine.Option(names = {"--element"},
           description = "the affected element")
-  private int elementIndex = -1;
+  private final int elementIndex = -1;
   @CommandLine.Option(names = {"--value"},
           description = "number of elements for a key (requires --element)")
-  private int value = -1;
+  private final int value = -1;
   
   /**
    * Worker thread class to claculate a new specific asymmetric key.
@@ -580,7 +580,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     private static int counter = 0;
     
     private volatile boolean shutdown = false;
-    private volatile boolean stopIfFull;
+    private final boolean stopIfFull;
     
     InternalThread(boolean stopIfFull) {
       this.stopIfFull = stopIfFull;

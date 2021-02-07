@@ -17,7 +17,7 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
 
   static Map<String, Set<BlenderRecipe>> recipes = new HashMap<>();
 
-  private static SecureRandom esr = ExtendedSecureRandom.getSecureRandom();
+  private static final SecureRandom esr = ExtendedSecureRandom.getSecureRandom();
 
   private static final String DEFAULT = "default";
 

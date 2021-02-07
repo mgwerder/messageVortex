@@ -78,8 +78,8 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
   
   public static final long serialVersionUID = 100000000032L;
   
-  private static int PUBLIC_KEY_TAG = 2;
-  private static int PRIVATE_KEY_TAG = 3;
+  private static final int PUBLIC_KEY_TAG = 2;
+  private static final int PRIVATE_KEY_TAG = 3;
   
   static {
     Security.addProvider(new BouncyCastleProvider());

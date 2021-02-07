@@ -56,8 +56,8 @@ public class Config {
   
   private static final String DEFAULT = "default";
   
-  private List<String> sections = new ArrayList<>();
-  private List<String> fields = new ArrayList<>();
+  private final List<String> sections = new ArrayList<>();
+  private final List<String> fields = new ArrayList<>();
   
   private String resourceFilename;
   
@@ -100,7 +100,7 @@ public class Config {
     
     @Override
     public Object stringToObject(String s) {
-      return s != null && ("true".equals(s.toLowerCase()) || "yes".equals(s.toLowerCase()));
+      return s != null && ("true".equalsIgnoreCase(s) || "yes".equalsIgnoreCase(s));
     }
   }
   
@@ -119,14 +119,14 @@ public class Config {
     
     public static ConfigType getById(String id) {
       for (ConfigType c : values()) {
-        if (c.name().toLowerCase().equals(id.toLowerCase())) {
+        if (c.name().equalsIgnoreCase(id)) {
           return c;
         }
       }
       return null;
     }
     
-    private Converters converters;
+    private final Converters converters;
     
     ConfigType(Converters converters) {
       this.converters = converters;
@@ -138,7 +138,7 @@ public class Config {
   }
   
   private class ConfigValue {
-    private String value;
+    private final String value;
     private int lineNumber = -1;
     
     public ConfigValue(String value, int lineNumber) {
@@ -546,7 +546,7 @@ public class Config {
               section,
               id,
               value != null
-                      && ("yes".equals(value.toLowerCase()) || "true".equals(value.toLowerCase())),
+                      && ("yes".equalsIgnoreCase(value) || "true".equalsIgnoreCase(value)),
               lineNumber);
     } else if (c.getType() == ConfigType.STRING) {
       setStringValue(section, id, value, lineNumber);

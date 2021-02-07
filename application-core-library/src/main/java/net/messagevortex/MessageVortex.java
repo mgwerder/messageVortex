@@ -83,31 +83,31 @@ public class MessageVortex implements Callable<Integer> {
     BLEDING,
     ROUTING,
     ACCOUNTING,
-    IDENTITY_STORE;
+    IDENTITY_STORE
   }
   
   @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
-  private String configFile = "messageVortex.cfg";
+  private final String configFile = "messageVortex.cfg";
   
   @CommandLine.Option(names = {"--timeoutAndDie"}, hidden = true,
           description = "timeout before aboorting execution (for test purposes only)")
-  private int timeoutInSeconds = -1;
+  private final int timeoutInSeconds = -1;
   
   @CommandLine.Option(names = {"--threadDumpInteval"}, hidden = true,
           description = "timeout before aboorting execution (for test purposes only)")
-  private int threadDumpInterval = 300;
+  private final int threadDumpInterval = 300;
   
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
   
-  private static Map<String, Transport> transport = new ConcurrentHashMap<>();
-  private static Map<String, Blender> blender = new ConcurrentHashMap<>();
-  private static Map<String, Router> router = new ConcurrentHashMap<>();
-  private static Map<String, Accountant> accountant = new ConcurrentHashMap<>();
-  private static Map<String, IdentityStore> identityStore = new ConcurrentHashMap<>();
-  private static InternalPayloadSpaceStore ownStores = new InternalPayloadSpaceStore();
-  private static InternalPayloadSpaceStore simStores = new InternalPayloadSpaceStore();
+  private static final Map<String, Transport> transport = new ConcurrentHashMap<>();
+  private static final Map<String, Blender> blender = new ConcurrentHashMap<>();
+  private static final Map<String, Router> router = new ConcurrentHashMap<>();
+  private static final Map<String, Accountant> accountant = new ConcurrentHashMap<>();
+  private static final Map<String, IdentityStore> identityStore = new ConcurrentHashMap<>();
+  private static final InternalPayloadSpaceStore ownStores = new InternalPayloadSpaceStore();
+  private static final InternalPayloadSpaceStore simStores = new InternalPayloadSpaceStore();
   private static Integer JRE_AES_KEY_SIZE = null;
   
   private boolean verifyPrerequisites() {
@@ -370,7 +370,7 @@ public class MessageVortex implements Callable<Integer> {
               + "\" does not implement required interfaces");
     }
     try {
-      return myConstructor.newInstance(new Object[]{section});
+      return myConstructor.newInstance(section);
     } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
       throw new ClassNotFoundException("Class \"" + name + "\" failed running the constructor", e);
     }

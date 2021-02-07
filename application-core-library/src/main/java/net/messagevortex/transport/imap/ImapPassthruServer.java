@@ -44,8 +44,8 @@ public class ImapPassthruServer {
           + "(?:(?<username>[\\p{Alnum}\\-\\.]+):(?<password>[\\p{ASCII}&&[^@]]+)@)?"
           + "(?<server>[\\p{Alnum}\\.\\-]+)(?::(?<port>[\\digit]{1,5}))?";
 
-  private ImapServer localServer;
-  private ImapClient remoteServer;
+  private final ImapServer localServer;
+  private final ImapClient remoteServer;
 
   /***
    * <p>Create an IMAP passthru proxy server.</p>

@@ -33,11 +33,11 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private GreenMail server;
-  private String section;
-  private Thread mailHandler = new Thread(this);
-  private TransportReceiver blender;
-  private Object runningLock = new Object();
+  private final GreenMail server;
+  private final String section;
+  private final Thread mailHandler = new Thread(this);
+  private final TransportReceiver blender;
+  private final Object runningLock = new Object();
   private boolean isRunning = false;
 
 

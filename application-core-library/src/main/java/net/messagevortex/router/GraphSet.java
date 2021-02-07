@@ -41,12 +41,12 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
 
   private static final long serialVersionUID = 16134223345689L;
 
-  private List<Edge> store = new ArrayList<>();
+  private final List<Edge> store = new ArrayList<>();
   private List<net.messagevortex.asn1.IdentityStoreBlock> anonymitySet;
   private net.messagevortex.asn1.IdentityStoreBlock source = null;
   private net.messagevortex.asn1.IdentityStoreBlock target = null;
   private boolean hasChanged = true;
-  private Object cacheLock = new Object();
+  private final Object cacheLock = new Object();
   private GraphSet[] cache = null;
 
   /***

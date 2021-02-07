@@ -75,7 +75,7 @@ public class IdentityStore extends AbstractBlock
   
   private static IdentityStore demo = null;
   private AsymmetricKey hostIdentity = null;
-  private Map<String, IdentityStoreBlock> blocks = new TreeMap<>();
+  private final Map<String, IdentityStoreBlock> blocks = new TreeMap<>();
   
   public IdentityStore() {
     blocks.clear();

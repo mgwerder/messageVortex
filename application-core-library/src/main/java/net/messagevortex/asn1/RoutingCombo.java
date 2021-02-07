@@ -84,7 +84,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
   private RoutingCombo murbReplyBlock = null;
   private long murbMaxReplay = -1;
   private UsagePeriod murbValidity = null;
-  private List<Operation> operation = new ArrayList<>();
+  private final List<Operation> operation = new ArrayList<>();
 
   /***
    * <p>Creates an empty router block.</p>

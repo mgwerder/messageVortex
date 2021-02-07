@@ -114,8 +114,8 @@ public class SizeBlock extends AbstractBlock implements Serializable {
 
     // encode target sequence
     ASN1EncodableVector v2 = new ASN1EncodableVector();
-    v2.add(new ASN1Integer((int) (from)));
-    v2.add(new ASN1Integer((int) (to)));
+    v2.add(new ASN1Integer(from));
+    v2.add(new ASN1Integer(to));
     v.add(new DERTaggedObject(type.getId(), new DERSequence(v2)));
 
     return new DERSequence(v);

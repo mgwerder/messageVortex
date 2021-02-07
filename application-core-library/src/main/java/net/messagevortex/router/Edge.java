@@ -31,8 +31,8 @@ public class Edge {
 
   private static final long serialVersionUID = 9070431563L;
 
-  private IdentityStoreBlock from;
-  private IdentityStoreBlock to;
+  private final IdentityStoreBlock from;
+  private final IdentityStoreBlock to;
   private long startTime = 0;
   private long maxDelay = 10000;
 

@@ -22,9 +22,9 @@ public class MessageVortexController implements SignalHandler {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
   
-  private Object runningLock = new Object();
-  private int port = 8743;
-  private ControllerRunner runner = new ControllerRunner();
+  private final Object runningLock = new Object();
+  private final int port = 8743;
+  private final ControllerRunner runner = new ControllerRunner();
   private Timer timer = null;
   
   private class ControllerRunner implements Runnable {

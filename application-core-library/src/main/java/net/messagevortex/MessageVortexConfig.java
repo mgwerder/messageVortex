@@ -28,7 +28,7 @@ public class MessageVortexConfig extends Config {
 
   public static final String DEFAULT_FILENAME = "messageVortex.cfg";
 
-  private static Object lock = new Object();
+  private static final Object lock = new Object();
 
   private MessageVortexConfig() throws IOException {
     // This constructor hides a default constructor

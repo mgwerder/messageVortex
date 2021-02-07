@@ -92,7 +92,7 @@ public class SmtpConnection extends ClientConnection {
         // smtp state machine
         String envelopeFrom = null;
         String envelopeTo = null;
-        while (command == null || !"quit".equals(command.toLowerCase())) {
+        while (command == null || !"quit".equalsIgnoreCase(command)) {
           LOGGER.log(Level.INFO, "Waiting for SMTP command to arrive");
 
           // wait for incomming command
@@ -110,7 +110,7 @@ public class SmtpConnection extends ClientConnection {
               write("250-ENHANCEDSTATUSCODES" + CRLF);
               write("250 AUTH login" + CRLF);
               // check for login
-            } else if ("auth login".equals(command.toLowerCase())) {
+            } else if ("auth login".equalsIgnoreCase(command)) {
               writeln("334 " + new String(
                       Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)),
                       StandardCharsets.UTF_8
@@ -134,7 +134,7 @@ public class SmtpConnection extends ClientConnection {
               write("250 OK" + CRLF);
               // FIXME reject if not apropriate
               // check for message body
-            } else if ("data".equals(command.toLowerCase())) {
+            } else if ("data".equalsIgnoreCase(command)) {
               if (envelopeFrom != null && envelopeTo != null) {
                 write("354 send the mail data, end with CRLF.CRLF" + CRLF);
 

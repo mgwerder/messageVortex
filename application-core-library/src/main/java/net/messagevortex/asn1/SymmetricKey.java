@@ -61,7 +61,7 @@ public class SymmetricKey extends Key implements Serializable {
 
   public static final long serialVersionUID = 100000000040L;
 
-  private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
+  private static final ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
 
   protected byte[] key = null;
 
@@ -145,7 +145,7 @@ public class SymmetricKey extends Key implements Serializable {
       old = s.getBytes(StandardCharsets.UTF_8);
     }
     if (b == null || b.length == 0) {
-      parameters.put(Parameter.IV, toHex(secureRandom.generateSeed(16)));
+      parameters.put(Parameter.IV, toHex(ExtendedSecureRandom.generateSeed(16)));
     } else {
       parameters.put(Parameter.IV, toHex(b));
     }
@@ -186,7 +186,7 @@ public class SymmetricKey extends Key implements Serializable {
   private void createAes(int keysize) {
     Mode mode = getMode();
     byte[] keyBytes = new byte[keysize / 8];
-    secureRandom.nextBytes(keyBytes);
+    ExtendedSecureRandom.nextBytes(keyBytes);
     if (mode.getRequiresInitVector() && (getIv() == null || getIv().length != 16)) {
       setIv(null);
     }
@@ -197,7 +197,7 @@ public class SymmetricKey extends Key implements Serializable {
   private void createCamellia(int keysize) {
     Mode mode = getMode();
     byte[] keyBytes = new byte[keysize / 8];
-    secureRandom.nextBytes(keyBytes);
+    ExtendedSecureRandom.nextBytes(keyBytes);
     if (mode.getRequiresInitVector()) {
       setIv(null);
     }
@@ -208,7 +208,7 @@ public class SymmetricKey extends Key implements Serializable {
   private void createTwofish(int keysize) {
     Mode mode = getMode();
     byte[] keyBytes = new byte[keysize / 8];
-    secureRandom.nextBytes(keyBytes);
+    ExtendedSecureRandom.nextBytes(keyBytes);
     if (mode.getRequiresInitVector()) {
       setIv(null);
     }

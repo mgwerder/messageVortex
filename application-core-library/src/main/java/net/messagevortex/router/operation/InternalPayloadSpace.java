@@ -57,7 +57,7 @@ public class InternalPayloadSpace {
   final Map<Integer, Operation>      internalOperationOutput = new HashMap<>();
   final Map<Integer, Set<Operation>> internalOperationInput = new HashMap<>();
 
-  private long lastcompact = System.currentTimeMillis();
+  private final long lastcompact = System.currentTimeMillis();
 
   /***
    * <p>Creates an internal payload space and adds it to the central directory.</p>

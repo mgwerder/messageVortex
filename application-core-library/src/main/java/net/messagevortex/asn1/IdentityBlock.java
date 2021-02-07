@@ -53,7 +53,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     ESTABLISHED(10),
     EXPIRED(100);
 
-    private int statusNumber;
+    private final int statusNumber;
 
     IdentityStatus(int num) {
       this.statusNumber = num;
@@ -67,7 +67,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   public static final long serialVersionUID = 100000000008L;
 
   private static int nextID = 0;
-  private static Object nextIdSemaphore = new Object();
+  private static final Object nextIdSemaphore = new Object();
 
   private static final int ENCRYPTED_HEADER_KEY = 1000;
   private static final int ENCRYPTED_BLOCK = 1001;
@@ -89,9 +89,9 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   private long identifier = -1;
   private byte[] padding = null;
   private byte[] encryptedIdentityBlock = null;
-  private IdentityStatus status = IdentityStatus.NEW;
+  private final IdentityStatus status = IdentityStatus.NEW;
 
-  private int id;
+  private final int id;
 
   private AsymmetricKey ownIdentity = null;
 

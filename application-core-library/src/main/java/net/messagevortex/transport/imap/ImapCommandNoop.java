@@ -32,15 +32,14 @@ public class ImapCommandNoop extends ImapCommand {
    *
    * @param line the full line to be processed.
    * @return the server reply
-   * @FIXME return proper status
    */
   public String[] processCommand(ImapLine line) throws ImapException {
 
     // skip space
-    // WRNING this is "non-strict"
+    // WARNING this is "non-strict"
     line.skipWhitespace(-1);
 
-    // skip lineend
+    // skip line end
     if (!line.skipLineEnd()) {
       throw new ImapException(line, "error parsing command");
     }
@@ -50,6 +49,7 @@ public class ImapCommandNoop extends ImapCommand {
     //// * 23 EXISTS
     //// * 3 RECENT
     //// * 14 FETCH (FLAGS (\Seen \Deleted))
+    // FIXME status probably wrong (returns always OK)
     return new String[]{line.getTag() + " OK\r\n"};
   }
 

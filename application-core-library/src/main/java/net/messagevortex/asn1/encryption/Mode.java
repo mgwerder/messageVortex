@@ -57,7 +57,7 @@ public enum Mode {
       "Twofish256"}, new Padding[]{Padding.PKCS7}),
   NONE(10100, "NONE", false, new String[]{"ECIES", "RSA"}, new Padding[]{Padding.PKCS7});
 
-  private static Map<AlgorithmType, Mode> def = new HashMap<>(2);
+  private static final Map<AlgorithmType, Mode> def = new HashMap<>(2);
 
   static {
     def.put(AlgorithmType.ASYMMETRIC, Mode.ECB);

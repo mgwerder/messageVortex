@@ -22,7 +22,7 @@ public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
    **/
   @CommandLine.Option(names = {"--seconds"},
           description = "number of seconds to run the calculator (-1) for infinite")
-  private int seconds = -1;
+  private final int seconds = -1;
   
   /**
    * <p>Run a cache pre-calculator to fill cache for the specified duration.</p>

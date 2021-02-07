@@ -43,10 +43,10 @@ public class CipherSpec extends AbstractBlock implements Serializable {
 
   public static final long serialVersionUID = 100000000006L;
 
-  private static int SYMMETRIC = 16001;
-  private static int ASYMMETRIC = 16002;
-  private static int MAC = 16003;
-  private static int USAGE = 16004;
+  private static final int SYMMETRIC = 16001;
+  private static final int ASYMMETRIC = 16002;
+  private static final int MAC = 16003;
+  private static final int USAGE = 16004;
 
   /* The endpoint address to be used */
   private AsymmetricAlgorithmSpec asymmetricSpec = null;

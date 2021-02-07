@@ -5,7 +5,7 @@ import java.awt.geom.Ellipse2D;
 
 public class TooltipExtentCircular extends TooltipExtent {
   
-  private Ellipse2D circle;
+  private final Ellipse2D circle;
   
   public TooltipExtentCircular(Ellipse2D circle) {
     this.circle = (Ellipse2D) (circle.clone());

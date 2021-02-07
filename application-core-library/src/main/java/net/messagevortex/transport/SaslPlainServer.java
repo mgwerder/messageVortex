@@ -57,8 +57,7 @@ public class SaslPlainServer implements SaslServer {
 
     @Override
     public String[] getMechanismNames(Map<String, ?> props) {
-      if (props == null || "false".equals(props.get(Sasl.POLICY_NOPLAINTEXT).toString()
-          .toLowerCase())) {
+      if (props == null || "false".equalsIgnoreCase(props.get(Sasl.POLICY_NOPLAINTEXT).toString())) {
         return new String[] {"PLAIN"};
       } else {
         return new String[0];

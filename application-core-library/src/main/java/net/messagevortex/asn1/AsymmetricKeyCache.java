@@ -268,7 +268,7 @@ public class AsymmetricKeyCache implements Serializable {
   public void store(String filename) throws IOException {
     Path p = Paths.get(filename);
     try (
-            ObjectOutputStream os = new ObjectOutputStream(Files.newOutputStream(p));
+            ObjectOutputStream os = new ObjectOutputStream(Files.newOutputStream(p))
     ) {
       os.writeObject(this);
     }
@@ -483,7 +483,6 @@ public class AsymmetricKeyCache implements Serializable {
     for (Map.Entry<AlgorithmParameter, CacheElement> e : cache.entrySet()) {
       lowest = Math.min(lowest, (double) (e.getValue().size()) / e.getValue().getMaxSize());
     }
-    ;
     return lowest;
   }
   

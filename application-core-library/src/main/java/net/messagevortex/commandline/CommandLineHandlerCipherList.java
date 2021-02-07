@@ -29,7 +29,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
     ASYM,
     SYM,
     MODE,
-    PAD;
+    PAD
   }
 
   private static final java.util.logging.Logger LOGGER;
@@ -120,7 +120,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
           System.err.println("ERROR: Unknown type specified");
           throw new IOException("Unknown type specified");
       }
-      System.out.println("");
+      System.out.println();
       System.out.flush();
     }
     return 0;

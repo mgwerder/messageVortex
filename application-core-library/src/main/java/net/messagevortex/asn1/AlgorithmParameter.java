@@ -46,7 +46,7 @@ public class AlgorithmParameter extends AbstractBlock
 
   public static final long serialVersionUID = 100000000001L;
 
-  private Map<Integer, String> parameter;
+  private final Map<Integer, String> parameter;
 
   public AlgorithmParameter() {
     parameter = new ConcurrentSkipListMap<>();

@@ -43,7 +43,7 @@ import org.junit.runners.Suite;
         IdentityBlockTest.class
 })
 
-/***
+/*
  * Test all classes related to parsing/handling ASN.1 data.
  */
 public class MainASN1Suite {

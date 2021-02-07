@@ -36,51 +36,55 @@ import org.bouncycastle.asn1.ASN1Enumerated;
  * <p>Enumeration listing all available padding types for encryption.</p>
  */
 public enum Padding implements Serializable {
-  NONE(1000, "NoPadding", new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
+  NONE(1000, "NoPadding", new AlgorithmType[] {AlgorithmType.SYMMETRIC}, new SizeCalc() {
     public int maxSize(int s) {
       return s / 8;
     }
   }),
-  PKCS1(1001, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+  PKCS1(1001, "PKCS1Padding", new AlgorithmType[] {AlgorithmType.ASYMMETRIC}, new SizeCalc() {
     public int maxSize(int s) {
       return (s / 8) - 11;
     }
   }),
   OAEP_SHA256_MGF1(1100, "OAEPWithSHA256AndMGF1Padding",
-          new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-    public int maxSize(int s) {
-      return (s / 8) - 2 - (256 / 4);
-    }
-  }),
+      new AlgorithmType[] {AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+        public int maxSize(int s) {
+          return (s / 8) - 2 - (256 / 4);
+        }
+      }
+  ),
   OAEP_SHA384_MGF1(1101, "OAEPWithSHA384AndMGF1Padding",
-          new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-    public int maxSize(int s) {
-      return s / 8 - 2 - 384 / 4;
-    }
-  }),
+      new AlgorithmType[] {AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+        public int maxSize(int s) {
+          return s / 8 - 2 - 384 / 4;
+        }
+      }
+  ),
   OAEP_SHA512_MGF1(1102, "OAEPWithSHA512AndMGF1Padding",
-          new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-    public int maxSize(int s) {
-      return s / 8 - 2 - 512 / 4;
-    }
-  }),
+      new AlgorithmType[] {AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+        public int maxSize(int s) {
+          return s / 8 - 2 - 512 / 4;
+        }
+      }
+  ),
   PKCS7(1007, "PKCS7Padding",
-          new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
-    public int maxSize(int s) {
-      return s / 8 - 1;
-    }
-  });
-  
+      new AlgorithmType[] {AlgorithmType.SYMMETRIC}, new SizeCalc() {
+        public int maxSize(int s) {
+          return s / 8 - 1;
+        }
+      }
+  );
+
   public static final long serialVersionUID = 100000000038L;
-  
+
   private static final Map<AlgorithmType, Padding> DEFAULT_PADDING = new HashMap<>();
-  
-  private int id;
-  private String txt;
-  private Set<AlgorithmType> at;
-  private SizeCalc sizeCalculator;
+
+  private final int id;
+  private final String txt;
+  private final Set<AlgorithmType> at;
+  private final SizeCalc sizeCalculator;
   final ASN1Enumerated asn;
-  
+
   Padding(int id, String txt, AlgorithmType[] at, SizeCalc sizeCalculator) {
     this.id = id;
     this.txt = txt;
@@ -89,7 +93,7 @@ public enum Padding implements Serializable {
     this.sizeCalculator = sizeCalculator;
     this.asn = new ASN1Enumerated(id);
   }
-  
+
   /***
    * <p>Get applicable padding sets for a given Algorithm type.</p>
    *
@@ -105,8 +109,8 @@ public enum Padding implements Serializable {
     }
     return v.toArray(new Padding[v.size()]);
   }
-  
-  
+
+
   /***
    * <p>Get a padding by its ASN.1 ID.</p>
    *
@@ -121,7 +125,7 @@ public enum Padding implements Serializable {
     }
     return null;
   }
-  
+
   /***
    * <p>Get a padding by its name.</p>
    *
@@ -136,7 +140,7 @@ public enum Padding implements Serializable {
     }
     return null;
   }
-  
+
   /***
    * <p>Get the default padding for a given AlgorithmType.</p>
    *
@@ -151,7 +155,7 @@ public enum Padding implements Serializable {
         DEFAULT_PADDING.put(AlgorithmType.SYMMETRIC, Padding.PKCS7);
       }
     }
-  
+
     // return padding
     Padding p = DEFAULT_PADDING.get(at);
     if (p == null) {
@@ -159,7 +163,7 @@ public enum Padding implements Serializable {
     }
     return p;
   }
-  
+
   /***
    * <p>Get the numeric ASN.1 id of the padding.</p>
    *
@@ -168,7 +172,7 @@ public enum Padding implements Serializable {
   public int getId() {
     return id;
   }
-  
+
   /***
    * <p>Get the textual representation of the padding for the cryptographic provider.</p>
    *
@@ -177,7 +181,7 @@ public enum Padding implements Serializable {
   public String toString() {
     return txt;
   }
-  
+
   /***
    * <p>Gets the maximum payload size.</p>
    *
@@ -189,7 +193,7 @@ public enum Padding implements Serializable {
   public int getMaxSize(int blockSize) {
     return sizeCalculator.maxSize(blockSize);
   }
-  
+
   /***
    * <p>Get the corresponding ASN1 enumeration.</p>
    *
@@ -198,5 +202,5 @@ public enum Padding implements Serializable {
   public ASN1Enumerated toAsn1() {
     return asn;
   }
-  
+
 }

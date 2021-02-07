@@ -1,8 +1,9 @@
 package net.messagevortex.asn1.encryption;
 
+// FIXME enum not functional (must first match specified PRNGs)
+
 /**
  * <p>Specifies random number generator.</p>
- * @FIXME enum not functional
  */
 public enum PrngType {
   FIXME(-1);

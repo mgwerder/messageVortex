@@ -52,7 +52,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
   public static class SimplePrng implements Prng {
 
     private final Random sr = new Random();
-    private long seed;
+    private final long seed;
 
     public SimplePrng() {
       seed = sr.nextLong();

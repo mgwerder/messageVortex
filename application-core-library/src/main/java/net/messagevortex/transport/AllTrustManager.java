@@ -40,7 +40,8 @@ public class AllTrustManager extends X509ExtendedTrustManager {
   }
 
   @Override
-  public void checkClientTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) {
+  public void checkClientTrusted(X509Certificate[] x509Certificates, String s,
+                                 SSLEngine sslEngine) {
   }
 
   @Override
@@ -48,7 +49,8 @@ public class AllTrustManager extends X509ExtendedTrustManager {
   }
 
   @Override
-  public void checkServerTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) {
+  public void checkServerTrusted(X509Certificate[] x509Certificates, String s,
+                                 SSLEngine sslEngine) {
   }
 
   @Override

@@ -28,7 +28,7 @@ public enum UsagePeriodType {
   ABSOLUTE(2),
   RELATIVE(3);
 
-  private int id;
+  private final int id;
 
   UsagePeriodType(int id) {
     this.id = id;

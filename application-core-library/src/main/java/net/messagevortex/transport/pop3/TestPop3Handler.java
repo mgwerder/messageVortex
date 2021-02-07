@@ -29,10 +29,10 @@ public class TestPop3Handler implements Transport {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private GreenMail server;
-  private String section;
-  private TransportReceiver blender;
-  private GreenMailUser outUser;
+  private final GreenMail server;
+  private final String section;
+  private final TransportReceiver blender;
+  private final GreenMailUser outUser;
 
 
   /**

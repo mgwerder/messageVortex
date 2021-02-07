@@ -409,7 +409,7 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
    */
   public String getUrl() throws IOException {
     if (nodeAddress.startsWith("smtp:")) {
-      String[] addr = nodeAddress.substring(5, nodeAddress.length()).split("@");
+      String[] addr = nodeAddress.substring(5).split("@");
       if (identityKey == null) {
         LOGGER.log(Level.WARNING, "unable to encode identity key of " + nodeAddress
                 + " (key is null)");

@@ -43,10 +43,10 @@ public class SimpleMessageFactory extends MessageFactory {
   }
   
   /* Edge set to be honored */
-  private GraphSet graph = new GraphSet();
+  private final GraphSet graph = new GraphSet();
   
   /* number of s for the graph to be completed */
-  private long minMessageTransferStart = 180L;
+  private final long minMessageTransferStart = 180L;
   
   /* number of s for the graph to be completed */
   private long maxMessageTransferTime = 1800L;

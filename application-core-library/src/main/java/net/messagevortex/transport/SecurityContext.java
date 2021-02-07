@@ -52,7 +52,7 @@ public class SecurityContext {
 
   private SecurityRequirement requirement = SecurityRequirement.STARTTLS;
   private SSLContext context = null;
-  private Set<String> supportedCiphers = new HashSet<>();
+  private final Set<String> supportedCiphers = new HashSet<>();
 
   public SecurityContext() {
   }

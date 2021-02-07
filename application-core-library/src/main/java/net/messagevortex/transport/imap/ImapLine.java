@@ -30,13 +30,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.messagevortex.MessageVortexLogger;
 
+// FIXME Limit strings and literals to a certain length (otherwise it is litterally unlimited)
+// FIXME Code will fail if Line.length()&gt;Maxint or out of memory
+
 /***
  * <p>A Imap conformant parser/scanner.</p>
  *
  * @author Martin Gwerder
  *
- * @FIXME Limit strings and literals to a certain length (otherwise it is litterally unlimited)
- * @FIXME Code will fail if Line.length()&gt;Maxint or out of memory
  */
 public class ImapLine {
 
@@ -75,7 +76,7 @@ public class ImapLine {
   /* this holds the past context for the case that an exception is risen */
   private String context = "";
   /* storage for the connection which created the line */
-  private ImapConnection con;
+  private final ImapConnection con;
 
   /* The holder for the parsed command/status of a line */
   private String commandToken = null;
@@ -89,6 +90,8 @@ public class ImapLine {
   /* this is the buffer of read but unprocessed characters */
   private String buffer = "";
 
+   // FIXME should be a ABNF implementation
+   // FIXME extract reading from constructor
   /***
    * <p>Creates an imap line object with a parser for a command.</p>
    *
@@ -102,8 +105,6 @@ public class ImapLine {
    * @throws ImapException if reading fails
    * @throws NullPointerException if connection and line are null
    *
-   * @FIXME should be a ABNF implementation
-   * @FIXME extract reading from constructor
    */
   public ImapLine(ImapConnection con, String line, InputStream input) throws ImapException {
     this.con = con;
@@ -372,7 +373,7 @@ public class ImapLine {
   private void addContext(String chunk) {
     context += chunk;
     if (context.length() > MAX_CONTEXT) {
-      context = context.substring(context.length() - MAX_CONTEXT, context.length());
+      context = context.substring(context.length() - MAX_CONTEXT);
     }
   }
 
@@ -424,7 +425,7 @@ public class ImapLine {
     }
 
     // cut the buffer
-    buffer = buffer.substring((int) num, buffer.length());
+    buffer = buffer.substring((int) num);
 
     return ret;
   }
@@ -535,7 +536,7 @@ public class ImapLine {
     while (snoopBytes(1) != null && (ABNF_QUOTED_CHAR.contains(snoopBytes(1))
            || snoopEscQuotes())) {
       if ("\\".contains(snoopBytes(1))) {
-        ret.append(skipBytes(2).substring(1, 2));
+        ret.append(skipBytes(2).charAt(1));
       } else {
         ret.append(skipBytes(1));
       }

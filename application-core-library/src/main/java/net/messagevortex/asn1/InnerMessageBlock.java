@@ -66,7 +66,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
   private IdentityBlock identity;
   private byte[] identitySignature = null;
   private RoutingCombo routing;
-  private Object payloadLock = new Object();
+  private final Object payloadLock = new Object();
   private PayloadChunk[] payload = new PayloadChunk[0];
 
   private static final java.util.logging.Logger LOGGER;

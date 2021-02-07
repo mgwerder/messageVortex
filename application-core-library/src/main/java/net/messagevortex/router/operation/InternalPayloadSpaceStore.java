@@ -31,7 +31,7 @@ import net.messagevortex.asn1.IdentityBlock;
 
 public class InternalPayloadSpaceStore {
 
-  private Map<String, InternalPayloadSpace> internalPayloadMap = new HashMap<>();
+  private final Map<String, InternalPayloadSpace> internalPayloadMap = new HashMap<>();
 
   /***
    * <p>Sets a payload space into the payload space store.</p>

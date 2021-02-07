@@ -50,8 +50,8 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private KeyStore keyStore;
-  private String alias;
+  private final KeyStore keyStore;
+  private final String alias;
   char[] password;
 
   /**
@@ -81,7 +81,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
     // KeyStore.getDefaultType()
     keyStore = KeyStore.getInstance("JKS");
     try {
-      try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(keyStoreFile);) {
+      try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(keyStoreFile)) {
         keyStore.load(is, password);
       }
     } catch (IOException ioe) {

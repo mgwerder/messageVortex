@@ -75,7 +75,7 @@ public class Version implements CommandLine.IVersionProvider {
 
       // load from properties first
       try (InputStream is = Config.class.getResourceAsStream(
-                      "/META-INF/messageVortex.properties");) {
+                      "/META-INF/messageVortex.properties")) {
         Properties p = new Properties();
         if (is != null) {
           p.load(is);

@@ -308,7 +308,7 @@ public enum Algorithm implements Serializable {
    */
   public static Algorithm getByString(String s) {
     for (Algorithm e : values()) {
-      if (e.toString().toLowerCase().equals(s.toLowerCase())) {
+      if (e.toString().equalsIgnoreCase(s)) {
         return e;
       }
     }

@@ -141,7 +141,7 @@ public enum Parameter implements Serializable {
   final String txt;
   final Transcoder transcoder;
 
-  private Parameter(int id, String txt, Transcoder transcoder) {
+  Parameter(int id, String txt, Transcoder transcoder) {
     this.id = id;
     this.txt = txt;
     this.transcoder = transcoder;

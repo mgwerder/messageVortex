@@ -114,7 +114,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
       }
       // FIXME add possibility to add realm
       props.put("com.sun.security.sasl.digest.realm", "theRealm");
-      ss = Sasl.createSaslServer(mech.toString(), "IMAP", "FQHN", props, serverHandler);
+      ss = Sasl.createSaslServer(mech, "IMAP", "FQHN", props, serverHandler);
     } catch (SaslException e) {
       LOGGER.log(Level.WARNING, "unsuported sasl mech " + mech + " requested by client (2)", e);
       return new String[]{line.getTag() + " BAD server configuration error\r\n"};

@@ -40,8 +40,8 @@ public class IdMapOperation extends AbstractOperation implements Serializable {
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
-  private int[] outputId;
-  private int[] inputId;
+  private final int[] outputId;
+  private final int[] inputId;
 
   /***
    * <p>Creates a simple operation mapping the input to the output ID.</p>

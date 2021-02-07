@@ -39,7 +39,7 @@ public enum SecurityRequirement {
       return null;
     }
     for (SecurityRequirement e : values()) {
-      if (e.toString().toLowerCase().equals(s.toLowerCase())) {
+      if (e.toString().equalsIgnoreCase(s)) {
         return e;
       }
     }

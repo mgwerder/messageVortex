@@ -63,13 +63,13 @@ public class JGraph extends JPanel implements MouseListener {
   private static final int BOX_HEIGHT = 15;
   private static final int BOX_WIDTH = 20;
   
-  private Map<Shape, String> tooltipps = new HashMap<>();
+  private final Map<Shape, String> tooltipps = new HashMap<>();
   
   private int route = 0;
   
-  private GraphSet graph;
+  private final GraphSet graph;
   
-  private TooltipContainer ttContainer = new TooltipContainer();
+  private final TooltipContainer ttContainer = new TooltipContainer();
   
   /***
    * <p>Creates a graph with the specified set.</p>
@@ -290,8 +290,8 @@ public class JGraph extends JPanel implements MouseListener {
    * @param args command line arguments
    * @throws IOException if the identity store is unavailable
    *
-   * @FIXME replace hidden call
    */
+   // FIXME replace hidden call
   public static void main(String[] args) throws IOException {
     IdentityStore is = null;
     try {

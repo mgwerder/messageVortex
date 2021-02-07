@@ -64,7 +64,6 @@ public abstract class AbstractConnection {
    * <p>This copy constructor enbles duplication of a connection.</p>
    *
    * @param ac A connection to be copied
-   * @throws IOException in case of failure (this method cannot fail but inherited may)
    */
   public AbstractConnection(AbstractConnection ac) {
     if (ac != null) {
@@ -943,10 +942,10 @@ public abstract class AbstractConnection {
       return null;
     } else {
       LOGGER.log(Level.INFO, "got line from readline ("
-              + ret.toString().substring(0, ret.length() - 2) + "; size "
+              + ret.substring(0, ret.length() - 2) + "; size "
               + ret.length() + ")");
       inboundAppData.compact().flip();
-      return ret.toString().substring(0, ret.length() - 2);
+      return ret.substring(0, ret.length() - 2);
     }
   }
 
