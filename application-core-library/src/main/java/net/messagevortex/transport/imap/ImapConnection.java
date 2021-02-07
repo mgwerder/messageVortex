@@ -104,6 +104,9 @@ public class ImapConnection extends ServerConnection
 
     @Override
     public void shutdown() throws IOException {
+      if(!shutdownImapRunner) {
+        throw new IOException("No Imap runner running");
+      }
       shutdownImapRunner = true;
     }
 
@@ -139,7 +142,7 @@ public class ImapConnection extends ServerConnection
   /***
    * <p>Creates an imapConnection.</p>
    ***/
-  private void init() throws IOException {
+  private void init() {
     imapConnectionRunner = new ImapConnectionRunner();
     setId(Thread.currentThread().getName() + "-conn" + id);
     imapConnectionRunner.start();

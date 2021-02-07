@@ -76,7 +76,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   private static boolean firstWarning = true;
   private static volatile InternalThread runner = null;
   @CommandLine.Option(names = {"--cacheFileName"},
-          description = "filename of the cache file", required = false)
+          description = "filename of the cache file")
   private static String filename = null;
   private static int incrementor = 128;
   /* number of threads to use */

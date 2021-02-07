@@ -38,7 +38,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  @CommandLine.Option(names = {"--type", "-t"}, required = false,
+  @CommandLine.Option(names = {"--type", "-t"},
       description = "type of information (ASYM, SYM, MODE, PAD)")
   CipherType[] types = {ASYM, SYM, MODE, PAD};
 

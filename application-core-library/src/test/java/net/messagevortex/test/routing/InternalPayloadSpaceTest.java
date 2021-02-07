@@ -87,7 +87,7 @@ public class InternalPayloadSpaceTest {
     }
 
     @Test
-    public void payloadSpaceSetAndGetTest() throws Exception {
+    public void payloadSpaceSetAndGetTest() {
         InternalPayloadSpace p=space[0].getInternalPayload(identity[0]);
         String pl=RandomString.nextString((int)(Math.random()*1024*10+1));
         PayloadChunk pc =new PayloadChunk(100,pl.getBytes(StandardCharsets.UTF_8),null);
@@ -109,7 +109,7 @@ public class InternalPayloadSpaceTest {
         }
     }
 
-    private void payloadSpaceProcessingTest(String s) throws Exception {
+    private void payloadSpaceProcessingTest(String s) {
         LOGGER.log(Level.INFO,"Testing payload handling with "+s.getBytes(StandardCharsets.UTF_8).length+" bytes");
         InternalPayloadSpace p=space[0].getInternalPayload(identity[0]);
         PayloadChunk pc =new PayloadChunk(200,s.getBytes(StandardCharsets.UTF_8),null);

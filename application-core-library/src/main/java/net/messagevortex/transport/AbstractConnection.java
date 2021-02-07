@@ -46,7 +46,7 @@ public abstract class AbstractConnection {
   private String protocol = null;
   private boolean isClient;
 
-  private ExecutorService executor = Executors.newSingleThreadExecutor();
+  private final ExecutorService executor = Executors.newSingleThreadExecutor();
   private SecurityContext context = null;
   private boolean isTls = false;
   private SocketChannel socketChannel = null;
@@ -66,7 +66,7 @@ public abstract class AbstractConnection {
    * @param ac A connection to be copied
    * @throws IOException in case of failure (this method cannot fail but inherited may)
    */
-  public AbstractConnection(AbstractConnection ac) throws IOException {
+  public AbstractConnection(AbstractConnection ac) {
     if (ac != null) {
       setSecurityContext(ac.getSecurityContext());
       setEngine(ac.getEngine());
@@ -89,10 +89,8 @@ public abstract class AbstractConnection {
    * @param sock          the channel to connect to
    * @param context       the predefined security context
    * @param isClient      true if the connection is a client connnection
-   * @throws IOException  if channel initialisation fails
    */
-  public AbstractConnection(SocketChannel sock, SecurityContext context, boolean isClient)
-          throws IOException {
+  public AbstractConnection(SocketChannel sock, SecurityContext context, boolean isClient) {
     this.isClient = isClient;
     if (sock != null) {
       setSocketChannel(sock);
@@ -105,9 +103,8 @@ public abstract class AbstractConnection {
    *
    * @param sock          the channel to connect to
    * @param context       the predefined security context
-   * @throws IOException  if channel initialisation fails
    */
-  public AbstractConnection(SocketChannel sock, SecurityContext context) throws IOException {
+  public AbstractConnection(SocketChannel sock, SecurityContext context) {
     this(sock, context, true);
   }
 

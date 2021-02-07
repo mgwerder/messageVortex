@@ -29,23 +29,23 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
   
-  @CommandLine.Option(names = {"--nodes", "-n"}, required = false,
+  @CommandLine.Option(names = {"--nodes", "-n"},
           description = "Number of nodes")
   int numNodes = 5;
   
-  @CommandLine.Option(names = {"--filename", "-f"}, required = false,
+  @CommandLine.Option(names = {"--filename", "-f"},
           description = "filename")
   String filename = null;
   
-  @CommandLine.Option(names = {"--x-resolution", "-x"}, required = false,
+  @CommandLine.Option(names = {"--x-resolution", "-x"},
           description = "resolution of x-axis")
   int xres = 1024;
   
-  @CommandLine.Option(names = {"--y-resolution", "-y"}, required = false,
+  @CommandLine.Option(names = {"--y-resolution", "-y"},
           description = "resolution of x-axis")
   int yres = 768;
   
-  @CommandLine.Option(names = {"--redundancy-size", "-r"}, required = false,
+  @CommandLine.Option(names = {"--redundancy-size", "-r"},
           description = "minimum number of paths to target node")
   int redundancy = 3;
   

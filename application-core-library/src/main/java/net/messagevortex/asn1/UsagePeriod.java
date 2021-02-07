@@ -299,7 +299,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
     } else if (type == UsagePeriodType.RELATIVE) {
       sb.append(prefix).append("  relative [");
     } else {
-      sb.append(prefix).append("  /* UNKNOWN: " + type + " */").append(CRLF);
+      sb.append(prefix).append("  /* UNKNOWN: ").append(type).append(" */").append(CRLF);
     }
     sb.append(type.getId()).append("] {").append(CRLF);
     final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss");
@@ -322,7 +322,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
       }
       sb.append(CRLF);
     }
-    sb.append(prefix).append("  ").append("}").append(CRLF);
+    sb.append(prefix).append("  ").append('}').append(CRLF);
     sb.append(prefix).append('}');
     return sb.toString();
   }

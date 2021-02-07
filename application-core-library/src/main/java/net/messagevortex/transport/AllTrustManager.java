@@ -32,33 +32,27 @@ public class AllTrustManager extends X509ExtendedTrustManager {
 
 
   @Override
-  public void checkClientTrusted(X509Certificate[] x509Certificates, String s)
-          throws CertificateException {
+  public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
   }
 
   @Override
-  public void checkClientTrusted(X509Certificate[] x509Certificates, String s, Socket socket)
-          throws CertificateException {
+  public void checkClientTrusted(X509Certificate[] x509Certificates, String s, Socket socket) {
   }
 
   @Override
-  public void checkClientTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine)
-          throws CertificateException {
+  public void checkClientTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) {
   }
 
   @Override
-  public void checkServerTrusted(X509Certificate[] x509Certificates, String s)
-          throws CertificateException {
+  public void checkServerTrusted(X509Certificate[] x509Certificates, String s) {
   }
 
   @Override
-  public void checkServerTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine)
-          throws CertificateException {
+  public void checkServerTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) {
   }
 
   @Override
-  public void checkServerTrusted(X509Certificate[] x509Certificates, String s, Socket socket)
-          throws CertificateException {
+  public void checkServerTrusted(X509Certificate[] x509Certificates, String s, Socket socket) {
   }
 
   @Override

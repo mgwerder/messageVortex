@@ -220,7 +220,7 @@ public class DummyBlender extends Blender {
   }
   
   @Override
-  public boolean blendMessage(BlendingSpec target, VortexMessage msg) throws IOException {
+  public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
     try {
       if (transport != null) {
         PipedOutputStream os = new PipedOutputStream();

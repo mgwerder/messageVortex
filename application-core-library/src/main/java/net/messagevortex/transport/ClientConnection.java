@@ -42,8 +42,7 @@ public class ClientConnection extends AbstractConnection {
     initConnection();
   }
 
-  public ClientConnection(InetSocketAddress socketAddress, SecurityContext context)
-          throws IOException {
+  public ClientConnection(InetSocketAddress socketAddress, SecurityContext context) {
     super(socketAddress, context);
     initConnection();
   }

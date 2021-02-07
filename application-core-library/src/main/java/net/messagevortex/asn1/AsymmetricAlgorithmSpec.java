@@ -109,7 +109,7 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
   }
 
   @Override
-  public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
+  public String dumpValueNotation(String prefix, DumpType dumptype) {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
     sb.append(prefix).append("  ").append("algorithm ").append(algorithm.name().toLowerCase());

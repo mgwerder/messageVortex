@@ -29,19 +29,19 @@ public class CommandLineHandlerExamplesAddress implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
   
-  @CommandLine.Option(names = {"--address", "-a"}, required = false,
+  @CommandLine.Option(names = {"--address", "-a"},
           description = "standard address")
   String address = "bob.andrews@example.com";
   
-  @CommandLine.Option(names = {"--cypher", "-c"}, required = false,
+  @CommandLine.Option(names = {"--cypher", "-c"},
           description = "the cypher to be used")
   String cypher = "EC";
   
-  @CommandLine.Option(names = {"--transport", "-t"}, required = false,
+  @CommandLine.Option(names = {"--transport", "-t"},
           description = "the transport protocol")
   String protocol = "smtp";
   
-  @CommandLine.Option(names = {"--key-size", "-s"}, required = false,
+  @CommandLine.Option(names = {"--key-size", "-s"},
           description = "the key size")
   int size = 384;
 

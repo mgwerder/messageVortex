@@ -172,7 +172,7 @@ public class AlgorithmParameter extends AbstractBlock
   }
 
   @Override
-  public ASN1Object toAsn1Object(DumpType dt) throws IOException {
+  public ASN1Object toAsn1Object(DumpType dt) {
     ASN1EncodableVector v = new ASN1EncodableVector();
     for (Map.Entry<Integer, String> e : parameter.entrySet()) {
       Parameter p = Parameter.getById(e.getKey());

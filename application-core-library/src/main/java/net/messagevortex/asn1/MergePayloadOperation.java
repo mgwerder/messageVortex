@@ -67,7 +67,7 @@ public class MergePayloadOperation extends Operation implements Serializable {
   }
 
   @Override
-  public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
+  public String dumpValueNotation(String prefix, DumpType dumptype) {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
     sb.append(prefix).append("  originalFirstId ").append(originalFirstId).append(',').append(CRLF);
@@ -79,7 +79,7 @@ public class MergePayloadOperation extends Operation implements Serializable {
   }
 
   @Override
-  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+  public ASN1Object toAsn1Object(DumpType dumpType) {
     ASN1EncodableVector s1 = new ASN1EncodableVector();
     s1.add(new ASN1Integer(originalFirstId));
     s1.add(new ASN1Integer(originalSecondId));
@@ -88,7 +88,7 @@ public class MergePayloadOperation extends Operation implements Serializable {
   }
 
   @Override
-  public Operation getNewInstance(ASN1Encodable object) throws IOException {
+  public Operation getNewInstance(ASN1Encodable object) {
     return new MergePayloadOperation(object);
   }
 }

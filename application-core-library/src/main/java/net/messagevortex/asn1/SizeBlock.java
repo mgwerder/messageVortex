@@ -93,7 +93,7 @@ public class SizeBlock extends AbstractBlock implements Serializable {
   }
 
   @Override
-  public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
+  public String dumpValueNotation(String prefix, DumpType dumptype) {
     StringBuilder sb = new StringBuilder();
     sb.append(type.name().toLowerCase()).append(" {").append(CRLF);
     String s1 = "fromPercent";
@@ -109,7 +109,7 @@ public class SizeBlock extends AbstractBlock implements Serializable {
   }
 
   @Override
-  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+  public ASN1Object toAsn1Object(DumpType dumpType) {
     ASN1EncodableVector v = new ASN1EncodableVector();
 
     // encode target sequence

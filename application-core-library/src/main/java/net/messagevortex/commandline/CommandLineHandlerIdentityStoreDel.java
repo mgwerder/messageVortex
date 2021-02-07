@@ -26,7 +26,7 @@ public class CommandLineHandlerIdentityStoreDel implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  @CommandLine.Option(names = {"--filename", "-f"}, required = false,
+  @CommandLine.Option(names = {"--filename", "-f"},
           description = "filename of the IdentityStorage file")
   String filename = CommandLineHandlerIdentityStore.DEFAULT_FILENAME;
 

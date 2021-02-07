@@ -63,7 +63,7 @@ public class MapBlockOperation extends Operation implements Serializable {
   }
 
   @Override
-  public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
+  public String dumpValueNotation(String prefix, DumpType dumptype) {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
     sb.append(prefix).append("  originalId ").append(originalId).append(',').append(CRLF);
@@ -73,7 +73,7 @@ public class MapBlockOperation extends Operation implements Serializable {
   }
 
   @Override
-  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+  public ASN1Object toAsn1Object(DumpType dumpType) {
     ASN1EncodableVector v = new ASN1EncodableVector();
     v.add(new ASN1Integer(originalId));
     v.add(new ASN1Integer(newId));
@@ -81,7 +81,7 @@ public class MapBlockOperation extends Operation implements Serializable {
   }
 
   @Override
-  public Operation getNewInstance(ASN1Encodable object) throws IOException {
+  public Operation getNewInstance(ASN1Encodable object)  {
     return new MapBlockOperation(object);
   }
 }

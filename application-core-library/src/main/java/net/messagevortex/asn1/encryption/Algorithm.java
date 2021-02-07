@@ -25,19 +25,18 @@ package net.messagevortex.asn1.encryption;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AlgorithmParameter;
 
 /**
  * Represents all supported crypto algorithms.
- *
  */
 public enum Algorithm implements Serializable {
   /* AES fixed (block sized) enumerations */
@@ -49,73 +48,73 @@ public enum Algorithm implements Serializable {
   CAMELLIA192(1101, AlgorithmType.SYMMETRIC, "CAMELLIA192", "BC", SecurityLevel.MEDIUM),
   CAMELLIA256(1102, AlgorithmType.SYMMETRIC, "CAMELLIA256", "BC", SecurityLevel.QUANTUM),
   EC(2600, AlgorithmType.ASYMMETRIC, "ECIES", "BC",
-          getSecLevelList(getSecLevelList(getSecLevelList(
-            EllipticCurveType.SECP384R1.getSecurityLevel(), getParameterList(
-                    new String[]{
-                      Parameter.ALGORITHM + "=ECIES",
-                      Parameter.KEYSIZE + "=384",
-                      Parameter.BLOCKSIZE + "=384",
-                      Parameter.CURVETYPE + "=" + EllipticCurveType.SECP384R1,
-                      Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
-                      Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
-                    })),
-            EllipticCurveType.SECT409K1.getSecurityLevel(), getParameterList(
-                    new String[]{
-                      Parameter.ALGORITHM + "=ECIES",
-                      Parameter.KEYSIZE + "=409",
-                      Parameter.BLOCKSIZE + "=409",
-                      Parameter.CURVETYPE + "=" + EllipticCurveType.SECT409K1,
-                      Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
-                      Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
-                    })),
-            EllipticCurveType.SECP521R1.getSecurityLevel(), getParameterList(
-                    new String[]{
-                      Parameter.ALGORITHM + "=ECIES",
-                      Parameter.KEYSIZE + "=521",
-                      Parameter.BLOCKSIZE + "=521",
-                      Parameter.CURVETYPE + "=" + EllipticCurveType.SECP521R1,
-                      Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
-                      Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
-                    })
-          )
+      getSecLevelList(getSecLevelList(getSecLevelList(
+          EllipticCurveType.SECP384R1.getSecurityLevel(), getParameterList(
+              new String[] {
+                  Parameter.ALGORITHM + "=ECIES",
+                  Parameter.KEYSIZE + "=384",
+                  Parameter.BLOCKSIZE + "=384",
+                  Parameter.CURVETYPE + "=" + EllipticCurveType.SECP384R1,
+                  Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
+                  Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
+              })),
+          EllipticCurveType.SECT409K1.getSecurityLevel(), getParameterList(
+              new String[] {
+                  Parameter.ALGORITHM + "=ECIES",
+                  Parameter.KEYSIZE + "=409",
+                  Parameter.BLOCKSIZE + "=409",
+                  Parameter.CURVETYPE + "=" + EllipticCurveType.SECT409K1,
+                  Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
+                  Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
+              })),
+          EllipticCurveType.SECP521R1.getSecurityLevel(), getParameterList(
+              new String[] {
+                  Parameter.ALGORITHM + "=ECIES",
+                  Parameter.KEYSIZE + "=521",
+                  Parameter.BLOCKSIZE + "=521",
+                  Parameter.CURVETYPE + "=" + EllipticCurveType.SECP521R1,
+                  Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
+                  Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
+              })
+      )
   )/* Elliptic curve (name represented) enumerations */,
   RIPEMD160(3100, AlgorithmType.HASHING, "ripemd160", "BC", SecurityLevel.LOW),
   //RIPEMD256  ( 3101, AlgorithmType.HASHING, "ripemd256", "BC", SecurityLevel.MEDIUM ),
   //RIPEMD320  ( 3102, AlgorithmType.HASHING, "ripemd320", "BC", SecurityLevel.HIGH ),
   /* RSA (variable sized) enumerations */
   RSA(2000, AlgorithmType.ASYMMETRIC, "RSA", "BC",
-          getSecLevelList(getSecLevelList(getSecLevelList(getSecLevelList(
-            SecurityLevel.LOW, getParameterList(
-                    new String[]{
-                      Parameter.ALGORITHM + "=RSA",
-                      Parameter.KEYSIZE + "=1024",
-                      Parameter.BLOCKSIZE + "=1024",
-                      Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
-                      Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
-                    })),
-            SecurityLevel.MEDIUM, getParameterList(
-                  new String[]{
-                    Parameter.ALGORITHM + "=RSA",
-                    Parameter.KEYSIZE + "=2048",
-                    Parameter.BLOCKSIZE + "=2048",
-                    Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
-                    Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
-                  })),
-            SecurityLevel.HIGH, getParameterList(
-                    new String[]{Parameter.ALGORITHM + "=RSA",
-                      Parameter.KEYSIZE + "=4096",
-                      Parameter.BLOCKSIZE + "=4096",
-                      Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
-                      Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
-                    })),
-            SecurityLevel.QUANTUM, getParameterList(
-                    new String[]{
-                      Parameter.ALGORITHM + "=RSA",
-                      Parameter.KEYSIZE + "=8192",
-                      Parameter.BLOCKSIZE + "=8192",
-                      Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
-                      Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
-                    }))
+      getSecLevelList(getSecLevelList(getSecLevelList(getSecLevelList(
+          SecurityLevel.LOW, getParameterList(
+              new String[] {
+                  Parameter.ALGORITHM + "=RSA",
+                  Parameter.KEYSIZE + "=1024",
+                  Parameter.BLOCKSIZE + "=1024",
+                  Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
+                  Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
+              })),
+          SecurityLevel.MEDIUM, getParameterList(
+              new String[] {
+                  Parameter.ALGORITHM + "=RSA",
+                  Parameter.KEYSIZE + "=2048",
+                  Parameter.BLOCKSIZE + "=2048",
+                  Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
+                  Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
+              })),
+          SecurityLevel.HIGH, getParameterList(
+              new String[] {Parameter.ALGORITHM + "=RSA",
+                  Parameter.KEYSIZE + "=4096",
+                  Parameter.BLOCKSIZE + "=4096",
+                  Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
+                  Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
+              })),
+          SecurityLevel.QUANTUM, getParameterList(
+              new String[] {
+                  Parameter.ALGORITHM + "=RSA",
+                  Parameter.KEYSIZE + "=8192",
+                  Parameter.BLOCKSIZE + "=8192",
+                  Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
+                  Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
+              }))
 
   ),
 
@@ -143,12 +142,12 @@ public enum Algorithm implements Serializable {
 
   public static final long serialVersionUID = 100000000039L;
 
-  /* provides a map for default selections or Algorihm sets (including parameters)
-     for each AlgorithnmType class */
-  private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<>();
+  /* provides a map for default selections or algorithm sets (including parameters)
+     for each AlgorithmType class */
+  private static final Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<>();
 
-  /* cresate a class specific logger */
-  private static Logger LOGGER;
+  /* create a class specific logger */
+  private static final Logger LOGGER;
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -192,20 +191,20 @@ public enum Algorithm implements Serializable {
       this.provider = provider;
       int blockSize = getKeySize();
       if (txt.toLowerCase().startsWith("aes") || txt.toLowerCase().startsWith("camellia")
-              || txt.toLowerCase().startsWith("twofish")) {
+          || txt.toLowerCase().startsWith("twofish")) {
         // CAMELLIA, TWOFISH and AES do always have 128 bit block size
         blockSize = 128;
       }
-      secLevel.putAll(getSecLevelList(level, getParameterList(new String[]{
+      secLevel.putAll(getSecLevelList(level, getParameterList(new String[] {
           Parameter.ALGORITHM + "=" + id,
           Parameter.KEYSIZE + "=" + getKeySize(),
           Parameter.BLOCKSIZE + "=" + blockSize
       })));
       if (algType == AlgorithmType.SYMMETRIC) {
         secLevel.get(level).put(Parameter.PADDING.getId(),
-                Padding.getDefault(algType).toString());
+            Padding.getDefault(algType).toString());
         secLevel.get(level).put(Parameter.MODE.getId(),
-                Mode.getDefault(algType).toString());
+            Mode.getDefault(algType).toString());
       }
     }
   }
@@ -231,7 +230,7 @@ public enum Algorithm implements Serializable {
     for (Map.Entry<SecurityLevel, AlgorithmParameter> e : parameters.entrySet()) {
       try {
         this.secLevel.put(e.getKey(),
-                new AlgorithmParameter(e.getValue().toAsn1Object(DumpType.INTERNAL)));
+            new AlgorithmParameter(e.getValue().toAsn1Object(DumpType.INTERNAL)));
       } catch (IOException ex) {
         throw new IllegalAccessError("unable to clone parameter map");
       }
@@ -252,16 +251,16 @@ public enum Algorithm implements Serializable {
   }
 
   private static Map<SecurityLevel, AlgorithmParameter> getSecLevelList(
-          SecurityLevel level, AlgorithmParameter o) {
+      SecurityLevel level, AlgorithmParameter o) {
     Map<SecurityLevel, AlgorithmParameter> ret = new ConcurrentHashMap<>();
     return getSecLevelList(ret, level, o);
   }
 
   private static Map<SecurityLevel, AlgorithmParameter> getSecLevelList(
-          Map<SecurityLevel, AlgorithmParameter> lst, SecurityLevel level,
-          AlgorithmParameter o) {
+      Map<SecurityLevel, AlgorithmParameter> lst, SecurityLevel level,
+      AlgorithmParameter o) {
 
-    Map<SecurityLevel, AlgorithmParameter> ret = new HashMap<>();
+    Map<SecurityLevel, AlgorithmParameter> ret = new EnumMap<>(SecurityLevel.class);
     ret.putAll(lst);
     ret.put(level, o);
     return ret;
@@ -397,7 +396,7 @@ public enum Algorithm implements Serializable {
    * @return the key size in bits for the security level specified
    */
   public int getKeySize(SecurityLevel sl) {
-    for (String i :  new String[]{"aes", "sha", "camellia", "twofish", "ripemd"}) {
+    for (String i : new String[] {"aes", "sha", "camellia", "twofish", "ripemd"}) {
       if (txt.toLowerCase().startsWith(i)) {
         return Integer.parseInt(txt.substring(i.length(), i.length() + 3));
       }
@@ -410,9 +409,9 @@ public enum Algorithm implements Serializable {
       // get kesize from parameters
       if (params == null || (Integer.parseInt(params.get(Parameter.KEYSIZE.getId())) < 10)) {
         LOGGER.log(Level.SEVERE, "Error fetching keysize for " + txt + "/" + sl
-                + " (" + secLevel.get(sl) + ")");
+            + " (" + secLevel.get(sl) + ")");
         throw new IllegalArgumentException("Error fetching key size for " + txt + "/" + sl
-                + " (" + secLevel.get(sl) + ")");
+            + " (" + secLevel.get(sl) + ")");
       }
       if (params.get(Parameter.ALGORITHM).toUpperCase().startsWith("ECIES")) {
         // Extract key size from EC courve name

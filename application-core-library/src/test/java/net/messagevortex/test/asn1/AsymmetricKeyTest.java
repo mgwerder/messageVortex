@@ -167,7 +167,7 @@ public class AsymmetricKeyTest {
   }
 
   @Test
-  public void fuzzingAsymmetricEncryption() throws Exception {
+  public void fuzzingAsymmetricEncryption() {
     for (Algorithm alg : Algorithm.getAlgorithms(AlgorithmType.ASYMMETRIC)) {
       for (int size : new int[]{alg.getKeySize(SecurityLevel.LOW), alg.getKeySize(SecurityLevel.MEDIUM), alg.getKeySize(SecurityLevel.HIGH), alg.getKeySize(SecurityLevel.QUANTUM)}) {
         try {

@@ -78,13 +78,13 @@ public class OperationProcessingTest {
 
         }
       }
-    } catch (IOException | NoSuchAlgorithmException ioe) {
+    } catch (IOException ioe) {
       ioe.printStackTrace();
       fail("Exception while testing redundancy operation");
     }
   }
 
-  private void redundancyOperationTest(InternalPayloadSpace p, int dataStripes, int redundancy, int gfSize) throws IOException, NoSuchAlgorithmException {
+  private void redundancyOperationTest(InternalPayloadSpace p, int dataStripes, int redundancy, int gfSize) throws IOException {
     ExtendedSecureRandom esr = new ExtendedSecureRandom();
     // create symmetric keys for stripes
     SymmetricKey[] keys = new SymmetricKey[dataStripes + redundancy];

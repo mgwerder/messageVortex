@@ -64,7 +64,7 @@ public abstract class AbstractCryptPayloadOperation extends Operation
   }
 
   @Override
-  public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
+  public String dumpValueNotation(String prefix, DumpType dumptype) {
     StringBuilder sb = new StringBuilder();
     sb.append('[').append(getTagNumber()).append("] {").append(CRLF);
     sb.append(prefix).append("  originalId ").append(originalId).append(',').append(CRLF);

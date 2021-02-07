@@ -52,7 +52,7 @@ public class SaslServerCallbackHandler implements CallbackHandler {
   }
 
   @Override
-  public void handle(Callback[] cbs) throws IOException, UnsupportedCallbackException {
+  public void handle(Callback[] cbs) throws IOException {
     for (Callback cb : cbs) {
       Credentials creds = proxy.getCredentials(authnid);
       if (cb instanceof AuthorizeCallback) {
