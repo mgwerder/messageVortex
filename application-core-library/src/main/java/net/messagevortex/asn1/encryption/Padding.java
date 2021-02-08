@@ -151,8 +151,11 @@ public enum Padding implements Serializable {
     // init hashmap if necesary
     synchronized (DEFAULT_PADDING) {
       if (DEFAULT_PADDING.isEmpty()) {
-        DEFAULT_PADDING.put(AlgorithmType.ASYMMETRIC, Padding.PKCS1);
-        DEFAULT_PADDING.put(AlgorithmType.SYMMETRIC, Padding.PKCS7);
+        synchronized (DEFAULT_PADDING) {
+          DEFAULT_PADDING.clear();
+          DEFAULT_PADDING.put(AlgorithmType.ASYMMETRIC, Padding.PKCS1);
+          DEFAULT_PADDING.put(AlgorithmType.SYMMETRIC, Padding.PKCS7);
+        }
       }
     }
 

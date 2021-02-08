@@ -292,7 +292,7 @@ public class InternalPayloadSpace {
     for (int id : op.getOutputId()) {
       if (internalOperationOutput.get(id) != null) {
         LOGGER.log(Level.WARNING, "addin of operation " + op + " due to conflicting outputs "
-                + "(conflicting op is:" + internalOperationOutput.get(id).toString() + ")");
+                + "(conflicting op is:" + internalOperationOutput.get(id) + ")");
         return false;
       }
     }

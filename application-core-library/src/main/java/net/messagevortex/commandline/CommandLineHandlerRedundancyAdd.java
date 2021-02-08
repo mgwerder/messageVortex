@@ -3,6 +3,10 @@ package net.messagevortex.commandline;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
@@ -65,7 +69,7 @@ public class CommandLineHandlerRedundancyAdd implements Callable<Integer> {
     }
     LOGGER.log(Level.INFO, "Loading file \"" + inFile + "\"");
     byte[] buffer = new byte[(int) new File(inFile).length()];
-    try (FileInputStream fis = new FileInputStream(inFile)) {
+    try (InputStream fis = Files.newInputStream(Paths.get(inFile))) {
       fis.read(buffer);
     }
 

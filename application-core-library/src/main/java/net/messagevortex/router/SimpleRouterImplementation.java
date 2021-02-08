@@ -33,7 +33,7 @@ public class SimpleRouterImplementation extends AbstractDaemon implements Router
   }
 
   @Override
-  public Accountant setAccountant(Accountant accountant) {
+  public final Accountant setAccountant(Accountant accountant) {
     Accountant ret = getAccountant();
     this.accountant = accountant;
     return ret;

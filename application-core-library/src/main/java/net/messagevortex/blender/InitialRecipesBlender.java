@@ -236,14 +236,14 @@ public class InitialRecipesBlender extends Blender {
       // apply receipes
       LOGGER.log(Level.INFO, "blending messages");
       for (Address receiverAddress : to) {
-        LOGGER.log(Level.INFO, "blending message for \"" + receiverAddress.toString() + "\"");
+        LOGGER.log(Level.INFO, "blending message for \"" + receiverAddress + "\"");
         IdentityStoreBlock fromAddr = istore.getIdentity(from[0].toString());
         
         IdentityStoreBlock toAddr = istore.getIdentity(receiverAddress.toString());
         RoutingCombo rb = recipe.applyRecipe(anonSet, fromAddr, toAddr);
         
         if (rb == null) {
-          LOGGER.log(Level.WARNING, "Unable to route message to " + receiverAddress.toString());
+          LOGGER.log(Level.WARNING, "Unable to route message to " + receiverAddress);
         }
         
         PrefixBlock pb = new PrefixBlock();

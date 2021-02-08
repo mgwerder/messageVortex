@@ -77,7 +77,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
               i++;
               System.out.print(p);
             }
-            System.out.println(")");
+            System.out.println(')');
           }
           break;
         case SYM:
@@ -102,7 +102,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
               i++;
               System.out.print(p);
             }
-            System.out.println(")");
+            System.out.println(')');
           }
           break;
         case MODE:

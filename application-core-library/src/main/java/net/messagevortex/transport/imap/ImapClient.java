@@ -223,7 +223,7 @@ public class ImapClient extends ClientConnection {
   }
   
   private void interruptedCatcher(InterruptedException ie) {
-    assert false : "This Point should never be reached (" + ie.toString() + ")";
+    assert false : "This Point should never be reached (" + ie + ")";
     Thread.currentThread().interrupt();
   }
   

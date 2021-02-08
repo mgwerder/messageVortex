@@ -100,7 +100,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    *
    * @param alias alias of the certificate to be used
    */
-  public PrivateKey getPrivateKey(String alias) {
+  public final PrivateKey getPrivateKey(String alias) {
     try {
       LOGGER.log(Level.INFO, "key for \"" + alias + "\" requested ",
               new Object[]{keyStore.getKey(alias, password)});

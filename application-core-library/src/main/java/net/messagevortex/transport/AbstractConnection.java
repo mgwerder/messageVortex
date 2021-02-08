@@ -185,7 +185,7 @@ public abstract class AbstractConnection {
     return engine;
   }
 
-  protected SSLEngine setEngine(SSLEngine engine) {
+  protected final SSLEngine setEngine(SSLEngine engine) {
     SSLEngine ret = this.engine;
     this.engine = engine;
     return ret;
@@ -750,7 +750,9 @@ public abstract class AbstractConnection {
         if (timeout <= (System.currentTimeMillis() - start)) {
           // timeout has been reached
           LOGGER.log(Level.FINE, "timeout has been reached while waiting for input");
-          throw new TimeoutException("Timeout while reading");
+          TimeoutException e = new TimeoutException("Timeout while reading");
+          e.addSuppressed(ioe);
+          throw e;
         } else {
           throw ioe;
         }

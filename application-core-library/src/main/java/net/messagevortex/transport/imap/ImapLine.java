@@ -47,30 +47,30 @@ public class ImapLine {
   /* These are character subsets specified in RFC3501 */
   private static final String ABNF_SP = " ";
   private static final String ABNF_CTL = charlistBuilder(0, 31);
-  private static final String ABNF_LIST_WILDCARDS  = "*%";
+  private static final String ABNF_LIST_WILDCARDS = "*%";
   private static final String ABNF_QUOTED_SPECIALS = "\"\\";
-  private static final String ABNF_RESP_SPECIALS   = "[";
-  private static final String ABNF_ATOM_SPECIALS   = "(){" + ABNF_SP + ABNF_CTL
-                                                     + ABNF_LIST_WILDCARDS
-                                                     + ABNF_QUOTED_SPECIALS
-                                                     + ABNF_RESP_SPECIALS;
+  private static final String ABNF_RESP_SPECIALS = "[";
+  private static final String ABNF_ATOM_SPECIALS = "(){" + ABNF_SP + ABNF_CTL
+      + ABNF_LIST_WILDCARDS
+      + ABNF_QUOTED_SPECIALS
+      + ABNF_RESP_SPECIALS;
   private static final String ABNF_ATOM_CHAR = charlistDifferencer(
-                                                    charlistBuilder(1, 127),
-                                                    ABNF_ATOM_SPECIALS
-                                                );
+      charlistBuilder(1, 127),
+      ABNF_ATOM_SPECIALS
+  );
   private static final String ABNF_TEXT_CHAR = charlistDifferencer(
-                                                    charlistBuilder(1, 127),
-                                                    "\r\n"
-                                                );
+      charlistBuilder(1, 127),
+      "\r\n"
+  );
   private static final String ABNF_QUOTED_CHAR = charlistDifferencer(
-                                                    ABNF_TEXT_CHAR,
-                                                    ABNF_QUOTED_SPECIALS
-                                                 );
+      ABNF_TEXT_CHAR,
+      ABNF_QUOTED_SPECIALS
+  );
   private static final String ABNF_TAG = charlistDifferencer(ABNF_ATOM_CHAR, "+");
 
   /* a Logger  for logging purposes */
   private static final Logger LOGGER = MessageVortexLogger.getLogger(
-          (new Throwable()).getStackTrace()[0].getClassName());
+      (new Throwable()).getStackTrace()[0].getClassName());
   private static final Object TAG_ENUMERATOR_LOCK = new Object();
   private static int tagEnumerator = 0;
   /* this holds the past context for the case that an exception is risen */
@@ -92,6 +92,7 @@ public class ImapLine {
 
   // FIXME should be a ABNF implementation
   // FIXME extract reading from constructor
+
   /***
    * <p>Creates an imap line object with a parser for a command.</p>
    *
@@ -238,7 +239,7 @@ public class ImapLine {
   }
 
   private void prepareStorage(ImapConnection con, String line, InputStream input)
-          throws ImapException {
+      throws ImapException {
     // make sure that a line is never null when reaching the parsing section
     if (buffer == null) {
       buffer = "";
@@ -271,7 +272,7 @@ public class ImapLine {
     int i = skipWhitespace(1);
     if (i != 1) {
       throw new ImapException(this, "error skipping to command (line=\"" + context + "\"; tag="
-              + tagToken + "; buffer=" + buffer + "; skipped=" + i + ")");
+          + tagToken + "; buffer=" + buffer + "; skipped=" + i + ")");
     }
 
     // get command
@@ -336,8 +337,8 @@ public class ImapLine {
    */
   public boolean snoopEscQuotes() {
     return "\\".contains(snoopBytes(1))
-            && snoopBytes(2).length() == 2
-            && ABNF_QUOTED_SPECIALS.contains(snoopBytes(2).substring(1, 2));
+        && snoopBytes(2).length() == 2
+        && ABNF_QUOTED_SPECIALS.contains(snoopBytes(2).substring(1, 2));
   }
 
   /***
@@ -436,7 +437,7 @@ public class ImapLine {
    * @param   num number of spaces to be skipped
    * @return number of skipped spaces
    */
-  public int skipWhitespace(int num) {
+  public final int skipWhitespace(int num) {
     // count number of spaces found
     int count = 0;
 
@@ -445,7 +446,7 @@ public class ImapLine {
 
     LOGGER.log(Level.FINER, "Skipping " + num + " spaces");
     // loop thru skipper
-    while (snoopBytes(1) != null && ABNF_SP.contains(snoopBytes(1)) && (countdown != 0)) {
+    while (snoopBytes(1) != null && (countdown != 0) && ABNF_SP.contains(snoopBytes(1))) {
       skipBytes(1);
       count++;
       countdown--;
@@ -534,7 +535,7 @@ public class ImapLine {
     skipBytes(1);
     StringBuilder ret = new StringBuilder();
     while (snoopBytes(1) != null && (ABNF_QUOTED_CHAR.contains(snoopBytes(1))
-           || snoopEscQuotes())) {
+        || snoopEscQuotes())) {
       if ("\\".contains(snoopBytes(1))) {
         ret.append(skipBytes(2).charAt(1));
       } else {

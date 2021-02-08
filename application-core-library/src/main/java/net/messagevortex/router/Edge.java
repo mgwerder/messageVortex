@@ -137,8 +137,8 @@ public class Edge {
       return false;
     }
     Edge g = (Edge) t;
-    return g.to.equals(this.to) && g.from.equals(this.from) && (g.startTime == this.startTime)
-            && (g.maxDelay == this.maxDelay);
+    return (g.startTime == this.startTime) && (g.maxDelay == this.maxDelay)
+        && g.to.equals(this.to) && g.from.equals(this.from);
   }
 
   @Override

@@ -31,7 +31,6 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
-
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.ClientConnection;
@@ -60,13 +59,13 @@ public class SmtpConnection extends ClientConnection {
   Credentials creds;
 
   public SmtpConnection(InetSocketAddress socketAddress, SecurityContext context, Credentials creds)
-          throws IOException {
+      throws IOException {
     super(socketAddress, context);
     init(creds);
   }
 
   public SmtpConnection(SocketChannel channel, SecurityContext secContext, Credentials creds)
-          throws IOException {
+      throws IOException {
     super(channel, secContext);
     init(creds);
   }
@@ -87,7 +86,7 @@ public class SmtpConnection extends ClientConnection {
         LOGGER.log(Level.INFO, "got new SMTP incomming connect... sending server greeting");
         // write SMTP banner of server
         writeln("220 " + InetAddress.getLocalHost().getHostName()
-                + " ESMTP MessageVortex receiver");
+            + " ESMTP MessageVortex receiver");
 
         // smtp state machine
         String envelopeFrom = null;
@@ -112,13 +111,13 @@ public class SmtpConnection extends ClientConnection {
               // check for login
             } else if ("auth login".equalsIgnoreCase(command)) {
               writeln("334 " + new String(
-                      Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)),
-                      StandardCharsets.UTF_8
+                  Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)),
+                  StandardCharsets.UTF_8
               ));
-              String username = new String(Base64.decode(readln()),StandardCharsets.UTF_8);
+              String username = new String(Base64.decode(readln()), StandardCharsets.UTF_8);
               Config.getDefault().getStringValue(cfgSection, "smtp_incomming_user");
               write("334 " + new String(
-                      Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
+                  Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
               );
               String password = new String(Base64.decode(readln()));
               Config.getDefault().getStringValue(cfgSection, "smtp_incomming_password");
@@ -143,7 +142,7 @@ public class SmtpConnection extends ClientConnection {
                 StringBuilder sb = new StringBuilder();
                 while (!".".equals(l)) {
                   if (l != null) {
-                    sb.append(l + CRLF);
+                    sb.append(l).append(CRLF);
                   }
                   l = readln();
                 }
@@ -152,7 +151,7 @@ public class SmtpConnection extends ClientConnection {
                 if (getReceiver() != null) {
                   LOGGER.log(Level.INFO, "Message passed to blender layer");
                   getReceiver().gotMessage(new ByteArrayInputStream(
-                          sb.toString().getBytes(StandardCharsets.UTF_8))
+                      sb.toString().getBytes(StandardCharsets.UTF_8))
                   );
                 } else {
                   LOGGER.log(Level.WARNING, "blender layer unknown ... message discarded");

@@ -1,9 +1,10 @@
 package net.messagevortex.router.operation;
 
+import java.io.Serializable;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.UsagePeriod;
 
-public abstract class AbstractOperation implements Operation {
+public abstract class AbstractOperation implements Operation, Serializable {
 
   IdentityBlock identity;
   InternalPayloadSpace payload;

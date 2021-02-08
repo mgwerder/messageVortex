@@ -3,6 +3,8 @@ package net.messagevortex.commandline;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import net.messagevortex.MessageVortex;
@@ -69,7 +71,7 @@ public class CommandLineHandlerIdentityStoreAdd implements Callable<Integer> {
 
     // dump store to disk
     LOGGER.log(Level.INFO, "writing identity store to \"" + filename + "\"");
-    try(OutputStream os = new FileOutputStream(filename)) {
+    try(OutputStream os = Files.newOutputStream(Paths.get(filename))) {
       os.write(is.toBytes(DumpType.ALL_UNENCRYPTED));
     }
 

@@ -12,11 +12,12 @@ import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -34,7 +35,7 @@ public class JGraph extends JPanel implements MouseListener {
   private static final int BOX_HEIGHT = 15;
   private static final int BOX_WIDTH = 20;
   
-  private final Map<Shape, String> tooltips = new HashMap<>();
+  private final Map<Shape, String> tooltips = new LinkedHashMap<>();
   
   private int route = 0;
   
@@ -127,8 +128,8 @@ public class JGraph extends JPanel implements MouseListener {
       
       if (this.route >= 0 && routes[this.route].contains(gr)) {
         System.out.println("##   route " + this.route + " contains " + i + " ("
-                + (this.route < 0 ? "none" : routes[this.route].size()) + "/" + gr.getStartTime()
-                + ")");
+                + (this.route < 0 ? "none" : routes[this.route].size()) + '/' + gr.getStartTime()
+                + ')');
         g2.setColor(Color.GREEN);
         g2.setStroke(s2);
         if (lastY > 0) {
@@ -266,6 +267,7 @@ public class JGraph extends JPanel implements MouseListener {
     f.add(this);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     f.setSize(x, y);
+    f.pack();
     f.setVisible(true);
   }
   
@@ -302,7 +304,7 @@ public class JGraph extends JPanel implements MouseListener {
    */
   public void saveScreenshot(String filename, int width, int height) throws IOException {
     BufferedImage image = getScreenShot(width, height);
-    try(OutputStream os = new FileOutputStream(filename)) {
+    try(OutputStream os = Files.newOutputStream(Paths.get(filename))) {
       ImageIO.write(image, "jpg", os);
     }
   }

@@ -302,6 +302,7 @@ public enum Algorithm implements Serializable {
   public static Algorithm getDefault(AlgorithmType at) {
     // init map if not yet done
     if (def.isEmpty()) {
+      def.clear();
       def.put(AlgorithmType.ASYMMETRIC, RSA);
       def.put(AlgorithmType.SYMMETRIC, AES256);
       def.put(AlgorithmType.HASHING, SHA384);
@@ -374,7 +375,8 @@ public enum Algorithm implements Serializable {
    * @return the key size in bits for the security level specified
    */
   public int getKeySize(SecurityLevel sl) {
-    for (String i : new String[] {"aes", "sha", "camellia", "twofish", "ripemd"}) {
+    final String[] a = new String[] {"aes", "sha", "camellia", "twofish", "ripemd"};
+    for (String i : a) {
       if (txt.toLowerCase().startsWith(i)) {
         return Integer.parseInt(txt.substring(i.length(), i.length() + 3));
       }

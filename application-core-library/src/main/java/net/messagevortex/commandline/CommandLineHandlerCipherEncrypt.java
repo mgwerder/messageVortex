@@ -3,6 +3,7 @@ package net.messagevortex.commandline;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
@@ -101,12 +102,12 @@ public class CommandLineHandlerCipherEncrypt implements Callable<Integer> {
         k = new AsymmetricKey(algParam);
       }
 
-      try(FileOutputStream fos = new FileOutputStream(outFile)) {
+      try(OutputStream fos = Files.newOutputStream(Paths.get(outFile))) {
         fos.write(k.encrypt(inBuffer));
       }
 
       if (outKey != null) {
-        try(FileOutputStream fosk = new FileOutputStream(outFile)) {
+        try(OutputStream fosk = Files.newOutputStream(Paths.get(outKey))) {
           fosk.write(k.toBytes(DumpType.ALL_UNENCRYPTED));
         }
       }
@@ -121,14 +122,14 @@ public class CommandLineHandlerCipherEncrypt implements Callable<Integer> {
       }
 
       System.out.println("writing encrypted file " + outFile);
-      try(FileOutputStream fos = new FileOutputStream(outFile)) {
+      try(OutputStream fos = Files.newOutputStream(Paths.get(outFile))) {
         fos.write(k.encrypt(inBuffer));
       }
 
       if (outKey != null) {
         System.out.println("writing key file " + outKey);
         File fk = new File(outFile);
-        try(FileOutputStream fosk = new FileOutputStream(outFile)) {
+        try(OutputStream fosk = Files.newOutputStream(Paths.get(outKey))) {
           fosk.write(k.toBytes(DumpType.ALL_UNENCRYPTED));
         }
       }

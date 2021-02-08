@@ -1,5 +1,6 @@
 package net.messagevortex.asn1.encryption;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -50,13 +51,13 @@ public enum EllipticCurveType {
    * @return an array of suitable enums
    */
   public static EllipticCurveType[] getByKeySize(int ks) {
-    List<EllipticCurveType> l = new Vector<>();
+    List<EllipticCurveType> l = new ArrayList<>();
     for (EllipticCurveType e : values()) {
       if (e.getKeySize() == ks) {
         l.add(e);
       }
     }
-    return l.toArray(new EllipticCurveType[l.size()]);
+    return l.toArray(new EllipticCurveType[0]);
   }
   
   /***

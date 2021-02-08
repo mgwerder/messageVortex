@@ -148,7 +148,7 @@ public class SecurityContext {
    * @param context the SSL context to be set
    * @return the previously set context
    */
-  public SSLContext setContext(SSLContext context) {
+  public final SSLContext setContext(SSLContext context) {
     SSLContext ret = this.context;
     this.context = context;
     return ret;
@@ -164,7 +164,7 @@ public class SecurityContext {
    * @param requirement the requrement to be achieved
    * @return the previously set requirement
    */
-  public SecurityRequirement setRequirement(SecurityRequirement requirement) {
+  public final SecurityRequirement setRequirement(SecurityRequirement requirement) {
     SecurityRequirement ret = this.requirement;
     this.requirement = requirement;
     return ret;

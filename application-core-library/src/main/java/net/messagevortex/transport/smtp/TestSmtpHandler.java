@@ -105,7 +105,7 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
   }
 
   @Override
-  public void startDaemon() {
+  public final void startDaemon() {
     synchronized (runningLock) {
       isRunning = true;
       server.start();

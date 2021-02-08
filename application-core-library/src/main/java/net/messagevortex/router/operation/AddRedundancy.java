@@ -150,7 +150,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
             new Vector<SymmetricKey>(), -1, gf)
     );
 
-    LOGGER.log(Level.INFO, "executing add redundancy operation (" + ar.toString() + ")");
+    LOGGER.log(Level.INFO, "executing add redundancy operation (" + ar + ")");
     Matrix out = ar.executeInt(in);
 
     // set output

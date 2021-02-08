@@ -60,8 +60,11 @@ public enum Mode {
   private static final Map<AlgorithmType, Mode> def = new HashMap<>(2);
 
   static {
-    def.put(AlgorithmType.ASYMMETRIC, Mode.ECB);
-    def.put(AlgorithmType.SYMMETRIC, Mode.CBC);
+    synchronized (def) {
+      def.clear();
+      def.put(AlgorithmType.ASYMMETRIC, Mode.ECB);
+      def.put(AlgorithmType.SYMMETRIC, Mode.CBC);
+    }
   }
 
   final int id;

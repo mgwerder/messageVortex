@@ -268,7 +268,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
         // this node is not yet visited (check possibility)
 
         // building new visited array
-        List<Edge> tg1 = new ArrayList<>();
+        final List<Edge> tg1 = new ArrayList<>();
         tg1.addAll(Arrays.asList(visited));
         tg1.add(tmp);
 
