@@ -15,7 +15,7 @@ import net.messagevortex.asn1.RoutingCombo;
 
 public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
 
-  static Map<String, Set<BlenderRecipe>> recipes = new HashMap<>();
+  static final Map<String, Set<BlenderRecipe>> recipes = new HashMap<>();
 
   private static final SecureRandom esr = ExtendedSecureRandom.getSecureRandom();
 

@@ -50,8 +50,7 @@ public class MessageVortexConfig extends Config {
   private static synchronized Config createConfig() throws IOException {
     synchronized (lock) {
       if (defaultConfig == null) {
-        Config cfg = new MessageVortexConfig();
-        defaultConfig = cfg;
+        defaultConfig = new MessageVortexConfig();
       }
     }
     return defaultConfig;

@@ -77,8 +77,8 @@ public class F5Blender extends Blender {
 
   private static class SenderThread extends Thread {
 
-    OutputStream output;
-    MimeMessage msg;
+    private final OutputStream output;
+    private final MimeMessage msg;
 
     volatile boolean success = true;
 

@@ -373,8 +373,7 @@ public class AsymmetricKeyCache implements Serializable {
         ce = new CacheElement();
         cache.put(parameter, ce);
       }
-      AsymmetricKey ret = ce.pull();
-      return ret;
+      return ce.pull();
     }
   }
   
@@ -391,8 +390,7 @@ public class AsymmetricKeyCache implements Serializable {
         ce = new CacheElement();
         cache.put(parameter, ce);
       }
-      AsymmetricKey ret = ce.peek();
-      return ret;
+      return ce.peek();
     }
   }
   

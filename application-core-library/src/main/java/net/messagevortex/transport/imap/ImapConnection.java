@@ -257,13 +257,13 @@ public class ImapConnection extends ServerConnection
       LOGGER.log(Level.INFO, "shut down for connection " + rname + " runner called");
       try {
         icr.shutdown();
-      } catch(IOException ex) {
+      } catch (IOException ex) {
         // ignore error due to non running connectors
       }
       LOGGER.log(Level.INFO, "shut down of abstract connection of " + rname + " called");
       try {
         super.shutdown();
-      } catch(IOException ex) {
+      } catch (IOException ex) {
         // ignore error due to non running connectors
       }
       LOGGER.log(Level.INFO, "waiting for shutdown of " + rname + " runner");

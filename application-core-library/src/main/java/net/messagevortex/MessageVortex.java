@@ -357,6 +357,7 @@ public class MessageVortex implements Callable<Integer> {
     if (name == null) {
       throw new ClassNotFoundException("unable to obtain class \"null\"");
     }
+    @SuppressWarnings("unchecked")
     Class<RunningDaemon> myClass = (Class<RunningDaemon>) (Class.forName(name));
     Constructor<?> myConstructor;
     try {

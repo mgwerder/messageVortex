@@ -126,7 +126,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
   @Override
   public int[] execute(int[] id) {
-    if (!canRun()) {
+    if (!canRun() || id==null) {
       return new int[0];
     }
     LOGGER.log(Level.INFO, "executing add redundancy operation (" + toString() + ")");
@@ -141,7 +141,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     try {
       for (int i = 0; i < out.getY(); i++) {
         int plid = operation.getOutputId() + i;
-        byte[] b = operation.getkeys()[i].encrypt(out.getRowAsByteArray(i));
+        byte[] b = operation.getKeys()[i].encrypt(out.getRowAsByteArray(i));
         payload.setCalculatedPayload(plid, new PayloadChunk(plid, b, getUsagePeriod()));
         tot += b.length;
       }
@@ -196,7 +196,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     // do the padding
     int paddingSize = 4;
     int size = in.length + paddingSize;
-    int keySize = operation.getkeys().length != 0 ? operation.getkeys()[1].getKeySize() / 8 : 32;
+    int keySize = operation.getKeys().length != 0 ? operation.getKeys()[1].getKeySize() / 8 : 32;
     if (size % (keySize * operation.getDataStripes()) > 0) {
       size = keySize * operation.getDataStripes() * (size
           / (keySize * operation.getDataStripes()) + 1);
@@ -247,9 +247,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
   private static long lcm(long n1, long n2) {
     long gcd = gcd(n1, n2);
-
-    long lcm = (n1 * n2) / gcd;
-    return lcm;
+    return (n1 * n2) / gcd;
   }
 
   /***

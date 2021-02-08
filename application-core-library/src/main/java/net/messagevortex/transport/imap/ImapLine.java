@@ -90,8 +90,8 @@ public class ImapLine {
   /* this is the buffer of read but unprocessed characters */
   private String buffer = "";
 
-   // FIXME should be a ABNF implementation
-   // FIXME extract reading from constructor
+  // FIXME should be a ABNF implementation
+  // FIXME extract reading from constructor
   /***
    * <p>Creates an imap line object with a parser for a command.</p>
    *
@@ -512,7 +512,7 @@ public class ImapLine {
 
     // skip rcurly brace
     String ret = skipBytes(1);
-    if (ret == null || !"}".equals(ret)) {
+    if (!"}".equals(ret)) {
       return null;
     }
 

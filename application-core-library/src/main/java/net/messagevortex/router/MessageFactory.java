@@ -55,7 +55,7 @@ public abstract class MessageFactory {
    * @param is the identity store to be used
    * @return the built message wrapped in a message factory
    */
-   // FIXME augment to plugable MessageFactory implementation
+  // FIXME augment to plugable MessageFactory implementation
   public static MessageFactory buildMessage(String msg, int source, int target,
                                             IdentityStoreBlock[] anonGroupMembers,
                                             IdentityStore is) {

@@ -259,7 +259,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
    * @return                 the previously set time
    */
   public long setLastProcessTime(long maxProcessTime) {
-    long old = maxProcessTime;
+    long old = this.maxProcessTime;
     encrypted = null;
     this.maxProcessTime = maxProcessTime;
     return old;

@@ -49,8 +49,8 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
     TRANSFER_QUOTA(3, HeaderRequestIncreaseTransferQuota.class),
     QUOTA_QUERY(4, HeaderRequestQueryQuota.class);
 
-    int id;
-    Class templateClass;
+    final int id;
+    final Class templateClass;
 
     Type(int id, Class templateClass) {
       this.id = id;

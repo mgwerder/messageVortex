@@ -110,7 +110,7 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
       int j = 0;
       for (int i : getInputId()) {
         if (!l.contains(i)) {
-          for (byte b : operation.getkeys()[i - getInputId()[0]]
+          for (byte b : operation.getKeys()[i - getInputId()[0]]
                         .decrypt(payload.getPayload(i).getPayload())) {
             in2[j++] = b;
           }

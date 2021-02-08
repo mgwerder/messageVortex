@@ -197,7 +197,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
    * @return the previously set usage period
    */
   public final UsagePeriod setUsagePeriod(UsagePeriod period) {
-    UsagePeriod ret = period;
+    UsagePeriod ret = this.period;
     this.period = period;
     return ret;
   }

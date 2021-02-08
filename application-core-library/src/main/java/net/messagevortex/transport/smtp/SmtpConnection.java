@@ -92,7 +92,7 @@ public class SmtpConnection extends ClientConnection {
         // smtp state machine
         String envelopeFrom = null;
         String envelopeTo = null;
-        while (command == null || !"quit".equalsIgnoreCase(command)) {
+        while (!"quit".equalsIgnoreCase(command)) {
           LOGGER.log(Level.INFO, "Waiting for SMTP command to arrive");
 
           // wait for incomming command
@@ -141,7 +141,7 @@ public class SmtpConnection extends ClientConnection {
                 // get body until terminated with a line with a single dot
                 String l = null;
                 StringBuilder sb = new StringBuilder();
-                while (l == null || !".".equals(l)) {
+                while (!".".equals(l)) {
                   if (l != null) {
                     sb.append(l + CRLF);
                   }

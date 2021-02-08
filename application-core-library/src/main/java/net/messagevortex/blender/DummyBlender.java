@@ -78,7 +78,7 @@ public class DummyBlender extends Blender {
   
   private static class SenderThread extends Thread {
     
-    OutputStream output;
+    final OutputStream output;
     MimeMessage msg;
     
     volatile boolean success = true;
@@ -92,8 +92,7 @@ public class DummyBlender extends Blender {
       this.output = os;
       Properties props = new Properties();
       ByteArrayInputStream bis = new ByteArrayInputStream(msg);
-      MimeMessage mmsg = new MimeMessage(null, bis);
-      this.msg = mmsg;
+      this.msg = new MimeMessage(null, bis);
     }
     
     @Override

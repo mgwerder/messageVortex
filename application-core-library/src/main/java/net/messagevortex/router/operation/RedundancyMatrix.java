@@ -115,8 +115,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
     while (red.getX() < red.getY()) {
       red.removeRow(red.getY() - 1);
     }
-    Matrix ret = red.getInverse();
-    return ret;
+    return red.getInverse();
   }
   
 }

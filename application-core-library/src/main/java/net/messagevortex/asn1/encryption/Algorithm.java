@@ -435,12 +435,15 @@ public enum Algorithm implements Serializable {
    * <p>Get the block size for this algorithm and security level.</p>
    *
    * @param sl   the security level
-   * @return the key size in bits for the security level specified
+   * @return the key size in bits for the security level specified or -1 if not set
    */
   public int getBlockSize(SecurityLevel sl) {
     synchronized (secLevel) {
       // get requested parameters
       AlgorithmParameter params = getParameters(sl);
+      if (params == null) {
+        return -1;
+      }
 
       String bsparam = params.get(Parameter.BLOCKSIZE);
       if (bsparam != null) {

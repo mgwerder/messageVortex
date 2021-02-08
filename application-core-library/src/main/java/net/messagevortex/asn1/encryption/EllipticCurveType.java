@@ -34,10 +34,9 @@ public enum EllipticCurveType {
   SECT409K1(2501, "sect409k1", 409, Algorithm.EC, SecurityLevel.HIGH),
   SECP521R1(2502, "secp521r1", 521, Algorithm.EC, SecurityLevel.QUANTUM);
   
-  static EllipticCurveType def = SECP521R1;
+  private static final EllipticCurveType def = SECP521R1;
   
   private final int id;
-  private EllipticCurveType courveType;
   private final String txt;
   private final Algorithm alg;
   private final SecurityLevel secLevel;

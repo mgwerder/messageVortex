@@ -56,7 +56,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   private static final Object mon = new Object();
   private static boolean localMode = false;
   
-  static Map<String, TransportReceiver> endpoints = new HashMap<>();
+  static final Map<String, TransportReceiver> endpoints = new HashMap<>();
   private static String name = null;
   private String registeredEndpoint = null;
   

@@ -45,7 +45,7 @@ public class ExtendedSecureRandom {
    * @param bound the maximum value to be used
    * @return a random integer value between 0 and bound-1
    */
-  public static final int nextInt(int bound) {
+  public static int nextInt(int bound) {
     return sr.nextInt(bound);
   }
   
@@ -58,7 +58,7 @@ public class ExtendedSecureRandom {
    *
    * @throws IllegalArgumentException if low &gt;= up
    */
-  public static final int nextInt(int low, int up) {
+  public static int nextInt(int low, int up) {
     if (low >= up) {
       throw new IllegalArgumentException("lower bound is not smaller than upper bound");
     }
@@ -70,7 +70,7 @@ public class ExtendedSecureRandom {
    *
    * @param array  the array to be filled
    */
-  public static final void nextBytes(byte[] array) {
+  public static void nextBytes(byte[] array) {
     sr.nextBytes(array);
   }
   
@@ -81,7 +81,7 @@ public class ExtendedSecureRandom {
    * @param i  the number of bytes to be generated
    * @return the seed bytes
    */
-  public static final byte[] generateSeed(int i) {
+  public static byte[] generateSeed(int i) {
     return sr.generateSeed(i);
   }
   
@@ -91,7 +91,7 @@ public class ExtendedSecureRandom {
    *
    * @return the next pseudorandom value
    */
-  public static final double nextDouble() {
+  public static double nextDouble() {
     return sr.nextDouble();
   }
   
@@ -100,7 +100,7 @@ public class ExtendedSecureRandom {
    *
    * @return the random number generator
    */
-  public static final SecureRandom getSecureRandom() {
+  public static SecureRandom getSecureRandom() {
     return sr;
   }
   
@@ -109,7 +109,7 @@ public class ExtendedSecureRandom {
    *
    * @return a gaussian random value
    */
-  public static final double nextGauss() {
+  public static double nextGauss() {
     double result = -1;
     while (result < 0 || result > 1) {
       result = (sr.nextGaussian() + Math.E) / 2 / Math.E;
@@ -126,7 +126,7 @@ public class ExtendedSecureRandom {
    *
    * @return a gaussian random value
    */
-  public static final double nextRandomTime(long start, long peak, long end) {
+  public static double nextRandomTime(long start, long peak, long end) {
     if (start >= end || peak <= start || end <= peak) {
       throw new NullPointerException("random time must offer a valid window [start(" + start
               + ")<peak(" + peak + ")<end(" + end + ")]");
