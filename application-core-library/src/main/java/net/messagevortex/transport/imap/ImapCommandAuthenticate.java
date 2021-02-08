@@ -131,7 +131,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
     byte[] saslChallenge = null;
     byte[] saslReply = null;
     try {
-      if (SaslMechanisms.PLAIN.toString().equals(mech) && context != null) {
+      if (context != null && SaslMechanisms.PLAIN.toString().equals(mech)) {
         saslReply = Base64.decode(context);
       } else {
         saslChallenge = ss.evaluateResponse(new byte[0]);

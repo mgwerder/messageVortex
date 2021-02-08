@@ -154,7 +154,7 @@ public class ImapConnection extends ServerConnection
    * @param authProxy the proxy to be set
    * @return the previously set proxy
    */
-  public AuthenticationProxy setAuth(AuthenticationProxy authProxy) {
+  public final AuthenticationProxy setAuth(AuthenticationProxy authProxy) {
     AuthenticationProxy oldProxyAuth = getAuth();
     this.authProxy = authProxy;
     if (authProxy != null) {

@@ -49,9 +49,8 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest implements 
    * <p>Creates a request block from the ASN.1 structure.</p>
    *
    * @param ae            the structure to be parsed
-   * @throws IOException  if the structure does not parse to the respective block
    */
-  public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) throws IOException {
+  public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) {
     this();
     if (ae != null) {
       parse(ae);

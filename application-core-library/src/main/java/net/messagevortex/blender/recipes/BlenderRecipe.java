@@ -68,6 +68,7 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
       if (recipes.get(identifier) != null) {
         recipes.get(identifier).clear();
       }
+      recipes.remove(identifier);
     }
   }
 

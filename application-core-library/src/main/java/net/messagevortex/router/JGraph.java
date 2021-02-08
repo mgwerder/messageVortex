@@ -13,7 +13,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
@@ -143,6 +145,7 @@ public class JGraph extends JPanel implements MouseListener {
       int xh = (int) ((double) (x2 - x1) / Math.abs(x2 - x1) * verticalSpace);
       g2.drawLine(x2, y, x2 - xh, y - xh / 4);
       g2.drawLine(x2, y, x2 - xh, y + xh / 4);
+      g2.dispose();
     }
   }
   
@@ -273,7 +276,7 @@ public class JGraph extends JPanel implements MouseListener {
   /***
    * <p>gets an image of the current graph.</p>
    *
-   *  @param width the width of the screenshot in pixels
+   * @param width the width of the screenshot in pixels
    * @param height the height of the screenshot in pixels
    * @return the image
    */
@@ -294,12 +297,14 @@ public class JGraph extends JPanel implements MouseListener {
    * @param filename name of the file to be written
    * @param width the width of the screenshot in pixels
    * @param height the height of the screenshot in pixels
+   *
    * @throws IOException when writing file
    */
   public void saveScreenshot(String filename, int width, int height) throws IOException {
     BufferedImage image = getScreenShot(width, height);
-    File outputFile = new File(filename);
-    ImageIO.write(image, "jpg", outputFile);
+    try(OutputStream os = new FileOutputStream(filename)) {
+      ImageIO.write(image, "jpg", os);
+    }
   }
   
 }

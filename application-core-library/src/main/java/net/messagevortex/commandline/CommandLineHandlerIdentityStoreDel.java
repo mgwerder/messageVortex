@@ -69,9 +69,9 @@ public class CommandLineHandlerIdentityStoreDel implements Callable<Integer> {
 
     // dump store to disk
     LOGGER.log(Level.INFO, "writing identity store to \"" + filename + "\"");
-    OutputStream os = new FileOutputStream(filename);
-    os.write(is.toBytes(DumpType.ALL_UNENCRYPTED));
-    os.close();
+    try(OutputStream os = new FileOutputStream(filename)) {
+      os.write(is.toBytes(DumpType.ALL_UNENCRYPTED));
+    }
 
     LOGGER.log(Level.INFO, "finished");
     return 0;

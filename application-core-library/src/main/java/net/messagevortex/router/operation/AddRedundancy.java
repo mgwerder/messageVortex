@@ -1,27 +1,5 @@
 package net.messagevortex.router.operation;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -44,7 +22,7 @@ import net.messagevortex.asn1.encryption.Prng;
  */
 public class AddRedundancy extends AbstractOperation implements Serializable {
 
-  private static final long MAX_SIZE = (long) Math.pow(2, 32);
+  private static final long MAX_SIZE = 2<<32;
 
   /***
    * <p>Wrapper for the java random number generator (not normative).</p>
@@ -203,9 +181,10 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     }
     byte[] in2 = new byte[size];
     byte[] pad = VortexMessage.getLongAsBytes(in.length, paddingSize);
-    LOGGER.log(Level.INFO, "  calculated padded size (original: " + in.length + "; blocks: "
+    String msg = "  calculated padded size (original: " + in.length + "; blocks: "
         + operation.getDataStripes() + "; block size: " + keySize + "; padded size: "
-        + size + ")");
+        + size + ")";
+    LOGGER.log(Level.INFO, msg);
 
     // copy length prefix
     System.arraycopy(pad, 0, in2, 0, paddingSize);

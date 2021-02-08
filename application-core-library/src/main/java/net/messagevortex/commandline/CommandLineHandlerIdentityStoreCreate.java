@@ -46,9 +46,9 @@ public class CommandLineHandlerIdentityStoreCreate implements Callable<Integer> 
       return MessageVortex.ARGUMENT_FAIL;
     }
     LOGGER.log(Level.INFO, "Writing \"" + filename + "\"");
-    OutputStream os = new FileOutputStream(filename);
-    os.write(is.toBytes(DumpType.ALL_UNENCRYPTED));
-    os.close();
+    try(OutputStream os = new FileOutputStream(filename)) {
+      os.write(is.toBytes(DumpType.ALL_UNENCRYPTED));
+    }
     LOGGER.log(Level.INFO, "Finished");
     return 0;
   }

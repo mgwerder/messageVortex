@@ -64,9 +64,8 @@ public class CommandLineHandlerRedundancyAdd implements Callable<Integer> {
       return MessageVortex.ARGUMENT_FAIL;
     }
     LOGGER.log(Level.INFO, "Loading file \"" + inFile + "\"");
-    File f = new File(inFile);
-    byte[] buffer = new byte[(int) f.length()];
-    try (FileInputStream fis = new FileInputStream(f)) {
+    byte[] buffer = new byte[(int) new File(inFile).length()];
+    try (FileInputStream fis = new FileInputStream(inFile)) {
       fis.read(buffer);
     }
 
@@ -76,7 +75,7 @@ public class CommandLineHandlerRedundancyAdd implements Callable<Integer> {
 
     // write output file
     LOGGER.log(Level.INFO, "writing output");
-    try (FileOutputStream fos = new FileOutputStream(new File(outFile))) {
+    try (FileOutputStream fos = new FileOutputStream(outFile)) {
       fos.write(out);
     }
 

@@ -48,7 +48,7 @@ public class GenericGenerator implements BlenderGenerator {
 
   private static byte[] getFileContent(File f) {
     byte[] b = null;
-    try (InputStream is = new FileInputStream(f)) {
+    try (InputStream is = new FileInputStream(f.toString())) {
       b = new byte[(int) (f.length())];
       is.read(b);
     } catch (IOException ioe) {

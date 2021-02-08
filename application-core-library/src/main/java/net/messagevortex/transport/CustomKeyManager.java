@@ -73,6 +73,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    * @param keyStoreFile name of the JKS keystore file
    * @param password     password to open the kestore file
    * @param alias        alias of the certificate to be used
+   * @throws GeneralSecurityException if alias is not in keystore
    */
   CustomKeyManager(String keyStoreFile, char[] password, String alias)
           throws GeneralSecurityException {

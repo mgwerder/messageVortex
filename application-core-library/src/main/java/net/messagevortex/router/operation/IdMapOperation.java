@@ -33,7 +33,7 @@ public class IdMapOperation extends AbstractOperation implements Serializable {
 
   public static final long serialVersionUID = 100000000019L;
 
-  private static final java.util.logging.Logger LOGGER;
+  private static final transient java.util.logging.Logger LOGGER;
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());

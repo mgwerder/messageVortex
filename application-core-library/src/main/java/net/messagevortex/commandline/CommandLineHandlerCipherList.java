@@ -5,6 +5,7 @@ import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherT
 import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.PAD;
 import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.SYM;
 
+
 import java.io.IOException;
 import java.util.concurrent.Callable;
 import net.messagevortex.MessageVortexLogger;
@@ -57,7 +58,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
         case ASYM:
           System.out.println("Asymmetric cpiher types:");
           for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.ASYMMETRIC)) {
-            System.out.print("  " + a.toString());
+            System.out.print("  " + a);
             System.out.print(" (modes: ");
             int i = 0;
             for (Mode m : Mode.getModes(a)) {
@@ -74,7 +75,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
                 System.out.print(", ");
               }
               i++;
-              System.out.print(p.toString());
+              System.out.print(p);
             }
             System.out.println(")");
           }
@@ -82,7 +83,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
         case SYM:
           System.out.println("Symmetric cpiher types:");
           for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.SYMMETRIC)) {
-            System.out.print("  " + a.toString());
+            System.out.print("  " + a);
             System.out.print(" (modes: ");
             int i = 0;
             for (Mode m : Mode.getModes(a)) {
@@ -99,7 +100,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
                 System.out.print(", ");
               }
               i++;
-              System.out.print(p.toString());
+              System.out.print(p);
             }
             System.out.println(")");
           }
