@@ -87,15 +87,15 @@ public class MessageVortex implements Callable<Integer> {
   }
   
   @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
-  private final String configFile = "messageVortex.cfg";
+  private String configFile = "messageVortex.cfg";
   
   @CommandLine.Option(names = {"--timeoutAndDie"}, hidden = true,
           description = "timeout before aboorting execution (for test purposes only)")
-  private final int timeoutInSeconds = -1;
+  private int timeoutInSeconds = -1;
   
   @CommandLine.Option(names = {"--threadDumpInteval"}, hidden = true,
           description = "timeout before aboorting execution (for test purposes only)")
-  private final int threadDumpInterval = 300;
+  private int threadDumpInterval = 300;
   
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
