@@ -22,7 +22,7 @@ import net.messagevortex.asn1.encryption.Prng;
  */
 public class AddRedundancy extends AbstractOperation implements Serializable {
 
-  private static final long MAX_SIZE = 2<<32;
+  private static final long MAX_SIZE = 2L<<32;
 
   /***
    * <p>Wrapper for the java random number generator (not normative).</p>
