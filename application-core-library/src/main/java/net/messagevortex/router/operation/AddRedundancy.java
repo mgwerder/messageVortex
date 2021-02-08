@@ -22,7 +22,7 @@ import net.messagevortex.asn1.encryption.Prng;
  */
 public class AddRedundancy extends AbstractOperation implements Serializable {
 
-  private static final long MAX_SIZE = 2L<<32;
+  private static final long MAX_SIZE = 2L << 31; // calculate 2^32
 
   /***
    * <p>Wrapper for the java random number generator (not normative).</p>
@@ -104,7 +104,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
   @Override
   public int[] execute(int[] id) {
-    if (!canRun() || id==null) {
+    if (!canRun() || id == null) {
       return new int[0];
     }
     LOGGER.log(Level.INFO, "executing add redundancy operation (" + toString() + ")");
@@ -354,6 +354,10 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
   public String toString() {
     return getInputId()[0] + "->addRedundancy(" + getOutputId().length + ")->" + getOutputId()[0];
+  }
+
+  public static void main(String[] args) {
+    System.out.println(MAX_SIZE);
   }
 
 }
