@@ -133,7 +133,7 @@ public class ImapConnection extends ServerConnection
    * @param proxy the authentication proxy to be used for login
    * @throws IOException if communication with peer fails
    */
-  public ImapConnection(AbstractConnection ac, AuthenticationProxy proxy) throws IOException {
+  public ImapConnection(AbstractConnection ac, AuthenticationProxy proxy) {
     super(ac);
     setAuth(proxy);
     init();

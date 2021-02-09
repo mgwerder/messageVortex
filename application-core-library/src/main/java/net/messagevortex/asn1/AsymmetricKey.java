@@ -104,8 +104,7 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
   
   protected byte[] publicKey = null;
   protected byte[] privateKey = null;
-  protected Algorithm mac = Algorithm.getDefault(AlgorithmType.HASHING);
-  
+
   /***
    * <p>Creates an asymmetric key based on the byte sequence.</p>
    *

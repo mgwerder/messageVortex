@@ -181,16 +181,17 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     // deregister endpoint
     synchronized (idReservation) {
       try {
+        String defHostname = InetAddress.getLocalHost().getHostName();
         // Remove all identities
         List<String> l = new Vector<>();
         for (Map.Entry<String, String> e : idReservation.entrySet()) {
-          if (e.getValue().equals(InetAddress.getLocalHost().getHostName())) {
+          if (e.getValue().equals(defHostname)) {
             l.add(e.getKey());
           }
         }
         for (String key : l) {
           String hostname = idReservation.remove(key);
-          if (hostname != null && hostname.equals(InetAddress.getLocalHost().getHostName())) {
+          if (hostname != null && hostname.equals(defHostname)) {
             LOGGER.log(Level.FINE, "successfully deregistered id " + registeredEndpoint
                     + " from dummy transport");
           } else {

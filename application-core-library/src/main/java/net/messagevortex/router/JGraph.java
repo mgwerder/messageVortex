@@ -7,10 +7,12 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class JGraph extends JPanel implements MouseListener {
   private static final int BOX_HEIGHT = 15;
   private static final int BOX_WIDTH = 20;
   
-  private final Map<Shape, String> tooltips = new LinkedHashMap<>();
+  private final Map<TooltipExtent, String> tooltips = new LinkedHashMap<>();
   
   private int route = 0;
   
@@ -74,13 +76,16 @@ public class JGraph extends JPanel implements MouseListener {
       if (graph.getAnonymity(i) == graph.getSource()) {
         g.setColor(Color.GREEN);
         g.fillRect(x, Y_OFFSET, BOX_WIDTH, BOX_HEIGHT);
-      }
-      if (graph.getAnonymity(i) == graph.getTarget()) {
+        tooltips.put(new TooltipExtentBox(new Rectangle2D.Float(x, Y_OFFSET, BOX_WIDTH, BOX_HEIGHT)),"Sender");
+      } else if (graph.getAnonymity(i) == graph.getTarget()) {
         g.setColor(Color.RED);
         g.fillRect(x, Y_OFFSET, BOX_WIDTH, BOX_HEIGHT);
+        tooltips.put(new TooltipExtentBox(new Rectangle2D.Float(x, Y_OFFSET, BOX_WIDTH, BOX_HEIGHT)),"Recipient");
+      } else {
+        g.setColor(Color.BLACK);
+        g.drawRect(x, Y_OFFSET, BOX_WIDTH, BOX_HEIGHT);
+        tooltips.put(new TooltipExtentBox(new Rectangle2D.Float(x, Y_OFFSET, BOX_WIDTH, BOX_HEIGHT)),"Anonymity node");
       }
-      g.setColor(Color.BLACK);
-      g.drawRect(x, Y_OFFSET, BOX_WIDTH, BOX_HEIGHT);
       
       // Center Text in box
       FontMetrics metrics = g.getFontMetrics(g.getFont());

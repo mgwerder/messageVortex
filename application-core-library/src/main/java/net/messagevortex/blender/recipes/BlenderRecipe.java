@@ -65,10 +65,10 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
     }
 
     synchronized (recipes) {
-      if (recipes.containsKey(identifier)) {
-        recipes.get(identifier).clear();
+      Set<BlenderRecipe> r=recipes.remove(identifier);
+      if (r!=null) {
+        r.clear();
       }
-      recipes.remove(identifier);
     }
   }
 

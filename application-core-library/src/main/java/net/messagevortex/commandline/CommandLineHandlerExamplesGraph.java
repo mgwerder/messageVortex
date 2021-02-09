@@ -62,14 +62,13 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
    */
   @Override
   public Integer call() throws Exception {
-    IdentityStore is = null;
+    String fname = System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der";
+    IdentityStore is;
     try {
-      is = new IdentityStore(new File(System.getProperty("java.io.tmpdir")
-              + "/IdentityStoreExample1.der"));
+      is = new IdentityStore(new File(fname));
     } catch (IOException ioe) {
       is = IdentityStore.getNewIdentityStoreDemo(false);
-      try(OutputStream os = Files.newOutputStream(Paths.get(System.getProperty("java.io.tmpdir")
-          + "/IdentityStoreExample1.der"))) {
+      try(OutputStream os = Files.newOutputStream(Paths.get(fname))) {
         ASN1OutputStream f = ASN1OutputStream.create(os, ASN1Encoding.DER);
         f.writeObject(is.toAsn1Object(DumpType.ALL_UNENCRYPTED));
       }

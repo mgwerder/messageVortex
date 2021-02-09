@@ -1,11 +1,10 @@
 package net.messagevortex.transport;
 
-import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
 public class ServerConnection extends AbstractConnection {
 
-  public ServerConnection(SocketChannel channel, SecurityContext context) throws IOException {
+  public ServerConnection(SocketChannel channel, SecurityContext context) {
     super(channel, context, false);
   }
 

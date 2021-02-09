@@ -119,7 +119,7 @@ public class SmtpConnection extends ClientConnection {
               write("334 " + new String(
                   Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
               );
-              String password = new String(Base64.decode(readln()));
+              String password = new String(Base64.decode(readln()),StandardCharsets.UTF_8);
               Config.getDefault().getStringValue(cfgSection, "smtp_incomming_password");
 
               // check for sender string

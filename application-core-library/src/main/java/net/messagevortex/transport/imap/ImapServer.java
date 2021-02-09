@@ -3,6 +3,7 @@ package net.messagevortex.transport.imap;
 import static net.messagevortex.transport.SecurityRequirement.SSLTLS;
 import static net.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
 
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -43,11 +44,11 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
    * @throws IOException if socket binding fails
    */
   public ImapServer(SecurityContext secContext) throws IOException {
-    super(new InetSocketAddress(InetAddress.getByAddress(new byte[]{0, 0, 0, 0}),
-            (
-                    secContext.getRequirement() == UNTRUSTED_SSLTLS
-                    || secContext.getRequirement() == SSLTLS ? 993 : 143)
-            ), null);
+    super(new InetSocketAddress(InetAddress.getByAddress(new byte[] {0, 0, 0, 0}),
+        (
+            secContext.getRequirement() == UNTRUSTED_SSLTLS
+                || secContext.getRequirement() == SSLTLS ? 993 : 143)
+    ), null);
 
     setSocketListener(this);
     setSecurityContext(secContext);
@@ -85,16 +86,12 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
 
   @Override
   public void gotConnect(ServerConnection ac) {
-    try {
-      doGarbageCollection(false);
-      LOGGER.log(Level.INFO, "got new connection");
-      ImapConnection ic = new ImapConnection(ac, auth);
-      ic.setTimeout(getTimeout());
-      connSet.add(ic);
-      LOGGER.log(Level.INFO, "inbound connection ready for use");
-    } catch (IOException ioe) {
-      LOGGER.log(Level.WARNING, "got exception while initial Handshake", ioe);
-    }
+    doGarbageCollection(false);
+    LOGGER.log(Level.INFO, "got new connection");
+    ImapConnection ic = new ImapConnection(ac, auth);
+    ic.setTimeout(getTimeout());
+    connSet.add(ic);
+    LOGGER.log(Level.INFO, "inbound connection ready for use");
   }
 
   private void doGarbageCollection(boolean force) {
@@ -109,7 +106,7 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
       }
       connSet.removeAll(tmp);
       LOGGER.log(Level.INFO, "garbage collector removed " + tmp.size() + " connections ("
-              + connSet.size() + " remaining)");
+          + connSet.size() + " remaining)");
       gcLastRun = System.currentTimeMillis();
     }
   }

@@ -446,7 +446,7 @@ public class ImapLine {
 
     LOGGER.log(Level.FINER, "Skipping " + num + " spaces");
     // loop thru skipper
-    while (snoopBytes(1) != null && (countdown != 0) && ABNF_SP.contains(snoopBytes(1))) {
+    while ((countdown != 0) && snoopBytes(1) != null && ABNF_SP.contains(snoopBytes(1))) {
       skipBytes(1);
       count++;
       countdown--;
@@ -497,7 +497,7 @@ public class ImapLine {
     // get number
 
     long num = 0;
-    while (snoopBytes(1) != null && "0123456789".contains(snoopBytes(1)) && num < 4294967295L) {
+    while (num < 4294967295L && snoopBytes(1) != null && "0123456789".contains(snoopBytes(1)) ) {
       num = num * 10 + (int) (skipBytes(1).charAt(0)) - (int) ("0".charAt(0));
     }
     return num;

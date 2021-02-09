@@ -351,8 +351,8 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
   public String dump() {
     StringBuilder sb = new StringBuilder();
     for (Edge g : store) {
-      sb.append("  ").append(anonymitySet.indexOf(g.getFrom()) + " -> "
-          + anonymitySet.indexOf(g.getTo()));
+      sb.append("  ").append(anonymitySet.indexOf(g.getFrom())).append(" -> ")
+          .append(anonymitySet.indexOf(g.getTo()));
     }
     sb.append('}');
     return sb.toString();

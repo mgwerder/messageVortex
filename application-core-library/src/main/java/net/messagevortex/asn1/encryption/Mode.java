@@ -58,13 +58,10 @@ public enum Mode {
   NONE(10100, "NONE", false, new String[]{"ECIES", "RSA"}, new Padding[]{Padding.PKCS7});
 
   private static final Map<AlgorithmType, Mode> def = new HashMap<>(2);
-
   static {
-    synchronized (def) {
-      def.clear();
-      def.put(AlgorithmType.ASYMMETRIC, Mode.ECB);
-      def.put(AlgorithmType.SYMMETRIC, Mode.CBC);
-    }
+    def.clear();
+    def.put(AlgorithmType.ASYMMETRIC, Mode.ECB);
+    def.put(AlgorithmType.SYMMETRIC, Mode.CBC);
   }
 
   final int id;

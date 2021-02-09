@@ -272,21 +272,21 @@ public class Matrix {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("{");
+    sb.append('{');
     for (int y = 0; y < dimension[Y]; y++) {
-      sb.append("{");
+      sb.append('{');
       for (int x = 0; x < dimension[X]; x++) {
         if (x > 0) {
-          sb.append(",");
+          sb.append(',');
         }
         sb.append(matrixContent[y * dimension[X] + x]);
       }
-      sb.append("}");
+      sb.append('}');
       if (y < dimension[Y] - 1) {
         sb.append(",\n");
       }
     }
-    sb.append("}");
+    sb.append('}');
     return sb.toString();
   }
 

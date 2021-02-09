@@ -42,8 +42,8 @@ public class TestPop3Handler implements Transport {
    */
   public TestPop3Handler(String section) throws IOException {
     Config cfg = Config.getDefault();
-    blender = MessageVortex.getBlender(cfg.getStringValue(section, "blender"));
-    if (blender == null) {
+    this.blender = MessageVortex.getBlender(cfg.getStringValue(section, "blender"));
+    if (this.blender == null) {
       throw new IOException("unable to fetch appropriate blender");
     }
     server = new GreenMail(new ServerSetup[]{new ServerSetup(
@@ -69,7 +69,7 @@ public class TestPop3Handler implements Transport {
   }
 
   @Override
-  public void startDaemon() {
+  public final void startDaemon() {
     server.start();
   }
 

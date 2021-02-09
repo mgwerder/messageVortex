@@ -2,25 +2,24 @@ package net.messagevortex.router.operation;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Offers galoise Math required for redundancy matrices.
  */
 public class GaloisFieldMathMode implements MathMode {
-  
+
   private final int gfFieldSize;
   private final int omega;
   private final int[] gfLog;
   private final int[] gfInverseLog;
-  
-  static final int[] PRIM_POLYNOM = new int[]{
-    3, 7, 11, 19, 37, 67, 137, 285, 529,
-    1033, 2053, 4179, 8219, 17475, 32771, 69643
+
+  static final int[] PRIM_POLYNOM = new int[] {
+      3, 7, 11, 19, 37, 67, 137, 285, 529,
+      1033, 2053, 4179, 8219, 17475, 32771, 69643
   };
-  
+
   static final Map<Integer, GaloisFieldMathMode> cachedMathMode = new LinkedHashMap<>();
-  
+
   private GaloisFieldMathMode(int omega) {
     if (omega < 2 || omega > 16) {
       throw new ArithmeticException("illegal GF size " + omega + " (PRIM_POLYNOM unknown)");
@@ -42,7 +41,7 @@ public class GaloisFieldMathMode implements MathMode {
     gfLog[0] = -1;
     gfInverseLog[gfFieldSize - 1] = -1;
   }
-  
+
   /***
    * <p>Gets a singleton math mode for the specified omega.</p>
    *
@@ -50,6 +49,9 @@ public class GaloisFieldMathMode implements MathMode {
    * @return the math mode (singleton)
    */
   public static GaloisFieldMathMode getGaloisFieldMathMode(int omega) {
+    if (omega < 1 || omega > 32) {
+      throw new IllegalArgumentException("omega (" + omega + ") out of range 1..32");
+    }
     GaloisFieldMathMode ret = cachedMathMode.get(omega);
     if (ret == null) {
       ret = new GaloisFieldMathMode(omega);
@@ -57,7 +59,7 @@ public class GaloisFieldMathMode implements MathMode {
     }
     return ret;
   }
-  
+
   @Override
   public int mul(int c1, int c2) {
     if (c1 == 0 || c2 == 0) {
@@ -69,7 +71,7 @@ public class GaloisFieldMathMode implements MathMode {
     }
     return gfInverseLog[sumLog];
   }
-  
+
   @Override
   public int div(int c1, int divisor) {
     if (c1 == 0) {
@@ -84,30 +86,30 @@ public class GaloisFieldMathMode implements MathMode {
     }
     return gfInverseLog[diffLog];
   }
-  
+
   @Override
   public int add(int c1, int c2) {
     return c1 ^ c2;
   }
-  
+
   @Override
   public int sub(int c1, int c2) {
     return add(c1, c2);
   }
-  
+
   public int[] getGfLog() {
     return gfLog.clone();
   }
-  
+
   public int[] getGfIlog() {
     return gfInverseLog.clone();
   }
-  
+
   @Override
   public String toString() {
     return "GF(2^" + omega + ")";
   }
-  
+
   /**
    * <p>dumps transformation table of GF-Field.</p>
    */
@@ -115,11 +117,11 @@ public class GaloisFieldMathMode implements MathMode {
     System.out.printf("omega=" + omega + System.lineSeparator());
     System.out.printf("Add:xor; sub=xor; " + System.lineSeparator());
     System.out.printf("mul=iif (c1 == 0 || c2 == 0;0; gfilog[gfLog[c1] + gfLog[c2]-iif(gfLog[c1] + "
-            + "gfLog[c2]>2^" + omega + "-1;2^\"+omega+\"-1;0)]" + System.lineSeparator());
+        + "gfLog[c2]>2^" + omega + "-1;2^\"+omega+\"-1;0)]" + System.lineSeparator());
     System.out.printf("div=iif (c1 == 0;0;iif(c2==0;illegal;gfilog[gfLog[c1] - gfLog[c2]+iif("
-            + "gfLog[c1] - gfLog[c2]<>0;2^\"+omega+\"-1;0))]" + System.lineSeparator());
+        + "gfLog[c1] - gfLog[c2]<>0;2^\"+omega+\"-1;0))]" + System.lineSeparator());
     System.out.println();
-    
+
     int cols = (int) (Math.ceil(Math.sqrt(Math.pow(2, omega)) / 2));
     for (int x = 0; x < cols; x++) {
       System.out.printf("| num | log |ilog |  ");
@@ -140,7 +142,7 @@ public class GaloisFieldMathMode implements MathMode {
       System.out.println();
     }
   }
-  
+
   public static void main(String[] args) {
     GaloisFieldMathMode mm = new GaloisFieldMathMode(8);
     mm.dumpTable();

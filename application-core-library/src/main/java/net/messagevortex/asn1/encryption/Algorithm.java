@@ -120,10 +120,6 @@ public enum Algorithm implements Serializable {
 
   public static final long serialVersionUID = 100000000039L;
 
-  /* provides a map for default selections or algorithm sets (including parameters)
-     for each AlgorithmType class */
-  private static final Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<>();
-
   /* create a class specific logger */
   private static final Logger LOGGER;
 
@@ -301,13 +297,16 @@ public enum Algorithm implements Serializable {
    */
   public static Algorithm getDefault(AlgorithmType at) {
     // init map if not yet done
-    if (def.isEmpty()) {
-      def.clear();
-      def.put(AlgorithmType.ASYMMETRIC, RSA);
-      def.put(AlgorithmType.SYMMETRIC, AES256);
-      def.put(AlgorithmType.HASHING, SHA384);
+    switch(at) {
+      case ASYMMETRIC:
+        return RSA;
+      case SYMMETRIC:
+        return AES256;
+      case HASHING:
+        return SHA384;
+      default:
+        return null;
     }
-    return def.get(at);
   }
 
   /***
@@ -375,8 +374,8 @@ public enum Algorithm implements Serializable {
    * @return the key size in bits for the security level specified
    */
   public int getKeySize(SecurityLevel sl) {
-    final String[] a = new String[] {"aes", "sha", "camellia", "twofish", "ripemd"};
-    for (String i : a) {
+    final String[] PREFIXED_LENGTH_NAMES = new String[] {"aes", "sha", "camellia", "twofish", "ripemd"};
+    for (String i : PREFIXED_LENGTH_NAMES) {
       if (txt.toLowerCase().startsWith(i)) {
         return Integer.parseInt(txt.substring(i.length(), i.length() + 3));
       }
