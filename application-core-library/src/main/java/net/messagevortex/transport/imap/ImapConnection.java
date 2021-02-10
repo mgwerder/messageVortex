@@ -131,7 +131,6 @@ public class ImapConnection extends ServerConnection
    *
    * @param ac the connection to be wrapped
    * @param proxy the authentication proxy to be used for login
-   * @throws IOException if communication with peer fails
    */
   public ImapConnection(AbstractConnection ac, AuthenticationProxy proxy) {
     super(ac);

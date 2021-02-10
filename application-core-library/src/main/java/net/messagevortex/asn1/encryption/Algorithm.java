@@ -297,7 +297,7 @@ public enum Algorithm implements Serializable {
    */
   public static Algorithm getDefault(AlgorithmType at) {
     // init map if not yet done
-    switch(at) {
+    switch (at) {
       case ASYMMETRIC:
         return RSA;
       case SYMMETRIC:
@@ -374,8 +374,9 @@ public enum Algorithm implements Serializable {
    * @return the key size in bits for the security level specified
    */
   public int getKeySize(SecurityLevel sl) {
-    final String[] PREFIXED_LENGTH_NAMES = new String[] {"aes", "sha", "camellia", "twofish", "ripemd"};
-    for (String i : PREFIXED_LENGTH_NAMES) {
+    //FIXME ignores security level (most likely a bug)
+    final String[] a = new String[] {"aes", "sha", "camellia", "twofish", "ripemd"};
+    for (String i : a) {
       if (txt.toLowerCase().startsWith(i)) {
         return Integer.parseInt(txt.substring(i.length(), i.length() + 3));
       }

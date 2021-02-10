@@ -18,6 +18,31 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../../SMESEC/cysec-platform-github/README.md">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../SMESEC/cysec-platform-github/cysec_backend/pom.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../SMESEC/cysec-platform-github/cysec_backend/src/main/java/eu/smesec/platform/services/MailServiceImpl.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../SMESEC/cysec-platform-github/cysec_bridge/pom.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../SMESEC/cysec-platform-github/pom.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../Jenkinsfile">
           <value>
             <set />
@@ -212,18 +237,18 @@
             <set>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqlU1monnZkXDoM3" />
-                <option name="line" value="253" />
-                <option name="message" value="Unconstrained method net.messagevortex.asn1.AsymmetricKey.createRsaKey() converts checked exception to unchecked" />
+                <option name="key" value="AXcZfqlU1monnZkXDoM4" />
+                <option name="line" value="664" />
+                <option name="message" value="Unconstrained method net.messagevortex.asn1.AsymmetricKey.getAlgorithmParameter() converts checked exception to unchecked" />
                 <option name="ruleKey" value="fb-contrib:EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS" />
                 <option name="severity" value="INFO" />
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqlU1monnZkXDoM4" />
-                <option name="line" value="664" />
-                <option name="message" value="Unconstrained method net.messagevortex.asn1.AsymmetricKey.getAlgorithmParameter() converts checked exception to unchecked" />
-                <option name="ruleKey" value="fb-contrib:EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS" />
+                <option name="key" value="AXcZfqlU1monnZkXDoM7" />
+                <option name="line" value="402" />
+                <option name="message" value="Static or private method net.messagevortex.asn1.AsymmetricKey.addToAsn1PublicKey(ASN1EncodableVector, DumpType) has unused parameters" />
+                <option name="ruleKey" value="fb-contrib:UP_UNUSED_PARAMETER" />
                 <option name="severity" value="INFO" />
               </SonarIssue>
               <SonarIssue>
@@ -236,10 +261,10 @@
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqlU1monnZkXDoM7" />
-                <option name="line" value="402" />
-                <option name="message" value="Static or private method net.messagevortex.asn1.AsymmetricKey.addToAsn1PublicKey(ASN1EncodableVector, DumpType) has unused parameters" />
-                <option name="ruleKey" value="fb-contrib:UP_UNUSED_PARAMETER" />
+                <option name="key" value="AXcZfqlU1monnZkXDoM3" />
+                <option name="line" value="253" />
+                <option name="message" value="Unconstrained method net.messagevortex.asn1.AsymmetricKey.createRsaKey() converts checked exception to unchecked" />
+                <option name="ruleKey" value="fb-contrib:EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS" />
                 <option name="severity" value="INFO" />
               </SonarIssue>
             </set>
@@ -553,18 +578,18 @@
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqic1monnZkXDoL_" />
-                <option name="line" value="49" />
-                <option name="message" value="Method net.messagevortex.commandline.CommandLineHandlerCacheCalculate.call() prints the stack trace to the console" />
-                <option name="ruleKey" value="fb-contrib:IMC_IMMATURE_CLASS_PRINTSTACKTRACE" />
-                <option name="severity" value="INFO" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
                 <option name="key" value="AXVPnKSl6386KOwWoFDq" />
                 <option name="line" value="36" />
                 <option name="message" value="Dead store to a in net.messagevortex.commandline.CommandLineHandlerCacheCalculate.call()" />
                 <option name="ruleKey" value="findbugs:DLS_DEAD_LOCAL_STORE" />
+                <option name="severity" value="INFO" />
+              </SonarIssue>
+              <SonarIssue>
+                <option name="isNew" value="false" />
+                <option name="key" value="AXcZfqic1monnZkXDoL_" />
+                <option name="line" value="49" />
+                <option name="message" value="Method net.messagevortex.commandline.CommandLineHandlerCacheCalculate.call() prints the stack trace to the console" />
+                <option name="ruleKey" value="fb-contrib:IMC_IMMATURE_CLASS_PRINTSTACKTRACE" />
                 <option name="severity" value="INFO" />
               </SonarIssue>
             </set>
@@ -649,19 +674,19 @@
             <set>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqoj1monnZkXDoON" />
-                <option name="line" value="271" />
-                <option name="message" value="Method net.messagevortex.router.GraphSet.getRoute(int, Edge[], IdentityStoreBlock) allocates an object that is used in a constant way in a loop" />
-                <option name="ruleKey" value="fb-contrib:PCAIL_POSSIBLE_CONSTANT_ALLOCATION_IN_LOOP" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
                 <option name="key" value="AXcZfqoj1monnZkXDoOK" />
                 <option name="line" value="1" />
                 <option name="message" value="Collection variable net.messagevortex.router.GraphSet.anonymitySet is named with a different type of collection in the name" />
                 <option name="ruleKey" value="fb-contrib:CNC_COLLECTION_NAMING_CONFUSION" />
                 <option name="severity" value="INFO" />
+              </SonarIssue>
+              <SonarIssue>
+                <option name="isNew" value="false" />
+                <option name="key" value="AXcZfqoj1monnZkXDoON" />
+                <option name="line" value="271" />
+                <option name="message" value="Method net.messagevortex.router.GraphSet.getRoute(int, Edge[], IdentityStoreBlock) allocates an object that is used in a constant way in a loop" />
+                <option name="ruleKey" value="fb-contrib:PCAIL_POSSIBLE_CONSTANT_ALLOCATION_IN_LOOP" />
+                <option name="severity" value="MAJOR" />
               </SonarIssue>
             </set>
           </value>
@@ -671,18 +696,10 @@
             <set>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqo61monnZkXDoOW" />
-                <option name="line" value="271" />
-                <option name="message" value="Method net.messagevortex.router.JGraph.createAndShowUserInterface(int, int) passes constant string to title/label of component" />
-                <option name="ruleKey" value="fb-contrib:S508C_NON_TRANSLATABLE_STRING" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqo61monnZkXDoOZ" />
-                <option name="line" value="1" />
-                <option name="message" value="Class net.messagevortex.router.JGraph creates and initializes a collection but never reads or gains information from it" />
-                <option name="ruleKey" value="fb-contrib:WOC_WRITE_ONLY_COLLECTION_FIELD" />
+                <option name="key" value="AXcZfqo61monnZkXDoOX" />
+                <option name="line" value="274" />
+                <option name="message" value="Window net.messagevortex.router.JGraph sets size manually, and doesn't use pack" />
+                <option name="ruleKey" value="fb-contrib:S508C_NO_SETSIZE" />
                 <option name="severity" value="MAJOR" />
               </SonarIssue>
               <SonarIssue>
@@ -695,10 +712,18 @@
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqo61monnZkXDoOX" />
-                <option name="line" value="274" />
-                <option name="message" value="Window net.messagevortex.router.JGraph sets size manually, and doesn't use pack" />
-                <option name="ruleKey" value="fb-contrib:S508C_NO_SETSIZE" />
+                <option name="key" value="AXcZfqo61monnZkXDoOZ" />
+                <option name="line" value="1" />
+                <option name="message" value="Class net.messagevortex.router.JGraph creates and initializes a collection but never reads or gains information from it" />
+                <option name="ruleKey" value="fb-contrib:WOC_WRITE_ONLY_COLLECTION_FIELD" />
+                <option name="severity" value="MAJOR" />
+              </SonarIssue>
+              <SonarIssue>
+                <option name="isNew" value="false" />
+                <option name="key" value="AXcZfqo61monnZkXDoOW" />
+                <option name="line" value="271" />
+                <option name="message" value="Method net.messagevortex.router.JGraph.createAndShowUserInterface(int, int) passes constant string to title/label of component" />
+                <option name="ruleKey" value="fb-contrib:S508C_NON_TRANSLATABLE_STRING" />
                 <option name="severity" value="MAJOR" />
               </SonarIssue>
             </set>
@@ -854,24 +879,8 @@
             <set>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqpj1monnZkXDoO_" />
-                <option name="line" value="277" />
-                <option name="message" value="Method net.messagevortex.router.operation.Matrix.toString() passes constant String of length 1 to character overridden method" />
-                <option name="ruleKey" value="fb-contrib:UCPM_USE_CHARACTER_PARAMETERIZED_METHOD" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqpj1monnZkXDoO3" />
-                <option name="line" value="357" />
-                <option name="message" value="Method net.messagevortex.router.operation.Matrix.checkField(int, int) accesses list or array with constant index" />
-                <option name="ruleKey" value="fb-contrib:CLI_CONSTANT_LIST_INDEX" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqpj1monnZkXDoO-" />
-                <option name="line" value="275" />
+                <option name="key" value="AXcZfqpj1monnZkXDoPA" />
+                <option name="line" value="280" />
                 <option name="message" value="Method net.messagevortex.router.operation.Matrix.toString() passes constant String of length 1 to character overridden method" />
                 <option name="ruleKey" value="fb-contrib:UCPM_USE_CHARACTER_PARAMETERIZED_METHOD" />
                 <option name="severity" value="MAJOR" />
@@ -902,6 +911,14 @@
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
+                <option name="key" value="AXcZfqpj1monnZkXDoO3" />
+                <option name="line" value="357" />
+                <option name="message" value="Method net.messagevortex.router.operation.Matrix.checkField(int, int) accesses list or array with constant index" />
+                <option name="ruleKey" value="fb-contrib:CLI_CONSTANT_LIST_INDEX" />
+                <option name="severity" value="MAJOR" />
+              </SonarIssue>
+              <SonarIssue>
+                <option name="isNew" value="false" />
                 <option name="key" value="AXcZfqpj1monnZkXDoOz" />
                 <option name="line" value="228" />
                 <option name="message" value="Method net.messagevortex.router.operation.Matrix.mul(Matrix) accesses list or array with constant index" />
@@ -910,8 +927,16 @@
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqpj1monnZkXDoPA" />
-                <option name="line" value="280" />
+                <option name="key" value="AXcZfqpj1monnZkXDoO_" />
+                <option name="line" value="277" />
+                <option name="message" value="Method net.messagevortex.router.operation.Matrix.toString() passes constant String of length 1 to character overridden method" />
+                <option name="ruleKey" value="fb-contrib:UCPM_USE_CHARACTER_PARAMETERIZED_METHOD" />
+                <option name="severity" value="MAJOR" />
+              </SonarIssue>
+              <SonarIssue>
+                <option name="isNew" value="false" />
+                <option name="key" value="AXcZfqpj1monnZkXDoO-" />
+                <option name="line" value="275" />
                 <option name="message" value="Method net.messagevortex.router.operation.Matrix.toString() passes constant String of length 1 to character overridden method" />
                 <option name="ruleKey" value="fb-contrib:UCPM_USE_CHARACTER_PARAMETERIZED_METHOD" />
                 <option name="severity" value="MAJOR" />
@@ -1085,16 +1110,7 @@
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java">
           <value>
-            <set>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXeCn2iDqrW5nTTX0SaT" />
-                <option name="line" value="137" />
-                <option name="message" value="Non derivable method new net.messagevortex.transport.imap.ImapConnection(AbstractConnection, AuthenticationProxy) declares throwing an exception that isn't thrown" />
-                <option name="ruleKey" value="fb-contrib:BED_BOGUS_EXCEPTION_DECLARATION" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
-            </set>
+            <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapLine.java">
@@ -1112,18 +1128,18 @@
             <set>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqod1monnZkXDoOH" />
-                <option name="line" value="45" />
-                <option name="message" value="Class net.messagevortex.transport.pop3.TestPop3Handler defines fields that are used only as locals" />
-                <option name="ruleKey" value="fb-contrib:FCBL_FIELD_COULD_BE_LOCAL" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
                 <option name="key" value="AXcZfqod1monnZkXDoOI" />
                 <option name="line" value="57" />
                 <option name="message" value="Constructor new net.messagevortex.transport.pop3.TestPop3Handler(String) makes call to non-final method" />
                 <option name="ruleKey" value="fb-contrib:PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS" />
+                <option name="severity" value="MAJOR" />
+              </SonarIssue>
+              <SonarIssue>
+                <option name="isNew" value="false" />
+                <option name="key" value="AXcZfqod1monnZkXDoOH" />
+                <option name="line" value="45" />
+                <option name="message" value="Class net.messagevortex.transport.pop3.TestPop3Handler defines fields that are used only as locals" />
+                <option name="ruleKey" value="fb-contrib:FCBL_FIELD_COULD_BE_LOCAL" />
                 <option name="severity" value="MAJOR" />
               </SonarIssue>
             </set>
@@ -1144,11 +1160,11 @@
             <set>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AWKmREcBzppQeiWXaMec" />
-                <option name="line" value="82" />
-                <option name="message" value="Potentially ambiguous invocation of either an outer or inherited method Thread.setName(String) in net.messagevortex.transport.smtp.SmtpConnection$InternalConnectionHandler.run()" />
-                <option name="ruleKey" value="findbugs:IA_AMBIGUOUS_INVOCATION_OF_INHERITED_OR_OUTER_METHOD" />
-                <option name="severity" value="INFO" />
+                <option name="key" value="AXcZfqnl1monnZkXDoNo" />
+                <option name="line" value="122" />
+                <option name="message" value="Method net.messagevortex.transport.smtp.SmtpConnection$InternalConnectionHandler.run() encodes String bytes without specifying the character encoding" />
+                <option name="ruleKey" value="fb-contrib:MDM_STRING_BYTES_ENCODING" />
+                <option name="severity" value="MAJOR" />
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
@@ -1160,11 +1176,11 @@
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqnl1monnZkXDoNo" />
-                <option name="line" value="122" />
-                <option name="message" value="Method net.messagevortex.transport.smtp.SmtpConnection$InternalConnectionHandler.run() encodes String bytes without specifying the character encoding" />
-                <option name="ruleKey" value="fb-contrib:MDM_STRING_BYTES_ENCODING" />
-                <option name="severity" value="MAJOR" />
+                <option name="key" value="AWKmREcBzppQeiWXaMec" />
+                <option name="line" value="82" />
+                <option name="message" value="Potentially ambiguous invocation of either an outer or inherited method Thread.setName(String) in net.messagevortex.transport.smtp.SmtpConnection$InternalConnectionHandler.run()" />
+                <option name="ruleKey" value="findbugs:IA_AMBIGUOUS_INVOCATION_OF_INHERITED_OR_OUTER_METHOD" />
+                <option name="severity" value="INFO" />
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
