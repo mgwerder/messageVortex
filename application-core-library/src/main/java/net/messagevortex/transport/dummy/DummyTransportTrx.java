@@ -1,34 +1,11 @@
 package net.messagevortex.transport.dummy;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,21 +22,22 @@ import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
 public class DummyTransportTrx extends AbstractDaemon implements Transport {
-  
+
   private static final Logger LOGGER;
-  
+
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
-  
+
+  private static String defHostname;
   private static Map<String, String> idReservation = null;
   private static final Object mon = new Object();
   private static boolean localMode = false;
-  
+
   static final Map<String, TransportReceiver> endpoints = new HashMap<>();
   private static String name = null;
   private String registeredEndpoint = null;
-  
+
   /**
    * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
    *
@@ -79,7 +57,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     init(id, blender);
     LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\" done");
   }
-  
+
   /**
    * <p>Sets the name of the cluster instance.</p>
    *
@@ -95,7 +73,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       }
     }
   }
-  
+
   /**
    * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
    *
@@ -106,12 +84,12 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   public DummyTransportTrx(String id, TransportReceiver blender) throws IOException {
     init(id, blender);
   }
-  
+
   /**
    * Constructor to create an endpoint with a random id.
    *
    * @param blender reference to the respective blender layer
-   * @throws IOException if therad problems occure
+   * @throws IOException if thread problems occur
    */
   public DummyTransportTrx(TransportReceiver blender) throws IOException {
     initCluster();
@@ -123,7 +101,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       init(id, blender);
     }
   }
-  
+
   private void initCluster() throws IOException {
     synchronized (mon) {
       if (idReservation == null) {
@@ -131,9 +109,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
           // set an instance name
           name = InetAddress.getLocalHost().getHostName();
         }
-        
+
         HazelcastInstance hz =
-                Hazelcast.getOrCreateHazelcastInstance(new com.hazelcast.config.Config(name));
+            Hazelcast.getOrCreateHazelcastInstance(new com.hazelcast.config.Config(name));
         if (localMode) {
           idReservation = hz.getMap("dummyTransportTrxEndpoints");
         } else {
@@ -142,13 +120,13 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       }
     }
   }
-  
+
   /**
    * <p>Set local only mode for dummy transport.</p>
    *
-   * @param lm true if localmode is set
+   * @param lm true if local mode should be set
    * @return old state of local mode
-   * @throws IOException if cluster is already inited
+   * @throws IOException if cluster is already initialized
    */
   public static boolean setLocalMode(boolean lm) throws IOException {
     boolean old = localMode;
@@ -161,8 +139,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     }
     return old;
   }
-  
-  private void init(String id, TransportReceiver blender) throws IOException {
+
+  private final void init(String id, TransportReceiver blender) throws IOException {
+    defHostname = InetAddress.getLocalHost().getHostName();
     initCluster();
     synchronized (endpoints) {
       if (idReservation.containsKey(id)) {
@@ -175,40 +154,35 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       endpoints.put(id, blender);
     }
   }
-  
+
   @Override
   public void shutdownDaemon() {
     // deregister endpoint
     synchronized (idReservation) {
-      try {
-        String defHostname = InetAddress.getLocalHost().getHostName();
-        // Remove all identities
-        List<String> l = new Vector<>();
-        for (Map.Entry<String, String> e : idReservation.entrySet()) {
-          if (e.getValue().equals(defHostname)) {
-            l.add(e.getKey());
-          }
+      // Remove all identities
+      List<String> l = new Vector<>();
+      for (Map.Entry<String, String> e : idReservation.entrySet()) {
+        if (e.getValue().equals(defHostname)) {
+          l.add(e.getKey());
         }
-        for (String key : l) {
-          String hostname = idReservation.remove(key);
-          if (hostname != null && hostname.equals(defHostname)) {
-            LOGGER.log(Level.FINE, "successfully deregistered id " + registeredEndpoint
-                    + " from dummy transport");
-          } else {
-            LOGGER.log(Level.SEVERE, "OUCH... for some reasons this endpoint was registered to"
-                    + " a different host (" + hostname + "). It is unclear if your system is still"
-                    + " working properly.");
-          }
-        }
-        
-      } catch (UnknownHostException uhe) {
-        LOGGER.log(Level.SEVERE, "OUCH... got exception while fetching own host name.", uhe);
       }
+      for (String key : l) {
+        String hostname = idReservation.remove(key);
+        if (hostname != null && hostname.equals(defHostname)) {
+          LOGGER.log(Level.FINE, "successfully de-registered id " + registeredEndpoint
+              + " from dummy transport");
+        } else {
+          LOGGER.log(Level.SEVERE, "OUCH... for some reasons this endpoint was registered to"
+              + " a different host (" + hostname + "). It is unclear if your system is still"
+              + " working properly.");
+        }
+      }
+
     }
-    
+
     super.shutdownDaemon();
   }
-  
+
   /**
    * <p>send a message to another dummy endpoint.</p>
    *
@@ -231,7 +205,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       bab.append(buffer, n);
     }
     is.close();
-    
+
     // send byte array as input stream to target
     byte[] arr = bab.toBytes();
     LOGGER.log(Level.INFO, "Dummy transport received " + arr.length + " sized message");
@@ -246,7 +220,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       }.start();
     }
   }
-  
+
   /**
    * <p>Remove all Dummy endpoints from the main listing.</p>
    */

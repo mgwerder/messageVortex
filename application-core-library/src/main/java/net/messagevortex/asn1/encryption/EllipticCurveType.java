@@ -2,29 +2,26 @@ package net.messagevortex.asn1.encryption;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * <p>Represents all supported EC named curves.</p>
  */
 public enum EllipticCurveType {
   
-  SECP384R1(2500, "secp384r1", 384, Algorithm.EC, SecurityLevel.MEDIUM),
-  SECT409K1(2501, "sect409k1", 409, Algorithm.EC, SecurityLevel.HIGH),
-  SECP521R1(2502, "secp521r1", 521, Algorithm.EC, SecurityLevel.QUANTUM);
+  SECP384R1(2500, "secp384r1", 384, SecurityLevel.MEDIUM),
+  SECT409K1(2501, "sect409k1", 409, SecurityLevel.HIGH),
+  SECP521R1(2502, "secp521r1", 521, SecurityLevel.QUANTUM);
   
   private static final EllipticCurveType def = SECP521R1;
   
   private final int id;
   private final String txt;
-  private final Algorithm alg;
   private final SecurityLevel secLevel;
   private final int keySize;
   
-  EllipticCurveType(int id, String txt, int keySize, Algorithm alg, SecurityLevel level) {
+  EllipticCurveType(int id, String txt, int keySize, SecurityLevel level) {
     this.id = id;
     this.txt = txt;
-    this.alg = alg;
     this.secLevel = level;
     this.keySize = keySize;
   }
@@ -86,11 +83,7 @@ public enum EllipticCurveType {
   public SecurityLevel getSecurityLevel() {
     return secLevel;
   }
-  
-  public Algorithm getAlgorithm() {
-    return alg;
-  }
-  
+
   public int getKeySize() {
     return keySize;
   }

@@ -55,6 +55,9 @@ public class GaloisFieldMathMode implements MathMode {
     GaloisFieldMathMode ret = cachedMathMode.get(omega);
     if (ret == null) {
       ret = new GaloisFieldMathMode(omega);
+      while(cachedMathMode.size()>50) {
+        cachedMathMode.remove(cachedMathMode.keySet().iterator().next());
+      }
       cachedMathMode.put(omega, ret);
     }
     return ret;

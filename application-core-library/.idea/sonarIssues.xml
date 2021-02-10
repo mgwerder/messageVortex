@@ -432,8 +432,16 @@
             <set>
               <SonarIssue>
                 <option name="isNew" value="false" />
+                <option name="key" value="AXeCn2hSqrW5nTTX0SaR" />
+                <option name="line" value="381" />
+                <option name="message" value="Method net.messagevortex.asn1.encryption.Algorithm.getKeySize(SecurityLevel) creates array using constants" />
+                <option name="ruleKey" value="fb-contrib:SACM_STATIC_ARRAY_CREATED_IN_METHOD" />
+                <option name="severity" value="MAJOR" />
+              </SonarIssue>
+              <SonarIssue>
+                <option name="isNew" value="false" />
                 <option name="key" value="AWFTVv3bkZiChDHjY-J_" />
-                <option name="line" value="19" />
+                <option name="line" value="22" />
                 <option name="message" value="Initialization circularity between net.messagevortex.asn1.encryption.Algorithm and net.messagevortex.asn1.encryption.EllipticCurveType" />
                 <option name="ruleKey" value="findbugs:IC_INIT_CIRCULARITY" />
                 <option name="severity" value="INFO" />
@@ -441,20 +449,17 @@
               <SonarIssue>
                 <option name="isNew" value="false" />
                 <option name="key" value="AXcZfqmW1monnZkXDoNN" />
-                <option name="line" value="381" />
+                <option name="line" value="384" />
                 <option name="message" value="This method net.messagevortex.asn1.encryption.Algorithm.getKeySize(SecurityLevel) parses a String that is a field" />
                 <option name="ruleKey" value="fb-contrib:STT_STRING_PARSING_A_FIELD" />
                 <option name="severity" value="INFO" />
               </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXeCn2hSqrW5nTTX0SaR" />
-                <option name="line" value="378" />
-                <option name="message" value="Method net.messagevortex.asn1.encryption.Algorithm.getKeySize(SecurityLevel) creates array using constants" />
-                <option name="ruleKey" value="fb-contrib:SACM_STATIC_ARRAY_CREATED_IN_METHOD" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
             </set>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/encryption/EllipticCurveType.java">
+          <value>
+            <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/encryption/Mode.java">
@@ -567,18 +572,18 @@
             <set>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AWq305_D0kIDX26YChhF" />
-                <option name="line" value="59" />
-                <option name="message" value="Useless object stored in variable g of method net.messagevortex.blender.recipes.LowAnonRecipe.applyRecipe(Set, IdentityStoreBlock, IdentityStoreBlock)" />
-                <option name="ruleKey" value="findbugs:UC_USELESS_OBJECT" />
-                <option name="severity" value="INFO" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
                 <option name="key" value="AXcZfqha1monnZkXDoLm" />
                 <option name="line" value="54" />
                 <option name="message" value="Collection variable set is named with a different type of collection in the name" />
                 <option name="ruleKey" value="fb-contrib:CNC_COLLECTION_NAMING_CONFUSION" />
+                <option name="severity" value="INFO" />
+              </SonarIssue>
+              <SonarIssue>
+                <option name="isNew" value="false" />
+                <option name="key" value="AWq305_D0kIDX26YChhF" />
+                <option name="line" value="59" />
+                <option name="message" value="Useless object stored in variable g of method net.messagevortex.blender.recipes.LowAnonRecipe.applyRecipe(Set, IdentityStoreBlock, IdentityStoreBlock)" />
+                <option name="ruleKey" value="findbugs:UC_USELESS_OBJECT" />
                 <option name="severity" value="INFO" />
               </SonarIssue>
             </set>
@@ -825,7 +830,7 @@
               <SonarIssue>
                 <option name="isNew" value="false" />
                 <option name="key" value="AXcZfqpG1monnZkXDoOc" />
-                <option name="line" value="139" />
+                <option name="line" value="142" />
                 <option name="message" value="Class net.messagevortex.router.operation.GaloisFieldMathMode defines two or more one for one associated lists or arrays" />
                 <option name="ruleKey" value="fb-contrib:PL_PARALLEL_LISTS" />
                 <option name="severity" value="INFO" />
@@ -983,17 +988,9 @@
               <SonarIssue>
                 <option name="isNew" value="false" />
                 <option name="key" value="AXeKmSJhqrW5nTTX0Scl" />
-                <option name="line" value="186" />
+                <option name="line" value="163" />
                 <option name="message" value="Method net.messagevortex.transport.dummy.DummyTransportTrx.shutdownDaemon() creates local variable-based synchronized collection" />
                 <option name="ruleKey" value="fb-contrib:LSYC_LOCAL_SYNCHRONIZED_COLLECTION" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXeKmSJhqrW5nTTX0Scm" />
-                <option name="line" value="184" />
-                <option name="message" value="Method net.messagevortex.transport.dummy.DummyTransportTrx.shutdownDaemon() calls InetAddress.getLocalHost(), which may be a security risk" />
-                <option name="ruleKey" value="fb-contrib:MDM_INETADDRESS_GETLOCALHOST" />
                 <option name="severity" value="MAJOR" />
               </SonarIssue>
             </set>

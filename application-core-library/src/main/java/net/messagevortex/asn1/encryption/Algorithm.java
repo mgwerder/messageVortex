@@ -3,13 +3,16 @@ package net.messagevortex.asn1.encryption;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AlgorithmParameter;
 
@@ -122,10 +125,11 @@ public enum Algorithm implements Serializable {
 
   /* create a class specific logger */
   private static final Logger LOGGER;
-
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
+
+  private final Set<String> fixed_sizes = Arrays.stream(new String[] {"aes", "sha", "camellia", "twofish", "ripemd"}).collect(Collectors.toSet());
 
   /* contains the ASN.1 based ID for the algorithm */
   private final int id;
@@ -374,9 +378,8 @@ public enum Algorithm implements Serializable {
    * @return the key size in bits for the security level specified
    */
   public int getKeySize(SecurityLevel sl) {
-    //FIXME ignores security level (most likely a bug)
-    final String[] a = new String[] {"aes", "sha", "camellia", "twofish", "ripemd"};
-    for (String i : a) {
+
+    for (String i : fixed_sizes) {
       if (txt.toLowerCase().startsWith(i)) {
         return Integer.parseInt(txt.substring(i.length(), i.length() + 3));
       }
