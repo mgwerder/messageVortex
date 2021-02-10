@@ -128,7 +128,6 @@ public class CommandLineHandlerCipherEncrypt implements Callable<Integer> {
 
       if (outKey != null) {
         System.out.println("writing key file " + outKey);
-        File fk = new File(outFile);
         try(OutputStream fosk = Files.newOutputStream(Paths.get(outKey))) {
           fosk.write(k.toBytes(DumpType.ALL_UNENCRYPTED));
         }

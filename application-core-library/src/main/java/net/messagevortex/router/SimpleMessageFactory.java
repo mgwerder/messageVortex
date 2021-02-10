@@ -105,10 +105,11 @@ public class SimpleMessageFactory extends MessageFactory {
   }
   
   private RoutingCombo buildRoutingBlock() {
+    // FIXME incomplete
     // determine message route
-    GraphSet[] gs = graph.getRoutes();
-    GraphSet msgpath = gs[ExtendedSecureRandom.nextInt(gs.length)];
-    
+    //GraphSet[] gs = graph.getRoutes();
+    //GraphSet msgpath = gs[ExtendedSecureRandom.nextInt(gs.length)];
+
     return graph.getRoutingBlock();
   }
   

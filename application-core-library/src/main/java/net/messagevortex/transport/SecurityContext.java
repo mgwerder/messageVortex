@@ -92,6 +92,7 @@ public class SecurityContext {
   }
 
   private KeyStore getSelfsignedKeyStore() {
+    //FIXME incomplete
     KeyStore keyStore = null;
     try {
       String commonName = "MessageVortex";

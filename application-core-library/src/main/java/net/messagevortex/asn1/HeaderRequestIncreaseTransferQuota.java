@@ -59,8 +59,7 @@ public class HeaderRequestIncreaseTransferQuota extends HeaderRequest implements
 
   protected final void parse(ASN1Encodable ae) {
     ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-    int i = 0;
-    quota = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
+    quota = ASN1Integer.getInstance(s1.getObjectAt(0)).getValue().intValue();
   }
 
   protected HeaderRequest getRequest(ASN1Encodable ae) {

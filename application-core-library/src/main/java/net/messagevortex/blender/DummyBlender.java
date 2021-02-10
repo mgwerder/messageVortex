@@ -90,7 +90,6 @@ public class DummyBlender extends Blender {
     
     public SenderThread(byte[] msg, OutputStream os) throws MessagingException {
       this.output = os;
-      Properties props = new Properties();
       ByteArrayInputStream bis = new ByteArrayInputStream(msg);
       this.msg = new MimeMessage(null, bis);
     }

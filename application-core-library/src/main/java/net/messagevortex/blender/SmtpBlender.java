@@ -47,6 +47,7 @@ public class SmtpBlender extends Blender {
 
   @Override
   public boolean blendMessage(BlendingSpec target, VortexMessage message) {
+    // FIXME blending incomplete
     byte[] msg = blendMessageToBytes(target, message);
     return true;
   }

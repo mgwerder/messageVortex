@@ -121,11 +121,10 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   protected final void parse(ASN1Encodable to) throws IOException {
     encrypted = null;
     LOGGER.log(Level.FINER, "Executing parse()");
-    int i = 0;
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
 
     // getting key
-    key = new SymmetricKey(toDer(s1.getObjectAt(i++).toASN1Primitive()), null);
+    key = new SymmetricKey(toDer(s1.getObjectAt(0).toASN1Primitive()), null);
   }
 
   /***

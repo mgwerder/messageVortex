@@ -43,7 +43,6 @@ public class GenericGenerator implements BlenderGenerator {
       throw new IOException("Directory \"" + dir
           + "\" is empty... there is no file to choose from");
     }
-    ExtendedSecureRandom sr = new ExtendedSecureRandom();
     return fa[ExtendedSecureRandom.nextInt(fa.length)];
   }
 

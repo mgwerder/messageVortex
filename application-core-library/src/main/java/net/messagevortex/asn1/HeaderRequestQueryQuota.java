@@ -55,8 +55,8 @@ public class HeaderRequestQueryQuota extends HeaderRequest implements Serializab
   }
 
   protected final void parse(ASN1Encodable ae) {
-    ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-    int i = 0;
+    //remove empty sequence
+    ASN1Sequence.getInstance(ae);
   }
 
   protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {

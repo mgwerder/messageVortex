@@ -33,7 +33,7 @@ public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
   public Integer call() throws IOException {
     
     // just create an instance and wait for the Cache to fill
-    final AsymmetricKey a = new AsymmetricKey();
+    new AsymmetricKey();
     
     // install signal handler for HUP to abort pre-calculation
     Signal.handle(new Signal("HUP"), signal -> {
