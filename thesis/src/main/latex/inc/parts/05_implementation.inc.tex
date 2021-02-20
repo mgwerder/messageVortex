@@ -514,7 +514,7 @@ The embedding supports some properties. A receiving host chooses the supported p
 	\label{lst:embeddingSpecs}
 \end{lstfloat}
 
-Both specifications allow embedding of a \VortexMessage{} and are described in the following section. A byte stream is extracted in both cases consisting of a prefix block containing the peer key $K_{peer_o}$ immediately followed by the symmetrically encrypted InnerMessageBlock as described in \cref{fig:defOuterBlocks}. The string is not necessarily terminated correctly. The presence of a valid PrefixBlock signals an existing \VortexMessage{} on the blending layer. That way, we make sure that the size of a potential message leaks its presence. To detect the presence of a \VortexMessage{}, the hosts private key $K^{-1}_{host_o}$ for decoding the is required. 
+Both specifications allow embedding of a \VortexMessage{} and are described in the following section. A byte stream is extracted in both cases consisting of a prefix block containing the peer key $K_{peer_o}$ immediately followed by the symmetrically encrypted InnerMessageBlock as described in listing~\ref{fig:defOuterBlocks}. The string is not necessarily terminated correctly. The presence of a valid PrefixBlock signals an existing \VortexMessage{} on the blending layer. That way, we make sure that the size of a potential message leaks its presence. To detect the presence of a \VortexMessage{}, the hosts private key $K^{-1}_{host_o}$ for decoding the is required. 
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={50-84},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
@@ -661,7 +661,7 @@ In this section, we focus on the operations carried out by a routing layer on ea
 
 A message extracted by the blending layer is passed to the routing layer for further processing. The source of the message (e.g., protocol of the message or sender address) is irrelevant and discarded by the blending layer. 
 
-First step of the processing is the extraction of the identity. The identity can be found in the header block (see \cref{fig:defInnerBlocks} $identityKey$) and then verified with the signature $identitySignature$ (\cref{fig:defOuterBlocks})
+First step of the processing is the extraction of the identity. The identity can be found in the header block (see listing~\ref{fig:defInnerBlocks} $identityKey$) and then verified with the signature $identitySignature$ (listing~\ref{fig:defOuterBlocks})
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={85-173},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
@@ -720,7 +720,7 @@ In this section, we focus on handling requests and the replies to requests requi
 
 In general, any host may send a request to any other host. These requests normally involve the requirement for sender anonymity. The request itself is included in the \lstinline[columns=fixed,basicstyle=\normalsize]{HeaderBlock}. The reply block is provided in $requestReplyBlock$.
 
-Requests are identified shown in \cref{fig:defRequest}. The tagging of the requests is necessary to identify the request provided.
+Requests are identified shown in listing~\ref{fig:defRequest}. The tagging of the requests is necessary to identify the request provided.
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={9-18},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
@@ -782,7 +782,7 @@ The CPU bound puzzle is a hash-based puzzle. The \VortexNode{} provides a bit st
 The second approach has a huge downside: A DoS attack is feasible. Given the fact that we need to store the key (1KB max), the date and time of expiry 4 bytes (epoch), and the bit sequence (up to 8 bytes). This means that we require millions of requests to flood a host. Since the keys do not need to be strong (an adversary does not intend to use them; It is just a DoS attack), this attack is doable with considerable effort. This is why we favor the first approach.
 
 \subsection{Replacing an Existing Node Specification or Proving a Sender Identity\label{sec:replaceID}}
-As users tend to change transport layer addresses, keys might become insecure, or transport services are no longer available, we need means of upgrading keys or replacing them with newer transport addresses. This may be done with a $HeaderRequestReplaceIdentity$ request as shown in \cref{fig:reqReplaceIdentity}. This request allows in a cryptographically secured way to exchange keys and transport endpoints by the respective owners.
+As users tend to change transport layer addresses, keys might become insecure, or transport services are no longer available, we need means of upgrading keys or replacing them with newer transport addresses. This may be done with a $HeaderRequestReplaceIdentity$ request as shown in listing~\ref{fig:reqReplaceIdentity}. This request allows in a cryptographically secured way to exchange keys and transport endpoints by the respective owners.
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={23-30},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
@@ -916,7 +916,7 @@ The \texttt{ReplyCapability} as shown in listing~\ref{lst:defCapabilityReply} al
 \subsection{Storage Management of Ephemeral Identities,  Operations, and Payload Blocks}
 The ephemeral identity (\defref{eID}) is the overarching unit of users data. In a normal message server, it may be comparable with the storage required for the queues. Unlike a message queue, \VortexMessages{} are not only kept until sent. \VortexMessages{} have different properties as we have a timed store-and-forward behavior. As a general rule, no data lives longer than its \defref{eID}.
 
-When an \defref{eID} is requested an absolute \texttt{UsagePeriod} (a timezone bound time) is specifies with an \texttt{AbsoluteUsagePeriod} is specified (see \cref{lst:defUsage}). Unless used for reply blocks (MURBs), \defref{eID} have a very limited lifespan of a couple hours. This minimizes any storage footprint associated with an \defref{eID}. 
+When an \defref{eID} is requested an absolute \texttt{UsagePeriod} (a timezone bound time) is specifies with an \texttt{AbsoluteUsagePeriod} is specified (see listing\ref{lst:defUsage}). Unless used for reply blocks (MURBs), \defref{eID} have a very limited lifespan of a couple hours. This minimizes any storage footprint associated with an \defref{eID}. 
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={85-114},language=asn.1,multicols=2,basicstyle=\tiny]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
@@ -926,7 +926,7 @@ When an \defref{eID} is requested an absolute \texttt{UsagePeriod} (a timezone b
 
 Every header block contains a relative and possibly an absolute \texttt{UsagePeriod}. A receiving node calculates a headers' lifespan by intersecting an absolute lifespan and a relative lifespan. All elements of a \VortexMessage{} inherit this lifespan. Therefore, payload blocks and operations, as well as the routing blocks expire simultaneously within a workspace.
 
-Furthermore, A node signals additional boundaries in the CapabilityReplyBlock (see \cref{lst:defCapabilityReply}). with this block, a \VortexNode{} may limit the storage required even further. By specifying low boundaries for the maximum simultaneously usable payload blocks in a workspace and their maximum size, we can effectively limit the size of the payload data of a single workspace. The number of simultaneously active operations is similarly limited by specifying \texttt{maxBuildOps}.
+Furthermore, A node signals additional boundaries in the CapabilityReplyBlock (see listing~\ref{lst:defCapabilityReply}). with this block, a \VortexNode{} may limit the storage required even further. By specifying low boundaries for the maximum simultaneously usable payload blocks in a workspace and their maximum size, we can effectively limit the size of the payload data of a single workspace. The number of simultaneously active operations is similarly limited by specifying \texttt{maxBuildOps}.
 
 \subsection{Life-cycle of Requests}
 Requests have a separate lifecycle. As a Request may exist prior to a corresponding workspace, which is typically assigned to a proof of work, such requests may be subject to DoS attacks by flooding the memory of a node. All requests immediately executed have no direct memory requirements. However, requests containing a PoW cycle require to maintain the state. 

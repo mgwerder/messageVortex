@@ -8,7 +8,7 @@
 % *** Decisions and Research
 % ********************************************************************************************************
 \partepigraph{Thinking is the hardest work there is, which is probably the reason, so few engage in it.}{Henry Ford, American industrialist and founder of Ford Motor Co.}
-\part{The  \MessageVortex System}\label{sec:coreMVProtocol}
+\part{The \MessageVortex{} System}\label{sec:coreMVProtocol}
 In this part, we describe the core parts of the \MessageVortex{} protocol. Unlike most other academic attempts, we do this based on an adversary capable of banning our technology. We, therefore, are not able to focus solely on the anonymity property. Instead, we first collect requirements for such a system in \cref{sec:genRequirements}. Based on these requirements, we explain our architectural concepts and decisions in \cref{sec:rationale}. We then build an outline of our protocol focusing on the protocol's main properties without going too much into implementation details. In \cref{sec:protocol}, we describe the protocol and its key concepts in depth. We explain all aspects relevant to the academic solution without going into implementation details. The implementation details are described in the RFC draft document in \cref{app:rfcMessageVortexMain}. Additionally, we describe the implementation's academically relevant details and their realization in infrastructure, in \cref{sec:implementation}. For operational concerns such as route building strategies, refer to \cref{sec:operation}.
 
 \chapter{Requirements for an Anonymizing Protocol}\label{sec:genRequirements}

@@ -19,7 +19,7 @@ The requirement \ref{req:zeroTrust} is met in a wider sense. We do not require a
 
 The requirement \ref{req:unlink} is under full control of an RBB. The RBB controls the number of hops and the nodes involved. He may, therefore, achieve unlinkability by combining the operations accordingly.
 
-The requirement \ref{reqt:anon} is met if not assuming an adversary within the system. It furthermore can be o accomplished in various grades ($k$-Anonymity) by the RBB if an adversary is within the system running nodes by the RBB. In such case, all independent message paths of a \VortexMessage{} must contain at least one honest \VortexNode{} with additional traffic. As soon as this condition is true, an adversary can no longer conclude any potential anonymity set. Even the sender and recipients alone may be sufficient, assuming additional traffic is being routed through these nodes.
+The requirement \ref{req:anon} is met if not assuming an adversary within the system. It furthermore can be o accomplished in various grades ($k$-Anonymity) by the RBB if an adversary is within the system running nodes by the RBB. In such case, all independent message paths of a \VortexMessage{} must contain at least one honest \VortexNode{} with additional traffic. As soon as this condition is true, an adversary can no longer conclude any potential anonymity set. Even the sender and recipients alone may be sufficient, assuming additional traffic is being routed through these nodes.
 
 The requirement \ref{req:accounting} is fulfilled as all elements required for accounting do have an expiration date. Requests going beyond that date are discarded. The information to be kept is limited to an absolute minimum and may accommodate multiple 100k identities per \VortexNode.
 
