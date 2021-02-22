@@ -222,7 +222,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
       ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
       requests = new HeaderRequest[s2.size()];
       for (int y = 0; y < s2.size(); y++) {
-        requests[y] = HeaderRequest.getInstance(s2.getObjectAt(y));
+        requests[y] = HeaderRequestFactory.getInstance(s2.getObjectAt(y));
       }
       while (s1.size() > i) {
         to = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));

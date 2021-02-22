@@ -27,7 +27,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
@@ -38,7 +37,7 @@ import org.bouncycastle.asn1.DERTaggedObject;
 /**
  * <p>ASN1 parser class for header request.</p>
  */
-public abstract class HeaderRequest extends AbstractBlock implements Serializable, Dumpable {
+public abstract class HeaderRequestFactory extends AbstractBlock implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000007L;
 
@@ -48,26 +47,34 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  protected HeaderRequest() {
+  private static final List<HeaderRequest> req = new ArrayList<>();
+
+  static {
+    try {
+      req.add(new HeaderRequestIdentity());
+      req.add(new HeaderRequestQueryQuota());
+    } catch (Exception e) {
+      LOGGER.log(Level.SEVERE, "Exception when adding Requests in static constructor", e);
+    }
+  }
+
+  protected HeaderRequestFactory() {
   }
 
   /***
-   * <p>Dumps the respective header request.</p>
+   * <p>Conversion helper for header request.</p>
    *
-   * @param dt            the dump type to be used
-   * @return              an ASN.1 object of the request
-   * @throws IOException  if dumping fails due to illegal internal state
+   * @param ae            asn.1 representation of the class
+   * @return              the respective header object if parseable or null
+   * @throws IOException  if parsing fails
    */
-  public ASN1Object toAsn1Object(DumpType dt) throws IOException {
-    HeaderRequestType tag = HeaderRequestType.getByClass(this.getClass());
-    if (tag == null) {
-      throw new IOException("Unknown Header Request type \"" + this.getClass().getCanonicalName()
-          + "\"");
+  public static HeaderRequest getInstance(ASN1Encodable ae) throws IOException {
+    for (HeaderRequest hr : req) {
+      if (HeaderRequestType.getByClass(hr.getClass()).getId() == ((ASN1TaggedObject) (ae)).getTagNo()) {
+        return hr.getRequest(ae);
+      }
     }
-    return new DERTaggedObject(tag.getId(), intToAsn1Object(dt));
+    return null;
   }
 
-  abstract ASN1Object intToAsn1Object(DumpType dt) throws IOException;
-
-  protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws IOException;
 }
