@@ -214,7 +214,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
       List<Operation> o = new ArrayList<>();
       if (s2.size() > 0) {
         for (ASN1Encodable obj : s2) {
-          Operation op = Operation.getInstance(obj);
+          Operation op = OperationFactory.getInstance(obj);
           o.add(op);
         }
         operation.clear();

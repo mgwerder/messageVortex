@@ -24,7 +24,7 @@ package net.messagevortex.transport.imap;
 public class ImapCommandNoop extends ImapCommand {
 
   public void init() {
-    ImapCommand.registerCommand(this);
+    ImapCommandFactory.registerCommand(this);
   }
 
   /***

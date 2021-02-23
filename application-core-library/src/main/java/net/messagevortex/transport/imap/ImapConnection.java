@@ -229,7 +229,7 @@ public class ImapConnection extends ServerConnection
     }
 
     LOGGER.log(Level.INFO, "got command \"" + il.getTag() + " " + il.getCommand() + "\".");
-    ImapCommand c = ImapCommand.getCommand(il.getCommand());
+    ImapCommand c = ImapCommandFactory.getCommand(il.getCommand());
     if (c == null) {
       throw new ImapException(il, "Command \"" + il.getCommand() + "\" is not implemented");
     }

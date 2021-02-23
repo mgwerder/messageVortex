@@ -1,6 +1,7 @@
 package net.messagevortex.test.imap;
 
 import net.messagevortex.transport.imap.ImapCommand;
+import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapLine;
 
@@ -9,7 +10,7 @@ class ImapCommandIWantATimeout extends ImapCommand {
   private volatile boolean shutdownTimeout = false;
 
   public void init() {
-    ImapCommand.registerCommand(this);
+    ImapCommandFactory.registerCommand(this);
   }
 
   public String[] processCommand(ImapLine line) {

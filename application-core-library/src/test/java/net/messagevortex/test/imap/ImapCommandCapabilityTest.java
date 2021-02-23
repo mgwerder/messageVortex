@@ -2,6 +2,7 @@ package net.messagevortex.test.imap;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.ImapCommand;
+import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
@@ -28,7 +29,7 @@ public class ImapCommandCapabilityTest {
 
     @Test
     public void capabilityParsing() {
-        ImapCommand ic=ImapCommand.getCommand("Capability");
+        ImapCommand ic= ImapCommandFactory.getCommand("Capability");
         try{
             ic.processCommand(new ImapLine(null,"A1 Noop\r\n"));
         } catch(ImapException ie) {
@@ -47,7 +48,7 @@ public class ImapCommandCapabilityTest {
 
         @Override
         public void init() {
-            ImapCommand.registerCommand(this);
+            ImapCommandFactory.registerCommand(this);
         }
 
         @Override
@@ -71,7 +72,7 @@ public class ImapCommandCapabilityTest {
     public void capabilityPropagation() {
         // check if capabilities with "=" are concatenated
         (new ImapCommandCapabilityParser()).init();
-        ImapCommand ic=ImapCommand.getCommand("capability");
+        ImapCommand ic=ImapCommandFactory.getCommand("capability");
         try{
             String[] a=ic.processCommand(new ImapLine(null,"A1 CAPABILITY\r\n"));
             String toCheck=a[0].replace( '\r',' ' ).replace( '\n',' ' );

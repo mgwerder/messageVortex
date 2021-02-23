@@ -78,7 +78,7 @@ public class AddRedundancyOperation extends AbstractRedundancyOperation
 
   @Override
   public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
-    return new DERTaggedObject(true, Operations.ADD_REDUNDANCY.getId(),
+    return new DERTaggedObject(true, OperationType.ADD_REDUNDANCY.getId(),
         super.toAsn1Object(dumpType));
   }
 

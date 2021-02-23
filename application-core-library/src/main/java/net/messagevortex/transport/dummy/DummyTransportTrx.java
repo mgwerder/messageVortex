@@ -147,9 +147,8 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       if (idReservation.containsKey(id)) {
         throw new IOException("Duplicate transport endpoint identifier (id:" + id + ")");
       }
-      String host = InetAddress.getLocalHost().getHostName();
-      LOGGER.log(Level.INFO, "Registering " + id + " to node " + host);
-      idReservation.put(id, host);
+      LOGGER.log(Level.INFO, "Registering " + id + " to node " + defHostname);
+      idReservation.put(id, defHostname);
       registeredEndpoint = id;
       endpoints.put(id, blender);
     }

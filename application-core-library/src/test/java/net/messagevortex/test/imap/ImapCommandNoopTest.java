@@ -2,6 +2,7 @@ package net.messagevortex.test.imap;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.ImapCommand;
+import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.MessageVortex;
@@ -27,7 +28,7 @@ public class ImapCommandNoopTest {
 
     @Test
     public void noopParsing() {
-        ImapCommand ic=ImapCommand.getCommand("Noop");
+        ImapCommand ic= ImapCommandFactory.getCommand("Noop");
         try{
             ic.processCommand(new ImapLine(null,"A1 Noop\r\n"));
         } catch(ImapException ie) {

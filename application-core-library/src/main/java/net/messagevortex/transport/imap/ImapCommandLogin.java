@@ -35,7 +35,7 @@ public class ImapCommandLogin extends ImapCommand {
   }
 
   public void init() {
-    ImapCommand.registerCommand(this);
+    ImapCommandFactory.registerCommand(this);
   }
 
   private String getAuthToken(ImapLine line) throws ImapException {

@@ -35,7 +35,7 @@ public class ImapCommandLogout extends ImapCommand {
   }
 
   public void init() {
-    ImapCommand.registerCommand(this);
+    ImapCommandFactory.registerCommand(this);
   }
 
   @Override

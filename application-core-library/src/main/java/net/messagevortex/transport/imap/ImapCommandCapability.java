@@ -24,7 +24,7 @@ package net.messagevortex.transport.imap;
 public class ImapCommandCapability extends ImapCommand {
 
   public void init() {
-    registerCommand(this);
+    ImapCommandFactory.registerCommand(this);
   }
 
   private String addCapability(String fullCap, String cap) throws ImapException {
@@ -57,7 +57,7 @@ public class ImapCommandCapability extends ImapCommand {
       throw new ImapException(line, "error parsing command");
     }
 
-    ImapCommand[] arr = getCommands();
+    ImapCommand[] arr = ImapCommandFactory.getCommands();
     String cap = "";
 
     // looping thru commands

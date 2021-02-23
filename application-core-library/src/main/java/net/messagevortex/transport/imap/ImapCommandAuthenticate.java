@@ -61,7 +61,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
    * <p>Initializer called by the static constructor of ImapCommand.</p>
    */
   public void init() {
-    ImapCommand.registerCommand(this);
+    ImapCommandFactory.registerCommand(this);
   }
 
   public static String getChallenge(int length) {
