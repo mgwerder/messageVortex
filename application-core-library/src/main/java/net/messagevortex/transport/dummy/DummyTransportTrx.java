@@ -14,8 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.Config;
-import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.transport.ByteArrayBuilder;
 import net.messagevortex.transport.RandomString;
 import net.messagevortex.transport.Transport;
@@ -51,7 +51,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     LOGGER.log(Level.INFO, "  id is \"" + id + "\"");
     String blenderName = Config.getDefault().getStringValue(section, "blender");
     LOGGER.log(Level.INFO, "  blender is \"" + blenderName + "\"");
-    TransportReceiver blender = MessageVortex.getBlender(blenderName);
+    TransportReceiver blender = MessageVortexRepository.getBlender("", blenderName);
     LOGGER.log(Level.INFO, "  blender " + (blender != null ? "found" : "not found"));
     LOGGER.log(Level.INFO, "  initializing transport");
     init(id, blender);

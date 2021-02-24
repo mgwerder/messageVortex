@@ -16,8 +16,8 @@ import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.Config;
-import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
@@ -49,20 +49,20 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
    */
   public TestSmtpHandler(String section) throws IOException {
     Config cfg = Config.getDefault();
-    blender = MessageVortex.getBlender(cfg.getStringValue(section, "blender"));
+    blender = MessageVortexRepository.getBlender("", cfg.getStringValue(section, "blender"));
     if (blender == null) {
       throw new IOException("unable to fetch apropriate blender ("
-              + cfg.getStringValue(section, "blender") + " from section " + section + ")");
+          + cfg.getStringValue(section, "blender") + " from section " + section + ")");
     }
     ServerSetup setup = new ServerSetup(
-            cfg.getNumericValue(section, "smtp_incoming_port"),
-            cfg.getStringValue(section, "smtp_incoming_address"),
-            ServerSetup.PROTOCOL_SMTP
+        cfg.getNumericValue(section, "smtp_incoming_port"),
+        cfg.getStringValue(section, "smtp_incoming_address"),
+        ServerSetup.PROTOCOL_SMTP
     );
     setup.setVerbose(true);
     setup.setServerStartupTimeout(50000);
 
-    server = new GreenMail(new ServerSetup[]{setup});
+    server = new GreenMail(new ServerSetup[] {setup});
     String username = cfg.getStringValue(section, "smtp_incoming_user");
     String password = cfg.getStringValue(section, "smtp_incoming_password");
     if (username == null || "".equals(username)) {
@@ -95,7 +95,7 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
         // fetch mail and process
         String msg = GreenMailUtil.getWholeMessage(server.getReceivedMessages()[count - 1]);
         LOGGER.log(Level.INFO, "got smtp mail in transport handler [" + section
-                + "] (size:" + msg.length() + ")");
+            + "] (size:" + msg.length() + ")");
         blender.gotMessage(new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8)));
 
         // wait for one more mail
@@ -137,14 +137,14 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
 
       Properties props = new Properties();
       props.put("mail.smtp.auth",
-              username != null && !"".equals(username) ? "true" : "false");
+          username != null && !"".equals(username) ? "true" : "false");
       props.put("mail.smtp.starttls.enable",
-              Config.getDefault().getBooleanValue(section, "smtp_outgoing_starttls")
-                      ? "true" : "false");
+          Config.getDefault().getBooleanValue(section, "smtp_outgoing_starttls")
+              ? "true" : "false");
       props.put("mail.smtp.host",
-              Config.getDefault().getStringValue(section, "smtp_outgoing_address"));
+          Config.getDefault().getStringValue(section, "smtp_outgoing_address"));
       props.put("mail.smtp.port",
-              "" + Config.getDefault().getNumericValue(section, "smtp_outgoing_port"));
+          "" + Config.getDefault().getNumericValue(section, "smtp_outgoing_port"));
 
       Session session = Session.getInstance(props, new javax.mail.Authenticator() {
         protected PasswordAuthentication getPasswordAuthentication() {

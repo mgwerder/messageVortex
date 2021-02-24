@@ -51,6 +51,7 @@ import javax.mail.util.ByteArrayDataSource;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.Version;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
@@ -133,7 +134,7 @@ public class DummyBlender extends Blender {
     // FIXME add sensible identity store
     this(
             null,
-            MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
+            MessageVortexRepository.getRouter("", Config.getDefault().getSectionValue(section, "router")),
             new IdentityStore()
     );
   }

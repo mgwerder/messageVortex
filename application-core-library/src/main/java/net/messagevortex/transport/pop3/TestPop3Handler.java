@@ -11,6 +11,7 @@ import javax.mail.internet.MimeMessage;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
@@ -42,7 +43,8 @@ public class TestPop3Handler implements Transport {
    */
   public TestPop3Handler(String section) throws IOException {
     Config cfg = Config.getDefault();
-    this.blender = MessageVortex.getBlender(cfg.getStringValue(section, "blender"));
+    this.blender = MessageVortexRepository.getBlender("",
+        cfg.getStringValue(section, "blender"));
     if (this.blender == null) {
       throw new IOException("unable to fetch appropriate blender");
     }

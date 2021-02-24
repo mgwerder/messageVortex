@@ -1,9 +1,8 @@
 package net.messagevortex.router;
 
 import java.util.List;
-
 import net.messagevortex.AbstractDaemon;
-import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.blender.Blender;
@@ -14,7 +13,7 @@ public class SimpleRouterImplementation extends AbstractDaemon implements Router
 
   public SimpleRouterImplementation(String section) {
     // get accounting layer
-    setAccountant(MessageVortex.getAccountant(section));
+    setAccountant(MessageVortexRepository.getAccountant("", section));
   }
 
   @Override

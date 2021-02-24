@@ -132,32 +132,7 @@
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <value>
-            <set>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqgb1monnZkXDoLX" />
-                <option name="line" value="294" />
-                <option name="message" value="Method net.messagevortex.MessageVortex.call() uses a Side Effect Constructor" />
-                <option name="ruleKey" value="fb-contrib:SEC_SIDE_EFFECT_CONSTRUCTOR" />
-                <option name="severity" value="INFO" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqgb1monnZkXDoLR" />
-                <option name="line" value="58" />
-                <option name="message" value="Class net.messagevortex.MessageVortex has a circular dependency with other classes" />
-                <option name="ruleKey" value="fb-contrib:FCCD_FIND_CLASS_CIRCULAR_DEPENDENCY" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqgb1monnZkXDoLY" />
-                <option name="line" value="338" />
-                <option name="message" value="Static or private method net.messagevortex.MessageVortex.getDaemon(String, String, MessageVortex$DaemonType) has unused parameters" />
-                <option name="ruleKey" value="fb-contrib:UP_UNUSED_PARAMETER" />
-                <option name="severity" value="INFO" />
-              </SonarIssue>
-            </set>
+            <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java">
@@ -193,6 +168,11 @@
                 <option name="severity" value="INFO" />
               </SonarIssue>
             </set>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexRepository.java">
+          <value>
+            <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexStatus.java">
@@ -278,17 +258,17 @@
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqlU1monnZkXDoM2" />
-                <option name="line" value="131" />
-                <option name="message" value="Unconstrained method new net.messagevortex.asn1.AsymmetricKey(AsymmetricKey) converts checked exception to unchecked" />
+                <option name="key" value="AXcZfqlU1monnZkXDoM3" />
+                <option name="line" value="253" />
+                <option name="message" value="Unconstrained method net.messagevortex.asn1.AsymmetricKey.createRsaKey() converts checked exception to unchecked" />
                 <option name="ruleKey" value="fb-contrib:EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS" />
                 <option name="severity" value="INFO" />
               </SonarIssue>
               <SonarIssue>
                 <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqlU1monnZkXDoM3" />
-                <option name="line" value="253" />
-                <option name="message" value="Unconstrained method net.messagevortex.asn1.AsymmetricKey.createRsaKey() converts checked exception to unchecked" />
+                <option name="key" value="AXcZfqlU1monnZkXDoM2" />
+                <option name="line" value="131" />
+                <option name="message" value="Unconstrained method new net.messagevortex.asn1.AsymmetricKey(AsymmetricKey) converts checked exception to unchecked" />
                 <option name="ruleKey" value="fb-contrib:EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS" />
                 <option name="severity" value="INFO" />
               </SonarIssue>
@@ -485,6 +465,21 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/BlenderRecipe.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/F5Blender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java">
           <value>
             <set />
           </value>
@@ -742,6 +737,11 @@
                 <option name="severity" value="INFO" />
               </SonarIssue>
             </set>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/router/SimpleRouterImplementation.java">
+          <value>
+            <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/AddRedundancy.java">
@@ -1061,16 +1061,7 @@
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java">
           <value>
-            <set>
-              <SonarIssue>
-                <option name="isNew" value="false" />
-                <option name="key" value="AXcZfqod1monnZkXDoOH" />
-                <option name="line" value="45" />
-                <option name="message" value="Class net.messagevortex.transport.pop3.TestPop3Handler defines fields that are used only as locals" />
-                <option name="ruleKey" value="fb-contrib:FCBL_FIELD_COULD_BE_LOCAL" />
-                <option name="severity" value="MAJOR" />
-              </SonarIssue>
-            </set>
+            <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/BasicSmtpReceiver.java">
@@ -1141,6 +1132,11 @@
                 <option name="severity" value="INFO" />
               </SonarIssue>
             </set>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java">
+          <value>
+            <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/MainASN1Suite.java">

@@ -22,8 +22,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import net.messagevortex.Config;
-import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.Version;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.BlendingSpec;
@@ -40,18 +40,18 @@ import net.messagevortex.transport.dummy.DummyTransportTrx;
 
 public class InitialRecipesBlender extends Blender {
   private static final java.util.logging.Logger LOGGER;
-  
+
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-  
+
   private final String identity;
   private final Transport transport;
   private final BlendingReceiver router;
   private IdentityStore identityStore;
   private int anonSetSize = 5;
-  
+
   /**
    * <p>An initial blender implementation based on anonymity recipes.</p>
    *
@@ -60,19 +60,19 @@ public class InitialRecipesBlender extends Blender {
    */
   public InitialRecipesBlender(String section) throws IOException {
     this(
-            Config.getDefault().isDefaultValue(section, "node_identity") ? null :
-                    Config.getDefault().getStringValue(section, "node_identity"),
-            MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
-            MessageVortex.getIdentityStore(
-                    Config.getDefault().getSectionValue(section, "identity_store")
-            ),
-            MessageVortex.getAccountant(
-                    Config.getDefault().getSectionValue(section, "accountant")
-            )
-    
+        Config.getDefault().isDefaultValue(section, "node_identity") ? null :
+            Config.getDefault().getStringValue(section, "node_identity"),
+        MessageVortexRepository.getRouter("",
+            Config.getDefault().getSectionValue(section, "router")),
+        MessageVortexRepository.getIdentityStore("",
+            Config.getDefault().getSectionValue(section, "identity_store")),
+        MessageVortexRepository.getAccountant("",
+            Config.getDefault().getSectionValue(section, "accountant")
+        )
+
     );
   }
-  
+
   /***
    * <p>Creates a passthru blender which abstracts a local transport media.</p>
    *
@@ -85,7 +85,7 @@ public class InitialRecipesBlender extends Blender {
    */
   public InitialRecipesBlender(String identity, BlendingReceiver router,
                                IdentityStore identityStore, Accountant acc)
-          throws IOException {
+      throws IOException {
     super(router, acc);
     this.identityStore = identityStore;
     this.identity = identity;
@@ -100,7 +100,7 @@ public class InitialRecipesBlender extends Blender {
     }
     this.identityStore = identityStore;
   }
-  
+
   /**
    * <p>Sets the size of the anonymity set.</p>
    *
@@ -112,22 +112,22 @@ public class InitialRecipesBlender extends Blender {
     anonSetSize = newSize;
     return oldsetsize;
   }
-  
+
   @Override
   public String getBlendingAddress() {
     return this.identity;
   }
-  
+
   @Override
   public byte[] blendMessageToBytes(BlendingSpec target, VortexMessage msg) {
     return new byte[0];
   }
-  
+
   @Override
   public VortexMessage unblendMessage(byte[] blendedMessage) {
     return null;
   }
-  
+
   @Override
   public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
     // encode message in clear readable and send it
@@ -142,25 +142,25 @@ public class InitialRecipesBlender extends Blender {
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
       mimeMsg.setRecipient(Message.RecipientType.TO,
-              new InternetAddress(target.getRecipientAddress()));
+          new InternetAddress(target.getRecipientAddress()));
       mimeMsg.setSubject("VortexMessage");
       mimeMsg.setHeader("User-Agent:",
-              "MessageVortex/" + Version.getStringVersion());
+          "MessageVortex/" + Version.getStringVersion());
       MimeMultipart content = new MimeMultipart("mixed");
-      
+
       // body
       MimeBodyPart body = new MimeBodyPart();
       body.setText("This is a VortexMessage");
       content.addBodyPart(body);
-      
+
       //create attachment
       MimeBodyPart attachment = new MimeBodyPart();
       ByteArrayDataSource source = new ByteArrayDataSource(msg.toBytes(DumpType.PUBLIC_ONLY),
-              "application/octet-stream");
+          "application/octet-stream");
       attachment.setDataHandler(new DataHandler(source));
       attachment.setFileName("messageVortex.raw");
       content.addBodyPart(attachment);
-      
+
       mimeMsg.setContent(content);
       final PipedOutputStream os = new PipedOutputStream();
       // FIXME catch error values
@@ -175,7 +175,7 @@ public class InitialRecipesBlender extends Blender {
         }
       }.start();
       PipedInputStream inp = new PipedInputStream(os);
-      
+
       // send
       transport.sendMessage(target.getRecipientAddress(), inp);
       return true;
@@ -185,11 +185,11 @@ public class InitialRecipesBlender extends Blender {
       LOGGER.log(Level.SEVERE, "Error when composing message", me);
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Unable to send to transport endpoint "
-              + target.getRecipientAddress(), ioe);
+          + target.getRecipientAddress(), ioe);
     }
     return false;
   }
-  
+
   @Override
   public boolean gotMessage(final InputStream is) {
     try {
@@ -200,57 +200,57 @@ public class InitialRecipesBlender extends Blender {
       };
       Session session = Session.getInstance(new Properties(), a);
       int i = 0;
-      
+
       MimeMessage msg = new MimeMessage(session, is);
-      
+
       // Convert Inputstream to byte array
       ByteArrayOutputStream os = new ByteArrayOutputStream();
       msg.writeTo(os);
       os.close();
       byte[] barr = os.toByteArray();
-      
+
       // extract sender address
       Address[] from = msg.getFrom();
-      
+
       // extract final recipient address
       Address[] to = msg.getAllRecipients();
       LOGGER.log(Level.INFO, "Got a message to blend from " + from[0] + " to " + to[0]);
-      
+
       // get identity store
       IdentityStore istore = this.identityStore;
-      
+
       // get anonymity set
       Set<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
       if (anonSet == null) {
         LOGGER.log(Level.WARNING, "unable to get anonymity set for message");
         return false;
       }
-      
+
       // get receipes
       BlenderRecipe recipe = BlenderRecipe.getRecipe(null, anonSet);
       if (recipe == null) {
         LOGGER.log(Level.WARNING, "unable to get recipe for message");
         return false;
       }
-      
+
       // apply receipes
       LOGGER.log(Level.INFO, "blending messages");
       for (Address receiverAddress : to) {
         LOGGER.log(Level.INFO, "blending message for \"" + receiverAddress + "\"");
         IdentityStoreBlock fromAddr = istore.getIdentity(from[0].toString());
-        
+
         IdentityStoreBlock toAddr = istore.getIdentity(receiverAddress.toString());
         RoutingCombo rb = recipe.applyRecipe(anonSet, fromAddr, toAddr);
-        
+
         if (rb == null) {
           LOGGER.log(Level.WARNING, "Unable to route message to " + receiverAddress);
         }
-        
+
         PrefixBlock pb = new PrefixBlock();
         InnerMessageBlock im = new InnerMessageBlock();
         im.setRouting(rb);
         im.setPayload(0, barr);
-        
+
         // send to workspace
         VortexMessage vmsg = new VortexMessage(pb, im);
         if (router.gotMessage(vmsg)) {
@@ -264,5 +264,5 @@ public class InitialRecipesBlender extends Blender {
       return false;
     }
   }
-  
+
 }
