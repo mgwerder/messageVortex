@@ -292,8 +292,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
       <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview"/>.</t>
 
       <figure anchor="fig_layer_overview" title="Layer overview">
-        <artwork align="center" type="ascii-art"><![CDATA[
-					+------------------------------------------------------------------+
+        <artwork align="center" type="ascii-art"><![CDATA[+------------------------------------------------------------------+
 | Vortex Node                                                      |
 | +--------------------------------------------------------------+ |
 | |                       Accounting                             | |
@@ -663,21 +662,21 @@ function incomming_message(VortexMessage blendedMessage) {
           
           // Message authenticated
           get_accounting( hdr.identity )
-			  .register_for_replay_protection( msg )
+           .register_for_replay_protection( msg )
           if( not verify_mtching_forward_secrets( msg ) ) {
             throw exception( "forward secret missmatch" )
           }
           if( contains_payload( msg ) ) {
-            if( get_accounting( hdr.identity )
-			    .decrement_message_quota() ) {
+            if( get_accounting( hdr.identity
+                .decrement_message_quota() ) {
               while index,nextPayloadBlock 
-			        == get_next_payload_block( msg ) {
+                  == get_next_payload_block( msg ) {
                 add_workspace( header.identity, 
-				               index, nextPayloadBlock )
+               index, nextPayloadBlock )
               }
               while nextRoutingBlock = get_next_routing_block( msg ) {
                 add_workspace( hdr.identity, 
-				               add_routing( nextRoutingBlock ) )
+               add_routing( nextRoutingBlock ) )
               }
               process_reserved_mapping_space( msg )
               while nextRequirement = get_next_requirement( hdr ) {
@@ -694,7 +693,7 @@ function incomming_message(VortexMessage blendedMessage) {
     throw e;
   }
 }
-							]]></artwork>
+]]></artwork>
             </figure></t>
         </section>
 

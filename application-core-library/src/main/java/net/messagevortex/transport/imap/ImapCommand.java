@@ -4,8 +4,6 @@ public abstract class ImapCommand implements Cloneable {
 
   public abstract String[] getCapabilities(ImapConnection conn);
 
-  public abstract void init();
-
   public abstract String[] getCommandIdentifier();
 
   /***

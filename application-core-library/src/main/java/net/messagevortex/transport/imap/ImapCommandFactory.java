@@ -9,11 +9,11 @@ public  class ImapCommandFactory {
 
   static {
     COMMANDS = new ConcurrentHashMap<>();
-    (new ImapCommandCapability()).init();
-    (new ImapCommandLogin()).init();
-    (new ImapCommandAuthenticate()).init();
-    (new ImapCommandLogout()).init();
-    (new ImapCommandNoop()).init();
+    registerCommand(new ImapCommandCapability());
+    registerCommand(new ImapCommandLogin());
+    registerCommand(new ImapCommandAuthenticate());
+    registerCommand(new ImapCommandLogout());
+    registerCommand(new ImapCommandNoop());
   }
 
   /***

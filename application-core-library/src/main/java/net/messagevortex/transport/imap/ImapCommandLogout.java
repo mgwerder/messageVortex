@@ -34,10 +34,6 @@ public class ImapCommandLogout extends ImapCommand {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  public void init() {
-    ImapCommandFactory.registerCommand(this);
-  }
-
   @Override
   public String[] processCommand(ImapLine line) throws ImapException {
     // skip space
