@@ -38,7 +38,7 @@ public abstract class AbstractCryptPayloadOperation extends Operation
     int i = 0;
     originalId = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
     key = new SymmetricKey(s1.getObjectAt(i++).toASN1Primitive().getEncoded());
-    newId = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
+    newId = ASN1Integer.getInstance(s1.getObjectAt(i)).getValue().intValue();
   }
 
   @Override

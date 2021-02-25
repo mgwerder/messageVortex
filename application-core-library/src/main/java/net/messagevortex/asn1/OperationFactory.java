@@ -16,10 +16,11 @@ public class OperationFactory {
    */
   public static Operation getInstance(ASN1Encodable object) throws IOException {
     int tag = ASN1TaggedObject.getInstance(object).getTagNo();
-    if (OperationType.getById(tag) == null || OperationType.getById(tag).getFactory() == null) {
+    OperationType opType = OperationType.getById(tag);
+    if (opType == null || OperationType.getById(tag).getFactory() == null) {
       throw new IOException("unknown tag for choice detected");
     }
-    return OperationType.getById(tag).getFactory()
+    return opType.getFactory()
         .getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
   }
 

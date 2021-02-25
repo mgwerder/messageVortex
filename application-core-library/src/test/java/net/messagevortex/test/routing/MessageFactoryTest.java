@@ -15,6 +15,7 @@ import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.router.Edge;
 import net.messagevortex.router.GraphSet;
 import net.messagevortex.router.MessageFactory;
+import net.messagevortex.router.SimpleMessageFactory;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OutputStream;
 import org.junit.Test;
@@ -55,7 +56,7 @@ public class MessageFactoryTest {
     for (int i = 1; i <= maxTests; i++) {
       LOGGER.log(Level.INFO, "cycle " + i + " of " + maxTests);
       LOGGER.log(Level.INFO, "  building message (" + i + " of " + maxTests + ")");
-      MessageFactory smf = MessageFactory.buildMessage("Subject: This is the message subject\n\nhello", 0, 1, is.getAnonSet(8).toArray(new IdentityStoreBlock[0]), is);
+      MessageFactory smf = SimpleMessageFactory.buildMessage("Subject: This is the message subject\n\nhello", 0, 1, is.getAnonSet(8).toArray(new IdentityStoreBlock[0]), is);
       smf.build();
       GraphSet gs = smf.getGraph();
       for (Edge gt : gs) {
