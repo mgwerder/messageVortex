@@ -31,7 +31,7 @@ public class MessageVortexRepository {
    *
    * @param uid the UUID of the related store
    * @param id the name of the config section
-   * @return the requested identity store or null
+   * @param a the transport handler
    */
   public static void setTransport(String uid, String id, Transport a) {
     Store rstore = store.get(uid);
@@ -62,7 +62,7 @@ public class MessageVortexRepository {
    *
    * @param uid the UUID of the related store
    * @param id the name of the config section
-   * @return the requested identity store or null
+   * @param a the accounting handler
    */
   public static void setAccountant(String uid, String id, Accountant a) {
     Store rstore = store.get(uid);
@@ -93,7 +93,7 @@ public class MessageVortexRepository {
    *
    * @param uid the UUID of the related store
    * @param id the name of the config section
-   * @return the requested identity store or null
+   * @param a the blending handler
    */
   public static void setBlender(String uid, String id, Blender a) {
     Store rstore = store.get(uid);
@@ -124,7 +124,7 @@ public class MessageVortexRepository {
    *
    * @param uid the UUID of the related store
    * @param id the name of the config section
-   * @return the requested identity store or null
+   * @param a the routing handler
    */
   public static void setRouter(String uid, String id, Router a) {
     Store rstore = store.get(uid);
@@ -155,7 +155,7 @@ public class MessageVortexRepository {
    *
    * @param uid the UUID of the related store
    * @param id the name of the config section
-   * @return the requested identity store or null
+   * @param is the identity store
    */
   public static void setIdentityStore(String uid, String id, IdentityStore is) {
     Store rstore = store.get(uid);
@@ -197,10 +197,21 @@ public class MessageVortexRepository {
     return rstore.ownStores.getInternalPayload(ib);
   }
 
-  public static void clear(String id) {
-    store.remove(id);
+  /**
+   * <p>Remove an id from the space.</p>
+   *
+   * @param uid the uid to be removed
+   */
+  public static void clear(String uid) {
+    store.remove(uid);
   }
 
+  /**
+   * <p>Get a list of all running daemons.</p>
+   *
+   * @param uid the affected uid
+   * @return the requested list
+   */
   public static Map<String,RunningDaemon> getRunningDaemons(String uid) {
     Store rstore = store.get(uid);
     if (rstore == null) {
