@@ -69,7 +69,7 @@ Depending on the blending method, a single, identifiable message is sufficient t
 \begin{itemize}
 	\item Broken internal file structure (due to plain blending)
 	\item Uncommon high entropy in a structureless file
-	\item Unrelated message flow (see \cite{oakland2013-parrot})
+	\item Unrelated message flow (see~\cite{oakland2013-parrot})
 	\item Non-human behavior on the transport layer (e.g., message traffic 24x7)
 \end{itemize}
 
@@ -77,12 +77,12 @@ If an endpoint is successfully identified, then all peering endpoints of the sam
 
 Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identify it as \VortexNode{} by following traces of the transport layer. However, in most protocols, this address is spoofable and not a reliable source for the originating account.
 
-As we specified machine communication for our messages, the dead parrot problem\cite{oakland2013-parrot} is not an issue as it only follows human communication. Thus, our system does not have to pass a touring test. Having messages sent with a non-human behavioral pattern (e.g., 24x7) is, therefore, not an issue either, as well as sending unrelated messages to an unstable set of endpoints. 
+As we specified machine communication for our messages, the dead parrot problem~\cite{oakland2013-parrot} is not an issue as it only follows human communication. Thus, our system does not have to pass a touring test. Having messages sent with a non-human behavioral pattern (e.g., 24x7) is, therefore, not an issue either, as well as sending unrelated messages to an unstable set of endpoints. 
 
 \subsection{Analysis of the F5 embedding Method}
 A routing node must embed the \VortexMessage{} into a generated image. Sending the same image multiple times without any generated content will look very suspicious as the same image sent multiple times but with a different fingerprint is not normal behavior. While we may adopt message sending code from open source products, it is not perfect as anyone may know what types of messages are affected. In return, this means that any message not heavily customized is suspicious. To make things worse, modifying the text may be relatively easy while modifying the content of generated imagery is much harder.
 
-From the technical point of view, the specification for the blending layer is complete. By specifying only one steganography algorithm, we cannot switch algorithms, which makes the blending layer potentially weaker as there is no seconding algorithm such as PQt providing crypto-agility. While F5 has been available for many years, no paper has been published proving the algorithm's detectability. F5 was analyzed among others and showed remarkable resistance to conventional attacks. Detectability is depending on the density of embedded data. A payload of 5-10 percent is currently not deemed detectable in a real-world environment\cite{fridrich2007statistically}. Many other algorithms such as nsF5, PQt/PQe, HUGO\cite{pevny2010using}, S-UNIWARD\cite{holub2014universal}, MiPOD\cite{sedighi2015content}, or HILL\cite{li2014new} have been evaluated but offering a solid implementation is nowadays rare. An implementation in java was not available for any of the mentioned algorithms. Considering that it is far harder to provide a solid implementation than some emulation code for academic purposes, the lack of this is understandable yet makes it very hard to either incorporate algorithms or test their robustness under realistic conditions.
+From the technical point of view, the specification for the blending layer is complete. By specifying only one steganography algorithm, we cannot switch algorithms, which makes the blending layer potentially weaker as there is no seconding algorithm such as PQt providing crypto-agility. While F5 has been available for many years, no paper has been published proving the algorithm's detectability. F5 was analyzed among others and showed remarkable resistance to conventional attacks. Detectability is depending on the density of embedded data. A payload of 5-10 percent is currently not deemed detectable in a real-world environment~\cite{fridrich2007statistically}. Many other algorithms such as nsF5, PQt/PQe, HUGO~\cite{pevny2010using}, S-UNIWARD~\cite{holub2014universal}, MiPOD~\cite{sedighi2015content}, or HILL~\cite{li2014new} have been evaluated but offering a solid implementation is nowadays rare. An implementation in java was not available for any of the mentioned algorithms. Considering that it is far harder to provide a solid implementation than some emulation code for academic purposes, the lack of this is understandable yet makes it very hard to either incorporate algorithms or test their robustness under realistic conditions.
 
 Hiding a \VortexNode{} from a censoring adversary means that we have to generate credible traffic for sending messages containing imagery roughly 10-20 times as big as the embedded payload. The \defref{carrier message}s require properties, which makes them assignable to a service instead of a user as the source of the message (e.g., personalized evaluation documents, status information, password recovery messages, or statistics). These messages should have constantly sized attachments as it would be typical for a process to generate messages always following the same patterns. Such size restriction for an embedding image is one of the caveats for larger messages as adaptive image size is easily detectable by an adversary. 
 
@@ -153,7 +153,7 @@ All encryption steps do leak some properties. They may leak the algorithm due to
 \subsubsection{Add and Remove Redundancy Operations}\label{sec:analysisReedSolomon}
 During analysis, the $addRedundancy$ operation showed the undesirable behavior that applying the operation lowered the target blocks' entropy, as shown in \cref{fig:entropy}. 
 
-We did reconsider thus the whole operation. The choice of the Reed-Solomon (RS) operation instead of a Lagrange polynomial seemed logical. As the possibilities to recover from cheaters in an RS setting of varying contexts have already been studied in \cite{mceliece1981sharing}, \cite{bu2017rasss}, and similar publications.
+We did reconsider thus the whole operation. The choice of the Reed-Solomon (RS) operation instead of a Lagrange polynomial seemed logical. As the possibilities to recover from cheaters in an RS setting of varying contexts have already been studied in~\cite{mceliece1981sharing},~\cite{bu2017rasss}, and similar publications.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Preplaced float
@@ -165,8 +165,10 @@ We did reconsider thus the whole operation. The choice of the Reed-Solomon (RS) 
 \end{figure*}
 
 
-\section{Senders routing layer}
-A sender may have some knowledge about the Routing block size and, therefore, guess the routing path's complexity. He is, however, unable to gain any additional information such as time of travel or number of hops until the target.
+\section{Knowledge of a Node Sending the First Message}
+A sender of a \VortexMessage{}, which is not equal to the RBB, may have knowledge about the initial Routing block size and, therefore, guess the routing path's complexity. He is, however, unable to gain any additional information such as time of travel or number of hops until the target. The building instructions do only leak minimal information which may also leak some ideas about the routing blocks complexity. 
+
+As with every routing node, the next hops are leaked to the sender. And again this is done without leaking the next-hops host key.
 
 \section{Intermediate node routing layer}
 An intermediate node does know all the operations applied and the immediate next hop. It does learn the routing addresses of the immediately following endpoints but is unable to use these endpoints. This inability is based on the fact that the node has no means to get the host key required to communicate.
@@ -382,7 +384,7 @@ If we assume that an adversary identifies all messages and involved \VortexNodes
 
 To weaken the threats of MURBs, we eradicated all needs for MURBs within the protocol. A MURB has only to be used when a user decides to do so, and we recommend not using them.
 
-\section{Achieved Anonymity and Flaws}
+\section{Achieved Anonymity and Shortcomings}
 \subsection{Measuring Anonymity}
 It is tough to measure anonymity, as it involves many uncontrollable factors. We may, however, control the degree of anonymity according to the number of involved parties. Assuming a sender knows the complete message path, including all operations carried out on any untrusted node a message travels through, the anonymity is maxed to the number of involved nodes $n$, excluding the sender nodes. This degree of $n-1$ may be further reduced if all well-known ``routing only'' or at least ``routing mostly'' nodes are reduced. Under these harsh assumptions, the set may be reduced to the potential set of ``well known'' recipients of a message.
 
@@ -497,8 +499,8 @@ A routing node may further improve the effectiveness of the protocol by\ldots
 	\item Use long host keys
 \end{itemize}
 
-\chapter[Degree of Anonymization in Comparison]{Analysis of Degree of Anonymization in Comparison to other Systems}
-It is hard to make a clear statement in terms of anonymity. To allow a comparison, we work with traditional anonymization systems and compare them to our system and outline the differences.
+\chapter[Degree of Anonymization in Comparison]{Analysis of Degree of Anonymization \MessageVortex{} in Comparison to other Systems}
+It is hard to make a clear statement in terms of anonymity. To allow a comparison, we work with traditional anonymization systems and compare them to our system and outline the differences. 
 
 \section{Comparing \MessageVortex{} to Remailers}
 All remailer systems are identifiable due to their traffic.  We leave aside simple remailer types such as nym remailers and concentrate solely on the most advanced type-3 remailer (Mixminion). Although development has been seized, we can still compare our system's effectiveness compared to a Mixminion system.
@@ -572,7 +574,7 @@ A broadcast-based network (BCN) hides a message transfer so that every involved 
 	\label{fig:bcCommPattern}
 \end{figure*}
 
-A BCN is a high load network having a very suspicious and uncommon communication pattern within internet protocols. \MessageVortex{} may rebuild such behavior by crafting routing blocks that trigger such a message pattern. Assuming no overlapping pattern, it would always expose the sending node as the first node sending a message. In such a case, privacy would be equal with a single peer broadcast, as shown in \cref{fig:bcRedCommPattern}. When assuming an overlapping pattern, a first node is no longer identifiable when using a full mesh in the case of a \VortexMessage{}. Atom\cite{kwon2016atom} cascades multiple BCNs into a cBCN. To achieve a cBCN, Atom relies on a central directory infrastructure. Additionally, to a simple BCN, Atom offers zero-knowledge proofs.
+A BCN is a high load network having a very suspicious and uncommon communication pattern within internet protocols. \MessageVortex{} may rebuild such behavior by crafting routing blocks that trigger such a message pattern. Assuming no overlapping pattern, it would always expose the sending node as the first node sending a message. In such a case, privacy would be equal with a single peer broadcast, as shown in \cref{fig:bcRedCommPattern}. When assuming an overlapping pattern, a first node is no longer identifiable when using a full mesh in the case of a \VortexMessage{}. Atom~\cite{kwon2016atom} cascades multiple BCNs into a cBCN. To achieve a cBCN, Atom relies on a central directory infrastructure. Additionally, to a simple BCN, Atom offers zero-knowledge proofs.
 
 \begin{figure*}[ht]\centering
 	\input{inc/redbcnets.inc.tex}
@@ -600,7 +602,7 @@ In such a case, we may conclude that \MessageVortex{} scores over a BCN...
 
 To conclude, \MessageVortex{} may offer at least the same properties as a BCN or cBCN. Unlike Atom, it is unable to offer zero-knowledge proofs. As an alternative, \MessageVortex{} offers diagnostics. By using multi-path message transfer, \MessageVortex{} may reduce bandwidth waste and improve throughput. These capabilities of \MessageVortex{} come at the price of local node storage, complex routing operations, and RBB strategies. On the other hand, processing and scalability of \MessageVortex{} do surpass Atoms' capability by far as the rather complex processing of Atom is very limiting.
 
-\chapter{Recommendations on Using the \MessageVortex Protocol}
+\chapter{Recommendations on Using the \MessageVortex{} Protocol}
 The following sections list recommendations using the \MessageVortex{} protocol. It is a summary of the previous sections.
 
 \section{Reuse of Routing blocks\label{sec:reuseRB}}
@@ -650,5 +652,5 @@ A payload block should always have a single representation only once when travel
 \subsection{Anonymity}
 Anonymity is greatly dependent on the routing block's quality and the chosen anonymity set for a single message and a communication tuple over time. 
 
-\subsubsection*{Size of the Anonymity Set}
+\hiddensubsubsection{Size of the Anonymity Set}
 The requirement for an anonymity set is dependent on jurisdictional restrictions. In some of the more restrictive countries, no one can be held guilty for an action that may not be credibly assigned to him alone. In other jurisdictions, it is possible to be held liable for actions just because of an identified membership in a group. This makes it essential that message traffic and the crafting of the blending is under the sole control of the sender. He needs to create an anonymity-set sufficiently large and spanning enough jurisdictions to create sufficient anonymity for his situation.

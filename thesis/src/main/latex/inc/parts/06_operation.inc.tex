@@ -4,8 +4,9 @@
 %!TeX root = ../../messageVortex.tex
 \partepigraph{Occurrences in this domain are beyond the reach of exact prediction because of the variety of factors in operation, not because of any lack of order in nature.}{Albert Einstein}
 \part{Operational concerns}\label{sec:operation}
+In this part we cover operational aspects of our system. Chapter~\ref{sec:genOperationalConcerns} covers some general operational concerns such as \VortexNode{} types, or handling of lifetimes. Chapter~\ref{sec:routingConcerns} covers routing concerns and introduces a simplified algorithm for building routing blocks. Chapter~\ref{sec:keyDistribution} deals with the problem of obtaining keys of routing nodes and bootstrapping a network. And finally, \cref{sec:realWorldProblems} focusses on some problems encountering when working with real world infrastructures.
 
-\chapter{General Operational Concerns}
+\chapter{General Operational Concerns}\label{sec:genOperationalConcerns}
 \section{Hardware}
 We require no specialized hardware for running \VortexNodes. Instead, we designed \MessageVortex{} in such a way that ordinary mobile phones may act as \VortexNodes. It is, however, recommended to have a node always connected to the Internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we used a RaspberryPi Zero W. It is, however, recommended to use a faster, newer model due to the proof-of-work algorithms' memory requirements. The hardware currently requires a network interface and a fully functional JSE VM to run the reference implementation.
 
@@ -77,7 +78,7 @@ This node does not answer any clear-text requests. As an immediate result, the n
 \subsubsection{Hidden \VortexNode}\label{sec:hiddenNode}
 A hidden node is a special form to a stealth node. It has a predefined set of identities. Only these already known identities are processed. This behavior has certain drawbacks. A sender may not change an existing identity, and he may not create new, unlinked  \defref{eID}s. As an immediate result, traffic may become pseudonymity. To counter this effect, at least partially, we may use the same local identity for multiple senders. To remove clashes in the workspace, we may use preassigned IDs in the workspace. The sender is only one of all senders knowing the private key of an identity. The advantage of such a node is that identities have unlimited quotas on such nodes, no longer bothering about accounting and refreshing identities. Such behavior seems to be a valuable option when using bulletproof providers.
 
-\chapter{Routing}
+\chapter{Routing}\label{sec:routingConcerns}
 Routing (as described in \cref{sec:routingLayer}) contributes heavily to the security of \MessageVortex. In our system, we typically have one node identity (node key). While this identity is relatively constant (but may be exchanged and notified by a \texttt{HeaderRequestReplaceIdentity} request), the involved transport nodes may be more mobile. In general, an incoming transport address does change relatively infrequently (unless advertised to friends with the header request mentioned above). The sending endpoint is irrelevant in the routing, and any routing node may, apart from the protocol type, freely choose this endpoint. 
 
 While having routing capabilities is mandatory, as every repeated pattern in routing leads to the possibility of identifying a node of an anonymity system, it adds significantly to the systems' complexity.
@@ -159,15 +160,15 @@ In \cref{sec:routingStrategies}, we elaborated on the properties of a routing bl
 
 In short, every foreseeable or logically invalid pattern may be used to identify \VortexMessages{} or in transport involved nodes. This is why we cannot use a fixed pattern in routing. Instead, we use randomized routing patterns. Ordinary fixed pattern protocols, such as broadcast or DC-net based protocols, are identifiable as their communication pattern is stable (fixed set of messages between involved nodes and foreseeable message size). Whereas the message size might be varied in such systems by adding decoy content or stuffing, such behavior depends on the secrecy of the nodes executing such operations.
 
-\subsection{The Routing Graph}\label{sec:routingGraph}
+\subsection{The Routing Block}\label{sec:routingGraph}
 In general, an RBB builds a routing block in three stages:
 \begin{enumerate}
-	\item Create a directed multigraph (\defref{routing graph}) where the nodes represent \VortexNodes, and the edges represent the messages sent between the \VortexNodes. The graph may contain loops. We may visualize such a \defref{routing graph} traditionally. Alternatively, we found that displaying the graph as a sequence of messages (see \cref{fig:transformGraph}) offers a better overview over the inner workings of a \defref{routing graph}.
+	\item Create a random but ``valid'' directed multigraph (\defref{routing graph}) where the nodes represent \VortexNodes, and the edges represent actual messages sent between the \VortexNodes{} and are assigned a label depicting the sequence in time . The graph may contain loops. We may visualize such a \defref{routing graph} traditionally. Alternatively, we found that displaying the graph as a sequence of messages (see \cref{fig:transformGraph}) offers a better overview over the inner workings of a \defref{routing graph}. For a graph to be valid there must be at least one valid path from node 0 to any other node, including node 1 which is our main target. Furthermore, outgoing edges may only arise after a an incoming edge is present.
 	\item We then assign timing information to each edge, leaving sufficient time in between to process the incoming message on the transport layer.
 	\item As the next step, we assign operations to all involved workspaces.
 \end{enumerate}
 
-Within such a \defref{routing graph}, we refer to a path between the two nodes $i$ and $j$ as an ordered set of edges, where an edge always starts where the previously edge ended, the first edge starts at node $i$, and the last edge ends at node $j$. A path may contain multiple times the same node, and a \defref{routing graph} may contain multiple paths between two given nodes.  Figure~\ref{fig:graphPaths} shows all paths between nodes $0$ and $1$ of the graph outlined in \cref{fig:transformGraph}. All these paths may be used to transport a message from node $0$ to $1$. Depending on the strategy, multiple paths may be used to transport a part of a message or used as a redundancy path.
+Based on such a \defref{routing graph}, we refer to a path between the two nodes $i$ and $j$ as an ordered set of edges, where an edge always starts where the previously edge ended, the first edge starts at node $i$, and the last edge ends at node $j$. A path may contain multiple times the same node, and a \defref{routing graph} may contain multiple paths between two given nodes.  Figure~\ref{fig:graphPaths} shows all paths between nodes $0$ and $1$ of the graph outlined in \cref{fig:transformGraph}. All these paths may be used to transport a message from node $0$ to $1$. Depending on the strategy, multiple paths may be used to transport a part of a message or used to transport redundant message parts.
 
 \begin{figure*}[ht]
 	\centering
@@ -476,7 +477,7 @@ So, while a node in an environment with an observing adversary may use such publ
 
 Both options are equally bad, but the second option is easier to fulfill as currently alliances in terms of cooperations seem to be relatively stable, and only a limited amount of adversaries (e.g., ``Five Eyes'' or China) have the resources to record encrypted traffic for later decryption.
 
-\chapter{Real World Problems using \MessageVortex}
+\chapter{Real World Problems using \MessageVortex}\label{sec:realWorldProblems}
 Some problems are not directly related to the \MessageVortex{} protocol but must still be considered when implementing or using \MessageVortex. The problems discovered during our experiments and possible solutions are listed in the following sections.
 
 \section{Size Restrictions of the Transport Layer}

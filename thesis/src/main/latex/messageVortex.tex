@@ -17,7 +17,7 @@
 \newcommand\subtitle[1]{\gdef\@subtitle{#1}}
 \makeatother
 
-\PassOptionsToPackage{table}{xcolor}
+\PassOptionsToPackage{table,svgnames}{xcolor}
 
 % enable breakable URLS
 \PassOptionsToPackage{hyphens}{url}
@@ -55,12 +55,13 @@
 
 \gdef\thetitle{MessageVortex}
 \title{\thetitle}
-\gdef\thesubtitle{Transport Independent Messaging Anonymous to Third Parties}
+\gdef\thesubtitle{Transport Independent, Unobservable, and Unlinkable Messaging}
 \subtitle{\thesubtitle}
 \author{Martin Gwerder (06-073-787)}
 %\date{\gitAuthorDate}
 \gdef\myabstract{
-	In this paper, we introduce an unobservable message anonymization protocol named MessageVortex. It bases on the zero-trust principle, a distributed peer-to-peer (P2P) architecture, and avoids central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable standard transport protocols, making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message, such as the degree of anonymity, timing, and redundancy of the message transport, without disclosing any of these details routing or transporting nodes. Part of this work is an RFC document attached in Appendix A describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under https://messagevortex.net/.}
+	In this thesis, we introduce an unobservable message anonymization protocol named MessageVortex. It is based on the zero-trust principle, has a distributed peer-to-peer (P2P) architecture, and avoids central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable standard transport protocols like SMTP, making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message, such as the degree of anonymity, timing, and redundancy of the message transport, without disclosing any of these details to routing or transporting nodes. We have made our prototype implementation publicly available and added an RFC-style document that contains all necessary information to build a MessageVortex node, see https://messagevortex.net/.
+}
 \makeatother
 
 % for PDF/A generation
@@ -128,7 +129,7 @@
 \renewcommand{\cftchappresnum}{\chaptername\hspace{5pt}}
 \renewcommand{\cftchapaftersnum}{\hspace{5pt}}
 
-% Extract filename frompath
+% Extract filename from path
 \makeatletter
 \DeclareRobustCommand{\filenameExtract}[1]{%
  \begingroup
@@ -178,6 +179,20 @@
 \makeatletter
 \patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
 \makeatother
+
+% hidden sections and subsections
+\newcommand{\hiddensubsubsection}[1]{
+	\stepcounter{subsubsection}
+	\subsection*{\arabic{chapter}.\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\hspace{1em}{#1}}
+}
+\newcommand{\hiddensubsection}[1]{
+	\stepcounter{subsection}
+	\subsection*{\arabic{chapter}.\arabic{section}.\arabic{subsection}\hspace{1em}{#1}}
+}
+\newcommand{\hiddensection}[1]{
+	\stepcounter{section}
+	\subsection*{\arabic{chapter}.\arabic{section}\hspace{1em}{#1}}
+}
 
 % titlepage geometry change
 \usepackage[paper=a4paper,top=2cm,bottom=2cm,inner=3.1cm,outer=2.2cm]{geometry}% http://ctan.org/pkg/geometry
@@ -418,11 +433,6 @@
 \usepackage{colortbl}
 
 
-% set numbering for subsubsections
-%\usepackage{tocstyle}
-\setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{4}
-
 % Sans serif font for the whole document
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage[T1]{fontenc}
@@ -453,9 +463,9 @@
 \newcommand*{\subentry}[2]{\par~\begin{minipage}{\columnwidth-0.6cm}{\bfseries{\itshape{#1\label{def:#1}}}}~#2\end{minipage}}
 
 \newcommand*{\defref}[1]{\hyperref[def:#1]{#1}}
-\title{MessageVortex}
-\subtitle{Transport Independent, Unobservable, and Unlinking Messaging}
-\author{Martin Gwerder (06-073-787)}
+\title{\thetitle}
+\subtitle{\thesubtitle}
+\author{Martin Gwerder}
 \date{\gitAuthorDate}
 
 %\hypersetup{pdfinfo={
@@ -734,6 +744,47 @@
 \gdef\VortexNode{\emph{\defref{VortexNode}}}
 \gdef\VortexNodes{\emph{\defref{VortexNode}s}}
 
+% quoted environment
+\usepackage{libertine}
+\newcommand*\quotefont{\fontfamily{LinuxLibertineT-LF}}
+\usepackage{etoolbox}
+\usepackage{framed}
+\newcommand*\quotesize{60} % if quote size changes, need a way to make shifts relative
+% Make commands for the quotes
+\newcommand*{\openquote}
+{\tikz[remember picture,overlay,xshift=-4ex,yshift=-2.5ex]
+	\node (OQ) {\quotefont\fontsize{\quotesize}{\quotesize}\selectfont``};\kern0pt}
+\newcommand*{\closequote}[1]
+{\tikz[remember picture,overlay,xshift=4ex,yshift={#1}]
+	\node (CQ) {\quotefont\fontsize{\quotesize}{\quotesize}\selectfont''};}
+% select a colour for the shading
+\colorlet{shadecolor}{Azure}
+\newcommand*\shadedauthorformat{\emph} % define format for the author argument
+% Now a command to allow left, right and centre alignment of the author
+\newcommand*\authoralign[1]{%
+\if#1l
+\def\authorfill{}\def\quotefill{\hfill}
+\else
+\if#1r
+\def\authorfill{\hfill}\def\quotefill{}
+\else
+\if#1c
+\gdef\authorfill{\hfill}\def\quotefill{\hfill}
+\else\typeout{Invalid option}
+\fi
+\fi
+\fi}
+% wrap everything in its own environment which takes one argument (author) and one optional argument
+% specifying the alignment [l, r or c]
+%
+\newenvironment{shadequote}[2][l]%
+{\authoralign{#1}%
+\ifblank{#2}%
+{\def\shadequoteauthor{}\def\yshift{-2ex}\def\quotefill{\hfill}}%
+{\def\shadequoteauthor{\par\authorfill\shadedauthorformat{#2}}\def\yshift{2ex}}%
+\begin{snugshade}\begin{quote}\openquote}%
+{\shadequoteauthor\quotefill\closequote{\yshift}\end{quote}\end{snugshade}}
+
 % Allow byte field graphs
 \usepackage{bytefield}
 
@@ -741,6 +792,15 @@
 % Allow unbreakable hyphens
 \usepackage[shortcuts]{extdash}
 
+% set numbering for subsubsections
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+% highlighting
+\usepackage[bordercolor=white,backgroundcolor=gray!30,linecolor=black,colorinlistoftodos]{todonotes}
+\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
+
+% allow clever references
 \usepackage{cleveref}
 
 \gdef\shadowshift{-3pt}
