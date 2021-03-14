@@ -331,6 +331,7 @@ Table \ref{tab:anonClass} shows the protocols analyzed in the next sections orde
 		
 		&\cols SOR & \networkFully & \directionBidi & \syncSynchronous & \roleCs & \hierarchyFlat & \decentralizationDecentr & \netviewFully & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetdet & \nsnodesusr & \nsprobuni &  \perflatl & \perfmodecon & \nsimplyes & \nscodeyes & \col\nscontwww\nscontmail \\
 		
+		% PGA missing
 		
 		&\cols Vuvuzela & \networkFully & \directionBidi & \syncSynchronous & \roleCs & \hierarchyHierarchical & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetdet & \nsnodesusr & \nsprobuni &  \perflatm & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontmicroblog \\
 		
@@ -510,6 +511,13 @@ SSH-based onion routing (SOR)~\cite{Egners_2012} is blaming the complex and mono
 The system was not really up to date at the time. While using a common, encrypted, and well-established protocol for the onionization, the system lacks obvious protection against timing attacks, the fact that either no access control is carried out or users have pseudonymous accounts on the target system (making them identifiable) or the predecessor attack~\cite{wright2004predecessor} which were all well known at the time.
 
 Unlike most other systems, SOR does not introduce an own protocol but uses an existing protocol having many legit uses. This makes it hard for an adversary to ban the protocol. Its approach in terms of hiding may be seen as somewhat similar to our approach.
+
+\subsection{PGA (2013)}
+Pretty Good anonymity~\cite{standtke2013pretty} attempted to create a single node anonymity service.  The client is running a local proxy which encapsulates the client traffic into the ``PGA Tunneling Protocol''. The protocol may hide traffic by adding additional (adaptive) decoy traffic (dummy traffic). It may be seen as a low latency encrypted SSH tunnel with additional anonymity features such as decoy traffic. It is capable of tunneling in a generic way any kind of TCP connection. UDP is not known to be supported.
+
+We did not include it into our table as it never achieved broad adoption and there is no routing involved. 
+
+The system does as other systems not withstand our adversary, as the PGA Tunnelling Protocol is detectable. Unlike most of the system an implementation of the system in Java is available.
 
 \subsection{Vuvuzela (2015)}
 Vuvuzela was presented by \citeauthor{van2015vuvuzela} in~\cite{van2015vuvuzela}. It is a scaleable anonymity system offering a high throughput between millions of users. The system is available as a PoC implementation written in Go. An adversary immediately knows that clients do use Vuvuzela. He is, however, unable to match up with communication peers over time. The Vuvuzela client software is available under \href{https://vuvuzela.io/} and connects to a vuvuzela network forming a centralized infrastructure. A Vuvuzela infrastructure may handle, according to its authors, up to 10 million users with an average bandwidth cost of 3.7KB/s per user.

@@ -149,6 +149,7 @@ Our MURBs are routing blocks that an owner of the block may use for a limited am
 	\item Due to transport layer size restrictions and ephemeral quotas, the total size of the transported messages is limited.
 \end{itemize}
 
+
 A MURB in our term is an entirely prepared routing instruction built by the recipient of a message. The sender has only the routing blocks and the instructions to assemble the initial message. It does not know the message path except for the first message hop.
 
 As a MURB is a routing block, it generates the same pattern on the network each time a sender uses it. To avoid statistical visibility, we need to limit the number of uses per MURB. As a maximum number of usages, the protocol is limited to 127 usages. This number should be sufficiently sized for automated messages. A minute pattern would disappear after 2 hours at the latest and an hourly pattern after five days.
@@ -164,7 +165,7 @@ In short, every foreseeable or logically invalid pattern may be used to identify
 In general, an RBB builds a routing block in three stages:
 \begin{enumerate}
 	\item Create a random but ``valid'' directed multigraph (\defref{routing graph}) where the nodes represent \VortexNodes, and the edges represent actual messages sent between the \VortexNodes{} and are assigned a label depicting the sequence in time . The graph may contain loops. We may visualize such a \defref{routing graph} traditionally. Alternatively, we found that displaying the graph as a sequence of messages (see \cref{fig:transformGraph}) offers a better overview over the inner workings of a \defref{routing graph}. For a graph to be valid there must be at least one valid path from node 0 to any other node, including node 1 which is our main target. Furthermore, outgoing edges may only arise after a an incoming edge is present.
-	\item We then assign timing information to each edge, leaving sufficient time in between to process the incoming message on the transport layer.
+	\item We then rewrite that graph and order it while assigning timing information to each edge, leaving sufficient time in between to process the incoming message on the transport layer.
 	\item As the next step, we assign operations to all involved workspaces.
 \end{enumerate}
 
@@ -253,7 +254,7 @@ To create a \defref{routing block}, we need some basic objects as defined in alg
 	\end{algorithmic}
 \end{breakablealgorithm}
 
-To create a routing block, we first need a graph representing the message flow. Algorithm~\ref{alg:simpleGraph} shows a pseudo-code to get such a valid graph. After creating a graph, we need to assign timing and routing information. Algorithm~\ref{alg:simpleTiming} shows a possible algorithm for assigning this timing information, whereas Algorithm~\ref{alg:simpleRouting} shows a simple generator for the routing operation. The algorithm omits for simplicity allocation of workspace IDs as this is a ``bookkeeping''-only problem.
+To create a routing block, we first need a graph representing the message flow. Algorithm~\ref{alg:simpleGraph} shows a pseudo-code to create such a valid graph. After creating a graph, we need to assign timing and routing information. Algorithm~\ref{alg:simpleTiming} shows a possible algorithm for assigning this timing information, whereas Algorithm~\ref{alg:simpleRouting} shows a simple generator for the routing operation. The algorithm omits for simplicity allocation of workspace IDs as this is a ``bookkeeping''-only problem.
 
 To create a graph, we use the function~\funcref{alg:getRoutingGraph}{} on line~\ref{alg:getRoutingGraph-line} as shown in algorithm~\ref{alg:simpleGraph}. It creates an ordered set of nodes (\texttt{nodes}), whereas the first node in the set is the sender and the second node of the set is the final recipient. It then adds randomly known nodes until the anonymity set is as large as requested. Next, we assign the edges by calling function~\funcref{alg:getEdges}{} (Line~\ref{alg:getEdges-line}). The function loops until the requested minimum number of edges are reached, and all nodes of the graph receive at least one message. On each loop, an edge is added to the graph, that is pointing from any already reached node to a random, different node.
 
