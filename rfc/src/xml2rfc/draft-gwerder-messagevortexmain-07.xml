@@ -8,8 +8,9 @@
 <?rfc sortrefs="yes" ?>
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
-
-<rfc category="exp" docName="draft-gwerder-messagevortexmain-06"
+<!-- FIXME missing ASN.1 files in detection -->
+<!-- FIXME ASN.1 is not detected -->
+<rfc category="exp" docName="draft-gwerder-messagevortexmain-07"
      ipr="trust200902" xml:lang="en">
   <front>
     <title>MessageVortex Protocol</title>
@@ -31,7 +32,7 @@
       </address>
     </author>
 
-    <date day="16" month="03" year="2021"/>
+    <date day="17" month="09" year="2021"/>
 
     <area>General</area>
 
