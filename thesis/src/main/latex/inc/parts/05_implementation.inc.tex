@@ -60,7 +60,7 @@ On the downside, ASN-1-encoding is, unlike XML, unreadable by humans. As we hide
 \section{Cipher Selection}
 In this protocol, many encryption and hashing algorithms have to be used. In the following, we explain the choice of these algorithms. 
 
-We decided to define fixed key sizes for symmetric ciphers as we chose block ciphers. We encode the key length in the asymmetric ciphers' parameters due to their differences far more often flexible.%FIXME Are the differences flexible or are the paramaters encoded flexibly? Please revise
+We decided to define fixed key sizes for symmetric ciphers as we chose block ciphers. For asymmetric ciphers, we encode the key length in the asymmetric ciphers' parameters section. Due to their mathematical differences, they are frequently flexible in their parameters such as key or block sizes. %FIXME2 Reworded section
 
 \begin{figure}[ht]
 	\lstinputlisting[linerange={18-84},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
@@ -242,14 +242,6 @@ We will identify SMTP and XMPP as suitable transport layer protocols for the \Me
 
 All sections are structured the same. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible. We then apply the previously referenced criteria and concisely summarize the protocol's suiting as a transport layer. The findings of this section are listed in \cref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
 
-All sections are structured the same. 
-\begin{itemize}
-	\item Description\\ %FIXME the following two sections (description, apply criteria) are the exact same wording as above, please revise
-	We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible.
-	\item Apply criteria\\\\
-	We then apply the previously referenced criteria and concisely summarize the protocol's suiting as a transport layer. The findings of this section are listed in \cref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
-\end{itemize} 
-
 \subsection{Applied Criteria\label{sec:transportCriteria}}
 \begin{itemize}
 	\item Widely adopted (Ct1)\\
@@ -318,7 +310,7 @@ TFTP has, despite its naming similarities to FTP, very little in common with it.
 TFTP is rarely ever used on the Internet, as its UDP-based nature is not suitable for a network with redundant routes. Not being common on the Internet, violates criterion one (Ct1: Widely Adopted). TFTP is asymmetrical. This means that a server is always just ``serving requests'' and not sending information actively to peers. This request--reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. Furthermore, the protocol violates Ct2 (Ct2: Reliable) as it is based on UDP without any additional error correction.
 
 \hiddensubsubsection{MQTT}
-MQTT is an ISO standard (ISO/IEC PRF 20922:2016) and was formerly called MQ Telemetry Transport. The current standard as the time of writing this document was 3.1.1~\cite{mqtt}. %FIXME Check if this is still valid
+MQTT is an ISO standard (ISO/IEC PRF 20922:2016) and was formerly called MQ Telemetry Transport. The current standard as the time of writing this document was 5.0~\cite{mqtt}. 
 
 The protocol runs by default on the two ports 1883 and 8883 and can be encrypted with TLS. MQTT is a publish/subscribe-based message-passing protocol that is mainly targeted to m2m communication. This protocol requires the receiving party to be subscribed to a central infrastructure to receive messages. Such behavior makes it very difficult to use it in a system without centralistic infrastructure and static routes between senders and recipients. 
 
@@ -528,7 +520,9 @@ In this section, we describe the extraction of a \VortexMessage{} by the blendin
 \subsection{Plain Embedding}
 In this section we explain $plainEmbedding$ and how \VortexMessages{} with $plainEmbedding$ may be extracted. This embedding is mainly suitable for simple, observable message transferal.
 
-The $plainEmbedding$ is a simple embedding replacing parts of the original file with the content of the \VortexMessage. To maintain the header information, we introduced an offset as a set of fixed values. Plain embedding is simply detectable. While offset and chunking may allow us to maintain a valid file structure, the file's original content is normally destroyed. We use plain embedding mainly for our experiments. We used a specialized blending layer for better readability using unchunked, plain embedding with an offset of $0$. The decoy message is the ASN.1 block representation of the encoded block. The chosen encoding simplified to see the inner workings of the protocol. For production use, we apply F5 embedding with a generated payload. The blending layer's current implementation employing plain embedding is not suitable for production use as the messages remain identifiable or suspicious.%FIXME Format weird extra space
+The $plainEmbedding$ is a simple embedding replacing parts of the original file with the content of the \VortexMessage. To maintain the header information, we introduced an offset as a set of fixed values. Plain embedding is simply detectable. While offset and chunking may allow us to maintain a valid file structure, the file's original content is normally destroyed. We use plain embedding mainly for our experiments. We used a specialized blending layer for better readability using unchunked, plain embedding with an offset of $0$. The decoy message is the ASN.1 block representation of the encoded block. The chosen encoding simplified to see the inner workings of the protocol. For production use, we apply F5 embedding with a generated payload. The blending layer's current implementation employing plain embedding is not suitable for production use as the messages remain identifiable or suspicious.
+
+%FIXMEX Format weird extra space (Will take care at end of document layouting)
 
 \hiddensubsubsection{Chunking of Plain Embedded Messages}\label{sec:chunkingPlain}
 In this section, we describe the chunked embedding into plain messages. Chunking is done by pre-pending two numeric values to a data chunk. The first number (modulo the remaining number of bytes of the file) reflects the chunk's size immediately following the second value. The second value (again modulo the same number)  reflects the number of bytes to be skipped after the chunk for getting to the next header.
@@ -584,7 +578,7 @@ Table~\ref{tab:chunkingExamples} shows some valid chunking header bytes and thei
 	\egroup
 \end{table*}
 
-When plain embedding messages, we have the problem that most of the files have recurring logical structures. Such structures should not be broken when embedding in plain as such embedding as it would leak in an easily detectable manner the presence of a broken file. %FIXME This is unclear.
+When plain embedding messages, we have the problem that most of the files have recurring logical structures. Such structures should not be broken. Broken files raise suspicion as they are no longer displayable. Thus, we have to avoid breaking logical file structures and concentrate on structureless portions of the file when embedding. %FIXME2 reworded
 
 \subsection{Implementation of F5 Blending}
 In this section, we introduce the implementation of F5 blending. It is a more suitable blending than the rather simple $plainBlending$ discussed in the previous section. At the same time, F5 is very old (\citeyear{f5} and renains unbroken. In the reference implementation of F5 was a detectable unintentional double compression~\cite{steganalysisf5}. The authors of the reference implementation fixed this issue~\cite{F5broken}, and we were unable to find newer breaches. Newer derivates, such as nsF5~\cite{fridrich2007statistically} or MSET~\cite{hosseini2015modification}, were proposed. However, we did not consider these as candidates as an appropriate reference implementation seemed to be unavailable.

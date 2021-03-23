@@ -75,7 +75,7 @@ Depending on the blending method, a single, identifiable message is sufficient t
 
 If an endpoint is successfully identified, then all peering endpoints of the same protocol may be identified as well by following the message flow. However, this does not enable an adversary to inject messages as the host key is not leaked. 
 
-Assuming a global observer as an adversary and unencrypted traffic, %FIXME is the global observer both?
+Assuming a global observer as an adversary and unencrypted traffic, %FIXME2 is the global observer both? No...?
  he might discover the originating routing layer and thus identify it as \VortexNode{} by following traces of the transport layer. However, in most protocols this address is spoofable and not a reliable source for the originating account.
 
 As we specified machine communication for our messages, the Dead Parrot problem~\cite{oaklan/d2013-parrot} is not an issue as it only follows human communication. Thus, our system does not have to pass a Turing test. Having messages sent with a non-human behavioral pattern (e.g., 24x7) is, therefore, not an issue either, as well as sending unrelated messages to an unstable set of endpoints. 
@@ -234,7 +234,7 @@ Identifying a node by probing and check their reaction is commonly done when fin
 
 One of the problems is cleartext requests. These requests may be used on any transport layer account without previous knowledge of any host key. Thus the recommendation in \cref{tab:protoReplyCrit} is generally not to answer the requests. Routing nodes in jurisdictions not fearing legal repression or prosecution may reply to cleartext requests, but it is usually discouraged as they allow harvesting of \VortexNodes{}. A discovered \VortexNode{} may leak subsequent nodes if the same account is used for receiving and sending.
 
-%FIXME: is that statement really true or just delaying?
+%FIXME2: is that statement really true or just delaying? Hi cost=high CPU consumption-> long reply time
 One strategy to avoid this would be to put high costs onto cleartext requests so that a cleartext request may have a long reply time (e.g., up to one day). 
 
 A node is free to blacklist an identity in case of an early reply. This is an insufficient strategy as a big adversary may have lots of identities in stock. Requesting an unusually long key as a plaintext identity does not make sense either, as these as well may be kept in stock. However, we may force a plaintext request to have an identity block with a hash following specific rules. For example, we may put in a requirement that the first four bytes of the hash of a header block correspond to the first four characters of the routing block. At the moment, this has been rejected in the standard for practical reasons. First, as the request is unsolicited, a sender is the only one able to decide the hash's algorithm. This would allow a requester to choose upon the complexity of the puzzle. Second, any negotiation of the request's cost would result in the disclosure of the node as \VortexNode, which might be unsuitable.
@@ -275,7 +275,7 @@ Numerous attacks are available through the bugging of a protocol. In this chapte
 	There are multiple possibilities to counter such an attack. The easiest one is to do no verification at all. Having no verification is, however, not desirable from the security point of view. Another possibility is only to verify trusted proof of identities. By doing so, the only attacker could be someone having access to a trusted source of proof of identities. A third possibility is relaying the request to another host either by using an anonymity structure such as Tor or using its infrastructure. Using Tor would violate the ``Zero Trust'' goal. Such a measure would only conceal the source of the verification. It would not hide the fact that the message is processed. A fourth and most promising technology would be to force the sender of the certificate to include a ``proof of non-revocation''. Such proof could be a timestamped and signed partial CRL. It would allow a node to verify a certificate's validity without being forced to disclose itself by doing a verification. On the downside, including a proof of non-revocation involves the requirement to accept a certain amount of caching time to be accepted. This caching cycle reduces the value of the proof as it may be expired in the meantime. It is recommended to keep the maximum cache time as low as 1d to avoid that revoked certificates may be used. 
 	
 	\item Bugging through DNS traffic:\\
-	A standard protocol on the Internet is DNS. Almost all network-related programs use it without thinking. %FIXME network programs don't think
+	A standard protocol on the Internet is DNS. Almost all network-related programs use it without considering effects on anonymity. %FIXME2 Reworded
 	 Typically, the use of such protocol is only a minor issue since an ISP usually makes the resolution of a lookup. Normally an ISP would not keep a query log as such logs tend to become big, and their information content is comparatively low. In the case of a censoring adversary, an ISP may be forced to keep such a log or to provide access to the adversary.
 	
 	The bugging in general attack works as follows: We include a unique DNS name to be resolved by a recipient. This can be done most easily by adding an external resource such as an image. A recipient will process this resource and might therefore deliver information about the frequency of reading or the type of client. 
@@ -513,7 +513,7 @@ Mixminion is an onion routing system working with a fixed message size of 32KB. 
 	\item No detectability due to timing-related constraints.\\
 	Mixminion had no synchronized timing constraints. Messages were sent as soon as the subsequent message node was known and the message decrypted. This behavior makes a node identifiable as it is not a common pattern.
 	\item No detectability due to constant sizing of the messages.\\
-	Messages were equally sized into 32KB junks.%FIXME do you mean chunks?
+	Messages were equally sized into 32KB chunks.%FIXME do you mean chunks?
 	\item No identifiable goal in the case of identified messages by a global observer.\\
 	An observing adversary able to match message sizes may identify messages in a low traffic network and identify sender and recipient. 
 	\item Possible resistance against a Byzantine node.

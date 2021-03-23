@@ -151,9 +151,7 @@ Furthermore, it must be impossible from an observing adversary to identify messa
 
 The requirements above protect from an adversary outside the system. Looking from the inside, an adversary may have access to much more information. An adversary will likely create nodes in an open system. As a consequence, trust in infrastructure is minimal.
 
-In our model, we will work with suspicion into the infrastructure.
-%FIXME this makes no sense, are you suspicious of the infrastructire? Please revise
- As every infrastructure node learns from each transaction (e.g., the usage of the network or size of messages), we have to minimize or ideally eradicate such information gains. The main problem is that we are unable to hide peer senders or recipients when routing messages. In jurisdictions where such infrastructure usage is illegal, we need to protect the presence of our routing messages from any distrusted party. Such hiding concludes that we need to be able to control which nodes are involved when sending messages. We refer to this concept as controllable trust.
+In our model, we will work with suspicion into the infrastructure. As every infrastructure node learns from each transaction (e.g., the usage of the network or size of messages), we have to minimize or ideally eradicate such information gains. The main problem is that we are unable to hide peer senders or recipients when routing messages. In jurisdictions where such infrastructure usage is illegal, we need to protect the presence of our routing messages from any distrusted party. Such hiding concludes that we need to be able to control which nodes are involved when sending messages. We refer to this concept as controllable trust.
 
 In terms of the trust, we conclude that:
 \begin{enumerate}
@@ -173,7 +171,7 @@ We need a requirement guaranteeing the unlinkability between the sender and reci
 
 Unobservability requires, according to~\cite{anonTerminology}, that an item of interest (\defref{IoI}) is undetectable from an uninvolved entity and anonymous for the involved entities. We therefore require anonymization as a property.
 
-As a result of the architecture of today's common networks, the anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. %FIXME Do you mean given that there is reust in the proxy?
+As a result of the architecture of today's common networks, the anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into such infrastructure. %FIXME2 Reworded
 By combining it with encryption, we may even achieve a simple form of a sender and receiver pseudonymity, even for a weak outside observer. This has been done in cypherpunk remailers (see \cref{sec:remailersAndMixnets}). If cascading more relay-like infrastructures and combining them with cryptography, we may achieve sender and receiver anonymity. When introducing anonymous remailing endpoints, we may additionally achieve both simultaneously. These are the standard approaches in remailers and mixes. We have seen real-world attacks on such systems in the past, and some were successful (e.g.,~\cite{penetClosure}). 
 
 \cite{anonTerminology} defines anonymity as:
@@ -212,7 +210,9 @@ This property applies not only to the message content itself but as well to any 
 	A message or its behavior must not be replayable.
 \end{requirement}
 
-In a generic sense, a node may also replay a message to highlight a messages property (e.g., the path or a size), which leads us to the following requirement:%FIXME see section right below
+In a generic sense, a node may also replay a message to highlight a messages property (e.g., the path or a size), which may lead to the discovery of such meta information. 
+
+%FIXME2 reworded section
 
 \subsection{Operational Requirements}
 In order to be realistically operated, our system needs to fulfill some additional requirements.
@@ -387,8 +387,9 @@ We first describe a single node and its identity. This node is always equivalent
 
 We then introduce the concept of \defref{workspace}s and ephemeral identities (\defref{eID}s). These concepts are essential for the routing and accounting layers. They dictate memory and storage requirements and lay a foundation for the routing layer.
 
-A node always consists of three layers and one or more transports connected to it. The understanding of their inner workings is essential to the understanding of the project as a whole. %FIXME Repetitive see above - key components
- We emphasize their main function and their inner workings without going into implementation details. These details are further discussed in \cref{sec:implementation}. We mainly focus on the data and the high-level processing done within these layers.
+The understanding of the protocols layers inner workings is essential to the understanding of the project as a whole. We emphasize their main function and their inner workings without going into implementation details. These details are further discussed in \cref{sec:implementation}. We mainly focus on the data and the high-level processing done within these layers.
+
+%FIXME2 reworded section
 
 \subsection{Nodes and Their Identities}
 We refer to a \VortexNode{} (node) as a system run by an individual containing a software processing \VortexMessages. Each node is connected to a transport layer protocol service (e.g., an IMAPv4 server as an endpoint for email or an XMPP server). A node is not a server but a device connected to a regular, unmodified transport service provider. Such transport services may be an SMTP/IMAPv4/POP3 account, an XMPP account, or a similar transport protocol account.
@@ -690,14 +691,13 @@ In this section, we focus on the core operation of our system. The $addRedundanc
 
 The Lagrange functions have been proposed in~\cite{shamir1979share} and were more generalized in~\cite{mceliece1981sharing} for sharing secrets. The general idea about all proposed schemes is to distribute pieces of information and restrict access to it so that only if a specified number of shares are captured a secret may be rebuilt. Unlike in these papers proposed, we do not apply privacy to our protocol by sharing the data among many points. Instead, we use Lagrange functions to create decoy traffic. By doing so, even a creator of traffic is unable to distinguish message traffic from decoy traffic. 
 
-These operations build the core of the routing capabilities of a node. The operation allows an \defref{RBB} to add redundancy %FIXME do you mean adding redundant information or information about redundancy?
-information to a message or to rebuild a block from a chosen set of information. 
+These operations build the core of the routing capabilities of a node. The operation allows an \defref{RBB} to add redundancy to a message or parts of it (payload chunk) information to a message or to rebuild a block from a chosen set of information.  %FIXME2 reworded paragraph
 
 The operation itself is shown in \cref{fig:addRedundancyOperation}. 
 
 \begin{figure}[ht]\centering
-	\resizebox{0.48\textwidth}{!}{\input{inc/addRedundancyOp.inc.tex}}
-	\resizebox{0.45\textwidth}{!}{\input{inc/removeRedundancyOp.inc.tex}}
+	\resizebox{0.51\textwidth}{!}{\input{inc/addRedundancyOp.inc.tex}}
+	\resizebox{0.49\textwidth}{!}{\input{inc/removeRedundancyOp.inc.tex}}
 	\caption{Outline of the addRedundancy and removeRedundancy operation}
 	\label{fig:addRedundancyOperation}
 \end{figure}

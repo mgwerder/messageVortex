@@ -9,8 +9,7 @@ In this part, we look in \cref{sec:standardProtocols} for common Internet protoc
 
 \chapter{Well Known Standard Protocols}\label{sec:standardProtocols}
 \hiddensection{SMTP and Related Post Office Protocols (1982)}\label{sec:mailTransport}
-Today's mail transport is mostly done via \defref{SMTP}\index{SMTP} protocol, as specified in~\cite{rfc5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from an MUA %FIXME Please provide definition as it is first use
-to an SMTP relay of a provider. From there, the message is directly sent to the recipient's SMTP server and, after that, to the recipient's server-based storage. At any time, the recipient may connect to his server-based storage and may optionally relocate the message to a client-based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (whereas a push-pull mechanism usually implements the latter).
+Today's mail transport is mostly done via \defref{SMTP}\index{SMTP} protocol, as specified in~\cite{rfc5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from an Mail User Agent (\defref{MUA}) to an SMTP relay of a provider. From there, the message is directly sent to the recipient's SMTP server and, after that, to the recipient's server-based storage. At any time, the recipient may connect to his server-based storage and may optionally relocate the message to a client-based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (whereas a push-pull mechanism usually implements the latter).
 
 If we want to understand the routing of a mail, it is essential that we understand the whole chain starting from a user(-agent) until arriving at the target user (and being read!). To simplify this, we used a consistent model that includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical mail routing. It is essential to understand that mail routing remains the same regardless of the client. However, the availability of mail at its destination changes drastically depending on the type of client used. Furthermore, control of the mail flow and control is different depending on the client.
 
@@ -24,8 +23,7 @@ The model has three main players \defref{storage}, \defref{agent}, and \defref{s
 
 In the following paragraphs (for definitions), the term ``email'' is used synonymously to the term ``Message''.  ``Email'' has been chosen over ``messages'' because of its frequent use in standard documents.
 
-Emails are typically initiated by a Mail User Agent (\defref{MUA}).%FIXME Remove definition and insert at point before
- An MUA accesses local email storage, which may be the server storage or a local copy. The local copy may be a cache only copy, the only existing storage (when emails are fetched and deleted from the server after retrieval), or a collected representation of multiple server storages (cache or authoritative).
+An \defref{MUA}{} accesses local email storage, which may be the server storage or a local copy. The local copy may be a cache only copy, the only existing storage (when emails are fetched and deleted from the server after retrieval), or a collected representation of multiple server storages (cache or authoritative).
 
 In addition to the MUA, the only other component accessing local email storage is the Mail Delivery Agent (\defref{MDA}). An MDA is responsible for storing and fetching emails from the local mail storage. Emails destined for other accounts than the current one are forwarded to the MTA. Emails destined for a user are persistently stored in the local email storage. It is essential to understand that email storage does not necessarily reflect a single mailbox. It may as well represent multiple mailboxes (e.g., a rich client-serving multiple IMAP accounts) or a combined view of multiple accounts (e.g., a rich client collecting mail from multiple \defref{POP} accounts). In the case of a rich client, the local MDA is part of the user agent's software. In the case of an email server, the local MDA is part of the local email store (not necessarily of the mail transport service).
 
@@ -128,8 +126,7 @@ In \citeyear{RP03-1} \citeauthor{RP03-1} analyzed the suitability for mixes as a
 They concluded that in an ideal implementation, a dynamic mix network where every user operates one mix is the most promising solution as static mixes always might be hunted by an adversary.
 
 \section{Anonymous Remailers}\label{sec:remailers}
-Remailers have been in use for quite some time. There are several classes of remailers, and all of them are somehow related to Mixnets.%FIXME is this supposed to be MixNetworks?
-There are ``types'' of remailers defined. Although these ``types'' offer some hierarchy, none of the more advanced ``types'' seem to have more than one implementation in the wild. 
+Remailers have been in use for quite some time. There are several classes of remailers, and all of them are somehow related to Mix Networks. There are ``types'' of remailers defined. Although these ``types'' offer some hierarchy, none of the more advanced ``types'' seem to have more than one implementation in the wild. 
 
 Pseudonymous remailers (also called Nym Servers) take a message and replace all information pointing to the original sender with a pseudonym. This pseudonym may be used as a *reply address. The most well known pseudonymous remailer possibly was anon.penet.fi run by Johan Helsingius. Several times, this service was forced to reveal a pseudonym's true identity before Johan Helsingius decided to shut it down. For a more in-depth discussion of pseudonymous remailers, see \ref{sec:remPseudo}
 
@@ -412,8 +409,7 @@ It drastically shows the problem of legal prosecution even within so-called ``de
 \subsection{Cypherpunk Remailers (approx. 1993)\label{sec:remCypherpunk}}
 With the failing of anon.penet.fi, it became clear that the weakest spot of a single server infrastructure the information stored on the server and the vulnerability of their owner. The new type-1-remailers score over the existing type-0-remailers by using encryption for the message.  The time of the invention of the first type-1-remailers is unclear. Setting up a type-1-remailer was typically achieved by using Procmail together with a small script calling PGP binaries and then sending the resulting message to the next recipient. By combining multiple type-1-remailers, an onion-like structure of the message was achievable. 
 
-This approach was promising, but it was still observable. An observation was possible by correlating the message sizes (e.g., strictly decreasing) and timing information. Furthermore, remailers were yet known, %FIXME is it still known or yet unknown? yet known makes no sense
-and authorities were able to ban infrastructure and capable of monitoring their routing activities. The standard mail logs of such servers provided valuable evidence for legal prosecution if not disabled.
+This approach was promising, but it was still observable. An observation was possible by correlating the message sizes (e.g., strictly decreasing) and timing information. Furthermore, remailers were known, and authorities were able to ban infrastructure and capable of monitoring their routing activities. The standard mail logs of such servers provided valuable evidence for legal prosecution if not disabled.
 
 \subsection{Babel (1996)}
 Babel was an academic system defined in a paper by \citeauthor{babel} in \citeyear{babel}~\cite{babel}. It was developed at IBM Zurich Research Laboratory. It was a mixing system using onionized addresses. The sender remains anonymous while he may provide a reply routing block called RPI. If both parties want to remain anonymous, the initiator's RPI was deployed in a forum thread. Anyone using this block adds an RPI for its address to the message.
@@ -659,8 +655,7 @@ Precisely as $I^2P$, Freenet is not analyzed thoroughly by the scientific world.
 
 The Freenet features two protocols FCPv2 acts as the client protocol for participating in the control of Freenet storage. The Freenet client protocol allows us to insert and retrieve data, query the network status, and manage Freenet nodes directly connected to their node. FCPv2 operates on port 9481, and blocking is thus easy, as it is a dedicated port. 
 
-The Freenet project seems to be under active development as pages about protocols were updated in the near past %FIXME check for more recent updates
- (the last update on the FCPv2 Page was July \nth{5} 2016 at the time of writing).
+The Freenet project seems to be under active development as pages about protocols were updated in the near past (the last update on the FCPv2 Page was August \nth{8} 2020 at the time of writing).
 
 \subsection{Gnutella (2000)}
 Gnutella is not a protocol for the anonymity world in special. Instead, the Gnutella protocol implements general file sharing on a peer-to-peer basis. This approach is the most interesting aspect of Gnutella in this context. Furthermore, Gnutella has proven to be working with a large number of clients.
@@ -668,5 +663,5 @@ Gnutella is not a protocol for the anonymity world in special. Instead, the Gnut
 The current protocol specification of Gnutella is available at  \href{http://rfc-gnutella.sourceforge.net/developer/stable/index.html}{http://rfc-gnutella.sourceforge.net/}. While the Gnutella network is defunct. The approaches to solving some of the peer-to-peer aspects were very interesting.
 
 \subsection{Gnutella2 (2002)}
-Despite its name, Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and was developed in a different direction. The specification of Gnutella2 is available at \url{http://g2.doxu.org}. Just as its predecessor, Gnutella2 seems to be dead. The last relevant update to the main site or its protocol is dated four years back. %FIXME check for more recent update, or it's more than 4 yrs
+Despite its name, Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and was developed in a different direction. The specification of Gnutella2 is available at \url{http://g2.doxu.org}. Just as its predecessor, Gnutella2 seems to be dead. The last update to the main site was on 2016 and the last update to the protocol on 2007. 
 
