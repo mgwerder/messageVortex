@@ -51,13 +51,13 @@
     <abstract>
       <t>The MessageVortex (referred to as Vortex) protocol achieves different degrees of anonymity, including sender, receiver, and third-party anonymity, by specifying messages embedded within the existing transfer protocols, such as SMTP or XMPP, sent via peer nodes to one or more recipients.</t>
 
-      <t>The protocol outperforms others by decoupling the transport from the final transmitter and receiver. No trust is placed into any infrastructure except for that of the sending and receiving parties of the message. The creator of the routing block (Routing block builder; RBB) has full control over the message flow. Routing nodes gain no non-obvious knowledge about the messages even when collaborating. While third-party anonymity is always achieved, the protocol also allows for either sender or receiver anonymity.</t>
+      <t>The protocol outperforms others by decoupling the transport from the final transmitter and receiver. No trust is placed into any infrastructure except for that of the sending and receiving parties of the message. The creator of the routing block (routing block builder; RBB) has full control over the message flow. Routing nodes gain no non-obvious knowledge about the messages even when collaborating. While third-party anonymity is always achieved, the protocol also allows for either sender or receiver anonymity.</t>
     </abstract>
   </front>
 
   <middle>
     <section title="Introduction">
-      <t>Anonymisation is hard to achieve. Most previous attempts relied on either trust in a dedicated infrastructure or a specialized networking protocol.</t>
+      <t>Anonymization is difficult to achieve. Most previous attempts relied on either trust in a dedicated infrastructure or a specialized networking protocol.</t>
 
       <t>Instead of defining a transport layer, Vortex piggybacks on other transport protocols. A blending layer embeds MessageVortex messages (VortexMessage) into ordinary messages of the respective transport protocol. This layer picks up the messages, passes them to a routing layer, which applies local operations to the messages, and resends the new message chunks to the next recipients.</t>
 
@@ -65,7 +65,7 @@
 
       <t>MessageVortex is a protocol that allows sending and receiving messages by using a routing block instead of a destination address. With this approach, the sender has full control over all parameters of the message flow.</t>
 
-      <t>A message is split and reassembled during transmission. Chunks of the message may carry redundant information to avoid service interruptions during transit. Decoy and message traffic are not differentiable as the nature of the addRedundancy operation allows each generated portion to be either message or decoy. Therefore, any routing node is unable to distinguish between message and decoy traffic.</t>
+      <t>A message is split and reassembled during transmission. Chunks of the message may carry redundant information to avoid service interruptions during transit. Decoy and message traffic are not differentiable as the nature of the addRedundancy operation allows each generated portion to be either message or decoy. Therefore, all routing nodes are unable to distinguish between message and decoy traffic.</t>
 
       <t>After processing, a potential receiver node knows if the message is destined for it (by creating a chunk with ID 0) or other nodes. Due to missing keys, no other node may perform this processing.</t>
 
@@ -76,7 +76,7 @@
       </section>
 
       <section title="Protocol Specification">
-        <t><xref target="asn_one"/> specifies all relevant parts of the protocol in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are DER encoded, if not otherwise specified.</t>
+        <t><xref target="asn_one"/> specifies all relevant parts of the protocol in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are DER-encoded, if not otherwise specified.</t>
       </section>
 
       <section title="Number Specification">
@@ -88,7 +88,7 @@
       <t>The following entities used in this document are defined below.</t>
 
       <section anchor="entities_node" title="Node">
-        <t>The term 'node' describes any computer system connected to other nodes, which support the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or other transport protocol identity supporting the MessageVortex protocol. Any address SHOULD include a public part of an 'identity key' to allow messages to transmit safely. One or more addresses MAY belong to the same node.</t>
+        <t>The term 'node' describes any computer system connected to other nodes, which support the MessageVortex protocol. A 'node address' is typically an email address, an XMPP address, or other transport protocol identity supporting the MessageVortex protocol. Any address SHOULD include a public part of an 'identity key' to allow messages to transmit safely. One or more addresses MAY belong to the same node.</t>
 
         <section anchor="entities_blocks" title="Blocks">
           <t>A 'block' represents an ASN.1 sequence in a transmitted message. We embed messages in the transport protocol, and these messages may be of any size.</t>
@@ -134,7 +134,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
         <t>This document refers to two or more message sending or receiving entities as peer partners. One partner sends a message, and all others receive one or more messages. Peer partners are message specific, and each partner always connects directly to a node.</t>
       </section>
 
-      <section anchor="entities_keys" title="Encryption keys">
+      <section anchor="entities_keys" title="Encryption Keys">
         <t>Several keys are required for a Vortex message. For identities and ephemeral identities (see below), we use asymmetric keys, while symmetric keys are used for message encryption.</t>
 
         <section anchor="entities_node_identity" title="Identity Keys">
@@ -176,7 +176,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
       </section>
 
       <section anchor="entities_message" title="Message">
-        <t>A message is content to be transmitted from a single sender to a recipient. The sender uses a routing block either built itself or provided by the receiver to perform the transmission. While a message may be anonymous, there are different degrees of anonymity as described by the following.</t>
+        <t>A message is content to be transmitted from a single sender to a recipient. The sender uses a routing block either built by themself or provided by the receiver to perform the transmission. While a message may be anonymous, there are different degrees of anonymity as described in the following.</t>
 
         <t><list style="symbols">
             <t>If the sender of a message is not known to anyone else except the sender, then this degree is referred to as 'sender anonymity.'</t>
@@ -188,7 +188,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             <t>If a sender or a receiver may be determined as one of a set of &lt;k&gt; entities, then it is referred to as k-anonymity<xref target="KAnon"/>.</t>
           </list></t>
 
-        <t>A message is always MIME encoded as specified in <xref target="RFC2045"/>.</t>
+        <t>A message is always MIME-encoded as specified in <xref target="RFC2045"/>.</t>
       </section>
 
       <section anchor="keys" title="Key and MAC specifications and usage">
@@ -217,7 +217,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
         <section anchor="symmetricKey" title="Symmetric Keys">
           <t>Nodes use symmetric keys for encrypting payloads and control blocks. These symmetric keys MUST contain a key type specifying a key, which MUST be in an encoded form.</t>
 
-          <t>A node MUST provide a keySize parameter if the key (or, equivalently, the block) size is not standardized or encoded in the name. All symmetric key specifications MUST contain a mode and padding parameter. A node MAY list multiple padding or mode parameters in a ReplyCapability block to offer the recipient a free choice.</t>
+          <t>A node MUST provide a keySize parameter if the key (or equivalently, the block) size is not standardized or encoded in the name. All symmetric key specifications MUST contain a mode and padding parameter. A node MAY list multiple padding or mode parameters in a ReplyCapability block to offer the recipient a free choice.</t>
         </section>
       </section>
 
@@ -285,7 +285,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
       </section>
 
       <section anchor="entities_version" title="Protocol Version">
-        <t>This Document describes the version 1 of the protocol. The message PrefixBlock contains an optional version indicator. If absent protocol version 1 should be assumed.</t>
+        <t>This document describes version 1 of the protocol. The message PrefixBlock contains an optional version indicator. If absent protocol version 1 should be assumed. %FIXME something is missing here</t>
       </section>
     </section>
 
@@ -322,7 +322,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
       </section>
 
       <section anchor="layer_overview_blending" title="Blending Layer">
-        <t>The blending layer embeds blended Vortex Message into the transport layer data stream and extracts the packets from the transport layer.</t>
+        <t>The blending layer embeds blended Vortex message into the transport layer data stream and extracts the packets from the transport layer.</t>
       </section>
 
       <section anchor="layer_overview_routing" title="Routing Layer">
@@ -336,7 +336,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
 
     <section title="Vortex Message">
       <section title="Overview">
-        <t><xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks, and the three or four-letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key, and sk_p is the symmetric peer key. The receiving node obtains this key by decrypting MPREFIX with its host key k_h. Then, sk_s is the symmetric sender key. When decrypting the MPREFIX block, the node obtains this key. The sender key protects the header and routing blocks by guaranteeing the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message, including its structure, from third-party observers. <figure anchor="fig_message_overview" title="Vortex message overview">
+        <t><xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks, and the three- or four-letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key, and sk_p is the symmetric peer key. The receiving node obtains this key by decrypting MPREFIX with its host key k_h. Then, sk_s is the symmetric sender key. When decrypting the MPREFIX block, the node obtains this key. The sender key protects the header and routing blocks by guaranteeing that the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message, including its structure, from third-party observers. <figure anchor="fig_message_overview" title="Vortex message overview">
             <artwork align="center" type="ascii-art"><![CDATA[
 +-+---+-+-+---+-+---+-+-+---+-+-+-+-------+-+
 | |   | | | | C | | |   | | | R | |       | |
@@ -442,7 +442,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
         <t>A node MUST support the following asymmetric ciphers.</t>
 
         <t><list style="symbols">
-            <t>RSA with key sizes greater or equal to 2048 (<xref target="RFC8017"/>).</t>
+            <t>RSA with key sizes larger or equal to 2048 (<xref target="RFC8017"/>).</t>
 
             <t>ECC with named curves secp384r1, sect409k1 or secp521r1 (see <xref target="SEC1"/>).</t>
           </list></t>
@@ -532,9 +532,9 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
 		<t>A routing block builder (RBB) MUST take care of sizing restrictions of the transport layer when composing routing blocks</t>
 
         <section anchor="blending_general_plain" title="PLAIN embedding into attachments">
-          <t>A blending layer embeds a VortexMessage in a carrier file with an offset for PLAIN blending. For replacing a file start, a node MUST          use the offset 0. The routing node MUST choose the payload file for the message and SHOULD use a credible payload type (e.g., MIMEtype) with high entropy. Furthermore, it SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. Finally, a routing node SHOULD use a valid footer, if any, to a payload file to improve blending.</t>
+          <t>A blending layer embeds a VortexMessage in a carrier file with an offset for PLAIN blending. For replacing a file start, a node MUST use the offset 0. The routing node MUST choose the payload file for the message and SHOULD use a credible payload type (e.g., MIMEtype) with high entropy. Furthermore, it SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. Finally, a routing node SHOULD use a valid footer, if any, to a payload file to improve blending.</t>
 
-          <t>The blended Vortex message is embedded in one or more message chunks, each starting with a chunk header. The chunk header consists of two unsigned integers of variable length. The integer starts with the LSB, and if bit 7 is set, then there is another byte following.           There cannot be more than four bytes where the last, fourth byte is always 8 bit. The three preceding bytes have a payload of seven bits each, which results in a maximum number of 2^29 bits. The first of the extracted numbers (modulo remaining document bytes starting from the first and including byte of the chunk header) reflect the number of bytes in the chunk after the chunk header. The second contains the number of bytes (again modulo remaining document bytes) to be skipped after the current chunk to reach the next chunk. There exists no "last chunk" indicator. And a gap or chunk may surpass the end of the file.</t>
+          <t>The blended Vortex message is embedded in one or more message chunks, each starting with a chunk header. The chunk header consists of two unsigned integers of variable length. The integer starts with the LSB, and if bit 7 is set, then another byte follows.           There cannot be more than four bytes whereas the last, fourth byte is always 8 bit. The three preceding bytes have a payload of seven bits each, which results in a maximum number of 2^29 bits. The first of the extracted numbers (modulo remaining document bytes starting from the first and including byte of the chunk header) reflect the number of bytes in the chunk after the chunk header. The second contains the number of bytes (again modulo remaining document bytes) to be skipped after the current chunk to reach the next chunk. There is no "last chunk" indicator. A gap or chunk may surpass the end of the file.</t>
 
           <t><figure>
               <artwork type="ascii-art"><![CDATA[
@@ -551,7 +551,7 @@ Result:  0A 13 (+ 494 omitted bytes; then skip 12 bytes to next chunk)
 
           <t>A node SHOULD offer at least one PLAIN blending method and MAY offer multiple offsets for incoming Vortex messages.</t>
 
-          <t>A plain blending is specified as the following.</t>
+          <t>A plain blending is specified as follows.</t>
 
           <t><figure>
               <artwork type="abnf"><![CDATA[
@@ -579,17 +579,17 @@ f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
       <section anchor="blending_smtp" title="Blending into an SMTP layer">
         <t>Email messages with content MUST be encoded with Multipurpose Internet Mail Extensions (MIME) as specified in <xref target="RFC2045"/>. All nodes MUST support BASE64 encoding and MUST test all sections of a MIME message for the presence of a VortexMessage.</t>
 
-        <t>A vortex message is present if a block containing the peer key at the known offset of any MIME part decodes correctly.</t>
+        <t>A Vortex message is present if a block containing the peer key at the known offset of any MIME part decodes correctly.</t>
 
-        <t>A node SHOULD support SMTP blending for sending and receiving. For sending SMTP, the specification in <xref target="RFC5321"/> must be      used. TLS layers MUST always be applied when obtaining messages using   POP3 (as specified in <xref target="RFC1939"/> and <xref target="RFC2595"/>) or IMAP (as specified in <xref target="RFC3501"/>). Any SMTP connection MUST employ a TLS encryption when passing credentials.</t>
+        <t>A node SHOULD support SMTP-blending for sending and receiving. For sending SMTP, the specification in <xref target="RFC5321"/> must be      used. TLS layers MUST always be applied when obtaining messages using   POP3 (as specified in <xref target="RFC1939"/> and <xref target="RFC2595"/>) or IMAP (as specified in <xref target="RFC3501"/>). Any SMTP connection MUST employ a TLS encryption when passing credentials.</t>
       </section>
 
       <section anchor="blending_xmpp" title="Blending into an XMPP layer">
-        <t>For interoperability, an implementation SHOULD provide XMPP blending.</t>
+        <t>For interoperability, an implementation SHOULD provide XMPP-blending.</t>
 
         <t>Blending into XMPP traffic is performed using the <xref target="XEP-0231"/> extension of the XMPP protocol.</t>
 
-        <t>PLAIN and F5 blending are acceptable for this transport layer.</t>
+        <t>PLAIN- and F5-blending are acceptable for this transport layer.</t>
       </section>
     </section>
 
@@ -601,9 +601,9 @@ f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
           <t>For an unauthenticated message, the following rules apply.</t>
 
           <t><list style="symbols">
-              <t>A node MUST ignore all Routing blocks.</t>
+              <t>A node MUST ignore all routing blocks.</t>
 
-              <t>A node MUST ignore all Payload blocks.</t>
+              <t>A node MUST ignore all payload blocks.</t>
 
               <t>A node SHOULD accept identity creation requests in unauthenticated messages.</t>
 
@@ -626,7 +626,7 @@ f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
               <t>A node SHOULD add all payload blocks to the workspace.</t>
             </list></t>
 
-          <t>A routing node MUST decrement the message quota by one if a          received message is authenticated, valid, and contains at least one payload block. If a message is identified as duplicate according to reply protection, then a node MUST NOT decrement the message quota.</t>
+          <t>A routing node MUST decrement the message quota by one if a          received message is authenticated, valid, and contains at least one payload block. If a message is identified as a duplicate according to reply protection, then a node MUST NOT decrement the message quota.</t>
 
           <t>The message processing works according to the pseudo-code shown below.
           <figure>
@@ -703,7 +703,7 @@ function incomming_message(VortexMessage blendedMessage) {
           <t>A routing workspace consists of the following items.</t>
 
           <t><list style="symbols">
-              <t>The identity linked to, which determines the lifetime of the workspace.</t>
+              <t>The linked identity, which determines the lifetime of the workspace.</t>
 
               <t>The linked routing combos (RoutingCombo).</t>
 
@@ -747,7 +747,7 @@ function incomming_message(VortexMessage blendedMessage) {
 
         <section anchor="routing_outgoing"
                  title="Processing of Outgoing Vortex Messages">
-          <t>The blending layer MUST compose a transport layer message according to the specification provided in the routing combo. It SHOULD choose any decoy message or steganographic carrier in such a way that the dead parrot syndrome, as specified in <xref target="DeadParrot"/>, is avoided.</t>
+          <t>The blending layer MUST compose a transport layer message according to the specification provided in the routing combo. It SHOULD choose any decoy message or steganographic carrier in such a way that the Dead Parrot syndrome, as specified in <xref target="DeadParrot"/>, is avoided.</t>
         </section>
       </section>
 
@@ -759,7 +759,7 @@ function incomming_message(VortexMessage blendedMessage) {
 
           <t>If a node accepts an identity creation request, then it MUST send a reply. A node accepting a request without a requirement MUST send back a special block containing "no error". A node accepting a request under the precondition of a requirement to be fulfilled MUST send a special block containing a requirement block.</t>
 
-          <t>A node SHOULD NOT reply to any clear-text requests if the node does not want to disclose its identity as a Vortex node officially. A node MUST reply with an error block if a valid identity is used for the request.</t>
+          <t>A node SHOULD NOT reply to any cleartext requests if the node does not want to officially disclose its identity as a Vortex node. A node MUST reply with an error block if a valid identity is used for the request.</t>
         </section>
 
         <section anchor="routing_header_req_msg_quota" title="Request Message Quota">
@@ -789,9 +789,9 @@ function incomming_message(VortexMessage blendedMessage) {
         </section>
 
         <section anchor="routing_header_req_cap" title="Request Capabilities">
-          <t>Any node MAY request the capabilities of another node, which include all information necessary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.</t>
+          <t>Any node MAY request the capabilities of another node, which include all information necessary to create a parsable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.</t>
 
-          <t>A node SHOULD NOT reply to clear-text requests if the node does not want to disclose its identity as a Vortex node officially. A node MUST reply if a valid identity is used for the request, and it MAY reply to unknown identities.</t>
+          <t>A node SHOULD NOT reply to cleartext requests if the node does not want to officially disclose its identity as a Vortex node. A node MUST reply if a valid identity is used for the request, and it MAY reply to unknown identities.</t>
         </section>
 
         <section anchor="routing_header_req_nodes" title="Request Nodes">
@@ -808,7 +808,7 @@ function incomming_message(VortexMessage blendedMessage) {
         </section>
 
         <section anchor="routing_header_req_upgrade" title="Request Upgrade">
-          <t>This request type allows a node to request a new version of the software in an anonymous, unliked manor. The identifier MUST identify the software product uniquely. The version MUST reflect the version tag of the currently installed version or a similarly usable tag.</t>
+          <t>This request type allows a node to request a new version of the software in an anonymous, unlinked manor. The identifier MUST identify the software product uniquely. The version MUST reflect the version tag of the currently installed version or a similarly usable tag.</t>
         </section>
       </section>
 
@@ -820,22 +820,22 @@ function incomming_message(VortexMessage blendedMessage) {
         </section>
 
         <section anchor="routing_special_requirement" title="Requirement Block">
-          <t>If a node is receiving a requirement block, then it MUST assume that the request block is accepted, is not yet processed, and is to be processed if it meets the contained requirement. A node MUST process a request as soon as the requirement is fulfilled and MUST resend the request as soon as it meets the requirement.</t>
+          <t>If a node receives a requirement block, then it MUST assume that the request block is accepted, is not yet processed, and is to be processed if it meets the contained requirement. A node MUST process a request as soon as the requirement is fulfilled and MUST resend the request as soon as it meets the requirement.</t>
 
           <t>A node MAY reject a request, accept a request without a requirement, accept a request upon payment (RequirementPaymentRequired), or accept a request upon solving a proof of work puzzle (RequirementPuzzleRequired).</t>
 
           <section anchor="routing_special_requirement_puzzle" title="Puzzle Requirement">
-            <t>If a node requests a puzzle, then it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved if the node receiving the puzzle is replying with a header block that contains the puzzle block, and the hash of the encoded block begins with the bit sequence mentioned in the puzzle within the period specified in the field 'valid.'</t>
+            <t>If a node requests a puzzle, then it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved if the node receiving the puzzle replies with a header block that contains the puzzle block, and the hash of the encoded block begins with the bit sequence mentioned in the puzzle within the period specified in the field 'valid.'</t>
 
             <t>A node solving a puzzle requires sending a VortexMessage to the requesting node, which MUST contain a header block that includes the puzzle block and MUST have a MAC fingerprint starting with the bit sequence as specified in the challenge. The receiving node calculates the MAC from the unencrypted DER-encoded HeaderBlock with the algorithm specified by the node. The sending node may achieve the requirement by adding a proofOfWork field to the HeaderBlock containing any content fulfilling the criteria. The sending node SHOULD keep the proofOfWork field as short as possible.</t>
           </section>
 
           <section anchor="routing_special_requirement_payment" title="Payment Requirement">
-            <t>If a node requests a payment, then it MUST send a RequirementPaymentRequired block. As soon as the requested fee is paid and confirmed, the requesting node MUST send a "no error" status message. The usage period 'valid' describes the period during which the payment may be carried out. A node MUST accept the payment if occurring within the 'valid' period but confirmed later. A node SHOULD return all unsolicited payments to the sending address.</t>
+            <t>If a node requests a payment, then it MUST send a RequirementPaymentRequired block. As soon as the requested fee is paid and confirmed, the requesting node MUST send a "no error" status message. The usage period 'valid' describes the period during which the payment may be carried out. A node MUST accept the payment if it occurs within the 'valid' period but is confirmed later. A node SHOULD return all unsolicited payments to the sending address.</t>
           </section>
 
           <section anchor="routing_special_upgrade" title="Upgrade">
-            <t>If a node requests an upgrade a ReplyUpgrade block MAY be sent. The block must contain the identifier and version of the most recent software version. The blob MAY contain the software if there is a newer one available.</t>
+            <t>If a node requests an upgrade, a ReplyUpgrade block MAY be sent. The block must contain the identifier and version of the most recent software version. The blob MAY contain the software if there is a newer one available.</t>
           </section>
         </section>
       </section>
@@ -867,7 +867,7 @@ function incomming_message(VortexMessage blendedMessage) {
               <t>If an absolute value is greater than the number of bytes in a block, then all bytes are mapped to the respective target block, and the other target block becomes a zero byte-sized block.</t>
             </list></t>
 
-          <t>An operation MUST fail if relative values are equal to, or less than, zero. An operation MUST fail if a relative value is equal to, or greater than, 100. All floating-point operations must be performed according to <xref target="IEEE754"/> and in 64-bit precision.</t>
+          <t>An operation MUST fail if relative values are equal to, or less than zero. An operation MUST fail if a relative value is equal to, or greater than 100. All floating-point operations must be performed according to <xref target="IEEE754"/> and in 64-bit precision.</t>
         </section>
 
         <section anchor="routing_operations_crypt" title="Encrypt and Decrypt Operations">
@@ -888,7 +888,7 @@ function incomming_message(VortexMessage blendedMessage) {
           <t>The following sections describe the order of the operations within an addRedundancy operation. For a removeRedundancy operation, invert the functions and order. If the removeRedundancy has more than the required blocks to recover the information, then it should take only the required number beginning from the smallest. If a seed and PRNG are provided, then the removeRedundancy operation MAY test any combination until recovery is successful.</t>
 
           <section anchor="routing_operations_redundancy_padding" title="Padding Operation">
-            <t>Padding is done in multiple steps. First, we calculate the padding value p. We then concatenate the padding value p as 32-bit little-endian uint with the message and fill the remaining bytes required with the seeded PRNG.</t>
+            <t>Padding is done in multiple steps. First, we calculate the padding value p. We then concatenate the padding value p as 32-bit little-endian unit with the message and fill the remaining bytes required with the seeded PRNG.</t>
 
             <t>A processing node calculates the final length of all payload blocks, including redundancy. This is done in three steps, followed by the calculation of the padding value p. 
 			<list style="numbers">
@@ -966,8 +966,8 @@ function incomming_message(VortexMessage blendedMessage) {
       </section>
     </section>
 
-    <section anchor="Acknowledgments" title="Acknowledgments">
-      <t>Thanks go to my family who supported me with patience and countless hours as well as to Mark Zeman for his feedback challenging my thoughts and peace.</t>
+    <section anchor="Acknowledgments" title="Acknowledgments"><!--FIXME check location -->
+      <t>Thanks go to my family who supported me with patience and countless hours as well as to Mark Zeman for his feedback challenging my thoughts and peace. %FIXME is this in the correct place?</t>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -999,15 +999,15 @@ function incomming_message(VortexMessage blendedMessage) {
 
       <t>These aspects are affected by the usage of the protocol, and the following sections provide additional information on how they impact the primary goals.</t>
 
-      <t>The Vortex protocol does not rely on any encryption of the transport layer since Vortex messages are already encrypted. Also, confidentiality is not affected by the protection mechanisms of the transport layer.</t>
+      <t>The Vortex protocol does not rely on any encryption of the transport layer since Vortex messages are already encrypted. In addition, confidentiality is not affected by the protection mechanisms of the transport layer.</t>
 
       <t>If a transport layer supports encryption, then a Vortex node SHOULD use it to improve the privacy of the message.</t>
 
-      <t>Anonymity is affected by the inner workings of the blending layer in many ways. A Vortex message cannot be read by anyone except the peer nodes and routing block builder. The presence of a Vortex node message may be detected through the typical high entropy of an encrypted file, broken structures of a carrier file, a meaningless content of a carrier file, or the contextless communication of the transport layer with its peer partner. A blending layer SHOULD minimize the possibility of simple detection by minimizing these effects.</t>
+      <t>Anonymity is affected by the inner workings of the blending layer in many ways. A Vortex message cannot be read by anyone except the peer nodes and routing block builder. The presence of a Vortex node message may be detected through the typical high entropy of an encrypted file, broken structures of a carrier file, meaningless content of a carrier file, or the contextless communication of the transport layer with its peer partner. A blending layer SHOULD minimize the possibility of simple detection by minimizing these effects.</t>
 
-      <t>A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures such that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 instead of PLAIN blending. This approach, however, increases the protocol overhead by approximately tenfold.</t>
+      <t>A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures such that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 instead of PLAIN blending. This approach however, increases the protocol overhead by approximately tenfold.</t>
 
-      <t>The two layers of 'routing' and 'accounting' have the deepest insight into a Vortex message's inner working. Each knows the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations, a node can never know if a malfunction (e.g., during a recovery calculation) was intended. Therefore, a node is unable to distinguish a failed transaction from a terminated transaction as well as content from decoy traffic.</t>
+      <t>The two layers of 'routing' and 'accounting' have the deepest insight into a Vortex message's inner workings. Each is aware of the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations, a node can never know if a malfunction (e.g., during a recovery calculation) was intended. Therefore, a node is unable to distinguish a failed transaction from a terminated transaction as well as content from decoy traffic.</t>
 
       <t>A routing block builder SHOULD follow the following rules not to compromise a Vortex message's anonymity.</t>
 
@@ -1025,9 +1025,9 @@ function incomming_message(VortexMessage blendedMessage) {
           <t>A routing block SHOULD be used for a limited number of messages. If used as a message block for the node, then it should be used only once. A block builder SHOULD use the HeaderRequestReplaceIdentity block to update the reply to routing blocks regularly. Implementers should always remember that the same routing block is identifiable by its structure.</t>
         </list></t>
 
-      <t>An active adversary cannot use blocks from other routing block builders. While the adversary may falsify the result by injecting an incorrect message chunk or not sending a message, such message disruptions may be detected by intentionally routing information to the routing block builder (RBB) node. If the Vortex message does not carry the information expected, then the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time and MAY build redundancy paths into a routing block to withstand such malicious nodes.</t>
+      <t>An active adversary cannot use blocks from other routing block builders. While the adversary may falsify the result by injecting an incorrect message chunk or not sending a message, such message disruptions may be detected by intentionally routing information to the routing block builder (RBB) node. If the Vortex message does not carry the information expected, then the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate the reputation for involved nodes over time and MAY build redundancy paths into a routing block to withstand such malicious nodes.</t>
 
-      <t>Receiver anonymity is at risk if the handling of the message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM header) to deanonymize a recipient. Careful attention is required when handling anything other than local references when processing, verifying or rendering a message.</t>
+      <t>Receiver anonymity is at risk if the handling of the message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM header) to de-anonymize a recipient. Careful attention is required when handling anything other than local references when processing, verifying or rendering a message.</t>
     </section>
   </middle>
 
@@ -1081,9 +1081,9 @@ function incomming_message(VortexMessage blendedMessage) {
 
       <reference anchor="ISO-10118-3">
         <front>
-          <title>ISO/IEC 10118-3:2004 -- Information technology -- Security
-          techniques -- Hash-functions -- Part 3: Dedicated
-          hash-functions</title>
+          <title>ISO/IEC 10118-3:2004 -- Information Technology -- Security
+          Techniques -- Hash-Functions -- Part 3: Dedicated
+          Hash-Functions</title>
 
           <author>
             <organization>International Organization for Standardization</organization>
@@ -1109,7 +1109,7 @@ function incomming_message(VortexMessage blendedMessage) {
 
       <reference anchor="CCITT.X680.2002">
         <front>
-          <title>Abstract Syntax Notation One (ASN.1): Specification of basic notation</title>
+          <title>Abstract Syntax Notation One (ASN.1): Specification of Basic Notation</title>
 
           <author>
             <organization>International Telephone and Telegraph Consultative Committee</organization>
@@ -1183,7 +1183,7 @@ function incomming_message(VortexMessage blendedMessage) {
 
       <reference anchor="EAX">
         <front>
-          <title>The EAX mode of operation</title>
+          <title>The EAX Mode of Operation</title>
 
           <author initials="M." surname="Bellare"/>
 
