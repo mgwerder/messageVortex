@@ -48,7 +48,7 @@ public class MessageVortexRouting extends AbstractDaemon implements BlendingRece
    * @return the previously set sender
    */
   public final BlendingSender setRoutingSender(BlendingSender routingSender) {
-    BlendingSender ret = routingSender;
+    BlendingSender ret = this.routingSender;
     this.routingSender = routingSender;
     return ret;
   }

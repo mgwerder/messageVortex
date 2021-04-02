@@ -29,6 +29,7 @@ import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.imap.ImapClient;
 import net.messagevortex.transport.imap.ImapCommand;
+import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapServer;
 import org.junit.Test;
@@ -197,7 +198,7 @@ public class ImapClientTest {
       assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
       assertFalse("Did wait too long", el > 2100);
     }
-    ImapCommand.deregisterCommand("IWantATimeout");
+    ImapCommandFactory.deregisterCommand("IWantATimeout");
     ict.shutdown();
     try {
       ic.shutdown();

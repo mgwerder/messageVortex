@@ -299,7 +299,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
     } else if (type == UsagePeriodType.RELATIVE) {
       sb.append(prefix).append("  relative [");
     } else {
-      sb.append(prefix).append("  /* UNKNOWN: " + type + " */").append(CRLF);
+      sb.append(prefix).append("  /* UNKNOWN: ").append(type).append(" */").append(CRLF);
     }
     sb.append(type.getId()).append("] {").append(CRLF);
     final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss");
@@ -307,7 +307,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
     if (notBefore != -1) {
       sb.append(prefix).append("    notBefore ");
       if (type == UsagePeriodType.ABSOLUTE) {
-        sb.append("\"").append(sdf.format(notBefore)).append("Z\"");
+        sb.append('"').append(sdf.format(notBefore)).append("Z\"");
       } else {
         sb.append((notBefore - reference.getTime()) / 1000L);
       }
@@ -316,13 +316,13 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
     if (notAfter != -1) {
       sb.append(prefix).append("    notAfter  ");
       if (type == UsagePeriodType.ABSOLUTE) {
-        sb.append("\"").append(sdf.format(notAfter)).append("Z\"");
+        sb.append('"').append(sdf.format(notAfter)).append("Z\"");
       } else {
         sb.append((notAfter - reference.getTime()) / 1000L);
       }
       sb.append(CRLF);
     }
-    sb.append(prefix).append("  ").append("}").append(CRLF);
+    sb.append(prefix).append("  ").append('}').append(CRLF);
     sb.append(prefix).append('}');
     return sb.toString();
   }

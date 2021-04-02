@@ -1,27 +1,5 @@
 package net.messagevortex.router;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -31,29 +9,51 @@ import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.RoutingCombo;
 
-/**
- * Created by martin.gwerder on 06.06.2016.
- */
 public class SimpleMessageFactory extends MessageFactory {
-  
+
   private static final java.util.logging.Logger LOGGER;
-  
+
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
-  
+
   /* Edge set to be honored */
-  private GraphSet graph = new GraphSet();
-  
+  private final GraphSet graph = new GraphSet();
+
   /* number of s for the graph to be completed */
   private long minMessageTransferStart = 180L;
-  
+
   /* number of s for the graph to be completed */
   private long maxMessageTransferTime = 1800L;
-  
+
   /* number of s between arrival the first sending time */
   private long minStepProcessSTime = 30L;
-  
+
+  /***
+   * <p>Build a message with the specified parameters.</p>
+   *
+   * @param msg the message to be embedded
+   * @param source the indes of the source identity
+   * @param target the index of the target identity
+   * @param anonGroupMembers a set of all available targets in the group set
+   * @param is the identity store to be used
+   * @return the built message wrapped in a message factory
+   */
+  public static MessageFactory buildMessage(String msg, int source, int target,
+                                            IdentityStoreBlock[] anonGroupMembers,
+                                            IdentityStore is) {
+
+    MessageFactory fullmsg = new SimpleMessageFactory(msg, source, target, anonGroupMembers, is);
+
+    // selecting hotspot
+    fullmsg.hotspot = anonGroupMembers[ExtendedSecureRandom.nextInt(anonGroupMembers.length)];
+
+    fullmsg.build();
+
+    return fullmsg;
+  }
+
+
   /***
    * <p>A simple message factory creating a possibly redundant message path.</p>
    * @param msg     the message to be used
@@ -65,12 +65,12 @@ public class SimpleMessageFactory extends MessageFactory {
   public SimpleMessageFactory(String msg, int source, int target,
                               IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
     this.msg = msg;
-    
+
     graph.setAnonymitySet(anonGroupMembers);
     graph.setSource(anonGroupMembers[source]);
     graph.setTarget(anonGroupMembers[target]);
   }
-  
+
   /***
    * <p>build a simple message path.</p>
    */
@@ -78,7 +78,7 @@ public class SimpleMessageFactory extends MessageFactory {
     // building vector graphs
     // minimum Graph size is 2.5 time edges
     int numberOfGraphs = (int) (graph.getAnonymitySetSize() * 2.5);
-    
+
     // create graph until minimum size is reached and target graph get message
     LOGGER.log(Level.FINE, "Create graph");
     while (graph.size() < numberOfGraphs || !graph.allTargetsReached()) {
@@ -92,7 +92,7 @@ public class SimpleMessageFactory extends MessageFactory {
       }
       graph.add(new Edge(from, to, graph.size(), 0));
     }
-    
+
     // set times (all times in seconds)
     LOGGER.log(Level.FINE, "Assigning time to graph");
     long minArrival = 0;
@@ -102,41 +102,42 @@ public class SimpleMessageFactory extends MessageFactory {
       long maxRemainingTime = maxMessageTransferTime - maxArrival; // OK
       int remainingHops = graph.size() - i; //OK
       LOGGER.log(Level.FINEST, "calculating timing for minArival=" + minArrival
-              + "/maxArrival=" + maxArrival + "/remainingTime=" + maxRemainingTime
-              + "/remainingHps=" + remainingHops);
+          + "/maxArrival=" + maxArrival + "/remainingTime=" + maxRemainingTime
+          + "/remainingHps=" + remainingHops);
       long maxShare = maxRemainingTime - remainingHops * minStepProcessSTime - 2;
       long share = Math.max(1, maxShare / remainingHops);
       maxShare = Math.max(2, maxShare);
       LOGGER.log(Level.FINEST, "calculated shares are maxShare=" + maxShare + "/share=" + share);
-      assert maxShare > 0 : "maxShare is negative (" + maxShare + ")";
       assert share > 0 : "share is negative (" + share + ")";
-      long minTime = (long) (ExtendedSecureRandom.nextRandomTime(minArrival, minArrival + share
-              + 1, minArrival + maxShare + 2));
+      long minTime = (long) (ExtendedSecureRandom.nextRandomTime(
+          minArrival + minMessageTransferStart, minArrival + share + 1,
+          minArrival + maxShare + 2));
       maxRemainingTime = maxMessageTransferTime - minTime; // OK
       maxShare = maxRemainingTime - remainingHops * minStepProcessSTime - 2;
       share = Math.max(1, maxShare / remainingHops);
       maxShare = Math.max(2, maxShare);
       long maxTime = (long) (ExtendedSecureRandom.nextRandomTime(minTime, minTime + share + 1,
-              minTime + maxShare + 2));
+          minTime + maxShare + 2));
       Edge g = graph.get(i);
       g.setStartTime(minArrival - minTime);
       g.setDelayTime(maxTime - minTime);
       maxArrival = maxTime + minStepProcessSTime;
       minArrival = minTime + minStepProcessSTime;
     }
-    
+
     // select operations
     return buildRoutingBlock();
   }
-  
+
   private RoutingCombo buildRoutingBlock() {
+    // FIXME incomplete
     // determine message route
-    GraphSet[] gs = graph.getRoutes();
-    GraphSet msgpath = gs[ExtendedSecureRandom.nextInt(gs.length)];
-    
+    //GraphSet[] gs = graph.getRoutes();
+    //GraphSet msgpath = gs[ExtendedSecureRandom.nextInt(gs.length)];
+
     return graph.getRoutingBlock();
   }
-  
+
   /***
    * <p>Sets the maximum time allowed to transfer the message to the final destination.</p>
    *
@@ -148,7 +149,7 @@ public class SimpleMessageFactory extends MessageFactory {
     maxMessageTransferTime = newmax;
     return ret;
   }
-  
+
   /***
    * <p>Sets the minimum time required to process a message in a node.</p>
    *
@@ -161,7 +162,20 @@ public class SimpleMessageFactory extends MessageFactory {
     minStepProcessSTime = newmin;
     return ret;
   }
-  
+
+  /***
+   * <p>Sets the minimum time required to process a message in a node.</p>
+   *
+   * <p>This time includes anti-malware related processing or anti-UBE related actions.</p>
+   * @param newmin the new time in seconds to be set
+   * @return the previously set time
+   */
+  public long getMinMessageTransferStart(long newmin) {
+    long ret = minMessageTransferStart;
+    minMessageTransferStart = newmin;
+    return ret;
+  }
+
   /***
    * <p>Gets the previously built message path.</p>
    * @return the message path or null if the previous build has failed
@@ -169,7 +183,7 @@ public class SimpleMessageFactory extends MessageFactory {
   public GraphSet getGraph() {
     return graph;
   }
-  
+
   /***
    * <p>This is a test methode sheduled to be removed.</p>
    *
@@ -190,5 +204,5 @@ public class SimpleMessageFactory extends MessageFactory {
     smf.build();
     LOGGER.log(Level.INFO, "done building");
   }
-  
+
 }

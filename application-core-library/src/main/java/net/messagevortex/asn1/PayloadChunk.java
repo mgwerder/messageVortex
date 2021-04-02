@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
-
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1EncodableVector;
@@ -137,7 +136,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
    */
   public final byte[] setPayload(byte[] b) {
     byte[] opl = payload;
-    if ( b!= null) {
+    if (b != null) {
       payload = Arrays.copyOf(b, b.length);
     } else {
       payload = null;
@@ -170,7 +169,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
    */
   public final byte[] setReplyBlock(byte[] reply) {
     byte[] opl = payload;
-    payload = Arrays.copyOf(reply,reply.length);
+    payload = Arrays.copyOf(reply, reply.length);
     payloadType = PayloadType.REPLY;
     return opl;
   }
@@ -198,7 +197,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
    * @return the previously set usage period
    */
   public final UsagePeriod setUsagePeriod(UsagePeriod period) {
-    UsagePeriod ret = period;
+    UsagePeriod ret = this.period;
     this.period = period;
     return ret;
   }
@@ -216,7 +215,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
       setReplyBlock(ASN1OctetString.getInstance(dto.getObject()).getOctets());
     } else {
       throw new IOException("got bad tag number (expected:" + PayloadType.REPLY.getId()
-              + " or " + PayloadType.PAYLOAD.getId() + ";got:" + dto.getTagNo() + ")");
+          + " or " + PayloadType.PAYLOAD.getId() + ";got:" + dto.getTagNo() + ")");
     }
   }
 
@@ -262,8 +261,8 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
       sb.append("reply ").append(toHex(payload)).append(CRLF);
     } else {
       throw new IOException("unable to determine payload type (expected:"
-              + PayloadType.REPLY.getId() + " or " + PayloadType.PAYLOAD.getId() + ";got:"
-              + payloadType + ")");
+          + PayloadType.REPLY.getId() + " or " + PayloadType.PAYLOAD.getId() + ";got:"
+          + payloadType + ")");
     }
     sb.append(prefix).append('}');
     return sb.toString();
@@ -299,7 +298,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
 
     try {
       return dumpValueNotation("", DumpType.ALL_UNENCRYPTED)
-              .equals(pl.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
+          .equals(pl.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
     } catch (IOException ioe) {
       return false;
     }

@@ -1,17 +1,31 @@
-\begin{tikzpicture}[ shorten <=0.5pt,
-	main/.style={draw,minimum width=0.5cm},child/.style={draw,minimum width=0.5cm}]		
-	\tikzstyle{level 1}=[sibling angle=25.71]
-	%\path(0,2000)
-
+\begin{tikzpicture}		
+	\tikzset{
+		double arrow/.style args={#1 colored by #2 and #3}{    
+			-latex,line width=#1,#2,
+			postaction={draw,-latex,#3,line width=(#1)/3,shorten <=(#1)/4,shorten >=4.5*(#1)/3},
+  		},
+		rounded/.style={rounded corners=3pt},	
+		shadowed/.style={general shadow={fill=nodeshadow,shadow xshift=\shadowshift,shadow yshift=\shadowshift}},
+ 		hexnode/.style={regular polygon,regular polygon sides=6,draw,fill=operationcolor,inner sep=0mm,minimum size=2mm]},
+		astyle/.style={-{Latex[length=2.5mm,width=1.5mm]},semithick},
+		%ostyle/.style={-{Latex[length=2.5mm,width=1.5mm]},thick,color=green},		
+		ostyle/.style={double arrow=2pt colored by black and green},		
+		knode/.style={rectangle,fill=nodecolor,draw=black,thick,inner sep=8pt,baseline=(current bounding box.center),shadowed,rounded},
+		nodestyle/.style={fill=nodecolor,rounded,anchor=center,shadowed},
+		main/.style={draw,minimum width=0.5cm},child/.style={draw,minimum width=0.5cm},
+	}
+	%\tikzstyle{level 1}=[sibling angle=25.71]
+	%\path(0,1000);
 	\node[main] (a) {
 		\begin{tikzpicture}
-			\node[] (n0) {0};
-			\node[right = of n0] (n1) {1};
-			\node[right = of n1] (n2) {2};
-			\node[right = of n2] (n3) {3};
-			\node[right = of n3] (n4) {4};
-			\node[right = of n4] (n5) {5};
-			\node[right = of n5] (n6) {6};
+			\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n0) {0};
+			\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n1) {1};
+			\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n2) {2};
+			\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n3) {3};
+			\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n4) {4};
+			\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n5) {5};
+			\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n6) {6};
+			\node[left = 0mm of n0] (nm0) {};
 			\node[below of=n0, node distance=5cm] (n0Ground) {};
 			\node[below of=n1, node distance=5cm] (n1Ground) {};
 			\node[below of=n2, node distance=5cm] (n2Ground) {};
@@ -19,6 +33,7 @@
 			\node[below of=n4, node distance=5cm] (n4Ground) {};
 			\node[below of=n5, node distance=5cm] (n5Ground) {};
 			\node[below of=n6, node distance=5cm] (n6Ground) {};
+			\node[below of=nm0,node distance=5cm] (nm0Ground) {};
 			% lines down
 			\draw (n0) -- (n0Ground);
 			\draw (n1) -- (n1Ground);
@@ -28,34 +43,39 @@
 			\draw (n5) -- (n5Ground);
 			\draw (n6) -- (n6Ground);
 			%arrows
-			\draw[-Latex] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
-			\draw[-Latex] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
-			\draw[-Latex] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
-			\draw[-Latex] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
-			\draw[-Latex] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
-			\draw[-Latex] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
-			\draw[-Latex] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
-			\draw[-Latex] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
-			\draw[-Latex] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
-			\draw[-Latex] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
-			\draw[-Latex] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
-			\draw[-Latex] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
-			\draw[-Latex] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+			\draw[astyle] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+			\draw[astyle] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+			\draw[astyle] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+			\draw[astyle] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+			\draw[astyle] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+			\draw[astyle] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+			\draw[astyle] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+			\draw[astyle] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+			\draw[astyle] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+			\draw[astyle] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+			\draw[astyle] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			% time arrow
+			\node[left = 1mm of n0] (n-1) {};
+			\node[below of=n-1, node distance=5cm] (n-1ground) {};
+			\draw[astyle,shorten <=25pt,shorten >=10pt] (n-1) -- (n-1ground) node[midway,sloped,above]{time};
 		\end{tikzpicture}
 	} ;
-	\node (1) at ($(a)+(0*180/5:17cm) $) [child] {
+	\node (1) at ($(a)+(-90+0*180/5:12.6cm) $) [child] {
 		\begin{tikzpicture}
-			\node[] (n0) {0};
-			\node[right = of n0] (n1) {1};
-			\node[right = of n1] (n2) {2};
-			\node[right = of n2] (n3) {3};
-			\node[right = of n3] (n4) {4};
-			\node[right = of n4] (n5) {5};
-			\node[right = of n5] (n6) {6};
+			\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n0) {0};
+			\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n1) {1};
+			\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n2) {2};
+			\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n3) {3};
+			\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n4) {4};
+			\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n5) {5};
+			\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n6) {6};
+			\node[left = 0mm of n0] (nm0) {};
 			\node[below of=n0, node distance=5cm] (n0Ground) {};
 			\node[below of=n1, node distance=5cm] (n1Ground) {};
 			\node[below of=n2, node distance=5cm] (n2Ground) {};
@@ -63,6 +83,7 @@
 			\node[below of=n4, node distance=5cm] (n4Ground) {};
 			\node[below of=n5, node distance=5cm] (n5Ground) {};
 			\node[below of=n6, node distance=5cm] (n6Ground) {};
+			\node[below of=nm0,node distance=5cm] (nm0Ground) {};
 			% lines down
 			\draw (n0) -- (n0Ground);
 			\draw (n1) -- (n1Ground);
@@ -72,34 +93,39 @@
 			\draw (n5) -- (n5Ground);
 			\draw (n6) -- (n6Ground);
 			%arrows
-			\draw[-Latex,thick,color=green] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
-			\draw[-Latex] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
-			\draw[-Latex] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
-			\draw[-Latex] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
-			\draw[-Latex] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
-			\draw[-Latex] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
-			\draw[-Latex] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
-			\draw[-Latex] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
-			\draw[-Latex] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
-			\draw[-Latex] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
-			\draw[-Latex] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
-			\draw[-Latex] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
-			\draw[-Latex] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			\draw[ostyle] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+			\draw[astyle] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+			\draw[astyle] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+			\draw[astyle] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+			\draw[astyle] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+			\draw[astyle] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+			\draw[astyle] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+			\draw[astyle] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+			\draw[astyle] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+			\draw[astyle] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+			\draw[astyle] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+			\draw[astyle] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			% time arrow
+			\node[left = 1mm of n0] (n-1) {};
+			\node[below of=n-1, node distance=5cm] (n-1ground) {};
+			\draw[astyle,shorten <=25pt,shorten >=10pt] (n-1) -- (n-1ground) node[midway,sloped,above]{time};
 		\end{tikzpicture}
 	};
-	\node (2) at ($(a)+(1*180/5:17cm) $) [child] {
+	\node (2) at ($(a)+(-84+1*180/5:17cm) $) [child] {
 		\begin{tikzpicture}
-			5			\node[] (n0) {0};
-			\node[right = of n0] (n1) {1};
-			\node[right = of n1] (n2) {2};
-			\node[right = of n2] (n3) {3};
-			\node[right = of n3] (n4) {4};
-			\node[right = of n4] (n5) {5};
-			\node[right = of n5] (n6) {6};
+			\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n0) {0};
+			\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n1) {1};
+			\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n2) {2};
+			\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n3) {3};
+			\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n4) {4};
+			\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n5) {5};
+			\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n6) {6};
+			\node[left = 0mm of n0] (nm0) {};
 			\node[below of=n0, node distance=5cm] (n0Ground) {};
 			\node[below of=n1, node distance=5cm] (n1Ground) {};
 			\node[below of=n2, node distance=5cm] (n2Ground) {};
@@ -107,6 +133,7 @@
 			\node[below of=n4, node distance=5cm] (n4Ground) {};
 			\node[below of=n5, node distance=5cm] (n5Ground) {};
 			\node[below of=n6, node distance=5cm] (n6Ground) {};
+			\node[below of=nm0,node distance=5cm] (nm0Ground) {};
 			% lines down
 			\draw (n0) -- (n0Ground);
 			\draw (n1) -- (n1Ground);
@@ -116,36 +143,41 @@
 			\draw (n5) -- (n5Ground);
 			\draw (n6) -- (n6Ground);
 			%arrows
-			\draw[-Latex] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
-			\draw[-Latex,thick,color=green] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
-			\draw[-Latex] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
-			\draw[-Latex] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
-			\draw[-Latex] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
-			\draw[-Latex] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
-			\draw[-Latex] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
-			\draw[-Latex,thick,color=green] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
-			\draw[-Latex] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
-			\draw[-Latex] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
-			\draw[-Latex] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
-			\draw[-Latex] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
-			\draw[-Latex] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
-			\draw[-Latex] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+			\draw[ostyle] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+			\draw[astyle] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+			\draw[astyle] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+			\draw[astyle] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+			\draw[astyle] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+			\draw[ostyle] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+			\draw[astyle] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+			\draw[astyle] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+			\draw[astyle] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+			\draw[astyle] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+			\draw[astyle] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+			\draw[astyle] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
 			% addon arrows
-			\draw[-Latex,thick,color=green] ($(n3)!0.15!(n3Ground)$)--($(n3)!0.50!(n3Ground)$);
+			\draw[ostyle] ($(n3)!0.15!(n3Ground)$)--($(n3)!0.50!(n3Ground)$);
+			% time arrow
+			\node[left = 1mm of n0] (n-1) {};
+			\node[below of=n-1, node distance=5cm] (n-1ground) {};
+			\draw[astyle,shorten <=25pt,shorten >=10pt] (n-1) -- (n-1ground) node[midway,sloped,above]{time};
 		\end{tikzpicture}
 	};
-	\node (3) at ($(a)+(2*180/5:17cm) $) [child] {
+	\node (3) at ($(a)+(-90+2*180/5:17cm) $) [child] {
 		\begin{tikzpicture}
-			\node[] (n0) {0};
-			\node[right = of n0] (n1) {1};
-			\node[right = of n1] (n2) {2};
-			\node[right = of n2] (n3) {3};
-			\node[right = of n3] (n4) {4};
-			\node[right = of n4] (n5) {5};
-			\node[right = of n5] (n6) {6};
+			\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n0) {0};
+			\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n1) {1};
+			\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n2) {2};
+			\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n3) {3};
+			\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n4) {4};
+			\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n5) {5};
+			\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n6) {6};
+			\node[left = 0mm of n0] (nm0) {};
 			\node[below of=n0, node distance=5cm] (n0Ground) {};
 			\node[below of=n1, node distance=5cm] (n1Ground) {};
 			\node[below of=n2, node distance=5cm] (n2Ground) {};
@@ -153,6 +185,7 @@
 			\node[below of=n4, node distance=5cm] (n4Ground) {};
 			\node[below of=n5, node distance=5cm] (n5Ground) {};
 			\node[below of=n6, node distance=5cm] (n6Ground) {};
+			\node[below of=nm0,node distance=5cm] (nm0Ground) {};
 			% lines down
 			\draw (n0) -- (n0Ground);
 			\draw (n1) -- (n1Ground);
@@ -162,36 +195,41 @@
 			\draw (n5) -- (n5Ground);
 			\draw (n6) -- (n6Ground);
 			%arrows
-			\draw[-Latex] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
-			\draw[-Latex] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
-			\draw[-Latex] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
-			\draw[-Latex,thick,color=green] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
-			\draw[-Latex] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
-			\draw[-Latex] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
-			\draw[-Latex] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
-			\draw[-Latex] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
-			\draw[-Latex] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
-			\draw[-Latex] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
-			\draw[-Latex] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
-			\draw[-Latex] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
-			\draw[-Latex] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+			\draw[astyle] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+			\draw[astyle] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+			\draw[ostyle] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+			\draw[astyle] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+			\draw[astyle] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+			\draw[astyle] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+			\draw[astyle] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+			\draw[astyle] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+			\draw[astyle] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+			\draw[astyle] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+			\draw[astyle] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
 			% addon arrows
-			%\draw[-Latex,thick,color=green] ($(n3)!0.15!(n3Ground)$)--($(n3)!0.50!(n3Ground)$);
+			%\draw[ostyle] ($(n3)!0.15!(n3Ground)$)--($(n3)!0.50!(n3Ground)$);
+			% time arrow
+			\node[left = 1mm of n0] (n-1) {};
+			\node[below of=n-1, node distance=5cm] (n-1ground) {};
+			\draw[astyle,shorten <=25pt,shorten >=10pt] (n-1) -- (n-1ground) node[midway,sloped,above]{time};
 		\end{tikzpicture}
 	};
-	\node (4) at ($(a)+(3*180/5:17cm) $) [child] {
+	\node (4) at ($(a)+(-90+3*180/5:17cm) $) [child] {
 		\begin{tikzpicture}
-			\node[] (n0) {0};
-			\node[right = of n0] (n1) {1};
-			\node[right = of n1] (n2) {2};
-			\node[right = of n2] (n3) {3};
-			\node[right = of n3] (n4) {4};
-			\node[right = of n4] (n5) {5};
-			\node[right = of n5] (n6) {6};
+			\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n0) {0};
+			\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n1) {1};
+			\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n2) {2};
+			\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n3) {3};
+			\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n4) {4};
+			\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n5) {5};
+			\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n6) {6};
+			\node[left = 0mm of n0] (nm0) {};
 			\node[below of=n0, node distance=5cm] (n0Ground) {};
 			\node[below of=n1, node distance=5cm] (n1Ground) {};
 			\node[below of=n2, node distance=5cm] (n2Ground) {};
@@ -199,6 +237,7 @@
 			\node[below of=n4, node distance=5cm] (n4Ground) {};
 			\node[below of=n5, node distance=5cm] (n5Ground) {};
 			\node[below of=n6, node distance=5cm] (n6Ground) {};
+			\node[below of=nm0,node distance=5cm] (nm0Ground) {};
 			% lines down
 			\draw (n0) -- (n0Ground);
 			\draw (n1) -- (n1Ground);
@@ -208,37 +247,42 @@
 			\draw (n5) -- (n5Ground);
 			\draw (n6) -- (n6Ground);
 			%arrows
-			\draw[-Latex] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
-			\draw[-Latex,thick,color=green] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
-			\draw[-Latex] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
-			\draw[-Latex] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
-			\draw[-Latex] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
-			\draw[-Latex,thick,color=green] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
-			\draw[-Latex] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
-			\draw[-Latex,thick,color=green] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
-			\draw[-Latex] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
-			\draw[-Latex] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
-			\draw[-Latex] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
-			\draw[-Latex] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
-			\draw[-Latex] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+			\draw[ostyle] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+			\draw[astyle] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+			\draw[astyle] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+			\draw[astyle] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+			\draw[ostyle] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+			\draw[ostyle] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+			\draw[astyle] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+			\draw[astyle] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+			\draw[astyle] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+			\draw[astyle] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+			\draw[astyle] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
 			% addon arrows
-			\draw[-Latex,thick,color=green] ($(n3)!0.15!(n3Ground)$)--($(n3)!0.40!(n3Ground)$);
-			\draw[-Latex,thick,color=green] ($(n5)!0.40!(n5Ground)$)--($(n5)!0.55!(n5Ground)$);
+			\draw[ostyle] ($(n3)!0.15!(n3Ground)$)--($(n3)!0.40!(n3Ground)$);
+			\draw[ostyle] ($(n5)!0.40!(n5Ground)$)--($(n5)!0.55!(n5Ground)$);
+			% time arrow
+			\node[left = 1mm of n0] (n-1) {};
+			\node[below of=n-1, node distance=5cm] (n-1ground) {};
+			\draw[astyle,shorten <=25pt,shorten >=10pt] (n-1) -- (n-1ground) node[midway,sloped,above]{time};
 		\end{tikzpicture}
 	};
-	\node (5) at ($(a)+(4*180/5:17cm) $) [child] {
+	\node (5) at ($(a)+(-96+4*180/5:17cm) $) [child] {
 		\begin{tikzpicture}
-			\node[] (n0) {0};
-			\node[right = of n0] (n1) {1};
-			\node[right = of n1] (n2) {2};
-			\node[right = of n2] (n3) {3};
-			\node[right = of n3] (n4) {4};
-			\node[right = of n4] (n5) {5};
-			\node[right = of n5] (n6) {6};
+			\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n0) {0};
+			\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n1) {1};
+			\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n2) {2};
+			\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n3) {3};
+			\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n4) {4};
+			\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n5) {5};
+			\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n6) {6};
+			\node[left = 0mm of n0] (nm0) {};
 			\node[below of=n0, node distance=5cm] (n0Ground) {};
 			\node[below of=n1, node distance=5cm] (n1Ground) {};
 			\node[below of=n2, node distance=5cm] (n2Ground) {};
@@ -246,6 +290,15 @@
 			\node[below of=n4, node distance=5cm] (n4Ground) {};
 			\node[below of=n5, node distance=5cm] (n5Ground) {};
 			\node[below of=n6, node distance=5cm] (n6Ground) {};
+			\node[below of=nm0,node distance=5cm] (nm0Ground) {};
+			% lines down
+			\draw (n0) -- (n0Ground);
+			\draw (n1) -- (n1Ground);
+			\draw (n2) -- (n2Ground);
+			\draw (n3) -- (n3Ground);
+			\draw (n4) -- (n4Ground);
+			\draw (n5) -- (n5Ground);
+			\draw (n6) -- (n6Ground);
 			% lines down
 			\draw (n0) -- (n0Ground);
 			\draw (n1) -- (n1Ground);
@@ -255,37 +308,42 @@
 			\draw (n5) -- (n5Ground);
 			\draw (n6) -- (n6Ground);
 			%arrows
-			\draw[-Latex] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
-			\draw[-Latex] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
-			\draw[-Latex] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
-			\draw[-Latex] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
-			\draw[-Latex,thick,color=green] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
-			\draw[-Latex,thick,color=green] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
-			\draw[-Latex] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
-			\draw[-Latex,thick,color=green] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
-			\draw[-Latex] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
-			\draw[-Latex] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
-			\draw[-Latex] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
-			\draw[-Latex] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
-			\draw[-Latex] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+			\draw[astyle] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+			\draw[astyle] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+			\draw[astyle] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+			\draw[ostyle] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+			\draw[ostyle] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+			\draw[ostyle] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+			\draw[astyle] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+			\draw[astyle] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+			\draw[astyle] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+			\draw[astyle] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+			\draw[astyle] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
 			% addon arrows
-			\draw[-Latex,thick,color=green] ($(n3)!0.35!(n3Ground)$)--($(n3)!0.40!(n3Ground)$);
-			\draw[-Latex,thick,color=green] ($(n5)!0.40!(n5Ground)$)--($(n5)!0.55!(n5Ground)$);
+			\draw[ostyle] ($(n3)!0.35!(n3Ground)$)--($(n3)!0.40!(n3Ground)$);
+			\draw[ostyle] ($(n5)!0.40!(n5Ground)$)--($(n5)!0.55!(n5Ground)$);
+			% time arrow
+			\node[left = 1mm of n0] (n-1) {};
+			\node[below of=n-1, node distance=5cm] (n-1ground) {};
+			\draw[astyle,shorten <=25pt,shorten >=10pt] (n-1) -- (n-1ground) node[midway,sloped,above]{time};
 		\end{tikzpicture}
 	};
-	\node (6) at ($(a)+(5*180/5:17cm) $) [child] {
+	\node (6) at ($(a)+(-90+5*180/5:12.6cm) $) [child] {
 		\begin{tikzpicture}
-			\node[] (n0) {0};
-			\node[right = of n0] (n1) {1};
-			\node[right = of n1] (n2) {2};
-			\node[right = of n2] (n3) {3};
-			\node[right = of n3] (n4) {4};
-			\node[right = of n4] (n5) {5};
-			\node[right = of n5] (n6) {6};
+			\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n0) {0};
+			\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n1) {1};
+			\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n2) {2};
+			\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n3) {3};
+			\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n4) {4};
+			\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n5) {5};
+			\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n6) {6};
+			\node[left = 0mm of n0] (nm0) {};
 			\node[below of=n0, node distance=5cm] (n0Ground) {};
 			\node[below of=n1, node distance=5cm] (n1Ground) {};
 			\node[below of=n2, node distance=5cm] (n2Ground) {};
@@ -293,6 +351,15 @@
 			\node[below of=n4, node distance=5cm] (n4Ground) {};
 			\node[below of=n5, node distance=5cm] (n5Ground) {};
 			\node[below of=n6, node distance=5cm] (n6Ground) {};
+			\node[below of=nm0,node distance=5cm] (nm0Ground) {};
+			% lines down
+			\draw (n0) -- (n0Ground);
+			\draw (n1) -- (n1Ground);
+			\draw (n2) -- (n2Ground);
+			\draw (n3) -- (n3Ground);
+			\draw (n4) -- (n4Ground);
+			\draw (n5) -- (n5Ground);
+			\draw (n6) -- (n6Ground);
 			% lines down
 			\draw (n0) -- (n0Ground);
 			\draw (n1) -- (n1Ground);
@@ -302,33 +369,39 @@
 			\draw (n5) -- (n5Ground);
 			\draw (n6) -- (n6Ground);
 			%arrows
-			\draw[-Latex] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
-			\draw[-Latex] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
-			\draw[-Latex] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
-			\draw[-Latex] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
-			\draw[-Latex,thick,color=green] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
-			\draw[-Latex] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
-			\draw[-Latex] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
-			\draw[-Latex,thick,color=green] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
-			\draw[-Latex] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
-			\draw[-Latex] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
-			\draw[-Latex] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
-			\draw[-Latex] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
-			\draw[-Latex] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
-			\draw[-Latex] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
-			\draw[-Latex] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
-			\draw[-Latex] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+			\draw[astyle] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+			\draw[astyle] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+			\draw[astyle] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+			\draw[ostyle] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+			\draw[astyle] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+			\draw[astyle] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+			\draw[ostyle] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+			\draw[astyle] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+			\draw[astyle] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+			\draw[astyle] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+			\draw[astyle] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+			\draw[astyle] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+			\draw[astyle] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+			\draw[astyle] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+			\draw[astyle] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
 			% addon arrows
-			\draw[-Latex,thick,color=green] ($(n3)!0.35!(n3Ground)$)--($(n3)!0.50!(n3Ground)$);
+			\draw[ostyle] ($(n3)!0.35!(n3Ground)$)--($(n3)!0.50!(n3Ground)$);
+			% time arrow
+			\node[left = 1mm of n0] (n-1) {};
+			\node[below of=n-1, node distance=5cm] (n-1ground) {};
+			\draw[astyle,shorten <=25pt,shorten >=10pt] (n-1) -- (n-1ground) node[midway,sloped,above]{time};
 		\end{tikzpicture}
 	};
 	
-	\draw[-Latex,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(1) node[midway,sloped,above] {path 1};
-	\draw[-Latex,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(2) node[midway,sloped,above] {path 2};
-	\draw[-Latex,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(3) node[midway,sloped,above] {path 3};
-	\draw[-Latex,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(4) node[midway,sloped,above] {path 4};
-	\draw[-Latex,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(5) node[midway,sloped,above] {path 5};
-	\draw[-Latex,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(6) node[midway,sloped,above] {path 6};
+	\draw[astyle,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(1) node[midway,sloped,above] {path 1};
+	\draw[astyle,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(2) node[midway,sloped,above] {path 2};
+	\draw[astyle,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(3) node[midway,sloped,above] {path 3};
+	\draw[astyle,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(4) node[midway,sloped,above] {path 4};
+	\draw[astyle,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(5) node[midway,sloped,above] {path 5};
+	\draw[astyle,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(6) node[midway,sloped,above] {path 6};
 	
+	%\path  (-23,20)  rectangle ($(1.south east)+(1.3,-0.6)$);
+
 \end{tikzpicture}

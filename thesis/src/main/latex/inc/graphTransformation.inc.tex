@@ -1,41 +1,55 @@
   \begin{tikzpicture}[node distance=0.5cm,auto,>=stealth]
-	\begin{scope}[baseline=(current bounding box.center),xshift=-3cm]
-		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=8pt,baseline=(current bounding box.center)]
-		\node[knode] (r0) at (0:2.5cm) {0};
-		\node[knode] (r1) at (51:2.5cm) {1};
+ 	\tikzset{
+		rounded/.style={rounded corners=3pt},	
+		shadowed/.style={general shadow={fill=nodeshadow,shadow xshift=\shadowshift,shadow yshift=\shadowshift}},
+ 		hexnode/.style={regular polygon,regular polygon sides=6,draw,fill=operationcolor,inner sep=0mm,minimum size=2mm},
+		astyle/.style={-{Latex[length=2.5mm,width=1.5mm]},semithick},
+		knode/.style={rectangle,fill=nodecolor,draw=black,thick,inner sep=8pt,baseline=(current bounding box.center),shadowed,rounded},
+		nodestyle/.style={fill=nodecolor,rounded,anchor=center,shadowed},
+ 	}
+	\begin{scope}[baseline=(current bounding box.center),xshift=-9cm,yshift=2.25cm]
+		\node[knode,fill=startnodecolor] (ln1) {0} node [right= of ln1] {start node};
+		\node[below= of ln1,knode,fill=endnodecolor] (ln2) {1} node[right= of ln2] {end node};
+		\node[below= of ln2,knode,fill=nodecolor] (ln3) {n} node[right= of ln3] {routing node};
+		\node[below=0.8cm of ln3,hexnode,fill=operationcolor] (ln4) {} node[right=0.8cm of ln4] {routing operations};
+		\node[below=0.95cm of ln4,hexnode,fill=endoperationcolor] (ln5) {} node[right=0.8cm  of ln5] (lne) {end operations};
+		\draw[black,thick] ($(ln1.north west)+(-0.3,0.6)$)  rectangle ($(lne.south east)+(1.3,-0.6)$);
+	\end{scope}
+	\begin{scope}[baseline=(current bounding box.center),xshift=-1cm,yshift=0.25cm]
+		\node[knode,fill=startnodecolor] (r0) at (0:2.5cm) {0};
+		\node[knode,fill=endnodecolor] (r1) at (51:2.5cm) {1};
 		\node[knode] (r2) at (103:2.5cm) {2};
 		\node[knode] (r3) at (154:2.5cm) {3};
 		\node[knode] (r4) at (206:2.5cm) {4};
 		\node[knode] (r5) at (257:2.5cm) {5};
 		\node[knode] (r6) at (309:2.5cm) {6};
 		%arrows
-		\draw[->] (r0)--node[sloped, anchor=center, above=-1mm]{\tiny 1}(r1);
-		\draw[->] (r0)--node[sloped, anchor=center, above=-1mm]{\tiny 2}(r3);
-		\draw[->] (r1)--node[sloped, anchor=center, above=-1mm]{\tiny 3}(r2);
-		\draw[->,bend right,looseness=0.4] (r0) edge node[sloped, anchor=center, above=-1mm]{\tiny 4} (r1);
-		\draw[->] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 5}(r4);
-		\draw[->,bend right,looseness=0.4,in=190] (r0) edge  node[sloped, anchor=center, above=-1mm]{\tiny 6}(r3);
-		\draw[->] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 7}(r5);
-		\draw[->] (r0)-- node[sloped, anchor=center, above=-1mm]{\tiny 8}(r6);
-		\draw[->] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 9}(r1);
-		\draw[->] (r5)-- node[sloped, anchor=center, above=-1mm]{\tiny 10}(r1);
-		\draw[->,bend right,looseness=0.4] (r3)edge node[sloped, anchor=center, above=-1mm]{\tiny 11}(r0);
-		\draw[->] (r5)-- node[sloped, anchor=center, above=-1mm]{\tiny 12}(r0);
-		\draw[->] (r6)-- node[sloped, anchor=center, above=-1mm]{\tiny 13}(r4);
-		\draw[->,bend right,looseness=0.4,out=-15,in=190] (r5) edge  node[sloped, anchor=center, above=-1mm]{\tiny 14}(r0);
-		\draw[->] (r2)-- node[sloped, anchor=center, above=-1mm]{\tiny 15}(r6);
-		\draw[->] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 16}(r2);
-		\draw[->] (r2)-- node[sloped, anchor=center, above=-1mm]{\tiny 17}(r5);
+		\draw[astyle] (r0)--node[sloped, anchor=center, above=-1mm]{\tiny 1}(r1);
+		\draw[astyle] (r0)--node[sloped, anchor=center, above=-1mm]{\tiny 2}(r3);
+		\draw[astyle] (r1)--node[sloped, anchor=center, above=-1mm]{\tiny 3}(r2);
+		\draw[astyle,bend right,looseness=0.4] (r0) edge node[sloped, anchor=center, above=-1mm]{\tiny 4} (r1);
+		\draw[astyle] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 5}(r4);
+		\draw[astyle,bend right,looseness=0.4,in=190] (r0) edge  node[sloped, anchor=center, above=-1mm]{\tiny 6}(r3);
+		\draw[astyle] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 7}(r5);
+		\draw[astyle] (r0)-- node[sloped, anchor=center, above=-1mm]{\tiny 8}(r6);
+		\draw[astyle] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 9}(r1);
+		\draw[astyle] (r5)-- node[sloped, anchor=center, above=-1mm]{\tiny 10}(r1);
+		\draw[astyle,bend right,looseness=0.4] (r3)edge node[sloped, anchor=center, above=-1mm]{\tiny 11}(r0);
+		\draw[astyle] (r5)-- node[sloped, anchor=center, above=-1mm]{\tiny 12}(r0);
+		\draw[astyle] (r6)-- node[sloped, anchor=center, above=-1mm]{\tiny 13}(r4);
+		\draw[astyle,bend right,looseness=0.4,out=-15,in=190] (r5) edge  node[sloped, anchor=center, above=-1mm]{\tiny 14}(r0);
+		\draw[astyle] (r2)-- node[sloped, anchor=center, above=-1mm]{\tiny 15}(r6);
+		\draw[astyle] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 16}(r2);
+		\draw[astyle] (r2)-- node[sloped, anchor=center, above=-1mm]{\tiny 17}(r5);
 	\end{scope}
 	\begin{scope}[baseline=(current bounding box.center),xshift=5cm,yshift=2cm]
-		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=1pt,baseline=(current bounding box.center)]
-		\node[knode] (n0) {0};
-		\node[knode,right = of n0] (n1) {1};
-		\node[knode,right = of n1] (n2) {2};
-		\node[knode,right = of n2] (n3) {3};
-		\node[knode,right = of n3] (n4) {4};
-		\node[knode,right = of n4] (n5) {5};
-		\node[knode,right = of n5] (n6) {6};
+		\draw[nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n0) {0};
+		\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n1) {1};
+		\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n2) {2};
+		\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n3) {3};
+		\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n4) {4};
+		\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n5) {5};
+		\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n6) {6};
 		\node[left = 0mm of n0] (nm0) {};
 		\node[below of=n0, node distance=5cm] (n0Ground) {};
 		\node[below of=n1, node distance=5cm] (n1Ground) {};
@@ -54,38 +68,37 @@
 		\draw (n5) -- (n5Ground);
 		\draw (n6) -- (n6Ground);
 		%arrows
-		\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);\node[anchor=east] at ($(n0)!0.10!(n0Ground)$) {\tiny 1};
-		\draw[->] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);\node[anchor=east] at ($(n0)!0.15!(n0Ground)$) {\tiny 2};
-		\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);\node[anchor=east] at ($(n0)!0.20!(n0Ground)$) {\tiny 3};
-		\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);\node[anchor=east] at ($(n0)!0.25!(n0Ground)$) {\tiny 4};
-		\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);\node[anchor=east] at ($(n0)!0.30!(n0Ground)$) {\tiny 5};
-		\draw[->] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);\node[anchor=east] at ($(n0)!0.35!(n0Ground)$) {\tiny 6};
-		\draw[->] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);\node[anchor=east] at ($(n0)!0.40!(n0Ground)$) {\tiny 7};
-		\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);\node[anchor=east] at ($(n0)!0.45!(n0Ground)$) {\tiny 8};
-		\draw[->] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);\node[anchor=east] at ($(n0)!0.50!(n0Ground)$) {\tiny 9};
-		\draw[->] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);\node[anchor=east] at ($(n0)!0.55!(n0Ground)$) {\tiny 10};
-		\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);\node[anchor=east] at ($(n0)!0.60!(n0Ground)$) {\tiny 11};
-		\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);\node[anchor=east] at ($(n0)!0.65!(n0Ground)$) {\tiny 12};
-		\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);\node[anchor=east] at ($(n0)!0.70!(n0Ground)$) {\tiny 13};
-		\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);\node[anchor=east] at ($(n0)!0.75!(n0Ground)$) {\tiny 14};
-		\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);\node[anchor=east] at ($(n0)!0.80!(n0Ground)$) {\tiny 15};
-		\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);\node[anchor=east] at ($(n0)!0.85!(n0Ground)$) {\tiny 16};
-		\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);\node[anchor=east] at ($(n0)!0.90!(n0Ground)$) {\tiny 17};
+		\draw[astyle] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);\node[anchor=east] at ($(n0)!0.10!(n0Ground)$) {\tiny 1};
+		\draw[astyle] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);\node[anchor=east] at ($(n0)!0.15!(n0Ground)$) {\tiny 2};
+		\draw[astyle] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);\node[anchor=east] at ($(n0)!0.20!(n0Ground)$) {\tiny 3};
+		\draw[astyle] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);\node[anchor=east] at ($(n0)!0.25!(n0Ground)$) {\tiny 4};
+		\draw[astyle] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);\node[anchor=east] at ($(n0)!0.30!(n0Ground)$) {\tiny 5};
+		\draw[astyle] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);\node[anchor=east] at ($(n0)!0.35!(n0Ground)$) {\tiny 6};
+		\draw[astyle] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);\node[anchor=east] at ($(n0)!0.40!(n0Ground)$) {\tiny 7};
+		\draw[astyle] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);\node[anchor=east] at ($(n0)!0.45!(n0Ground)$) {\tiny 8};
+		\draw[astyle] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);\node[anchor=east] at ($(n0)!0.50!(n0Ground)$) {\tiny 9};
+		\draw[astyle] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);\node[anchor=east] at ($(n0)!0.55!(n0Ground)$) {\tiny 10};
+		\draw[astyle] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);\node[anchor=east] at ($(n0)!0.60!(n0Ground)$) {\tiny 11};
+		\draw[astyle] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);\node[anchor=east] at ($(n0)!0.65!(n0Ground)$) {\tiny 12};
+		\draw[astyle] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);\node[anchor=east] at ($(n0)!0.70!(n0Ground)$) {\tiny 13};
+		\draw[astyle] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);\node[anchor=east] at ($(n0)!0.75!(n0Ground)$) {\tiny 14};
+		\draw[astyle] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);\node[anchor=east] at ($(n0)!0.80!(n0Ground)$) {\tiny 15};
+		\draw[astyle] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);\node[anchor=east] at ($(n0)!0.85!(n0Ground)$) {\tiny 16};
+		\draw[astyle] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);\node[anchor=east] at ($(n0)!0.90!(n0Ground)$) {\tiny 17};
 		% Legend
-		\draw[->,shorten <=25pt,shorten >=20pt] (nm0) --node[above=-1mm,sloped,anchor=center,rotate=180] {$\text{\tiny time (epoch)}$} (nm0Ground)  ;
+		\draw[astyle,shorten <=25pt,shorten >=20pt] (nm0) -- node[above=-1mm,sloped,anchor=center,rotate=180] {$\text{\tiny time (epoch)}$} (nm0Ground)  ;
 		
 	\end{scope}
-	\draw[->,shorten <=25pt,shorten >=20pt,draw=red] ($(r0)!0.0!(r0)$)--node[above,sloped]{\tiny \textcolor{red}{redraw}}($(n0)!0.4!(n0Ground)$);
+	\draw[astyle,shorten <=25pt,shorten >=20pt,draw=red] ($(r0)!0.0!(r0)$)--node[sloped,above]{\small \textcolor{red}{redraw and}} node[sloped,below]{\small \textcolor{red}{order}} ($(n0)!0.4!(n0Ground)$);
 	\begin{scope}[baseline=(current bounding box.center),xshift=5cm,yshift=-5cm]
-		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=1pt,baseline=(current bounding box.center)]
-		\node[knode] (n10) {0};
-		\node[knode,right = of n10] (n11) {1};
-		\node[knode,right = of n11] (n12) {2};
-		\node[knode,right = of n12] (n13) {3};
-		\node[knode,right = of n13] (n14) {4};
-		\node[knode,right = of n14] (n15) {5};
-		\node[knode,right = of n15] (n16) {6};
-		\node[left = 0mm of n10] (nm10) {};
+		\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n10) {0};
+		\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n11) {1};
+		\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n12) {2};
+		\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n13) {3};
+		\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n14) {4};
+		\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n15) {5};
+		\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n16) {6};
+		\node[left = 0mm of n0] (nm10) {};
 		\node[below of=n10, node distance=5cm] (n10Ground) {};
 		\node[below of=n11, node distance=5cm] (n11Ground) {};
 		\node[below of=n12, node distance=5cm] (n12Ground) {};
@@ -103,35 +116,35 @@
 		\draw (n15) -- (n15Ground);
 		\draw (n16) -- (n16Ground);
 		%arrows
-		\draw[->] ($(n10)!0.10!(n10Ground)$)--($(n11)!0.10!(n11Ground)$);\node[anchor=east] at ($(n10)!0.10!(n10Ground)$) {\tiny 1: 00:10};
-		\draw[->] ($(n10)!0.15!(n10Ground)$)--($(n13)!0.15!(n13Ground)$);\node[anchor=east] at ($(n10)!0.15!(n10Ground)$) {\tiny 2: 00:23-00:36};
-		\draw[->] ($(n11)!0.20!(n11Ground)$)--($(n12)!0.20!(n12Ground)$);\node[anchor=east] at ($(n10)!0.20!(n10Ground)$) {\tiny 3: 00:41-00:44};
-		\draw[->] ($(n10)!0.25!(n10Ground)$)--($(n11)!0.25!(n11Ground)$);\node[anchor=east] at ($(n10)!0.25!(n10Ground)$) {\tiny 4: 00:58-01:10};
-		\draw[->] ($(n13)!0.30!(n13Ground)$)--($(n14)!0.30!(n14Ground)$);\node[anchor=east] at ($(n10)!0.30!(n10Ground)$) {\tiny 5: 01:25-01:28};
-		\draw[->] ($(n10)!0.35!(n10Ground)$)--($(n13)!0.35!(n13Ground)$);\node[anchor=east] at ($(n10)!0.35!(n10Ground)$) {\tiny 6: 02:09-02:21};
-		\draw[->] ($(n13)!0.40!(n13Ground)$)--($(n15)!0.40!(n15Ground)$);\node[anchor=east] at ($(n10)!0.40!(n10Ground)$) {\tiny 7: 02:45-02:48};
-		\draw[->] ($(n10)!0.45!(n10Ground)$)--($(n16)!0.45!(n16Ground)$);\node[anchor=east] at ($(n10)!0.45!(n10Ground)$) {\tiny 8: 02:59-03:20};
-		\draw[->] ($(n13)!0.50!(n13Ground)$)--($(n11)!0.50!(n11Ground)$);\node[anchor=east] at ($(n10)!0.50!(n10Ground)$) {\tiny 9: 03:34-03:36};
-		\draw[->] ($(n15)!0.55!(n15Ground)$)--($(n11)!0.55!(n11Ground)$);\node[anchor=east] at ($(n10)!0.55!(n10Ground)$) {\tiny 10: 03:40-04:01};
-		\draw[->] ($(n13)!0.60!(n13Ground)$)--($(n10)!0.60!(n10Ground)$);\node[anchor=east] at ($(n10)!0.60!(n10Ground)$) {\tiny 11: 04:21-04:22};
-		\draw[->] ($(n15)!0.65!(n15Ground)$)--($(n10)!0.65!(n10Ground)$);\node[anchor=east] at ($(n10)!0.65!(n10Ground)$) {\tiny 12: 04:42-04:56};
-		\draw[->] ($(n16)!0.70!(n16Ground)$)--($(n14)!0.70!(n14Ground)$);\node[anchor=east] at ($(n10)!0.70!(n10Ground)$) {\tiny 13: 05:10-05:19};
-		\draw[->] ($(n15)!0.75!(n15Ground)$)--($(n10)!0.75!(n10Ground)$);\node[anchor=east] at ($(n10)!0.75!(n10Ground)$) {\tiny 14: 05:26-05:27};
-		\draw[->] ($(n12)!0.80!(n12Ground)$)--($(n16)!0.80!(n16Ground)$);\node[anchor=east] at ($(n10)!0.80!(n10Ground)$) {\tiny 15: 05:36-05:56};
-		\draw[->] ($(n13)!0.85!(n13Ground)$)--($(n12)!0.85!(n12Ground)$);\node[anchor=east] at ($(n10)!0.85!(n10Ground)$) {\tiny 16: 06:20-07:15};
-		\draw[->] ($(n12)!0.90!(n12Ground)$)--($(n15)!0.90!(n15Ground)$);\node[anchor=east] at ($(n10)!0.90!(n10Ground)$) {\tiny 17: 08:11-08:12};
+		%arrows
+		\draw[astyle] ($(n10)!0.10!(n10Ground)$)--($(n11)!0.10!(n11Ground)$);\node[anchor=east] at ($(n10)!0.10!(n10Ground)$) {\tiny 1: 00:10};
+		\draw[astyle] ($(n10)!0.15!(n10Ground)$)--($(n13)!0.15!(n13Ground)$);\node[anchor=east] at ($(n10)!0.15!(n10Ground)$) {\tiny 2: 00:23-00:36};
+		\draw[astyle] ($(n11)!0.20!(n11Ground)$)--($(n12)!0.20!(n12Ground)$);\node[anchor=east] at ($(n10)!0.20!(n10Ground)$) {\tiny 3: 00:41-00:44};
+		\draw[astyle] ($(n10)!0.25!(n10Ground)$)--($(n11)!0.25!(n11Ground)$);\node[anchor=east] at ($(n10)!0.25!(n10Ground)$) {\tiny 4: 00:58-01:10};
+		\draw[astyle] ($(n13)!0.30!(n13Ground)$)--($(n14)!0.30!(n14Ground)$);\node[anchor=east] at ($(n10)!0.30!(n10Ground)$) {\tiny 5: 01:25-01:28};
+		\draw[astyle] ($(n10)!0.35!(n10Ground)$)--($(n13)!0.35!(n13Ground)$);\node[anchor=east] at ($(n10)!0.35!(n10Ground)$) {\tiny 6: 02:09-02:21};
+		\draw[astyle] ($(n13)!0.40!(n13Ground)$)--($(n15)!0.40!(n15Ground)$);\node[anchor=east] at ($(n10)!0.40!(n10Ground)$) {\tiny 7: 02:45-02:48};
+		\draw[astyle] ($(n10)!0.45!(n10Ground)$)--($(n16)!0.45!(n16Ground)$);\node[anchor=east] at ($(n10)!0.45!(n10Ground)$) {\tiny 8: 02:59-03:20};
+		\draw[astyle] ($(n13)!0.50!(n13Ground)$)--($(n11)!0.50!(n11Ground)$);\node[anchor=east] at ($(n10)!0.50!(n10Ground)$) {\tiny 9: 03:34-03:36};
+		\draw[astyle] ($(n15)!0.55!(n15Ground)$)--($(n11)!0.55!(n11Ground)$);\node[anchor=east] at ($(n10)!0.55!(n10Ground)$) {\tiny 10: 03:40-04:01};
+		\draw[astyle] ($(n13)!0.60!(n13Ground)$)--($(n10)!0.60!(n10Ground)$);\node[anchor=east] at ($(n10)!0.60!(n10Ground)$) {\tiny 11: 04:21-04:22};
+		\draw[astyle] ($(n15)!0.65!(n15Ground)$)--($(n10)!0.65!(n10Ground)$);\node[anchor=east] at ($(n10)!0.65!(n10Ground)$) {\tiny 12: 04:42-04:56};
+		\draw[astyle] ($(n16)!0.70!(n16Ground)$)--($(n14)!0.70!(n14Ground)$);\node[anchor=east] at ($(n10)!0.70!(n10Ground)$) {\tiny 13: 05:10-05:19};
+		\draw[astyle] ($(n15)!0.75!(n15Ground)$)--($(n10)!0.75!(n10Ground)$);\node[anchor=east] at ($(n10)!0.75!(n10Ground)$) {\tiny 14: 05:26-05:27};
+		\draw[astyle] ($(n12)!0.80!(n12Ground)$)--($(n16)!0.80!(n16Ground)$);\node[anchor=east] at ($(n10)!0.80!(n10Ground)$) {\tiny 15: 05:36-05:56};
+		\draw[astyle] ($(n13)!0.85!(n13Ground)$)--($(n12)!0.85!(n12Ground)$);\node[anchor=east] at ($(n10)!0.85!(n10Ground)$) {\tiny 16: 06:20-07:15};
+		\draw[astyle] ($(n12)!0.90!(n12Ground)$)--($(n15)!0.90!(n15Ground)$);\node[anchor=east] at ($(n10)!0.90!(n10Ground)$) {\tiny 17: 08:11-08:12};
 	\end{scope}
-	\draw[->,shorten <=1pt,shorten >=2pt,draw=red] (n3Ground)--node[rotate=180,above,sloped]{\tiny \textcolor{red}{assign time slots}}(n13);
-	\begin{scope}[baseline=(current bounding box.center),xshift=-6cm,yshift=-5cm]
-		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=1pt,baseline=(current bounding box.center)]
-		\node[knode] (n20) {0};
-		\node[knode,right = of n20] (n21) {1};
-		\node[knode,right = of n21] (n22) {2};
-		\node[knode,right = of n22] (n23) {3};
-		\node[knode,right = of n23] (n24) {4};
-		\node[knode,right = of n24] (n25) {5};
-		\node[knode,right = of n25] (n26) {6};
-		\node[left = 0mm of n20] (nm20) {};
+	\begin{scope}[baseline=(current bounding box.center),xshift=-8cm,yshift=-5cm]
+		\draw[astyle,shorten <=1pt,shorten >=2pt,draw=red] (n3Ground)--node[rotate=180,above,sloped]{\small \textcolor{red}{assign}} node[rotate=180,below,sloped]{\small \textcolor{red}{time slots}}(n13);
+		\draw [nodestyle,fill=startnodecolor] (0,0) rectangle +(0.4,0.45) node[pos=.5] (n20) {0};
+		\draw[nodestyle,fill=endnodecolor] (1.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n21) {1};
+		\draw[nodestyle] (3,0) rectangle +(0.4,0.45) node[pos=0.5] (n22) {2};
+		\draw[nodestyle] (4.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n23) {3};
+		\draw[nodestyle] (6,0) rectangle +(0.4,0.45) node[pos=0.5] (n24) {4};
+		\draw[nodestyle] (7.5,0) rectangle +(0.4,0.45) node[pos=0.5] (n25) {5};
+		\draw[nodestyle] (9,0) rectangle +(0.4,0.45) node[pos=0.5] (n26) {6};
+		\node[left = 0mm of n0] (nm20) {};
 		\node[below of=n20, node distance=5cm] (n20Ground) {};
 		\node[below of=n21, node distance=5cm] (n21Ground) {};
 		\node[below of=n22, node distance=5cm] (n22Ground) {};
@@ -149,24 +162,24 @@
 		\draw (n25) -- (n25Ground);
 		\draw (n26) -- (n26Ground);
 		%arrows
-		\draw[->] ($(n20)!0.10!(n20Ground)$)--($(n21)!0.10!(n21Ground)$);\node[anchor=east] at ($(n20)!0.10!(n20Ground)$) {\tiny 1: 00:10}; \node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.10!(n20Ground)$) {};
-		\draw[->] ($(n20)!0.15!(n20Ground)$)--($(n23)!0.15!(n23Ground)$);\node[anchor=east] at ($(n20)!0.15!(n20Ground)$) {\tiny 2: 00:23-00:36};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.15!(n20Ground)$) {};
-		\draw[->] ($(n21)!0.20!(n21Ground)$)--($(n22)!0.20!(n22Ground)$);\node[anchor=east] at ($(n20)!0.20!(n20Ground)$) {\tiny 3: 00:41-00:44};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n21)!0.20!(n21Ground)$) {};
-		\draw[->] ($(n20)!0.25!(n20Ground)$)--($(n21)!0.25!(n21Ground)$);\node[anchor=east] at ($(n20)!0.25!(n20Ground)$) {\tiny 4: 00:58-01:10};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.25!(n20Ground)$) {};
-		\draw[->] ($(n23)!0.30!(n23Ground)$)--($(n24)!0.30!(n24Ground)$);\node[anchor=east] at ($(n20)!0.30!(n20Ground)$) {\tiny 5: 01:25-01:28};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.30!(n23Ground)$) {};
-		\draw[->] ($(n20)!0.35!(n20Ground)$)--($(n23)!0.35!(n23Ground)$);\node[anchor=east] at ($(n20)!0.35!(n20Ground)$) {\tiny 6: 02:09-02:21};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.35!(n20Ground)$) {};
-		\draw[->] ($(n23)!0.40!(n23Ground)$)--($(n25)!0.40!(n25Ground)$);\node[anchor=east] at ($(n20)!0.40!(n20Ground)$) {\tiny 7: 02:45-02:48};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.40!(n23Ground)$) {};
-		\draw[->] ($(n20)!0.45!(n20Ground)$)--($(n26)!0.45!(n26Ground)$);\node[anchor=east] at ($(n20)!0.45!(n20Ground)$) {\tiny 8: 02:59-03:20};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.45!(n20Ground)$) {};
-		\draw[->] ($(n23)!0.50!(n23Ground)$)--($(n21)!0.50!(n21Ground)$);\node[anchor=east] at ($(n20)!0.50!(n20Ground)$) {\tiny 9: 03:34-03:36};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.50!(n23Ground)$) {};
-		\draw[->] ($(n25)!0.55!(n25Ground)$)--($(n21)!0.55!(n21Ground)$);\node[anchor=east] at ($(n20)!0.55!(n20Ground)$) {\tiny 10: 03:40-04:01};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n25)!0.55!(n25Ground)$) {};
-		\node[regular polygon,regular polygon sides=6,draw,fill=green,inner sep=0mm,minimum size=2mm]  at ($(n21)!0.575!(n21Ground)$) {}; %% reassembly node
-		\draw[->] ($(n23)!0.60!(n23Ground)$)--($(n20)!0.60!(n20Ground)$);\node[anchor=east] at ($(n20)!0.60!(n20Ground)$) {\tiny 11: 04:21-04:22};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.60!(n23Ground)$) {};
-		\draw[->] ($(n25)!0.65!(n25Ground)$)--($(n20)!0.65!(n20Ground)$);\node[anchor=east] at ($(n20)!0.65!(n20Ground)$) {\tiny 12: 04:42-04:56};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n25)!0.65!(n25Ground)$) {};
-		\draw[->] ($(n26)!0.70!(n26Ground)$)--($(n24)!0.70!(n24Ground)$);\node[anchor=east] at ($(n20)!0.70!(n20Ground)$) {\tiny 13: 05:10-05:19};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n26)!0.70!(n26Ground)$) {};
-		\draw[->] ($(n25)!0.75!(n25Ground)$)--($(n20)!0.75!(n20Ground)$);\node[anchor=east] at ($(n20)!0.75!(n20Ground)$) {\tiny 14: 05:26-05:27};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n25)!0.75!(n25Ground)$) {};
-		\draw[->] ($(n22)!0.80!(n22Ground)$)--($(n26)!0.80!(n26Ground)$);\node[anchor=east] at ($(n20)!0.80!(n20Ground)$) {\tiny 15: 05:36-05:56};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n22)!0.80!(n22Ground)$) {};
-		\draw[->] ($(n23)!0.85!(n23Ground)$)--($(n22)!0.85!(n22Ground)$);\node[anchor=east] at ($(n20)!0.85!(n20Ground)$) {\tiny 16: 06:20-07:15};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.85!(n23Ground)$) {};
-		\draw[->] ($(n22)!0.90!(n22Ground)$)--($(n25)!0.90!(n25Ground)$);\node[anchor=east] at ($(n20)!0.90!(n20Ground)$) {\tiny 17: 08:11-08:12};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n22)!0.90!(n22Ground)$) {};
+		\draw[astyle] ($(n20)!0.10!(n20Ground)$)--($(n21)!0.10!(n21Ground)$);\node[anchor=east] at ($(n20)!0.10!(n20Ground)$) {\tiny 1: 00:10}; \node[hexnode]  at ($(n20)!0.10!(n20Ground)$) {};
+		\draw[astyle] ($(n20)!0.15!(n20Ground)$)--($(n23)!0.15!(n23Ground)$);\node[anchor=east] at ($(n20)!0.15!(n20Ground)$) {\tiny 2: 00:23-00:36};\node[hexnode]  at ($(n20)!0.15!(n20Ground)$) {};
+		\draw[astyle] ($(n21)!0.20!(n21Ground)$)--($(n22)!0.20!(n22Ground)$);\node[anchor=east] at ($(n20)!0.20!(n20Ground)$) {\tiny 3: 00:41-00:44};\node[hexnode]  at ($(n21)!0.20!(n21Ground)$) {};
+		\draw[astyle] ($(n20)!0.25!(n20Ground)$)--($(n21)!0.25!(n21Ground)$);\node[anchor=east] at ($(n20)!0.25!(n20Ground)$) {\tiny 4: 00:58-01:10};\node[hexnode]  at ($(n20)!0.25!(n20Ground)$) {};
+		\draw[astyle] ($(n23)!0.30!(n23Ground)$)--($(n24)!0.30!(n24Ground)$);\node[anchor=east] at ($(n20)!0.30!(n20Ground)$) {\tiny 5: 01:25-01:28};\node[hexnode]  at ($(n23)!0.30!(n23Ground)$) {};
+		\draw[astyle] ($(n20)!0.35!(n20Ground)$)--($(n23)!0.35!(n23Ground)$);\node[anchor=east] at ($(n20)!0.35!(n20Ground)$) {\tiny 6: 02:09-02:21};\node[hexnode]  at ($(n20)!0.35!(n20Ground)$) {};
+		\draw[astyle] ($(n23)!0.40!(n23Ground)$)--($(n25)!0.40!(n25Ground)$);\node[anchor=east] at ($(n20)!0.40!(n20Ground)$) {\tiny 7: 02:45-02:48};\node[hexnode]  at ($(n23)!0.40!(n23Ground)$) {};
+		\draw[astyle] ($(n20)!0.45!(n20Ground)$)--($(n26)!0.45!(n26Ground)$);\node[anchor=east] at ($(n20)!0.45!(n20Ground)$) {\tiny 8: 02:59-03:20};\node[hexnode]  at ($(n20)!0.45!(n20Ground)$) {};
+		\draw[astyle] ($(n23)!0.50!(n23Ground)$)--($(n21)!0.50!(n21Ground)$);\node[anchor=east] at ($(n20)!0.50!(n20Ground)$) {\tiny 9: 03:34-03:36};\node[hexnode]  at ($(n23)!0.50!(n23Ground)$) {};
+		\draw[astyle] ($(n25)!0.55!(n25Ground)$)--($(n21)!0.55!(n21Ground)$);\node[anchor=east] at ($(n20)!0.55!(n20Ground)$) {\tiny 10: 03:40-04:01};\node[hexnode]  at ($(n25)!0.55!(n25Ground)$) {};
+		\node[hexnode,fill=endoperationcolor]  at ($(n21)!0.575!(n21Ground)$) {}; %% reassembly node
+		\draw[astyle] ($(n23)!0.60!(n23Ground)$)--($(n20)!0.60!(n20Ground)$);\node[anchor=east] at ($(n20)!0.60!(n20Ground)$) {\tiny 11: 04:21-04:22};\node[hexnode]  at ($(n23)!0.60!(n23Ground)$) {};
+		\draw[astyle] ($(n25)!0.65!(n25Ground)$)--($(n20)!0.65!(n20Ground)$);\node[anchor=east] at ($(n20)!0.65!(n20Ground)$) {\tiny 12: 04:42-04:56};\node[hexnode]  at ($(n25)!0.65!(n25Ground)$) {};
+		\draw[astyle] ($(n26)!0.70!(n26Ground)$)--($(n24)!0.70!(n24Ground)$);\node[anchor=east] at ($(n20)!0.70!(n20Ground)$) {\tiny 13: 05:10-05:19};\node[hexnode]  at ($(n26)!0.70!(n26Ground)$) {};
+		\draw[astyle] ($(n25)!0.75!(n25Ground)$)--($(n20)!0.75!(n20Ground)$);\node[anchor=east] at ($(n20)!0.75!(n20Ground)$) {\tiny 14: 05:26-05:27};\node[hexnode]  at ($(n25)!0.75!(n25Ground)$) {};
+		\draw[astyle] ($(n22)!0.80!(n22Ground)$)--($(n26)!0.80!(n26Ground)$);\node[anchor=east] at ($(n20)!0.80!(n20Ground)$) {\tiny 15: 05:36-05:56};\node[hexnode]  at ($(n22)!0.80!(n22Ground)$) {};
+		\draw[astyle] ($(n23)!0.85!(n23Ground)$)--($(n22)!0.85!(n22Ground)$);\node[anchor=east] at ($(n20)!0.85!(n20Ground)$) {\tiny 16: 06:20-07:15};\node[hexnode]  at ($(n23)!0.85!(n23Ground)$) {};
+		\draw[astyle] ($(n22)!0.90!(n22Ground)$)--($(n25)!0.90!(n25Ground)$);\node[anchor=east] at ($(n20)!0.90!(n20Ground)$) {\tiny 17: 08:11-08:12};\node[hexnode]  at ($(n22)!0.90!(n22Ground)$) {};
 	\end{scope}
-	\draw[->,shorten <=55pt,shorten >=20pt,draw=red] ($(n10)!0.4!(n10Ground)$)--node[above,xshift=-17pt]{\tiny \textcolor{red}{assign operations}}($(n26)!0.4!(n26Ground)$);
+	\draw[astyle,shorten <=55pt,shorten >=20pt,draw=red] ($(n10)!0.4!(n10Ground)$)--node[above,xshift=-17pt]{\small \textcolor{red}{assign }} node[below,xshift=-17pt]{\small \textcolor{red}{operations}}($(n26)!0.4!(n26Ground)$);
 \end{tikzpicture}

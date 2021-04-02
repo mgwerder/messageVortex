@@ -7,7 +7,7 @@ import picocli.CommandLine;
 import sun.misc.Signal;
 
 /**
- * <p>Commandline handler for prepopulating keys in cache.</p>
+ * <p>Commandline handler for pre-populating keys in cache.</p>
  */
 @CommandLine.Command(
         description = "Add key to cache",
@@ -18,7 +18,7 @@ import sun.misc.Signal;
 public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
   
   /**
-   * duration for the precalculation to take place. Use -1 (default) for "no time limit"
+   * duration for the pre-calculation to take place. Use -1 (default) for "no time limit"
    **/
   @CommandLine.Option(names = {"--seconds"},
           description = "number of seconds to run the calculator (-1) for infinite")
@@ -33,7 +33,7 @@ public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
   public Integer call() throws IOException {
     
     // just create an instance and wait for the Cache to fill
-    final AsymmetricKey a = new AsymmetricKey();
+    new AsymmetricKey();
     
     // install signal handler for HUP to abort pre-calculation
     Signal.handle(new Signal("HUP"), signal -> {

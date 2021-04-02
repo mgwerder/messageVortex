@@ -49,19 +49,17 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest implements 
    * <p>Creates a request block from the ASN.1 structure.</p>
    *
    * @param ae            the structure to be parsed
-   * @throws IOException  if the structure does not parse to the respective block
    */
-  public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) throws IOException {
+  public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) {
     this();
     if (ae != null) {
       parse(ae);
     }
   }
 
-  protected final void parse(ASN1Encodable ae) throws IOException {
+  protected final void parse(ASN1Encodable ae) {
     ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-    int i = 0;
-    quota = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
+    quota = ASN1Integer.getInstance(s1.getObjectAt(0)).getValue().intValue();
   }
 
   protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {

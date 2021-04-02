@@ -82,7 +82,7 @@ public class SymmetricKeyTest {
     }
 
     @Test
-    public void fuzzingSymmetricEncryption() throws Exception {
+    public void fuzzingSymmetricEncryption() {
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             for (int size : new int[]{alg.getKeySize( SecurityLevel.LOW ), alg.getKeySize( SecurityLevel.MEDIUM ), alg.getKeySize( SecurityLevel.HIGH ), alg.getKeySize( SecurityLevel.QUANTUM )}) {
                 try {

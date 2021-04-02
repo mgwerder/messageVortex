@@ -41,12 +41,12 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
 
   private static final long serialVersionUID = 16134223345689L;
 
-  private List<Edge> store = new ArrayList<>();
+  private final List<Edge> store = new ArrayList<>();
   private List<net.messagevortex.asn1.IdentityStoreBlock> anonymitySet;
   private net.messagevortex.asn1.IdentityStoreBlock source = null;
   private net.messagevortex.asn1.IdentityStoreBlock target = null;
   private boolean hasChanged = true;
-  private Object cacheLock = new Object();
+  private final Object cacheLock = new Object();
   private GraphSet[] cache = null;
 
   /***
@@ -212,7 +212,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
         Set<GraphSet> ret = new TreeSet<>();
         for (int i = 0; i < store.size(); i++) {
           if (store.get(i).getFrom().equals(getSource())) {
-            Edge[][] g = getRoute(i, new Edge[]{store.get(i)}, getTarget());
+            Edge[][] g = getRoute(i, new Edge[] {store.get(i)}, getTarget());
             for (Edge[] gr : g) {
               GraphSet gs = new GraphSet();
               gs.setAnonymitySet(getAnonymitySet());
@@ -239,7 +239,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
 
     // if target reached tell so
     if (g.getTo().equals(to)) {
-      return new Edge[][]{new Edge[0]};
+      return new Edge[][] {new Edge[0]};
     }
 
     //
@@ -254,8 +254,8 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
       for (Edge v : visited) {
         if (v == null) {
           throw new NullPointerException("OUCH got an null visited graph ... "
-                  + "thats impossible (size is " + visited.length + ";v[0]=" + visited[0]
-                  + ";v[1]=" + visited[1] + ")");
+              + "thats impossible (size is " + visited.length + ";v[0]=" + visited[0]
+              + ";v[1]=" + visited[1] + ")");
         }
         if (tmp.getTo().equals(v.getFrom()) || tmp.getTo().equals(v.getTo())) {
           vis = true;
@@ -268,7 +268,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
         // this node is not yet visited (check possibility)
 
         // building new visited array
-        List<Edge> tg1 = new ArrayList<>();
+        final List<Edge> tg1 = new ArrayList<>();
         tg1.addAll(Arrays.asList(visited));
         tg1.add(tmp);
 
@@ -351,10 +351,10 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
   public String dump() {
     StringBuilder sb = new StringBuilder();
     for (Edge g : store) {
-      sb.append("  " + anonymitySet.indexOf(g.getFrom()) + " -> "
-              + anonymitySet.indexOf(g.getTo()));
+      sb.append("  ").append(anonymitySet.indexOf(g.getFrom())).append(" -> ")
+          .append(anonymitySet.indexOf(g.getTo()));
     }
-    sb.append("}");
+    sb.append('}');
     return sb.toString();
   }
 

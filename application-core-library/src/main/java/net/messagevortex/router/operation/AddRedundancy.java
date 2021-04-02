@@ -1,27 +1,5 @@
 package net.messagevortex.router.operation;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -43,21 +21,27 @@ import net.messagevortex.asn1.encryption.Prng;
  * <p>It builds redundant data blocksfrom the existing data blocks.</p>
  */
 public class AddRedundancy extends AbstractOperation implements Serializable {
-  
-  private static final long MAX_SIZE = (long) Math.pow(2, 32);
-  
+
+  private static final long MAX_SIZE = 2L << 31; // calculate 2^32
+
   /***
    * <p>Wrapper for the java random number generator (not normative).</p>
    */
   public static class SimplePrng implements Prng {
-    
-    private Random sr = new Random();
-    private long seed = sr.nextLong();
-    
+
+    private final Random sr = new Random();
+    private final long seed;
+
     public SimplePrng() {
+      seed = sr.nextLong();
       sr.setSeed(seed);
     }
-    
+
+    public SimplePrng(long seed) {
+      this.seed = seed;
+    }
+
+
     /***
      * <p>Get the next random byte of the Prng.</p>
      *
@@ -68,7 +52,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       sr.nextBytes(a);
       return a[0];
     }
-    
+
     /***
      * <p>Resets the Prng to the initially seeded state.</p>
      */
@@ -76,29 +60,29 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       sr.setSeed(seed);
     }
   }
-  
-  private static Prng localPrng = new SimplePrng();
-  
+
+  private static final Prng localPrng = new SimplePrng();
+
   public static final long serialVersionUID = 100000000018L;
-  
+
   private static final java.util.logging.Logger LOGGER;
-  
+
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-  
+
   AbstractRedundancyOperation operation;
-  
+
   public AddRedundancy(AddRedundancyOperation op) {
     this.operation = op;
   }
-  
+
   @Override
   public boolean canRun() {
     return payload.getPayload(operation.getInputId()) != null;
   }
-  
+
   @Override
   public int[] getOutputId() {
     int[] ret = new int[operation.getDataStripes() + operation.getRedundancy()];
@@ -108,7 +92,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     }
     return ret;
   }
-  
+
   @Override
   public int[] getInputId() {
     int[] ret = new int[1];
@@ -117,17 +101,17 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     }
     return ret;
   }
-  
+
   @Override
   public int[] execute(int[] id) {
-    if (!canRun()) {
+    if (!canRun() || id == null) {
       return new int[0];
     }
     LOGGER.log(Level.INFO, "executing add redundancy operation (" + toString() + ")");
     byte[] in = payload.getPayload(operation.getInputId()).getPayload();
-    
+
     Matrix out = executeInt(in);
-    
+
     // set output
     LOGGER.log(Level.INFO, "  setting output chunks");
     int tot = 0;
@@ -135,7 +119,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     try {
       for (int i = 0; i < out.getY(); i++) {
         int plid = operation.getOutputId() + i;
-        byte[] b = operation.getkeys()[i].encrypt(out.getRowAsByteArray(i));
+        byte[] b = operation.getKeys()[i].encrypt(out.getRowAsByteArray(i));
         payload.setCalculatedPayload(plid, new PayloadChunk(plid, b, getUsagePeriod()));
         tot += b.length;
       }
@@ -147,11 +131,11 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       return new int[0];
     }
     LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
-            + tot + ")");
-    
+        + tot + ")");
+
     return getOutputId();
   }
-  
+
   /***
    * <p>Execute the add redundancy operation on the provided data.</p>
    * @param in           data to add redundancy
@@ -162,13 +146,13 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
    */
   public static byte[] execute(byte[] in, int redundancy, int dataStripes, int gf) {
     AddRedundancy ar = new AddRedundancy(
-            new AddRedundancyOperation(-1, redundancy, dataStripes,
-                    new Vector<SymmetricKey>(), -1, gf)
+        new AddRedundancyOperation(-1, redundancy, dataStripes,
+            new Vector<SymmetricKey>(), -1, gf)
     );
-    
-    LOGGER.log(Level.INFO, "executing add redundancy operation (" + ar.toString() + ")");
+
+    LOGGER.log(Level.INFO, "executing add redundancy operation (" + ar + ")");
     Matrix out = ar.executeInt(in);
-    
+
     // set output
     LOGGER.log(Level.INFO, "  setting output chunks");
     int tot = 0;
@@ -182,70 +166,69 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       tot += b.length;
     }
     LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
-            + tot + ")");
+        + tot + ")");
     return totArray;
   }
-  
+
   private Matrix executeInt(byte[] in) {
     // do the padding
     int paddingSize = 4;
     int size = in.length + paddingSize;
-    int keySize = operation.getkeys().length != 0 ? operation.getkeys()[1].getKeySize() / 8 : 32;
+    int keySize = operation.getKeys().length != 0 ? operation.getKeys()[1].getKeySize() / 8 : 32;
     if (size % (keySize * operation.getDataStripes()) > 0) {
       size = keySize * operation.getDataStripes() * (size
-              / (keySize * operation.getDataStripes()) + 1);
+          / (keySize * operation.getDataStripes()) + 1);
     }
     byte[] in2 = new byte[size];
     byte[] pad = VortexMessage.getLongAsBytes(in.length, paddingSize);
-    LOGGER.log(Level.INFO, "  calculated padded size (original: " + in.length + "; blocks: "
-            + operation.getDataStripes() + "; block size: " + keySize + "; padded size: "
-            + size + ")");
-    
+    String msg = "  calculated padded size (original: " + in.length + "; blocks: "
+        + operation.getDataStripes() + "; block size: " + keySize + "; padded size: "
+        + size + ")";
+    LOGGER.log(Level.INFO, msg);
+
     // copy length prefix
     System.arraycopy(pad, 0, in2, 0, paddingSize);
-    
+
     // copy data
     System.arraycopy(in, 0, in2, paddingSize, in.length);
-    
+
     // repeat length prefix
     for (int i = 0; i < in2.length - in.length - paddingSize; i++) {
       in2[i + paddingSize + in.length] = pad[i % pad.length];
     }
-    
+
     // do the redundancy calc
     MathMode mm = GaloisFieldMathMode.getGaloisFieldMathMode(operation.getGfSize());
     LOGGER.log(Level.INFO, "  preparing data matrixContent");
     Matrix data = new Matrix(in2.length / operation.getDataStripes(), operation.getDataStripes(),
-            mm, in2);
+        mm, in2);
     LOGGER.log(Level.INFO, "  data matrixContent is " + data.getX() + "x" + data.getY());
     LOGGER.log(Level.INFO, "  preparing redundancy matrixContent");
     RedundancyMatrix r = new RedundancyMatrix(operation.getDataStripes(),
-            operation.getDataStripes() + operation.getRedundancy(), mm);
+        operation.getDataStripes() + operation.getRedundancy(), mm);
     LOGGER.log(Level.INFO, "  redundancy matrixContent is " + r.getX() + "x" + r.getY());
     LOGGER.log(Level.INFO, "  calculating");
     return r.mul(data);
   }
-  
+
   private static long gcd(long n1, long n2) {
     long gcd = 1;
-    
+
     for (int i = 1; i <= n1 && i <= n2; ++i) {
       // Checks if i is factor of both integers
       if (n1 % i == 0 && n2 % i == 0) {
         gcd = i;
       }
     }
-    
+
     return gcd;
   }
-  
+
   private static long lcm(long n1, long n2) {
     long gcd = gcd(n1, n2);
-    
-    long lcm = (n1 * n2) / gcd;
-    return lcm;
+    return (n1 * n2) / gcd;
   }
-  
+
   /***
    * <p>padds a given payload block.</p>
    *
@@ -260,8 +243,8 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
   public static byte[] pad(int blocksize, int numberOfOutBlocks, byte[] data,
                            Prng prng, int c1, int c2) {
     LOGGER.log(Level.FINEST, "starting padding of " + data.length + " bytes with blocksize "
-            + blocksize + " and output block count with " + numberOfOutBlocks);
-    
+        + blocksize + " and output block count with " + numberOfOutBlocks);
+
     // catch some bad values
     if (c1 < 0) {
       c1 = 0;
@@ -269,40 +252,40 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     if (c2 < 0) {
       c2 = 0;
     }
-    
+
     // calculate sizes
     long outRowSize = lcm(blocksize, numberOfOutBlocks);
     long containerSize = ((long) (Math.ceil(((double) data.length + c2) / outRowSize))
-            * outRowSize);
+        * outRowSize);
     LOGGER.log(Level.FINEST, "container size of padded array is " + (containerSize + 4)
-            + " bytes (c1: " + c1 + "; c2: " + c2 + ")");
-    
+        + " bytes (c1: " + c1 + "; c2: " + c2 + ")");
+
     // calculate padding value
     long modOp = (long) (Math.floor((0.0 + MAX_SIZE - 1 - data.length) / containerSize))
-            * containerSize;
+        * containerSize;
     long pval = (containerSize == 0 ? ThreadLocalRandom.current().nextLong(MAX_SIZE)
-            : new BigInteger("" + data.length).add(new BigInteger("" + c1).multiply(
-            new BigInteger("" + containerSize))).mod(new BigInteger("" + modOp)).longValue());
+        : new BigInteger("" + data.length).add(new BigInteger("" + c1).multiply(
+        new BigInteger("" + containerSize))).mod(new BigInteger("" + modOp)).longValue());
     LOGGER.log(Level.FINEST, "Padding value is " + pval + "");
     assert modOp < MAX_SIZE : "modulo value too big (" + modOp + ">" + MAX_SIZE + ")";
     assert pval < MAX_SIZE : "Padding value too big (" + pval + ">" + MAX_SIZE + ")";
-    
+
     // create new container
     byte[] out = new byte[(int) containerSize + 4];
-    
+
     // insert size descriptor
     out[0] = (byte) ((pval & 255) - 128);
     out[1] = (byte) (((pval >>> 8) & 255) - 128);
     out[2] = (byte) (((pval >>> 16) & 255) - 128);
     out[3] = (byte) (((pval >>> 24) & 255) - 128);
     LOGGER.log(Level.FINEST, "Encoded padding value is " + out[0] + ";" + out[1] + ";" + out[2]
-            + ";" + out[3] + "");
-    
+        + ";" + out[3] + "");
+
     // insert data (inefficient yet working)
     for (int a = 4; a < data.length + 4; a++) {
       out[a] = data[a - 4];
     }
-    
+
     // insert padding
     if (prng == null) {
       prng = localPrng;
@@ -314,12 +297,12 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
         LOGGER.log(Level.FINEST, "  Padding start value is " + val + " at " + a);
       }
     }
-    
+
     LOGGER.log(Level.FINEST, "Padding is done up to size " + out.length);
-    
+
     return out;
   }
-  
+
   /***
    * <p>Removes padding from a byte array.</p>
    * @param blocksize          encryption block size
@@ -331,14 +314,14 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
    * @throws IOException       if unpadding fails for any reason
    */
   public static byte[] unpad(int blocksize, int numberOfOutBlocks, byte[] in, Prng prng)
-          throws IOException {
+      throws IOException {
     LOGGER.log(Level.FINEST, "starting unpadding of " + in.length + " bytes");
-    
+
     // extract size descriptor
     LOGGER.log(Level.FINEST, "Encoded padding value is " + in[0] + ";" + in[1] + ";" + in[2] + ";"
-            + in[3] + "");
+        + in[3] + "");
     long size = ((long) (in[0]) + 128) + ((long) (in[1]) + 128) * 256 + ((long) (in[2]) + 128) * 256
-            * 256 + ((long) (in[3]) + 128) * 256 * 256 * 256;
+        * 256 + ((long) (in[3]) + 128) * 256 * 256 * 256;
     LOGGER.log(Level.FINEST, "Padding value is " + size);
     if (in.length > 4) {
       size = size % (in.length - 4);
@@ -346,13 +329,13 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       size = 0;
     }
     LOGGER.log(Level.FINEST, "size is " + size + " bytes");
-    
+
     // creating output
     byte[] out = new byte[(int) size];
     for (int a = 4; a < out.length + 4; a++) {
       out[a - 4] = in[a];
     }
-    
+
     // check if padding is correct
     if (prng != null) {
       for (int a = out.length + 4; a < in.length; a++) {
@@ -365,12 +348,16 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
         }
       }
     }
-    
+
     return out;
   }
-  
+
   public String toString() {
     return getInputId()[0] + "->addRedundancy(" + getOutputId().length + ")->" + getOutputId()[0];
   }
-  
+
+  public static void main(String[] args) {
+    System.out.println(MAX_SIZE);
+  }
+
 }

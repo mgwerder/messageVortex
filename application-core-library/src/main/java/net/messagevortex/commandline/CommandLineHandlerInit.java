@@ -11,9 +11,7 @@ import picocli.CommandLine;
     description = "initialize or upgrade configuration files",
     name = "initconfig",
     aliases = {"icfg"},
-    mixinStandardHelpOptions = true,
-    subcommands = {
-    }
+    mixinStandardHelpOptions = true
 )
 public class CommandLineHandlerInit implements Callable<Integer> {
 
@@ -23,11 +21,11 @@ public class CommandLineHandlerInit implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  @CommandLine.Option(names = {"--filename", "-f"}, required = false,
+  @CommandLine.Option(names = {"--filename", "-f"},
       description = "filename of the config file")
   String filename = MessageVortexConfig.DEFAULT_FILENAME;
 
-  @CommandLine.Option(names = {"--newname", "-n"}, required = false,
+  @CommandLine.Option(names = {"--newname", "-n"},
       description = "filename of the new config file")
   String nfilename = null;
 

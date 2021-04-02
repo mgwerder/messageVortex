@@ -51,6 +51,7 @@ import javax.mail.util.ByteArrayDataSource;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.Version;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
@@ -71,14 +72,14 @@ public class DummyBlender extends Blender {
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
   
-  private String identity;
-  private Transport transport;
-  private BlendingReceiver router;
-  private IdentityStore identityStore;
+  private final String identity;
+  private final Transport transport;
+  private final BlendingReceiver router;
+  private final IdentityStore identityStore;
   
   private static class SenderThread extends Thread {
     
-    OutputStream output;
+    final OutputStream output;
     MimeMessage msg;
     
     volatile boolean success = true;
@@ -90,10 +91,8 @@ public class DummyBlender extends Blender {
     
     public SenderThread(byte[] msg, OutputStream os) throws MessagingException {
       this.output = os;
-      Properties props = new Properties();
       ByteArrayInputStream bis = new ByteArrayInputStream(msg);
-      MimeMessage mmsg = new MimeMessage(null, bis);
-      this.msg = mmsg;
+      this.msg = new MimeMessage(null, bis);
     }
     
     @Override
@@ -135,7 +134,7 @@ public class DummyBlender extends Blender {
     // FIXME add sensible identity store
     this(
             null,
-            MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
+            MessageVortexRepository.getRouter("", Config.getDefault().getSectionValue(section, "router")),
             new IdentityStore()
     );
   }
@@ -220,7 +219,7 @@ public class DummyBlender extends Blender {
   }
   
   @Override
-  public boolean blendMessage(BlendingSpec target, VortexMessage msg) throws IOException {
+  public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
     try {
       if (transport != null) {
         PipedOutputStream os = new PipedOutputStream();

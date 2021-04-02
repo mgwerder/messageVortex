@@ -52,7 +52,7 @@ public class SecurityContext {
 
   private SecurityRequirement requirement = SecurityRequirement.STARTTLS;
   private SSLContext context = null;
-  private Set<String> supportedCiphers = new HashSet<>();
+  private final Set<String> supportedCiphers = new HashSet<>();
 
   public SecurityContext() {
   }
@@ -92,6 +92,7 @@ public class SecurityContext {
   }
 
   private KeyStore getSelfsignedKeyStore() {
+    //FIXME incomplete
     KeyStore keyStore = null;
     try {
       String commonName = "MessageVortex";
@@ -148,7 +149,7 @@ public class SecurityContext {
    * @param context the SSL context to be set
    * @return the previously set context
    */
-  public SSLContext setContext(SSLContext context) {
+  public final SSLContext setContext(SSLContext context) {
     SSLContext ret = this.context;
     this.context = context;
     return ret;
@@ -164,7 +165,7 @@ public class SecurityContext {
    * @param requirement the requrement to be achieved
    * @return the previously set requirement
    */
-  public SecurityRequirement setRequirement(SecurityRequirement requirement) {
+  public final SecurityRequirement setRequirement(SecurityRequirement requirement) {
     SecurityRequirement ret = this.requirement;
     this.requirement = requirement;
     return ret;

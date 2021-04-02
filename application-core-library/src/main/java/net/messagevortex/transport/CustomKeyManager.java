@@ -50,8 +50,8 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private KeyStore keyStore;
-  private String alias;
+  private final KeyStore keyStore;
+  private final String alias;
   char[] password;
 
   /**
@@ -73,6 +73,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    * @param keyStoreFile name of the JKS keystore file
    * @param password     password to open the kestore file
    * @param alias        alias of the certificate to be used
+   * @throws GeneralSecurityException if alias is not in keystore
    */
   CustomKeyManager(String keyStoreFile, char[] password, String alias)
           throws GeneralSecurityException {
@@ -81,7 +82,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
     // KeyStore.getDefaultType()
     keyStore = KeyStore.getInstance("JKS");
     try {
-      try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(keyStoreFile);) {
+      try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(keyStoreFile)) {
         keyStore.load(is, password);
       }
     } catch (IOException ioe) {
@@ -99,7 +100,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    *
    * @param alias alias of the certificate to be used
    */
-  public PrivateKey getPrivateKey(String alias) {
+  public final PrivateKey getPrivateKey(String alias) {
     try {
       LOGGER.log(Level.INFO, "key for \"" + alias + "\" requested ",
               new Object[]{keyStore.getKey(alias, password)});

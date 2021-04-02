@@ -1,31 +1,23 @@
-\gdef\shadowshift{-3pt}
-\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
-
 \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
-
-% Hexagon
-%\draw  [fill={rgb, 255:red, 255; green, 226; blue, 226 }  ,fill opacity=1 ][general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }] (1047.25,629.75) -- (804.63,1049.99) -- (319.38,1049.99) -- (76.75,629.75) -- (319.37,209.51) -- (804.63,209.51) -- cycle ;
-% Rounded Rect [id:dp0867630424874597] 
- %\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 217; green, 248; blue, 217 }  ,fill opacity=1 ][general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,shadow xshift=\shadowshift,shadow yshift=\shadowshift, opacity=1 }] (194.5,445.5) .. controls (194.5,440.25) and (198.75,436) .. (204,436) -- (920,436) .. controls (925.25,436) and (929.5,440.25) .. (929.5,445.5) -- (929.5,487.5) .. controls (929.5,492.75) and (925.25,497) .. (920,497) -- (204,497) .. controls (198.75,497) and (194.5,492.75) .. (194.5,487.5) -- cycle ;
-% Straight Lines [id:da9786342569348638] 
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
 
 % Hexagon
 \path[
  	fill={rgb, 255:red, 255; green, 226; blue, 226 },
  	draw=black,
  	xshift=100, 
- 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=-3pt,shadow yshift=-3pt}
- 	%blur shadow={shadow xshift=-.5mm,shadow yshift=.5mm}
- 	%blur shadow
+ 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=\shadowshift,shadow yshift=\shadowshift}
  	] (0:200) -- (60:200) -- (120:200) -- (180:200) -- (240:200) -- (300:200) -- (0:200);
 % square
 \path[fill={rgb, 255:red, 217; green, 248; blue, 217 },draw=black,rounded corners=5pt,
- 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=-3pt,shadow yshift=-3pt}
+ 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=\shadowshift,shadow yshift=\shadowshift}
 	] (100,-30) rectangle +(60,60) node [pos=.5,scale=2] {$D^{K_o}$};
 % Input arrow
-\draw [color=black  ,draw opacity=1,Latex- ]   (130,-100) -- +(0,70)  node [pos=.5,xshift=15,scale=2] {$O$} node [yshift=70,scale=2] {$Output$};
+\draw [color=black  ,draw opacity=1,Latex- ]   (130,-100) -- +(0,70)  node [pos=.5,xshift=15,scale=2] {$O$} node [yshift=70,scale=2] {Output};
 % output arrow
-\draw [color=black  ,draw opacity=1,Latex-]   (130,30) -- +(0,70)  node [pos=.5,xshift=15,scale=2] {$I$} node [yshift=-15,scale=2] {$Input$};
+\draw [color=black  ,draw opacity=1,Latex-]   (130,30) -- +(0,70)  node [pos=.5,xshift=15,scale=2] {$I$} node [yshift=-15,scale=2] {Input};
+% draw parameters
+\draw [color=black,draw opacity=1,Latex- ]   (160,0) -- +(190,0)  node[scale=2,right] {$D, K_o$};
 
 \end{tikzpicture}
 

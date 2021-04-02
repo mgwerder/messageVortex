@@ -1,25 +1,4 @@
 package net.messagevortex.test.routing;
-/***
- * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- ***/
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityBlock;
@@ -87,7 +66,7 @@ public class InternalPayloadSpaceTest {
     }
 
     @Test
-    public void payloadSpaceSetAndGetTest() throws Exception {
+    public void payloadSpaceSetAndGetTest() {
         InternalPayloadSpace p=space[0].getInternalPayload(identity[0]);
         String pl=RandomString.nextString((int)(Math.random()*1024*10+1));
         PayloadChunk pc =new PayloadChunk(100,pl.getBytes(StandardCharsets.UTF_8),null);
@@ -109,7 +88,7 @@ public class InternalPayloadSpaceTest {
         }
     }
 
-    private void payloadSpaceProcessingTest(String s) throws Exception {
+    private void payloadSpaceProcessingTest(String s) {
         LOGGER.log(Level.INFO,"Testing payload handling with "+s.getBytes(StandardCharsets.UTF_8).length+" bytes");
         InternalPayloadSpace p=space[0].getInternalPayload(identity[0]);
         PayloadChunk pc =new PayloadChunk(200,s.getBytes(StandardCharsets.UTF_8),null);

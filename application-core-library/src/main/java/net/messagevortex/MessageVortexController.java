@@ -22,12 +22,12 @@ public class MessageVortexController implements SignalHandler {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
   
-  private Object runningLock = new Object();
-  private int port = 8743;
-  private ControllerRunner runner = new ControllerRunner();
+  private static final Object runningLock = new Object();
+  private static final int port = 8743;
+  private static final ControllerRunner runner = new ControllerRunner();
   private Timer timer = null;
   
-  private class ControllerRunner implements Runnable {
+  private static class ControllerRunner implements Runnable {
     
     private boolean shutdown = false;
     private Thread runner = null;
@@ -137,7 +137,7 @@ public class MessageVortexController implements SignalHandler {
       LOGGER.log(Level.INFO, "Received SIGINT signal. Will teardown.");
       runner.shutdown();
     } else {
-      LOGGER.log(Level.WARNING, "Received unthandled signal SIG" + signal.getName() + ". IGNORING");
+      LOGGER.log(Level.WARNING, "Received unhandled signal SIG" + signal.getName() + ". IGNORING");
     }
   }
   

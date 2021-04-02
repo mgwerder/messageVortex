@@ -61,7 +61,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
    * <p>Initializer called by the static constructor of ImapCommand.</p>
    */
   public void init() {
-    ImapCommand.registerCommand(this);
+    ImapCommandFactory.registerCommand(this);
   }
 
   public static String getChallenge(int length) {
@@ -114,7 +114,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
       }
       // FIXME add possibility to add realm
       props.put("com.sun.security.sasl.digest.realm", "theRealm");
-      ss = Sasl.createSaslServer(mech.toString(), "IMAP", "FQHN", props, serverHandler);
+      ss = Sasl.createSaslServer(mech, "IMAP", "FQHN", props, serverHandler);
     } catch (SaslException e) {
       LOGGER.log(Level.WARNING, "unsuported sasl mech " + mech + " requested by client (2)", e);
       return new String[]{line.getTag() + " BAD server configuration error\r\n"};
@@ -131,7 +131,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
     byte[] saslChallenge = null;
     byte[] saslReply = null;
     try {
-      if (SaslMechanisms.PLAIN.toString().equals(mech) && context != null) {
+      if (context != null && SaslMechanisms.PLAIN.toString().equals(mech)) {
         saslReply = Base64.decode(context);
       } else {
         saslChallenge = ss.evaluateResponse(new byte[0]);

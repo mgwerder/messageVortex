@@ -31,8 +31,8 @@ public class Edge {
 
   private static final long serialVersionUID = 9070431563L;
 
-  private IdentityStoreBlock from;
-  private IdentityStoreBlock to;
+  private final IdentityStoreBlock from;
+  private final IdentityStoreBlock to;
   private long startTime = 0;
   private long maxDelay = 10000;
 
@@ -137,8 +137,8 @@ public class Edge {
       return false;
     }
     Edge g = (Edge) t;
-    return g.to.equals(this.to) && g.from.equals(this.from) && (g.startTime == this.startTime)
-            && (g.maxDelay == this.maxDelay);
+    return (g.startTime == this.startTime) && (g.maxDelay == this.maxDelay)
+        && g.to.equals(this.to) && g.from.equals(this.from);
   }
 
   @Override

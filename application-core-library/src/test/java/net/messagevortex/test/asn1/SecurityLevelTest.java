@@ -10,7 +10,7 @@ import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;
 
-/**
+/*
  * Created by martin.gwerder on 06.06.2016.
  */
 @RunWith(JUnit4.class)
@@ -23,8 +23,8 @@ public class SecurityLevelTest {
     }
 
     @Test
-    /***
-     * Testing null beheour of toHex()
+    /*
+     * Testing null behaviour of toHex()
      */
     public void incrementTest() {
         assertTrue( "incrementing LOW (got " + SecurityLevel.LOW.next() + ")", SecurityLevel.LOW.next() == SecurityLevel.MEDIUM );

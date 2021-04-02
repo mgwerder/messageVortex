@@ -87,7 +87,7 @@ public class SmtpReceiver implements SocketListener {
    * @param lreceiver the blending layer to be set
    * @return the previously set blending layer
    */
-  public TransportReceiver setTransportReceiver(TransportReceiver lreceiver) {
+  public final TransportReceiver setTransportReceiver(TransportReceiver lreceiver) {
     TransportReceiver ret = this.receiver;
     this.receiver = lreceiver;
     return ret;

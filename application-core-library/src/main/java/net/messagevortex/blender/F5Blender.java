@@ -49,6 +49,7 @@ import javax.mail.util.ByteArrayDataSource;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.NotImplementedException;
 import net.messagevortex.Version;
 import net.messagevortex.asn1.BlendingSpec;
@@ -70,15 +71,15 @@ public class F5Blender extends Blender {
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
-  private String identity;
-  private Transport transport;
-  private BlendingReceiver router;
-  private IdentityStore identityStore;
+  private final String identity;
+  private final Transport transport;
+  private final BlendingReceiver router;
+  private final IdentityStore identityStore;
 
   private static class SenderThread extends Thread {
 
-    OutputStream output;
-    MimeMessage msg;
+    private final OutputStream output;
+    private final MimeMessage msg;
 
     volatile boolean success = true;
 
@@ -126,7 +127,7 @@ public class F5Blender extends Blender {
     // FIXME add sensible identity store
     this(
             null,
-            MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
+            MessageVortexRepository.getRouter("",Config.getDefault().getSectionValue(section, "router")),
             new IdentityStore()
     );
   }

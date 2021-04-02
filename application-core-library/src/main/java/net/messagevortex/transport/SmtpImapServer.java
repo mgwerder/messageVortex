@@ -37,8 +37,8 @@ public class SmtpImapServer extends AbstractDaemon implements Transport {
   }
 
   @Override
-  public void sendMessage(String address, InputStream os) throws IOException {
-
+  public void sendMessage(String address, InputStream os) {
+    // TODO empty
   }
 
   @Override

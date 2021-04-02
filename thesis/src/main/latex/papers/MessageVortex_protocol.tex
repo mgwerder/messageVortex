@@ -1,4 +1,5 @@
 % !TeX spellcheck = en_GB
+% !BIB TS-program = bibtex
 
 \documentclass[9pt,journal,compsoc]{IEEEtran}
 
@@ -447,6 +448,13 @@ pdfkeywords={messages, unobservable}}%<^!CHANGE!
 \usepackage{zref-user}
 %\usepackage{extsizes}
 \usepackage[margin=0.6in]{geometry}
+
+%% Custom Packages
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,arrows.meta,backgrounds,shapes.geometric,shadows.blur}
+\tikzset{background rectangle/.style={fill=black!10}, show background rectangle}
+
+
 \begin{document}
 %
 % paper title
@@ -772,10 +780,9 @@ This is the reason why DC-nets are not used. Theoretically, it is possible refle
 This operation is based on a modified Reed-Solomon redundancy function in order to accommodate the anonymity needs of this function. The Reed-Solomon function as defined in appendix~\ref{sec:reedSolomon} offers a varying number of redundant checksum blocks. When sending these blocks into multiple directions no mixing node is able to tell where the original message is being rebuilt. The general inner workings are described in Fig~\ref{fig:addRedundancy}.
 
 \begin{figure}[htb]
-	\centering
-	\includegraphics[width=2.5in]{../inc/addRedundancyOp}
-	\caption{AddRedundancy Operation}
-	\label{fig:addRedundancy}
+	\resizebox{0.9\columnwidth}{!}{\input{../inc/addRedundancyOp.inc.tex}}
+	\caption{Outline of the addRedundancy operation}
+	\label{fig:addRedundancyOperation}
 \end{figure}
 
 We define a function $\addRedundancy_{n,m}( \mathbf{M},k_1\ldots k_{m} )$ where $M$ denotes the message, $n$ the number of total output blocks, $m$ the number of redundancy blocks wheras $m<n$, $k$ the encryption key and scheme to be used, and $bs_k$ the block size required to accommodate scheme and key size described by $k$. It is important to note that the number of true data blocks is $d=n-m$, while the rest of the output blocks are redundant information.

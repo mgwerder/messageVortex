@@ -8,6 +8,7 @@ import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.ImapClient;
 import net.messagevortex.transport.imap.ImapCommand;
+import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
@@ -42,7 +43,7 @@ public class ImapCommandLoginTest {
 
     @Test
     public void loginParsing() {
-        ImapCommand ic=ImapCommand.getCommand("login");
+        ImapCommand ic= ImapCommandFactory.getCommand("login");
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login\r\n"));

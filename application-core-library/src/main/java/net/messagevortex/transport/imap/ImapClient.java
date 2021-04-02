@@ -123,7 +123,7 @@ public class ImapClient extends ClientConnection {
     
     try {
       String tag = ImapLine.getNextTag();
-      writeln(tag + " AUTHENTICATE " + mech.toString());
+      writeln(tag + " AUTHENTICATE " + mech);
       SaslClient sc = Sasl.createSaslClient(new String[]{mech.toString()}, "username", "IMAP",
               "FQHN", props, clientHandler);
       if (sc == null) {
@@ -223,7 +223,7 @@ public class ImapClient extends ClientConnection {
   }
   
   private void interruptedCatcher(InterruptedException ie) {
-    assert false : "This Point should never be reached (" + ie.toString() + ")";
+    assert false : "This Point should never be reached (" + ie + ")";
     Thread.currentThread().interrupt();
   }
   

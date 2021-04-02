@@ -49,22 +49,20 @@ public class HeaderRequestIncreaseTransferQuota extends HeaderRequest implements
    * <p>Creates a request block from the ASN.1 structure.</p>
    *
    * @param ae            the structure to be parsed
-   * @throws IOException  if the structure does not parse to the respective block
    */
-  public HeaderRequestIncreaseTransferQuota(ASN1Encodable ae) throws IOException {
+  public HeaderRequestIncreaseTransferQuota(ASN1Encodable ae) {
     this();
     if (ae != null) {
       parse(ae);
     }
   }
 
-  protected void parse(ASN1Encodable ae) throws IOException {
+  protected final void parse(ASN1Encodable ae) {
     ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-    int i = 0;
-    quota = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
+    quota = ASN1Integer.getInstance(s1.getObjectAt(0)).getValue().intValue();
   }
 
-  protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
+  protected HeaderRequest getRequest(ASN1Encodable ae) {
     return new HeaderRequestIncreaseTransferQuota(ae);
   }
 
@@ -100,7 +98,7 @@ public class HeaderRequestIncreaseTransferQuota extends HeaderRequest implements
   }
 
   @Override
-  ASN1Object intToAsn1Object(DumpType dumpType) throws IOException {
+  ASN1Object intToAsn1Object(DumpType dumpType) {
     ASN1EncodableVector s1 = new ASN1EncodableVector();
     s1.add(new ASN1Integer(quota));
     return new DERSequence(s1);

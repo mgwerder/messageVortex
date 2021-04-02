@@ -37,13 +37,12 @@ public class ClientConnection extends AbstractConnection {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  public ClientConnection(SocketChannel channel, SecurityContext context) throws IOException {
+  public ClientConnection(SocketChannel channel, SecurityContext context) {
     super(channel, context);
     initConnection();
   }
 
-  public ClientConnection(InetSocketAddress socketAddress, SecurityContext context)
-          throws IOException {
+  public ClientConnection(InetSocketAddress socketAddress, SecurityContext context) {
     super(socketAddress, context);
     initConnection();
   }

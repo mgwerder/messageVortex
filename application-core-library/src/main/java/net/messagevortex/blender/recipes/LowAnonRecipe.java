@@ -1,6 +1,7 @@
 package net.messagevortex.blender.recipes;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -48,7 +49,7 @@ public class LowAnonRecipe extends BlenderRecipe {
   public RoutingCombo applyRecipe(Set<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
                                   IdentityStoreBlock to) throws IOException {
     // select random order
-    List<IdentityStoreBlock> set = new Vector<>();
+    List<IdentityStoreBlock> set = new ArrayList<>();
     //set.add(from);
     set.add(to);
     set.addAll(anonSet);
@@ -79,8 +80,10 @@ public class LowAnonRecipe extends BlenderRecipe {
 
 
     // send packages along the line
+    // FIXME
 
     // add some dead ends
+    // FIXME
 
     return null;
   }

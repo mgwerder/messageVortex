@@ -1,6 +1,6 @@
 package net.messagevortex.test;
 
-/**
+/*
  * Test all classes related to parsing/handling ASN.1 data.
  *
  * Created by martin.gwerder on 19.04.2016.

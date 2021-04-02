@@ -2,6 +2,7 @@ package net.messagevortex.test.imap;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.ImapCommand;
+import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.MessageVortex;
@@ -27,7 +28,7 @@ public class ImapCommandLogoutTest {
 
     @Test
     public void logoutParsing() {
-        ImapCommand ic=ImapCommand.getCommand("logout");
+        ImapCommand ic= ImapCommandFactory.getCommand("logout");
         try{
             ic.processCommand(new ImapLine(null,"A1 Logout\r\n"));
         } catch(ImapException ie) {

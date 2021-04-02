@@ -47,7 +47,7 @@ public class SaslClientCallbackHandler implements CallbackHandler {
   }
 
   @Override
-  public void handle(Callback[] cbs) throws IOException, UnsupportedCallbackException {
+  public void handle(Callback[] cbs) {
     for (Callback cb : cbs) {
       if (cb instanceof NameCallback) {
         NameCallback nc = (NameCallback) cb;

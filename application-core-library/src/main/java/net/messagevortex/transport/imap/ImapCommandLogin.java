@@ -34,10 +34,6 @@ public class ImapCommandLogin extends ImapCommand {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  public void init() {
-    ImapCommand.registerCommand(this);
-  }
-
   private String getAuthToken(ImapLine line) throws ImapException {
     String userid = line.getAString();
     if (userid == null) {

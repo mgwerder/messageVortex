@@ -25,6 +25,7 @@ package net.messagevortex.router.operation;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
@@ -110,7 +111,7 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
       int j = 0;
       for (int i : getInputId()) {
         if (!l.contains(i)) {
-          for (byte b : operation.getkeys()[i - getInputId()[0]]
+          for (byte b : operation.getKeys()[i - getInputId()[0]]
                         .decrypt(payload.getPayload(i).getPayload())) {
             in2[j++] = b;
           }
@@ -140,10 +141,7 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
     int paddingSize = 4;
     LOGGER.log(Level.INFO, "  removing padding");
     byte[] out1 = out.getAsByteArray();
-    byte[] len = new byte[paddingSize];
-    for (int i = 0; i < paddingSize; i++) {
-      len[i] = out1[i];
-    }
+    byte[] len = Arrays.copyOf(out1,paddingSize);
     int outputLength = (int) VortexMessage.getBytesAsLong(len);
     LOGGER.log(Level.INFO, "    message size is " + outputLength + " (padded: " + out1.length
             + ")");

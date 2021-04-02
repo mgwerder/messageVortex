@@ -46,7 +46,7 @@ public abstract class AbstractConnection {
   private String protocol = null;
   private boolean isClient;
 
-  private ExecutorService executor = Executors.newSingleThreadExecutor();
+  private final ExecutorService executor = Executors.newSingleThreadExecutor();
   private SecurityContext context = null;
   private boolean isTls = false;
   private SocketChannel socketChannel = null;
@@ -61,12 +61,11 @@ public abstract class AbstractConnection {
   }
 
   /***
-   * <p>This copy constructor enbles duplication of a connection.</p>
+   * <p>This copy constructor enables duplication of a connection.</p>
    *
    * @param ac A connection to be copied
-   * @throws IOException in case of failure (this method cannot fail but inherited may)
    */
-  public AbstractConnection(AbstractConnection ac) throws IOException {
+  public AbstractConnection(AbstractConnection ac) {
     if (ac != null) {
       setSecurityContext(ac.getSecurityContext());
       setEngine(ac.getEngine());
@@ -88,11 +87,9 @@ public abstract class AbstractConnection {
    *
    * @param sock          the channel to connect to
    * @param context       the predefined security context
-   * @param isClient      true if the connection is a client connnection
-   * @throws IOException  if channel initialisation fails
+   * @param isClient      true if the connection is a client connection
    */
-  public AbstractConnection(SocketChannel sock, SecurityContext context, boolean isClient)
-          throws IOException {
+  public AbstractConnection(SocketChannel sock, SecurityContext context, boolean isClient) {
     this.isClient = isClient;
     if (sock != null) {
       setSocketChannel(sock);
@@ -105,9 +102,8 @@ public abstract class AbstractConnection {
    *
    * @param sock          the channel to connect to
    * @param context       the predefined security context
-   * @throws IOException  if channel initialisation fails
    */
-  public AbstractConnection(SocketChannel sock, SecurityContext context) throws IOException {
+  public AbstractConnection(SocketChannel sock, SecurityContext context) {
     this(sock, context, true);
   }
 
@@ -137,7 +133,7 @@ public abstract class AbstractConnection {
     }
   }
 
-  protected SocketChannel setSocketChannel(SocketChannel s) {
+  protected final SocketChannel setSocketChannel(SocketChannel s) {
     SocketChannel ret = this.socketChannel;
     this.socketChannel = s;
     if (s != null) {
@@ -170,7 +166,7 @@ public abstract class AbstractConnection {
    * @param context the security context to be used
    * @return the previously set security context
    */
-  public SecurityContext setSecurityContext(SecurityContext context) {
+  public final SecurityContext setSecurityContext(SecurityContext context) {
     SecurityContext ret = this.context;
     this.context = context;
     return ret;
@@ -189,7 +185,7 @@ public abstract class AbstractConnection {
     return engine;
   }
 
-  protected SSLEngine setEngine(SSLEngine engine) {
+  protected final SSLEngine setEngine(SSLEngine engine) {
     SSLEngine ret = this.engine;
     this.engine = engine;
     return ret;
@@ -209,7 +205,7 @@ public abstract class AbstractConnection {
 
     socketChannel.connect(remoteAddress);
     isClient = true;
-    // wait for conection to complete handshake
+    // wait for connection to complete handshake
     while (!socketChannel.finishConnect()) {
       try {
         Thread.sleep(10);
@@ -244,9 +240,9 @@ public abstract class AbstractConnection {
   }
 
   /***
-   * <p>Make a TLS handshake on the connection with a sepcified timeout.</p>
+   * <p>Make a TLS handshake on the connection with a specified timeout.</p>
    *
-   * @param timeout       the timeout in miliseconds
+   * @param timeout       the timeout in milliseconds
    * @throws IOException if handshake fails
    */
   public void startTls(long timeout) throws IOException {
@@ -263,7 +259,7 @@ public abstract class AbstractConnection {
       setEngine(getSecurityContext().getContext().createSSLEngine(ia.getHostName(), ia.getPort()));
       getEngine().setUseClientMode(isClient);
     } else if (getEngine() == null) {
-      throw new IOException("no securtity context available but startTls called");
+      throw new IOException("no security context available but startTls called");
     }
 
     LOGGER.log(Level.INFO, "starting TLS handshake (clientMode=" + isClient + ")");
@@ -278,7 +274,7 @@ public abstract class AbstractConnection {
   /***
    * <p>Sets the protocol to be used (mainly for logger messages).</p>
    *
-   * @param protocol the protocol name or abreviation
+   * @param protocol the protocol name or abbreviation
    * @return the previously set protocol name
    */
   public String setProtocol(String protocol) {
@@ -393,7 +389,7 @@ public abstract class AbstractConnection {
             && timeout - (System.currentTimeMillis() - start) > 0 && getEngine() != null) {
 
       // Checking handshake status of SSL engine
-      LOGGER.log(Level.INFO, "relooping (handshake status is " + handshakeStatus + ")");
+      LOGGER.log(Level.INFO, "re-looping (handshake status is " + handshakeStatus + ")");
       switch (handshakeStatus) {
         case NEED_UNWRAP:
           LOGGER.log(Level.INFO, "doing unwrap (reading; buffer is "
@@ -583,7 +579,7 @@ public abstract class AbstractConnection {
 
     if (!shutdownAbstractConnection && timeout - (System.currentTimeMillis() - start) <= 0
             && handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED) {
-      throw new IOException("SSL/TLS handshake abborted due to timeout");
+      throw new IOException("SSL/TLS handshake aborted due to timeout");
     } else {
       LOGGER.log(Level.INFO, "******* HANDSHAKE SUCCESS");
     }
@@ -708,7 +704,7 @@ public abstract class AbstractConnection {
             outboundAppData.compact();
             break;
           case BUFFER_UNDERFLOW:
-            throw new SSLException("Buffer underflow occured after a wrap. "
+            throw new SSLException("Buffer underflow occurred after a wrap. "
                     + "I don't think we should ever get here.");
           case CLOSED:
             closeConnection();
@@ -754,7 +750,9 @@ public abstract class AbstractConnection {
         if (timeout <= (System.currentTimeMillis() - start)) {
           // timeout has been reached
           LOGGER.log(Level.FINE, "timeout has been reached while waiting for input");
-          throw new TimeoutException("Timeout while reading");
+          TimeoutException e = new TimeoutException("Timeout while reading");
+          e.addSuppressed(ioe);
+          throw e;
         } else {
           throw ioe;
         }
@@ -839,7 +837,7 @@ public abstract class AbstractConnection {
     }
 
     if (bytesRead < 0) {
-      LOGGER.log(Level.INFO, "doing shudown due to closed connection");
+      LOGGER.log(Level.INFO, "doing shutdown due to closed connection");
       // if remote has closed channel do local shutdown
       shutdown();
     }
@@ -946,10 +944,10 @@ public abstract class AbstractConnection {
       return null;
     } else {
       LOGGER.log(Level.INFO, "got line from readline ("
-              + ret.toString().substring(0, ret.length() - 2) + "; size "
+              + ret.substring(0, ret.length() - 2) + "; size "
               + ret.length() + ")");
       inboundAppData.compact().flip();
-      return ret.toString().substring(0, ret.length() - 2);
+      return ret.substring(0, ret.length() - 2);
     }
   }
 
@@ -977,8 +975,7 @@ public abstract class AbstractConnection {
     if (engine.getSession().getPacketBufferSize() <= buffer.limit()) {
       return buffer;
     } else {
-      ByteBuffer replaceBuffer = enlargePacketBuffer(engine, buffer);
-      return replaceBuffer;
+      return enlargePacketBuffer(engine, buffer);
     }
   }
 

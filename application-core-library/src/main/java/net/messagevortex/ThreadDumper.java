@@ -16,28 +16,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ThreadDumper {
-  
+
   private static final String CRLF = System.lineSeparator();
-  
+
   private static final Logger LOGGER;
-  
+
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
-  
+
   private static final DateFormat df;
-  
+
   static {
     df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
     TimeZone tz = TimeZone.getTimeZone("UTC");
     df.setTimeZone(tz);
   }
-  
+
   private static final ScheduledExecutorService scheduler
-          = Executors.newScheduledThreadPool(1, new ThreadDumperThreadFactory());
-  
+      = Executors.newScheduledThreadPool(1, new ThreadDumperThreadFactory());
+
   private static volatile ThreadGroup rootTG = null;
-  
+
   private static class ThreadDumperRunner implements Runnable {
     @Override
     public void run() {
@@ -52,7 +52,7 @@ public class ThreadDumper {
       }
     }
   }
-  
+
   private static class ThreadDumperThreadFactory implements ThreadFactory {
     public Thread newThread(Runnable r) {
       Thread t = new Thread(r, "ThreadDumper");
@@ -60,7 +60,7 @@ public class ThreadDumper {
       return t;
     }
   }
-  
+
   /***
    * <p>Dump all running threads on a regular base.</p>
    *
@@ -71,7 +71,7 @@ public class ThreadDumper {
     Runnable r = new ThreadDumperRunner();
     scheduler.scheduleAtFixedRate(r, interval, interval, TimeUnit.SECONDS);
   }
-  
+
   /***
    * <p>Get a string dump all running threads.</p>
    *
@@ -81,33 +81,34 @@ public class ThreadDumper {
   public static String getThreadDump(boolean dumpDaemon) {
     StringBuilder tdump = new StringBuilder();
     tdump.append("======================================================================")
-            .append(CRLF);
+        .append(CRLF);
     synchronized (df) {
       tdump.append("==== Thread Dump ").append(df.format(new Date()))
-              .append("                               =====").append(CRLF);
+          .append("                               =====").append(CRLF);
     }
     tdump.append("======================================================================")
-            .append(CRLF);
+        .append(CRLF);
     ThreadMXBean tbean = ManagementFactory.getThreadMXBean();
     ThreadInfo[] threadInfos = tbean.getThreadInfo(tbean.getAllThreadIds(), 100);
     for (ThreadInfo threadInfo : threadInfos) {
       Thread.State state = threadInfo.getThreadState();
       Thread t = getThread(threadInfo.getThreadId());
       if (dumpDaemon || !t.isDaemon()) {
-        tdump.append("\"").append(threadInfo.getThreadName()).append("\"").append(CRLF);
-        tdump.append("   java.lang.Thread.State: ").append(state).append(t.isDaemon() ? " [DAEMON]" : " [normal]")
-                .append(CRLF);
+        tdump.append('"').append(threadInfo.getThreadName()).append('"').append(CRLF);
+        tdump.append("   java.lang.Thread.State: ").append(state)
+            .append(t.isDaemon() ? " [DAEMON]" : " [normal]")
+            .append(CRLF);
         final StackTraceElement[] stackTraceElements = threadInfo.getStackTrace();
         for (final StackTraceElement stackTraceElement : stackTraceElements) {
-          tdump.append("        at " + stackTraceElement).append(CRLF);
+          tdump.append("        at ").append(stackTraceElement).append(CRLF);
         }
         tdump.append("======================================================================")
-                .append(CRLF);
+            .append(CRLF);
       }
     }
     return tdump.toString();
   }
-  
+
   private static Thread getThread(long id) {
     final ThreadMXBean thbean = ManagementFactory.getThreadMXBean();
     ThreadGroup root = rootTG;
@@ -126,7 +127,7 @@ public class ThreadDumper {
       threads = new Thread[nalloc];
       n = root.enumerate(threads, true);
     } while (n == nalloc);
-    
+
     for (Thread thread : Arrays.copyOf(threads, n)) {
       if (thread.getId() == id) {
         return thread;
@@ -134,5 +135,5 @@ public class ThreadDumper {
     }
     return null;
   }
-  
+
 }

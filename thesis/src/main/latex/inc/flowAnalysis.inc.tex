@@ -1,0 +1,159 @@
+
+
+\gdef\logo{MessageVortexLogo}
+
+	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+	\tikzset{
+		every picture/.style={line width=0.75pt},
+		astyle/.style={-{Latex[flowBorderColor,length=3.5mm,width=2.5mm]},semithick}
+ 	} %set default line width to 0.75pt        
+	
+	\tikzset{MVnodeWithoutTraffic/.pic={
+			code={%in this line should be used "code" and not "\code"
+				\begin{scope}
+				\draw [fill=nodecolor, draw=black,rounded corners=10pt,	general shadow={fill=nodeshadow,shadow xshift=\shadowshift,shadow yshift=\shadowshift}
+				] (-60,-45) rectangle +(120,90)  node  [pos=.5,scale=0.3] {\includegraphics{\logo}};
+				\end{scope}	
+		}},MVnode/.pic={
+			code={%in this line should be used "code" and not "\code"
+				\begin{scope}
+				\path (0,0) pic {MVnodeWithoutTraffic};
+				\draw[unrelatedcolor, dashed, -{Latex[unrelatedcolor,length=3.5mm,width=2.5mm]},semithick]  (-90,40) -- (-60,0) ;
+				\draw[unrelatedcolor, dashed, -{Latex[unrelatedcolor,length=3.5mm,width=2.5mm]},semithick]   (-60,0) -- (-90,-40);
+				\end{scope}	
+		}},
+	}
+	
+	%Place a vortex node
+	\path (660,210) pic {MVnode};
+	\path (323.75,350) pic {MVnode};
+	\path (548.24,350) pic {MVnode};
+	\path (773.71,350) pic {MVnode};
+	\path (1000.36,350) pic {MVnode};
+	
+	\path (323.75,484) pic {MVnode};
+	\path (548.24,484) pic {MVnode};
+	\path (773.71,484) pic {MVnode};
+	\path (1000.36,484) pic {MVnode};
+	
+	\path (323.75,619) pic {MVnode};
+	\path (548.24,619) pic {MVnode};
+	\path (773.71,619) pic {MVnode};
+	\path (1000.36,619) pic {MVnode};
+	
+	\path (207.93,775) pic {MVnode};
+	\path (437.74,775) pic {MVnode};
+	\path (660.16,775) pic {MVnode};
+	\path (887.69,775) pic {MVnode};
+	\path (1114.34,775) pic {MVnode};
+
+	%Legend
+	\draw   (930,120) rectangle  +(430,135) ;
+	\path (975,150) pic [every node/.style={scale=0.4},scale=0.4] {MVnodeWithoutTraffic} node [scale=2, xshift=43] [align=left] {$\text{VortexNode}$};
+	\draw (1166.05,191.5) node  [xscale=2,yscale=2]  {$\text{Related VortexMessage}$};
+	\draw (1179.05,232.5) node  [xscale=2,yscale=2]  {$\text{Unrelated VortexMessage}$};
+	
+	
+	%Straight Lines [id:da4646484950832961] 
+	\draw[black,semithick]   (660.16,258) -- (660.16,281.5) ;
+	%Straight Lines [id:da3082505583073949] 
+	\draw[black,semithick]   (1000.36,281.5) -- (323.75,281.5) ;
+	%Straight Lines [id:da8130774674251597] 
+	\draw[astyle]   (548.24,281.5) -- (548.24,302.37) ;
+	
+	%Straight Lines [id:da24282901907291587] 
+	\draw[astyle]   (773.71,281.5) -- (773.71,302.37) ;
+	
+	%Straight Lines [id:da7701880969474721] 
+	\draw[astyle]   (1000.36,281.5) -- (1000.36,302.37) ;
+	
+	%Straight Lines [id:da7085928508041848] 
+	\draw[astyle]   (323.75,281.5) -- (323.75,302.37) ;
+	
+	%Straight Lines [id:da42853110121698346] 
+	\draw[astyle]   (548.24,397.08) -- (548.24,436.37) ;
+	
+	%Straight Lines [id:da6712002027343287] 
+	\draw[astyle]   (323.75,397.08) -- (323.75,436.37) ;
+	
+	%Straight Lines [id:da8272469909003433] 
+	\draw[astyle]   (773.71,397.08) -- (773.71,436.37) ;
+	
+	%Straight Lines [id:da5927517178066497] 
+	\draw[astyle]   (1000.36,397.08) -- (1000.36,436.37) ;
+	
+	%Straight Lines [id:da9178370203800954] 
+	\draw[astyle]   (1000.36,531.08) -- (1000.36,571.37) ;
+	
+	%Straight Lines [id:da21957524571209697] 
+	\draw[astyle]   (773.71,531.08) -- (773.71,571.37) ;
+	
+	%Straight Lines [id:da2294985236933571] 
+	\draw[astyle]   (548.24,531.08) -- (548.24,571.37) ;
+	
+	%Straight Lines [id:da16125448212416416] 
+	\draw[astyle]   (323.75,531.08) -- (323.75,571.37) ;
+	
+	%Straight Lines [id:da14380022281236493] 
+	\draw[black,semithick]   (1114.34,698.38) -- (207.93,698.38) ;
+	%Straight Lines [id:da9747409632000112] 
+	\draw[astyle]   (207.93,698.38) -- (207.93,727.37) ;
+	
+	%Straight Lines [id:da190002382443625] 
+	\draw[astyle]   (437.74,698.38) -- (437.74,727.37) ;
+	
+	%Straight Lines [id:da5316321589853279] 
+	\draw[black,semithick]  (323.75,666.08) -- (323.75,698.17) ;
+	%Straight Lines [id:da7859528363846544] 
+	\draw[black,semithick]  (548.24,666.08) -- (548.24,698.17) ;
+	%Straight Lines [id:da22692774749694133] 
+	\draw[black,semithick]  (773.71,666.08) -- (773.71,698.17) ;
+	%Straight Lines [id:da9026743628307745] 
+	\draw[black,semithick]  (1000.36,666.08) -- (1000.36,698.17) ;
+	%Straight Lines [id:da6302931520014885] 
+	\draw[astyle]   (660.16,698.38) -- (660.16,727.37) ;
+	
+	%Straight Lines [id:da7087615105109044] 
+	\draw[astyle]   (887.69,698.38) -- (887.69,727.37) ;
+	
+	%Straight Lines [id:da7240588428538111] 
+	\draw[astyle]   (1114.34,698.38) -- (1114.34,727.37) ;
+	
+	%Straight Lines [id:da7292166945472867] 
+	\draw [line width=1.5]  [dash pattern={on 1.69pt off 9.76pt}]  (1121.34,384) -- (1121.34,613) ;
+	%Straight Lines [id:da8173928827900472] 
+	\draw [line width=1.5]  [dash pattern={on 1.69pt off 9.76pt}]  (20.34,381) -- (20.34,610) ;
+	
+	
+	
+	%Straight Lines [id:da5310629761146188] 
+	\draw[astyle]   (950.24,191.5) -- (997.5,191.5) ;
+	
+	
+	%Straight Lines [id:da419399700502294] 
+	\draw [line width=1.5]  [dash pattern={on 1.69pt off 9.76pt}]  (298.5,848) -- (798.5,848) ;
+	
+	%Straight Lines [id:da3046864842834194] 
+	\draw[unrelatedcolor, -{Latex[unrelatedcolor,length=3.5mm,width=2.5mm]},semithick] [dash pattern={on 4.5pt off 4.5pt}]  (950.24,232.5) -- (997.5,232.5) ;
+
+	% Text Node
+	\draw (1214.25,362.55) node  [xscale=2,yscale=2]  {$\text{Routing node} \ n_{1,j}$};
+	% Text Node
+	\draw (1212.93,630.55) node  [xscale=2,yscale=2]  {$\text{Routing node} \ n_{i,j}$};
+	% Text Node
+	\draw (103.27,359.55) node  [xscale=2,yscale=2]  {$\text{Routing node} \ n_{1,1}$};
+	% Text Node
+	\draw (101.95,627.55) node  [xscale=2,yscale=2]  {$\text{Routing node} \ n_{i,1}$};
+	% Text Node
+	\draw (804.05,189.5) node  [xscale=2,yscale=2]  {$\text{sender} \ s$};
+	% Text Node
+	\draw (208.05,848) node  [xscale=2,yscale=2]  {$\text{anon} \ a_{1}$};
+	% Text Node
+	\draw (888.05,848) node  [xscale=2,yscale=2]  {$\text{anon} \ a_{k}$};
+	% Text Node
+	\draw (1113.05,848) node  [xscale=2,yscale=2]  {$\text{receiver} \ r$};
+	
+	
+	\end{tikzpicture}
+

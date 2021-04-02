@@ -46,7 +46,7 @@ public class AlgorithmParameter extends AbstractBlock
 
   public static final long serialVersionUID = 100000000001L;
 
-  private Map<Integer, String> parameter;
+  private final Map<Integer, String> parameter;
 
   public AlgorithmParameter() {
     parameter = new ConcurrentSkipListMap<>();
@@ -172,7 +172,7 @@ public class AlgorithmParameter extends AbstractBlock
   }
 
   @Override
-  public ASN1Object toAsn1Object(DumpType dt) throws IOException {
+  public ASN1Object toAsn1Object(DumpType dt) {
     ASN1EncodableVector v = new ASN1EncodableVector();
     for (Map.Entry<Integer, String> e : parameter.entrySet()) {
       Parameter p = Parameter.getById(e.getKey());

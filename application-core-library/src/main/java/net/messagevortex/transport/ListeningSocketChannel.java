@@ -9,9 +9,6 @@ import java.util.logging.Logger;
 
 import net.messagevortex.MessageVortexLogger;
 
-/**
- * Created by Martin on 10.03.2018.
- */
 public class ListeningSocketChannel {
 
   static final Logger LOGGER;

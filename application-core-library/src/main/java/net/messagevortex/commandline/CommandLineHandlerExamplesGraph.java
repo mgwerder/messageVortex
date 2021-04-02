@@ -3,6 +3,9 @@ package net.messagevortex.commandline;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import javax.swing.SwingUtilities;
 import net.messagevortex.MessageVortexLogger;
@@ -29,23 +32,23 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
   
-  @CommandLine.Option(names = {"--nodes", "-n"}, required = false,
+  @CommandLine.Option(names = {"--nodes", "-n"},
           description = "Number of nodes")
   int numNodes = 5;
   
-  @CommandLine.Option(names = {"--filename", "-f"}, required = false,
+  @CommandLine.Option(names = {"--filename", "-f"},
           description = "filename")
   String filename = null;
   
-  @CommandLine.Option(names = {"--x-resolution", "-x"}, required = false,
+  @CommandLine.Option(names = {"--x-resolution", "-x"},
           description = "resolution of x-axis")
   int xres = 1024;
   
-  @CommandLine.Option(names = {"--y-resolution", "-y"}, required = false,
+  @CommandLine.Option(names = {"--y-resolution", "-y"},
           description = "resolution of x-axis")
   int yres = 768;
   
-  @CommandLine.Option(names = {"--redundancy-size", "-r"}, required = false,
+  @CommandLine.Option(names = {"--redundancy-size", "-r"},
           description = "minimum number of paths to target node")
   int redundancy = 3;
   
@@ -59,19 +62,16 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
    */
   @Override
   public Integer call() throws Exception {
-    IdentityStore is = null;
+    String fname = System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der";
+    IdentityStore is;
     try {
-      is = new IdentityStore(new File(System.getProperty("java.io.tmpdir")
-              + "/IdentityStoreExample1.der"));
+      is = new IdentityStore(new File(fname));
     } catch (IOException ioe) {
       is = IdentityStore.getNewIdentityStoreDemo(false);
-      ASN1OutputStream f = ASN1OutputStream.create(
-              new FileOutputStream(
-                      System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der"
-              ), ASN1Encoding.DER
-      );
-      f.writeObject(is.toAsn1Object(DumpType.ALL_UNENCRYPTED));
-      f.close();
+      try(OutputStream os = Files.newOutputStream(Paths.get(fname))) {
+        ASN1OutputStream f = ASN1OutputStream.create(os, ASN1Encoding.DER);
+        f.writeObject(is.toAsn1Object(DumpType.ALL_UNENCRYPTED));
+      }
     }
     SimpleMessageFactory smf = null;
     do {

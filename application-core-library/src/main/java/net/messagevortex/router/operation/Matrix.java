@@ -1,30 +1,8 @@
 package net.messagevortex.router.operation;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
@@ -47,7 +25,8 @@ public class Matrix {
   static final int X = 0;
   static final int Y = 1;
 
-  static Map<String, Matrix> matrixCache = new ConcurrentHashMap<>();
+  public static final int MAX_CACHE = 30;
+  private static final Map<String, Matrix> matrixCache = new LinkedHashMap<>();
 
 
   int[] matrixContent;
@@ -55,8 +34,19 @@ public class Matrix {
   int modulo = Integer.MAX_VALUE;
   MathMode mode;
 
-  public Matrix(Matrix m) {
-    this(m.getX(), m.getY(), m.mode, m.matrixContent);
+  /**
+   * <p>Creates a copy of the current matrix object.</p>
+   *
+   * @param originalMatrix the matrix to be copied
+   */
+  public Matrix(Matrix originalMatrix) {
+    this(originalMatrix.getX(), originalMatrix.getY(), originalMatrix.mode,
+        originalMatrix.matrixContent);
+    this.modulo = originalMatrix.modulo;
+    // make sure that any dimension is copied
+    this.dimension = Arrays.copyOf(dimension, dimension.length);
+    // copy matrix content
+    this.matrixContent = Arrays.copyOf(matrixContent, matrixContent.length);
   }
 
   /***
@@ -128,7 +118,7 @@ public class Matrix {
    */
   public static Matrix unitMatrix(int size, MathMode mode) {
     if (!matrixCacheDisabled) {
-      Matrix m = matrixCache.get("um" + size + "/" + mode);
+      Matrix m = getCache("um" + size + "/" + mode);
       if (m != null) {
         return new Matrix(m);
       }
@@ -143,14 +133,35 @@ public class Matrix {
         }
       }
     }
-    matrixCache.put("um" + size + "/" + mode, new Matrix(ret));
+    addCache("um" + size + "/" + mode, new Matrix(ret));
     return ret;
+  }
+
+  static void addCache(String key, Matrix m) {
+    synchronized (matrixCache) {
+      if (matrixCacheDisabled) {
+        return;
+      }
+      if (matrixCache.containsKey(key)) {
+        return;
+      }
+      while (matrixCache.size() > MAX_CACHE) {
+        matrixCache.remove(matrixCache.entrySet().iterator().next().getKey());
+      }
+      matrixCache.put(key, m);
+    }
+  }
+
+  static Matrix getCache(String key) {
+    synchronized (matrixCache) {
+      return matrixCache.get(key);
+    }
   }
 
   /***
    * <p>Get the number of columns.</p>
    *
-   * @return the nuber of columns as int value
+   * @return the number of columns as int value
    */
   public int getX() {
     return dimension[X];
@@ -159,7 +170,7 @@ public class Matrix {
   /***
    * <p>Set the number of rows.</p>
    *
-   * @return the nuber of rows as int value
+   * @return the number of rows as int value
    */
   public int getY() {
     return dimension[Y];
@@ -200,9 +211,9 @@ public class Matrix {
   /***
    * <p>Multiplies the current matrixContent with the specified matrixContent.</p>
    *
-   * @param m                    the matrixContent to multitply with
+   * @param m                    the matrixContent to multiply with
    * @return the resulting matrixContent
-   * @throws ArithmeticException if multiplication may not be caried out
+   * @throws ArithmeticException if multiplication may not be carried out
    */
   public Matrix mul(Matrix m) {
     if (!this.mode.equals(m.mode)) {
@@ -217,15 +228,15 @@ public class Matrix {
         ret.matrixContent[y * ret.dimension[X] + x] = 0;
         for (int i = 0; i < m.dimension[Y]; i++) {
           ret.matrixContent[y * ret.dimension[X] + x] = mode.add(
-                  ret.matrixContent[y * ret.dimension[X] + x],
-                  mode.mul(
-                          this.matrixContent[y * this.dimension[X] + i],
-                          m.matrixContent[i * m.dimension[X] + x]
-                  )
+              ret.matrixContent[y * ret.dimension[X] + x],
+              mode.mul(
+                  this.matrixContent[y * this.dimension[X] + i],
+                  m.matrixContent[i * m.dimension[X] + x]
+              )
           );
         }
         ret.matrixContent[y * ret.dimension[X] + x] =
-                ret.matrixContent[y * ret.dimension[X] + x] % modulo;
+            ret.matrixContent[y * ret.dimension[X] + x] % modulo;
       }
     }
     return ret;
@@ -261,21 +272,21 @@ public class Matrix {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("{");
+    sb.append('{');
     for (int y = 0; y < dimension[Y]; y++) {
-      sb.append("{");
+      sb.append('{');
       for (int x = 0; x < dimension[X]; x++) {
         if (x > 0) {
-          sb.append(",");
+          sb.append(',');
         }
         sb.append(matrixContent[y * dimension[X] + x]);
       }
-      sb.append("}");
+      sb.append('}');
       if (y < dimension[Y] - 1) {
         sb.append(",\n");
       }
     }
-    sb.append("}");
+    sb.append('}');
     return sb.toString();
   }
 
@@ -319,12 +330,7 @@ public class Matrix {
    * @return the value of the field
    */
   public int getField(int x, int y) {
-    if (x < 0 || x >= dimension[X]) {
-      throw new ArithmeticException("column index out of range 0<=col[" + x + "]<" + dimension[X]);
-    }
-    if (y < 0 || y >= dimension[Y]) {
-      throw new ArithmeticException("row index out of range 0<=row[" + y + "]<" + dimension[Y]);
-    }
+    checkField(x, y);
     return matrixContent[y * getX() + x];
   }
 
@@ -337,19 +343,23 @@ public class Matrix {
    * @return the previously set value of the field
    */
   public int setField(int x, int y, int value) {
+    checkField(x, y);
+    int old = getField(x, y);
+    matrixContent[y * getX() + x] = value;
+    return old;
+  }
+
+  private void checkField(int x, int y) {
     if (x < 0 || x >= dimension[X]) {
       throw new ArithmeticException("column index out of range 0<=col[" + x + "]<" + dimension[X]);
     }
     if (y < 0 || y >= dimension[Y]) {
       throw new ArithmeticException("row index out of range 0<=row[" + y + "]<" + dimension[Y]);
     }
-    int old = getField(x, y);
-    matrixContent[y * getX() + x] = value;
-    return old;
   }
 
   /***
-   * <p>Calculates the inverse by aplying the Gauss-Jordan-algorithm.</p>
+   * <p>Calculates the inverse by applying the Gauss-Jordan-algorithm.</p>
    *
    * @return the inverse of the matrixContent
    * @throws ArithmeticException if matrixContent is not square in dimensions or the algorithm
@@ -358,7 +368,7 @@ public class Matrix {
   public Matrix getInverse() {
     if (dimension[X] != dimension[Y]) {
       throw new ArithmeticException("matrixContent to inverse must have square dimensions "
-              + "(dimension is " + getX() + "/" + getY() + ")");
+          + "(dimension is " + getX() + "/" + getY() + ")");
     }
     Matrix red = new Matrix(this);
     Matrix ret = Matrix.unitMatrix(dimension[X], mode);
@@ -376,7 +386,7 @@ public class Matrix {
         }
 
         // flip rows
-        LOGGER.log(Level.FINEST, "  processing flip row", new Object[]{row, flipRow});
+        LOGGER.log(Level.FINEST, "  processing flip row", new Object[] {row, flipRow});
         red.flipRow(row, flipRow);
         ret.flipRow(row, flipRow);
       }
@@ -418,7 +428,7 @@ public class Matrix {
    * <p>Get the values of a row as byte arrays.</p>
    *
    * @param row the index of the row to be used (starting with 0)
-   * @return the array containing the calues of the row
+   * @return the array containing the values of the row
    */
   public byte[] getRowAsByteArray(int row) {
     byte[] ret = new byte[getX()];

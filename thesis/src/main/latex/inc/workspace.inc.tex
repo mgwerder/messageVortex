@@ -1,0 +1,71 @@
+	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+	\definecolor{workspacecolor}{RGB}{240,250,240}
+	%\definecolor{routineblocksblue}{RGB}{159,216,255}
+	\definecolor{blue}{RGB}{38,38,255}
+
+	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+	\tikzset{
+		rounded/.style={rounded corners=10pt},	
+		shadowed/.style={general shadow={fill=nodeshadow,shadow xshift=\shadowshift,shadow yshift=\shadowshift}},
+		workspace/.style={color=black  ,draw opacity=1,fill=workspacecolor  ,fill opacity=1,shadowed,rounded},
+		opstyle/.style={shadowed,regular polygon,regular polygon sides=6,draw,fill=operationcolor,inner sep=0mm,minimum size=12mm},
+		emptycircle/.style={shadowed,circle,radius=2mm,draw=black,fill=white},
+		filledcircle/.style={emptycircle,fill=payloadcolor},
+		astyle/.style={-{Latex[black,length=3.5mm,width=2.5mm]},semithick},
+		complexnode/.pic={
+			\draw  [shadowed,color=black  ,draw opacity=1, fill=white ] (582.14,134.1) -- (616.02,134.1) -- (616.02,168.33) -- (582.14,168.33) -- cycle ;
+			\draw  [shadowed,color=black  ,draw opacity=1 ][fill=senderkeycolor  ,fill opacity=1 ] (622,163.46) -- (622,173.61) -- (576.17,173.61) -- (576.17,163.46) -- (580.58,163.46) -- (580.58,170.13) -- (617.59,170.13) -- (617.59,163.46) -- (622,163.46) -- cycle ;
+			\draw  [color=black  ,draw opacity=1 ] (598.21,136.88) -- (611.32,136.88) -- (611.32,149.18) -- (598.21,149.18) -- cycle ;
+			\draw  [color=black  ,draw opacity=1 ] (592.64,155.54) .. controls (592.64,155.43) and (592.73,155.33) .. (592.85,155.33) .. controls (592.96,155.33) and (593.05,155.43) .. (593.05,155.54) .. controls (593.05,155.65) and (592.96,155.74) .. (592.85,155.74) .. controls (592.73,155.74) and (592.64,155.65) .. (592.64,155.54) -- cycle ;
+			\draw  [color=black  ,draw opacity=1 ] (596.12,151.36) .. controls (596.12,151.25) and (596.22,151.16) .. (596.33,151.16) .. controls (596.44,151.16) and (596.53,151.25) .. (596.53,151.36) .. controls (596.53,151.47) and (596.44,151.56) .. (596.33,151.56) .. controls (596.22,151.56) and (596.12,151.47) .. (596.12,151.36) -- cycle ;
+		}
+	}
+
+
+	% Legend
+	 \node[opstyle] at (800,120) (leg) {Op} node[right=of leg] (tor) {Operation};
+	 \node[emptycircle,below=of leg] (leg) {} node[right=of leg] {Unused payload slot};
+	 \node[filledcircle,below=of leg] (leg) {} node[right=of leg] {Used payload slot};
+	 \node[below=of leg] (leg) {\ } pic[scale=-1,xshift=-1050,yshift=110] (leg) {complexnode} node[right=of leg,xshift=10,yshift=-10] {Routing block};
+	 \draw[black,thick] ($(tor.north east)+(80,-30)$)  rectangle ($(leg.south west)+(-30,40)$);
+
+
+	 
+	\path (200,221); %set diagram left start at 0, and has height of 721
+	
+	%Shape: Rectangle [id:dp9548095324800636] 
+	\draw  [workspace] (389.5,68) rectangle (739.5,376) node[pos=0.05,xshift=20] {Workspace} ;
+	\draw  [workspace] (360.5,94) rectangle (710.5,402)  node[pos=0.05,xshift=20] {Workspace} ;
+	\draw  [workspace] (330.5,123) rectangle (680.5,431) node[pos=0.05,xshift=20] {Workspace} node[pos=0,xshift=-10] {} node[pos=0,yshift=-240] {};
+
+	%Shape: Circle [id:dp17460123477535205] 
+	\foreach \angle in {0,...,29}
+	 	\node[emptycircle] at ($(490,300)+(\angle*12:100)$) (circle\angle) {};
+	
+	%fill some 
+	\foreach \c in {0,2,12,13,14,15,22,28,29}
+ 		\draw[filledcircle] ($(circle\c)$) circle [radius=2mm];
+ 	
+ 	% Operations
+ 	\node[opstyle] (op1) at (490,325) {Op};
+ 	\node[opstyle] (op2) at (530,260) {Op};
+ 	
+	%op1 arrows
+	\draw[astyle]  (circle12) -- (op1) ;
+	\draw[astyle]  (circle13) -- (op1) ;
+	\draw[astyle]  (circle14) -- (op1) ;
+	\draw[astyle]  (circle15) -- (op1) ;
+	\draw[astyle]  (op1) -- (circle22) ;
+	
+	%op2 arrows
+	\draw[astyle]  (circle22) -- (op2) ;
+	\draw[astyle]  (op2) -- (circle28) ;
+	\draw[astyle]  (op2) -- (circle29) ;
+	
+	% Routingblock
+	\draw (1200,0) pic[scale=-1] {complexnode};
+	\draw (1250,0) pic[scale=-1] {complexnode};
+	\draw (1250,50) pic[scale=-1] {complexnode};
+	
+	% Text Node
+	\end{tikzpicture}

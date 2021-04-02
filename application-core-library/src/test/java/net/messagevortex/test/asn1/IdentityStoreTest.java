@@ -50,14 +50,7 @@ public class IdentityStoreTest {
   }
 
   @Test
-  public void testingIdentityStoreDemo() throws InterruptedException {
-    class ISThread extends Thread {
-      public IdentityStore is = null;
-
-      public void run() {
-      }
-    }
-
+  public void testingIdentityStoreDemo() {
     Date start = new Date();
     final IdentityStore[] arr = new IdentityStore[10];
     for (int i = 0; i < arr.length; i++) {

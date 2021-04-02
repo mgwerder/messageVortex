@@ -11,6 +11,7 @@ import javax.mail.internet.MimeMessage;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
@@ -29,10 +30,9 @@ public class TestPop3Handler implements Transport {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private GreenMail server;
-  private String section;
-  private TransportReceiver blender;
-  private GreenMailUser outUser;
+  private final GreenMail server;
+  private final TransportReceiver blender;
+  private final GreenMailUser outUser;
 
 
   /**
@@ -42,11 +42,11 @@ public class TestPop3Handler implements Transport {
    * @throws IOException if server fails to start
    */
   public TestPop3Handler(String section) throws IOException {
-    this.section = section;
     Config cfg = Config.getDefault();
-    blender = MessageVortex.getBlender(cfg.getStringValue(this.section, "blender"));
-    if (blender == null) {
-      throw new IOException("unable to fetch apropriate blender");
+    this.blender = MessageVortexRepository.getBlender("",
+        cfg.getStringValue(section, "blender"));
+    if (this.blender == null) {
+      throw new IOException("unable to fetch appropriate blender");
     }
     server = new GreenMail(new ServerSetup[]{new ServerSetup(
             cfg.getNumericValue(section, "pop3_outgoing_port"),
@@ -71,7 +71,7 @@ public class TestPop3Handler implements Transport {
   }
 
   @Override
-  public void startDaemon() {
+  public final void startDaemon() {
     server.start();
   }
 

@@ -1,0 +1,59 @@
+
+
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,995); %set diagram left start at 0, and has height of 995
+
+\tikzset{
+	every picture/.style={line width=0.75pt},
+	boxstyle/.style={draw=black,rounded corners=3pt, general shadow={fill=nodeshadow,shadow xshift=\shadowshift,shadow yshift=\shadowshift}}
+} %set default line width to 0.75pt        
+
+% MPREFIX encryption
+\draw  [fill=hostIdentitycolor  ,fill opacity=1,boxstyle ] (213.69,453.61) -- (213.69,534.21) -- (35,534.21) -- (35,453.61) -- (68.08,453.61) -- (68.08,484.03) -- (180.61,484.03) -- (180.61,453.61) -- (213.69,453.61) -- cycle  node  [pos=.5,font=\small,xscale=2,yscale=2,xshift=-35,yshift=-20 ]  {$E^{K_{host_{o}}}( ...)$};
+%HPREFIX encryption
+\draw  [fill=hostIdentitycolor  ,fill opacity=1,boxstyle ] (452.45,393.54) -- (452.45,474.14) -- (273.76,474.14) -- (273.76,393.54) -- (306.84,393.54) -- (306.84,423.96) -- (419.38,423.96) -- (419.38,393.54) -- (452.45,393.54) -- cycle node  [pos=.5,font=\small,xscale=2,yscale=2,xshift=-35,yshift=-20 ]  {$E^{K_{host_{o}}}( ...)$};
+%HEADER encryption
+\draw  [fill=senderkeycolor  ,fill opacity=1 ,boxstyle] (777.9,393.54) -- (777.9,474.14) -- (465.38,474.14) -- (465.38,393.54) -- (498.46,393.54) -- (498.46,423.96) -- (744.82,423.96) -- (744.82,393.54) -- (777.9,393.54) -- cycle node  [pos=.5,font=\small,xscale=2,yscale=2,xshift=-60,yshift=-20 ]  {$E^{K_{sender_{o}}}( ...)$};
+%ROUTING encryption
+\draw  [fill=senderkeycolor  ,fill opacity=1,boxstyle] (1102.58,393.54) -- (1102.58,474.14) -- (790.06,474.14) -- (790.06,393.54) -- (823.14,393.54) -- (823.14,423.96) -- (1069.51,423.96) -- (1069.51,393.54) -- (1102.58,393.54) -- cycle node  [pos=.5,font=\small,xscale=2,yscale=2,xshift=-60,yshift=-20 ]  {$E^{K_{sender_{o}}}( ...)$};
+%innerMessage encryption
+\draw  [fill=peerkeycolor  ,fill opacity=1 ,boxstyle] (1527.64,453.61) -- (1527.64,534.21) -- (226.62,534.21) -- (226.62,453.61) -- (259.97,453.61) -- (259.97,484.03) -- (1494.56,484.03) -- (1494.56,453.61) -- (1527.64,453.61) -- cycle node  [pos=.5,font=\small,xscale=2,yscale=2,xshift=-275,yshift=-20 ]  {$E^{K_{peer_{o}}}( ...)$};
+%Payload 1
+\draw  [fill=payloadcolor  ,fill opacity=1,boxstyle  ] (1140.6,152.5) rectangle (1186.22,474.14)  node  [pos=.5,font=\small,rotate=-270,xscale=2,yscale=2]  {$payload_{0}$};
+%Payload 2
+\draw  [fill=payloadcolor  ,fill opacity=1 ,boxstyle] (1220.44,152.5) rectangle (1266.07,474.14) node  [pos=.5,font=\small,rotate=-270,xscale=2,yscale=2]  {$payload_{1}$};;
+%payload 3
+\draw  [fill=payloadcolor  ,fill opacity=1,boxstyle ] (1424.23,152.5) rectangle  (1469.85,474.14)  node  [pos=.5,font=\small,rotate=-270,xscale=2,yscale=2]  {$payload_{p-1}$};;
+%HEADER
+\draw[boxstyle,fill=white]   (506.44,319.53) rectangle (736.84,413.82) node  [font=\small,xscale=2,yscale=2,pos=.5]  {$\mathbf{HEADER}_{o}$};
+%ROUTING
+\draw[boxstyle,fill=white]    (833.35,152.5) rectangle (1059.44,414.07)  node  [pos=.5,font=\small,xscale=2,yscale=2,yshift=-32 ]  {$\mathbf{ROUTING}_o$}; ;
+%Routing_1_enc
+\draw  [boxstyle, fill=senderkeycolor] (940.37,240.83) -- (940.37,263.01) -- (840.25,263.01) -- (840.25,240.83) -- (849.88,240.83) -- (849.88,255.41) -- (930.74,255.41) -- (930.74,240.83) -- (940.37,240.83) -- cycle ;
+\draw   [boxstyle, fill=white] (853.3,176.71) -- (927.31,176.71) -- (927.31,251.48) -- (853.3,251.48) -- cycle ;
+\draw   [boxstyle, fill=white] (888.41,182.79) -- (917.05,182.79) -- (917.05,209.66) -- (888.41,209.66) -- cycle ;
+\draw   (861.03,243.3) .. controls (861.03,243.06) and (861.23,242.86) .. (861.48,242.86) .. controls (861.72,242.86) and (861.92,243.06) .. (861.92,243.3) .. controls (861.92,243.55) and (861.72,243.75) .. (861.48,243.75) .. controls (861.23,243.75) and (861.03,243.55) .. (861.03,243.3) -- cycle ;
+\draw   (868.64,234.18) .. controls (868.64,233.93) and (868.84,233.73) .. (869.08,233.73) .. controls (869.33,233.73) and (869.52,233.93) .. (869.52,234.18) .. controls (869.52,234.42) and (869.33,234.62) .. (869.08,234.62) .. controls (868.84,234.62) and (868.64,234.42) .. (868.64,234.18) -- cycle ;
+\draw   (876.24,223.53) .. controls (876.24,223.29) and (876.44,223.09) .. (876.68,223.09) .. controls (876.93,223.09) and (877.13,223.29) .. (877.13,223.53) .. controls (877.13,223.78) and (876.93,223.98) .. (876.68,223.98) .. controls (876.44,223.98) and (876.24,223.78) .. (876.24,223.53) -- cycle ;
+\draw   (883.84,214.41) .. controls (883.84,214.16) and (884.04,213.96) .. (884.29,213.96) .. controls (884.53,213.96) and (884.73,214.16) .. (884.73,214.41) .. controls (884.73,214.65) and (884.53,214.85) .. (884.29,214.85) .. controls (884.04,214.85) and (883.84,214.65) .. (883.84,214.41) -- cycle ;
+%Routing_2_enc
+\draw  [boxstyle, fill=senderkeycolor] (1052.65,240.83) -- (1052.65,263.01) -- (952.53,263.01) -- (952.53,240.83) -- (962.16,240.83) -- (962.16,255.41) -- (1043.02,255.41) -- (1043.02,240.83) -- (1052.65,240.83) -- cycle ;
+\draw  [boxstyle, fill=white] (965.59,176.71) -- (1039.6,176.71) -- (1039.6,251.48) -- (965.59,251.48) -- cycle ;
+\draw  [boxstyle, fill=white] (1000.69,182.79) -- (1029.33,182.79) -- (1029.33,209.66) -- (1000.69,209.66) -- cycle ;
+\draw   (973.32,243.3) .. controls (973.32,243.06) and (973.52,242.86) .. (973.76,242.86) .. controls (974.01,242.86) and (974.2,243.06) .. (974.2,243.3) .. controls (974.2,243.55) and (974.01,243.75) .. (973.76,243.75) .. controls (973.52,243.75) and (973.32,243.55) .. (973.32,243.3) -- cycle ;
+\draw   (980.92,234.18) .. controls (980.92,233.93) and (981.12,233.73) .. (981.36,233.73) .. controls (981.61,233.73) and (981.81,233.93) .. (981.81,234.18) .. controls (981.81,234.42) and (981.61,234.62) .. (981.36,234.62) .. controls (981.12,234.62) and (980.92,234.42) .. (980.92,234.18) -- cycle ;
+\draw   (988.52,223.53) .. controls (988.52,223.29) and (988.72,223.09) .. (988.97,223.09) .. controls (989.21,223.09) and (989.41,223.29) .. (989.41,223.53) .. controls (989.41,223.78) and (989.21,223.98) .. (988.97,223.98) .. controls (988.72,223.98) and (988.52,223.78) .. (988.52,223.53) -- cycle ;
+\draw   (996.13,214.41) .. controls (996.13,214.16) and (996.33,213.96) .. (996.57,213.96) .. controls (996.82,213.96) and (997.02,214.16) .. (997.02,214.41) .. controls (997.02,214.65) and (996.82,214.85) .. (996.57,214.85) .. controls (996.33,214.85) and (996.13,214.65) .. (996.13,214.41) -- cycle ;
+%HPREFIX
+\draw  [fill=senderkeycolor  ,fill opacity=1,boxstyle ] (314.95,319.53) rectangle (411.26,413.82) node  [pos=.5,font=\small,xscale=2,yscale=2]  {$K_{sender_{o}}$}; 
+%MPREFIX
+\draw  [fill=peerkeycolor ,fill opacity=1,boxstyle ] (76,379) rectangle  (172.5,474.14) node  [font=\small,xscale=2,yscale=2,pos=.5]  {$K_{peer_{o}}$};
+%payload dots
+\draw  [dash pattern={on 0.84pt off 8.51pt}]  (1284.88,411.23) -- (1402.23,411.23) ;
+
+% Text Node
+\draw (680,585.07) node  [font=\large,xscale=2,yscale=2]  {${\langle \mathbf{MPREFIX}_{o} ,\ E_{K}}_{peer_{o+1}} \ \left( \mathbf{HPREFIX}_{o} ,{\mathbf{HEADER}_o}^{K_{sender_{o}}},{\mathbf{ROUTING}_o}^{K_{sender_{o}}} ,\ payload*\right) \rangle $};
+
+
+\end{tikzpicture}

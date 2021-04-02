@@ -42,7 +42,7 @@ public class SaslServerCallbackHandler implements CallbackHandler {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private AuthenticationProxy proxy;
+  private final AuthenticationProxy proxy;
 
   private String authnid = null;
   private String password = null;
@@ -52,7 +52,7 @@ public class SaslServerCallbackHandler implements CallbackHandler {
   }
 
   @Override
-  public void handle(Callback[] cbs) throws IOException, UnsupportedCallbackException {
+  public void handle(Callback[] cbs) throws IOException {
     for (Callback cb : cbs) {
       Credentials creds = proxy.getCredentials(authnid);
       if (cb instanceof AuthorizeCallback) {
@@ -78,7 +78,7 @@ public class SaslServerCallbackHandler implements CallbackHandler {
           password = new String(pc.getPassword());
         }
         LOGGER.log(Level.INFO, "got password " + password + " (correct password is "
-                + (creds == null ? null : creds.getPassword()) + ")");
+                + (creds == null ? null : creds.getPassword()) + ')');
         if (creds == null || (password != null && !creds.getPassword().equals(password))) {
           throw new SaslException("unknown user or bad password");
         } else {

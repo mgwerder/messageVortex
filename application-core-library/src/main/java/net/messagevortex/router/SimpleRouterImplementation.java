@@ -1,9 +1,14 @@
 package net.messagevortex.router;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import net.messagevortex.AbstractDaemon;
-import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.blender.Blender;
@@ -11,29 +16,47 @@ import net.messagevortex.blender.Blender;
 public class SimpleRouterImplementation extends AbstractDaemon implements Router {
 
   private Accountant accountant;
+  private final Map<String, Blender> blenders = new ConcurrentHashMap<>();
 
   public SimpleRouterImplementation(String section) {
     // get accounting layer
-    setAccountant(MessageVortex.getAccountant(section));
+    setAccountant(MessageVortexRepository.getAccountant("", section));
   }
 
   @Override
   public boolean addBlendingLayer(Blender blendingLayer) {
-    return false;
+    String id = blendingLayer.getBlendingAddress();
+    blendingLayer.setBlenderReceiver(this);
+    blenders.put(id, blendingLayer);
+    return true;
   }
 
   @Override
   public boolean removeBlendingLayer(Blender blendingLayer) {
-    return false;
+    if (!blenders.containsValue(blendingLayer)) {
+      return false;
+    }
+    synchronized (blenders) {
+      Set<String> keys = new HashSet<>();
+      for (Map.Entry<String, Blender> entry : blenders.entrySet()) {
+        if (Objects.equals(blendingLayer, entry.getValue())) {
+          keys.add(entry.getKey());
+        }
+      }
+      for (String key : keys) {
+        blenders.remove(key);
+      }
+    }
+    return true;
   }
 
   @Override
   public List<Blender> getAllBlendingLayer() {
-    return null;
+    return new ArrayList<>(blenders.values());
   }
 
   @Override
-  public Accountant setAccountant(Accountant accountant) {
+  public final Accountant setAccountant(Accountant accountant) {
     Accountant ret = getAccountant();
     this.accountant = accountant;
     return ret;

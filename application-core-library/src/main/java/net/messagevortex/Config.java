@@ -1,27 +1,5 @@
 package net.messagevortex;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -56,8 +34,8 @@ public class Config {
   
   private static final String DEFAULT = "default";
   
-  private List<String> sections = new ArrayList<>();
-  private List<String> fields = new ArrayList<>();
+  private final List<String> sections = new ArrayList<>();
+  private final List<String> fields = new ArrayList<>();
   
   private String resourceFilename;
   
@@ -100,7 +78,7 @@ public class Config {
     
     @Override
     public Object stringToObject(String s) {
-      return s != null && ("true".equals(s.toLowerCase()) || "yes".equals(s.toLowerCase()));
+      return ("true".equalsIgnoreCase(s) || "yes".equalsIgnoreCase(s));
     }
   }
   
@@ -119,14 +97,14 @@ public class Config {
     
     public static ConfigType getById(String id) {
       for (ConfigType c : values()) {
-        if (c.name().toLowerCase().equals(id.toLowerCase())) {
+        if (c.name().equalsIgnoreCase(id)) {
           return c;
         }
       }
       return null;
     }
     
-    private Converters converters;
+    private final Converters converters;
     
     ConfigType(Converters converters) {
       this.converters = converters;
@@ -138,7 +116,7 @@ public class Config {
   }
   
   private class ConfigValue {
-    private String value;
+    private final String value;
     private int lineNumber = -1;
     
     public ConfigValue(String value, int lineNumber) {
@@ -545,8 +523,7 @@ public class Config {
       setBooleanValue(
               section,
               id,
-              value != null
-                      && ("yes".equals(value.toLowerCase()) || "true".equals(value.toLowerCase())),
+              ("yes".equalsIgnoreCase(value) || "true".equalsIgnoreCase(value)),
               lineNumber);
     } else if (c.getType() == ConfigType.STRING) {
       setStringValue(section, id, value, lineNumber);

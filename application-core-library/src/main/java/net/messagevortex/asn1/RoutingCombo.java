@@ -84,7 +84,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
   private RoutingCombo murbReplyBlock = null;
   private long murbMaxReplay = -1;
   private UsagePeriod murbValidity = null;
-  private List<Operation> operation = new ArrayList<>();
+  private final List<Operation> operation = new ArrayList<>();
 
   /***
    * <p>Creates an empty router block.</p>
@@ -214,7 +214,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
       List<Operation> o = new ArrayList<>();
       if (s2.size() > 0) {
         for (ASN1Encodable obj : s2) {
-          Operation op = Operation.getInstance(obj);
+          Operation op = OperationFactory.getInstance(obj);
           o.add(op);
         }
         operation.clear();
@@ -259,7 +259,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
    * @return                 the previously set time
    */
   public long setLastProcessTime(long maxProcessTime) {
-    long old = maxProcessTime;
+    long old = this.maxProcessTime;
     encrypted = null;
     this.maxProcessTime = maxProcessTime;
     return old;

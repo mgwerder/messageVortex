@@ -31,38 +31,31 @@ import org.bouncycastle.asn1.ASN1Enumerated;
  * Enumeration to list available encryption modes.
  */
 public enum Mode {
-  ECB(10000, "ECB", false, new String[]{
+  ECB(10000, "ECB", false, new String[] {
       "ECIES", "RSA", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128",
-      "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
-  CBC(10001, "CBC", true, new String[]{
+      "Twofish192", "Twofish256"}, new Padding[] {Padding.PKCS7}),
+  CBC(10001, "CBC", true, new String[] {
       "aes128", "aes192", "aes256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256",
-      "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
-  EAX(10002, "EAX", true, new String[]{
-      "CAMELLIA128", "CAMELLIA192", "CAMELLIA256","Twofish128", "Twofish192",
-      "Twofish256"}, new Padding[]{Padding.PKCS7}),
-  CTR(10003, "CTR", true, new String[]{
-      "aes128", "aes192", "aes256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256",
-      "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
-  CCM(10004, "CCM", true, new String[]{
-      "aes128", "aes192", "aes256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256",
-      "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
-  GCM(10005, "GCM", true, new String[]{
-      "aes128", "aes192", "AES256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256",
-      "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
-  OCB(10006, "OCB", true, new String[]{
-      "aes128", "aes192", "AES256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256",
-      "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
-  OFB(10007, "OFB", true, new String[]{
+      "Twofish128", "Twofish192", "Twofish256"}, new Padding[] {Padding.PKCS7}),
+  EAX(10002, "EAX", true, new String[] {
       "CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192",
-      "Twofish256"}, new Padding[]{Padding.PKCS7}),
-  NONE(10100, "NONE", false, new String[]{"ECIES", "RSA"}, new Padding[]{Padding.PKCS7});
-
-  private static Map<AlgorithmType, Mode> def = new HashMap<>(2);
-
-  static {
-    def.put(AlgorithmType.ASYMMETRIC, Mode.ECB);
-    def.put(AlgorithmType.SYMMETRIC, Mode.CBC);
-  }
+      "Twofish256"}, new Padding[] {Padding.PKCS7}),
+  CTR(10003, "CTR", true, new String[] {
+      "aes128", "aes192", "aes256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256",
+      "Twofish128", "Twofish192", "Twofish256"}, new Padding[] {Padding.PKCS7}),
+  CCM(10004, "CCM", true, new String[] {
+      "aes128", "aes192", "aes256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256",
+      "Twofish128", "Twofish192", "Twofish256"}, new Padding[] {Padding.PKCS7}),
+  GCM(10005, "GCM", true, new String[] {
+      "aes128", "aes192", "AES256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256",
+      "Twofish128", "Twofish192", "Twofish256"}, new Padding[] {Padding.PKCS7}),
+  OCB(10006, "OCB", true, new String[] {
+      "aes128", "aes192", "AES256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256",
+      "Twofish128", "Twofish192", "Twofish256"}, new Padding[] {Padding.PKCS7}),
+  OFB(10007, "OFB", true, new String[] {
+      "CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192",
+      "Twofish256"}, new Padding[] {Padding.PKCS7}),
+  NONE(10100, "NONE", false, new String[] {"ECIES", "RSA"}, new Padding[] {Padding.PKCS7});
 
   final int id;
   final String txt;
@@ -122,20 +115,14 @@ public enum Mode {
    * @return the default value requested
    */
   public static Mode getDefault(AlgorithmType type) {
-    return def.get(type);
-  }
-
-  /***
-   * <p>Sets the default encryption mode for a specific algorithm type.</p>
-   *
-   * @param t     the type for which the default value should be set
-   * @param ndef  the new default value
-   * @return the previously set default value
-   */
-  public static Mode setDefault(AlgorithmType t, Mode ndef) {
-    Mode old = def.get(t);
-    def.put(t, ndef);
-    return old;
+    switch (type) {
+      case ASYMMETRIC:
+        return ECB;
+      case SYMMETRIC:
+        return CBC;
+      default:
+        throw new IllegalArgumentException("Type " + type + " is not suitable for mode.");
+    }
   }
 
   /***

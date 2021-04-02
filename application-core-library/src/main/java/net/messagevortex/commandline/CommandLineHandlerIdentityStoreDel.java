@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import net.messagevortex.MessageVortex;
@@ -26,7 +28,7 @@ public class CommandLineHandlerIdentityStoreDel implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  @CommandLine.Option(names = {"--filename", "-f"}, required = false,
+  @CommandLine.Option(names = {"--filename", "-f"},
           description = "filename of the IdentityStorage file")
   String filename = CommandLineHandlerIdentityStore.DEFAULT_FILENAME;
 
@@ -69,9 +71,9 @@ public class CommandLineHandlerIdentityStoreDel implements Callable<Integer> {
 
     // dump store to disk
     LOGGER.log(Level.INFO, "writing identity store to \"" + filename + "\"");
-    OutputStream os = new FileOutputStream(filename);
-    os.write(is.toBytes(DumpType.ALL_UNENCRYPTED));
-    os.close();
+    try(OutputStream os = Files.newOutputStream(Paths.get(filename))) {
+      os.write(is.toBytes(DumpType.ALL_UNENCRYPTED));
+    }
 
     LOGGER.log(Level.INFO, "finished");
     return 0;

@@ -52,14 +52,13 @@ public class MergePayloadOperation extends Operation implements Serializable {
    * <p>Create object from ASN.1 code.</p>
    *
    * @param object the ASN.1 code
-   * @throws IOException if parsing of ASN.1 code fails
    */
-  public MergePayloadOperation(ASN1Encodable object) throws IOException {
+  public MergePayloadOperation(ASN1Encodable object) {
     parse(object);
   }
 
   @Override
-  protected final void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) {
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
     int i = 0;
     originalFirstId = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
@@ -68,7 +67,7 @@ public class MergePayloadOperation extends Operation implements Serializable {
   }
 
   @Override
-  public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
+  public String dumpValueNotation(String prefix, DumpType dumptype) {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
     sb.append(prefix).append("  originalFirstId ").append(originalFirstId).append(',').append(CRLF);
@@ -80,7 +79,7 @@ public class MergePayloadOperation extends Operation implements Serializable {
   }
 
   @Override
-  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+  public ASN1Object toAsn1Object(DumpType dumpType) {
     ASN1EncodableVector s1 = new ASN1EncodableVector();
     s1.add(new ASN1Integer(originalFirstId));
     s1.add(new ASN1Integer(originalSecondId));
@@ -89,7 +88,7 @@ public class MergePayloadOperation extends Operation implements Serializable {
   }
 
   @Override
-  public Operation getNewInstance(ASN1Encodable object) throws IOException {
+  public Operation getNewInstance(ASN1Encodable object) {
     return new MergePayloadOperation(object);
   }
 }

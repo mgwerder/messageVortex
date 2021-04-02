@@ -77,9 +77,7 @@ public class SizeBlock extends AbstractBlock implements Serializable {
   @Override
   protected final void parse(ASN1Encodable to) throws IOException {
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
-    int i = 0;
-
-    ASN1TaggedObject tag = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
+    ASN1TaggedObject tag = ASN1TaggedObject.getInstance(s1.getObjectAt(0));
     type = SizeType.getById(tag.getTagNo());
     if (type == null) {
       throw new IOException("Unknown type in SizeType " + tag.getTagNo());
@@ -93,7 +91,7 @@ public class SizeBlock extends AbstractBlock implements Serializable {
   }
 
   @Override
-  public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
+  public String dumpValueNotation(String prefix, DumpType dumptype) {
     StringBuilder sb = new StringBuilder();
     sb.append(type.name().toLowerCase()).append(" {").append(CRLF);
     String s1 = "fromPercent";
@@ -109,13 +107,13 @@ public class SizeBlock extends AbstractBlock implements Serializable {
   }
 
   @Override
-  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+  public ASN1Object toAsn1Object(DumpType dumpType) {
     ASN1EncodableVector v = new ASN1EncodableVector();
 
     // encode target sequence
     ASN1EncodableVector v2 = new ASN1EncodableVector();
-    v2.add(new ASN1Integer((int) (from)));
-    v2.add(new ASN1Integer((int) (to)));
+    v2.add(new ASN1Integer(from));
+    v2.add(new ASN1Integer(to));
     v.add(new DERTaggedObject(type.getId(), new DERSequence(v2)));
 
     return new DERSequence(v);

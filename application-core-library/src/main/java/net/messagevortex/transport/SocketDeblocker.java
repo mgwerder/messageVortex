@@ -37,8 +37,8 @@ public class SocketDeblocker extends Thread {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private int timeout;
-  private int port;
+  private final int timeout;
+  private final int port;
   private volatile boolean shutdown = false;
 
   public SocketDeblocker(int port, int timeout) {

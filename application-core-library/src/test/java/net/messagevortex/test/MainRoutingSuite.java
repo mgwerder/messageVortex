@@ -1,6 +1,6 @@
 package net.messagevortex.test;
 
-/**
+/*
  * Test all classes related to router.
  */
 

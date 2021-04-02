@@ -68,7 +68,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
     
     // get value from cache
     if (!matrixCacheDisabled) {
-      Matrix m = matrixCache.get("rm" + dataRows + "/" + total + "/" + mode.toString());
+      Matrix m = getCache("rm" + dataRows + "/" + total + "/" + mode.toString());
       if (!noCache && m != null) {
         m = new Matrix(m);
         this.matrixContent = m.matrixContent;
@@ -95,7 +95,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
         }
         
       }
-      matrixCache.put("rm" + dataRows + "/" + total + "/" + mode.toString(), new Matrix(this));
+      addCache("rm" + dataRows + "/" + total + "/" + mode.toString(), new Matrix(this));
     }
   }
   
@@ -115,8 +115,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
     while (red.getX() < red.getY()) {
       red.removeRow(red.getY() - 1);
     }
-    Matrix ret = red.getInverse();
-    return ret;
+    return red.getInverse();
   }
   
 }

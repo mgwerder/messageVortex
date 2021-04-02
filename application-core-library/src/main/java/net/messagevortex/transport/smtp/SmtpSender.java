@@ -149,9 +149,9 @@ public class SmtpSender extends ClientConnection implements TransportSender {
       if (reply == null || !reply.startsWith("354 ")) {
         throw new IOException("Invalid DATA reply  (Reply was '" + reply + "')");
       }
-      java.util.Scanner s = new Scanner(is, "UTF-8").useDelimiter("\\A");
+      java.util.Scanner s = new Scanner(is, StandardCharsets.UTF_8.name()).useDelimiter("\\A");
       String txt = s.hasNext() ? s.next() : "";
-      write(txt + CRLF + "." + CRLF);
+      write(txt + CRLF + '.' + CRLF);
 
       // get delivery confirmed or denied
       reply = readln();

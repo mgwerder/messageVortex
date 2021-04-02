@@ -41,6 +41,9 @@
 
 \usepackage{fixfoot}
 
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,arrows.meta,backgrounds,shapes.geometric,shadows.blur}
+\tikzset{background rectangle/.style={fill=black!10}, show background rectangle}
 
 \begin{document}
 	
@@ -491,8 +494,8 @@
 	The Redundancy Operations build the core of the mixing operations. The operation allows us to add redundancy information to a message or to rebuild a block from a chosen set of information. 
 	
 	\begin{figure}[ht]\centering
-		\includegraphics[width=0.5\columnwidth]{addRedundancyOp}
-		\caption{Graphical representation of the addRedundancy operation}
+		\resizebox{0.9\columnwidth}{!}{\input{../../inc/addRedundancyOp.inc.tex}}
+		\caption{Outline of the addRedundancy operation}
 		\label{fig:addRedundancyOperation}
 		\Description{Contains a block diagram representing the addRedundancy operation. First an incomming block is padded and split into a number of blocks. Then, the RS operation is applied, and each resulting block is then encrypted with its own key.}
 	\end{figure}

@@ -3,7 +3,9 @@ package net.messagevortex.commandline;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AlgorithmParameter;
@@ -76,10 +78,10 @@ public class CommandLineHandlerCipherEncrypt implements Callable<Integer> {
    */
   @Override
   public Integer call() throws Exception {
-    byte[] inBuffer = Files.readAllBytes(new File(inFile).toPath());
+    byte[] inBuffer = Files.readAllBytes(Paths.get(inFile));
     byte[] key = null;
     if (keyfile != null) {
-      key = Files.readAllBytes(new File(inFile).toPath());
+      key = Files.readAllBytes(Paths.get(inFile));
     }
 
     Algorithm ct = Algorithm.getByString(cipherType);
@@ -100,16 +102,14 @@ public class CommandLineHandlerCipherEncrypt implements Callable<Integer> {
         k = new AsymmetricKey(algParam);
       }
 
-      File f = new File(outFile);
-      FileOutputStream fos = new FileOutputStream(f);
-      fos.write(k.encrypt(inBuffer));
-      fos.close();
+      try(OutputStream fos = Files.newOutputStream(Paths.get(outFile))) {
+        fos.write(k.encrypt(inBuffer));
+      }
 
       if (outKey != null) {
-        File fk = new File(outFile);
-        FileOutputStream fosk = new FileOutputStream(fk);
-        fosk.write(k.toBytes(DumpType.ALL_UNENCRYPTED));
-        fosk.close();
+        try(OutputStream fosk = Files.newOutputStream(Paths.get(outKey))) {
+          fosk.write(k.toBytes(DumpType.ALL_UNENCRYPTED));
+        }
       }
 
     } else if (ct.getAlgorithmType() == AlgorithmType.SYMMETRIC) {
@@ -122,21 +122,19 @@ public class CommandLineHandlerCipherEncrypt implements Callable<Integer> {
       }
 
       System.out.println("writing encrypted file " + outFile);
-      File f = new File(outFile);
-      FileOutputStream fos = new FileOutputStream(f);
-      fos.write(k.encrypt(inBuffer));
-      fos.close();
+      try(OutputStream fos = Files.newOutputStream(Paths.get(outFile))) {
+        fos.write(k.encrypt(inBuffer));
+      }
 
       if (outKey != null) {
         System.out.println("writing key file " + outKey);
-        File fk = new File(outFile);
-        FileOutputStream fosk = new FileOutputStream(fk);
-        fosk.write(k.toBytes(DumpType.ALL_UNENCRYPTED));
-        fosk.close();
+        try(OutputStream fosk = Files.newOutputStream(Paths.get(outKey))) {
+          fosk.write(k.toBytes(DumpType.ALL_UNENCRYPTED));
+        }
       }
 
     } else {
-      throw new IOException("Unhandlable cipher type");
+      throw new IOException("Unhandleable cipher type");
     }
     return 0;
   }

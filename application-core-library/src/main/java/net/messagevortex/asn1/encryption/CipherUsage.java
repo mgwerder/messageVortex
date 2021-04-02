@@ -29,8 +29,8 @@ public enum CipherUsage {
   SIGN(200, "sign"),
   ENCRYPT(210, "encrypt");
 
-  private int id;
-  private String txt;
+  private final int id;
+  private final String txt;
 
   CipherUsage(int id, String txt) {
     this.id = id;

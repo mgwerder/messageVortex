@@ -99,7 +99,7 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
    * @return The old/previous router layer
    */
   public final TransportSender setTransportSender(TransportSender sender) {
-    TransportSender ret = sender;
+    TransportSender ret = this.sender;
     this.sender = sender;
     return ret;
   }

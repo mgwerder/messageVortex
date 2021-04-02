@@ -1,27 +1,5 @@
 package net.messagevortex.transport.smtp;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -31,7 +9,6 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
-
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.ClientConnection;
@@ -60,13 +37,13 @@ public class SmtpConnection extends ClientConnection {
   Credentials creds;
 
   public SmtpConnection(InetSocketAddress socketAddress, SecurityContext context, Credentials creds)
-          throws IOException {
+      throws IOException {
     super(socketAddress, context);
     init(creds);
   }
 
   public SmtpConnection(SocketChannel channel, SecurityContext secContext, Credentials creds)
-          throws IOException {
+      throws IOException {
     super(channel, secContext);
     init(creds);
   }
@@ -87,12 +64,12 @@ public class SmtpConnection extends ClientConnection {
         LOGGER.log(Level.INFO, "got new SMTP incomming connect... sending server greeting");
         // write SMTP banner of server
         writeln("220 " + InetAddress.getLocalHost().getHostName()
-                + " ESMTP MessageVortex receiver");
+            + " ESMTP MessageVortex receiver");
 
         // smtp state machine
         String envelopeFrom = null;
         String envelopeTo = null;
-        while (command == null || !"quit".equals(command.toLowerCase())) {
+        while (!"quit".equalsIgnoreCase(command)) {
           LOGGER.log(Level.INFO, "Waiting for SMTP command to arrive");
 
           // wait for incomming command
@@ -110,17 +87,18 @@ public class SmtpConnection extends ClientConnection {
               write("250-ENHANCEDSTATUSCODES" + CRLF);
               write("250 AUTH login" + CRLF);
               // check for login
-            } else if ("auth login".equals(command.toLowerCase())) {
+            } else if ("auth login".equalsIgnoreCase(command)) {
               writeln("334 " + new String(
-                      Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)),
-                      StandardCharsets.UTF_8
+                  Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)),
+                  StandardCharsets.UTF_8
               ));
-              String username = new String(Base64.decode(readln()),StandardCharsets.UTF_8);
+              String username = new String(Base64.decode(readln()), StandardCharsets.UTF_8);
               Config.getDefault().getStringValue(cfgSection, "smtp_incomming_user");
               write("334 " + new String(
-                      Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
+                  Base64.encode("Password:".getBytes(StandardCharsets.UTF_8)),
+                  StandardCharsets.UTF_8) + CRLF
               );
-              String password = new String(Base64.decode(readln()));
+              String password = new String(Base64.decode(readln()), StandardCharsets.UTF_8);
               Config.getDefault().getStringValue(cfgSection, "smtp_incomming_password");
 
               // check for sender string
@@ -134,16 +112,16 @@ public class SmtpConnection extends ClientConnection {
               write("250 OK" + CRLF);
               // FIXME reject if not apropriate
               // check for message body
-            } else if ("data".equals(command.toLowerCase())) {
+            } else if ("data".equalsIgnoreCase(command)) {
               if (envelopeFrom != null && envelopeTo != null) {
                 write("354 send the mail data, end with CRLF.CRLF" + CRLF);
 
                 // get body until terminated with a line with a single dot
                 String l = null;
                 StringBuilder sb = new StringBuilder();
-                while (l == null || !".".equals(l)) {
+                while (!".".equals(l)) {
                   if (l != null) {
-                    sb.append(l + CRLF);
+                    sb.append(l).append(CRLF);
                   }
                   l = readln();
                 }
@@ -152,7 +130,7 @@ public class SmtpConnection extends ClientConnection {
                 if (getReceiver() != null) {
                   LOGGER.log(Level.INFO, "Message passed to blender layer");
                   getReceiver().gotMessage(new ByteArrayInputStream(
-                          sb.toString().getBytes(StandardCharsets.UTF_8))
+                      sb.toString().getBytes(StandardCharsets.UTF_8))
                   );
                 } else {
                   LOGGER.log(Level.WARNING, "blender layer unknown ... message discarded");

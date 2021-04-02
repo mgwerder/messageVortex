@@ -51,16 +51,15 @@ public class SaslPlainServer implements SaslServer {
   public static class SaslPlainServerFactory implements SaslServerFactory {
     @Override
     public SaslServer createSaslServer(String mech, String protocol, String serverName,
-                                       Map<String, ?> props, CallbackHandler cbh)
-            throws SaslException {
+                                       Map<String, ?> props, CallbackHandler cbh) {
       return "PLAIN".equals(mech) ? new SaslPlainServer(cbh) : null;
     }
 
     @Override
     public String[] getMechanismNames(Map<String, ?> props) {
-      if (props == null || "false".equals(props.get(Sasl.POLICY_NOPLAINTEXT).toString()
-              .toLowerCase())) {
-        return new String[]{"PLAIN"};
+      if (props == null
+          || "false".equalsIgnoreCase(props.get(Sasl.POLICY_NOPLAINTEXT).toString())) {
+        return new String[] {"PLAIN"};
       } else {
         return new String[0];
       }
@@ -96,7 +95,7 @@ public class SaslPlainServer implements SaslServer {
 
       if (chunks.length != 3) {
         throw new IllegalArgumentException("error parsing response (got " + chunks.length
-                + " chunks out of " + response.length + ")");
+            + " chunks out of " + response.length + ")");
       }
       if (chunks[0] == null || chunks[0].isEmpty()) {
         chunks[0] = chunks[1];
@@ -107,7 +106,7 @@ public class SaslPlainServer implements SaslServer {
       PasswordCallback pc = new PasswordCallback("SASL PLAIN", false);
       pc.setPassword(chunks[2].toCharArray());
       AuthorizeCallback ac = new AuthorizeCallback(chunks[1], chunks[0]);
-      cbh.handle(new Callback[]{nc, pc, ac});
+      cbh.handle(new Callback[] {nc, pc, ac});
       if (ac.isAuthorized()) {
         authz = ac.getAuthorizedID();
       }
@@ -141,17 +140,17 @@ public class SaslPlainServer implements SaslServer {
   }
 
   @Override
-  public byte[] wrap(byte[] outgoing, int offset, int len) throws SaslException {
+  public byte[] wrap(byte[] outgoing, int offset, int len) {
     throw new IllegalStateException("PLAIN supports no integrity or privacy");
   }
 
   @Override
-  public byte[] unwrap(byte[] incoming, int offset, int len) throws SaslException {
+  public byte[] unwrap(byte[] incoming, int offset, int len) {
     throw new IllegalStateException("PLAIN supports no integrity or privacy");
   }
 
   @Override
-  public void dispose() throws SaslException {
+  public void dispose() {
     cbh = null;
     authz = null;
   }

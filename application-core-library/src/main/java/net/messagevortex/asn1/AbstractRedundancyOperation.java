@@ -1,27 +1,5 @@
 package net.messagevortex.asn1;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -62,7 +40,6 @@ public abstract class AbstractRedundancyOperation
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
   int inputId;
@@ -77,14 +54,14 @@ public abstract class AbstractRedundancyOperation
   }
 
   /***
-   * <p>Creates an apropriate operation with the given GF size and properties.</p>
+   * <p>Creates an appropriate operation with the given GF size and properties.</p>
    *
    * @param inputId       first ID of the input workspace
    * @param dataStripes   number of data stripes contained in operation
    * @param redundancy    number of redundancy stripes
-   * @param stripeKeys    keys for the resiulting stripes (number should be dataStripes+redundancy)
+   * @param stripeKeys    keys for the resulting stripes (number should be dataStripes+redundancy)
    * @param newFirstId    first output ID
-   * @param gfSize        Size of the Galoise Field in bits
+   * @param gfSize        Size of the Galois Field in bits
    */
   public AbstractRedundancyOperation(int inputId, int dataStripes, int redundancy,
                                      List<SymmetricKey> stripeKeys, int newFirstId, int gfSize) {
@@ -112,10 +89,10 @@ public abstract class AbstractRedundancyOperation
     int i = 0;
     ASN1Sequence s1 = ASN1Sequence.getInstance(p);
 
-    inputId = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), INPUT_ID, "inputId");
-    dataStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), DATA_STRIPES,
+    inputId = parseIntVal(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), INPUT_ID, "inputId");
+    dataStripes = parseIntVal(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), DATA_STRIPES,
         "dataStripes");
-    redundancyStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), REDUNDANCY,
+    redundancyStripes = parseIntVal(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), REDUNDANCY,
         "redundancy");
 
     // reading keys
@@ -131,15 +108,15 @@ public abstract class AbstractRedundancyOperation
       }
     }
 
-    outputId = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), OUTPUT_ID,
+    outputId = parseIntVal(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), OUTPUT_ID,
         "outputId");
-    gfSize = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), GF_SIZE, "gfSize");
+    gfSize = parseIntVal(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), GF_SIZE, "gfSize");
 
     LOGGER.log(Level.FINER, "Finished parse()");
 
   }
 
-  private int parseIntval(ASN1TaggedObject obj, int id, String description) throws IOException {
+  private int parseIntVal(ASN1TaggedObject obj, int id, String description) throws IOException {
     if (obj.getTagNo() != id) {
       throw new IOException("got unknown tag id (" + id + ") when expecting " + description);
     }
@@ -229,11 +206,11 @@ public abstract class AbstractRedundancyOperation
    *
    * @param stripes The number of data stripes to be used for the redundancy operation
    * @return the previously set number of stripes
-   * @throws ArithmeticException if all stripes together are not accomodatable in the given GF field
+   * @throws ArithmeticException if all stripes together are not accommodated in the given GF field
    */
   public final int setDataStripes(int stripes) {
     if (stripes < 1 || stripes + this.redundancyStripes > BitShifter.lshift(2, gfSize, (byte) 33)) {
-      throw new ArithmeticException("too many stripes to be acomodated in given galois field");
+      throw new ArithmeticException("too many stripes to be accommodated in given galois field");
     }
     int old = this.dataStripes;
     this.dataStripes = stripes;
@@ -249,13 +226,13 @@ public abstract class AbstractRedundancyOperation
    *
    * @param stripes the number of redundancy stripes to be set
    * @return the previous number of redundancy stripes
-   * @throws ArithmeticException if the defined GF size is unable to accomodate all values
+   * @throws ArithmeticException if the defined GF size is unable to accommodated all values
    */
   public final int setRedundancy(int stripes) {
     if (stripes < 1) {
-      throw new ArithmeticException("too few stripes to be acomodated in current galois field");
+      throw new ArithmeticException("too few stripes to be accommodated in current Galois field");
     } else if (stripes + this.dataStripes > BitShifter.lshift(2, gfSize, (byte) 33)) {
-      throw new ArithmeticException("too many stripes to be acomodated in current galois field");
+      throw new ArithmeticException("too many stripes to be accommodated in current galois field");
     }
     int old = this.redundancyStripes;
     this.redundancyStripes = stripes;
@@ -269,20 +246,20 @@ public abstract class AbstractRedundancyOperation
   /***
    * <p>Sets the keys to be used to encrypt all input respective output fields.</p>
    *
-   * @param keys a list of teys
+   * @param keys a list of keys
    * @return the old list of keys
-   * @throws ArithmeticException if the number of keys doees not match the number of stripes
+   * @throws ArithmeticException if the number of keys does not match the number of stripes
    */
   public final SymmetricKey[] setKeys(List<SymmetricKey> keys) {
     if (keys == null) {
-      keys = new Vector<SymmetricKey>();
+      keys = new Vector<>();
     }
 
     if (this.dataStripes + this.redundancyStripes != keys.size() && keys.size() != 0) {
       throw new ArithmeticException("illegal number of keys");
     }
 
-    SymmetricKey[] old = stripeKeys.toArray(new SymmetricKey[stripeKeys.size()]);
+    SymmetricKey[] old = stripeKeys.toArray(new SymmetricKey[0]);
     synchronized (stripeKeys) {
       stripeKeys.clear();
       stripeKeys.addAll(keys);
@@ -291,16 +268,16 @@ public abstract class AbstractRedundancyOperation
   }
 
   /***
-   * <p>Gets the omega parameter of the Galoise field.</p>
+   * <p>Gets the omega parameter of the Galois field.</p>
    *
    * @return the omega parameter of the GF.
    */
-  public SymmetricKey[] getkeys() {
-    return stripeKeys.toArray(new SymmetricKey[stripeKeys.size()]);
+  public SymmetricKey[] getKeys() {
+    return stripeKeys.toArray(new SymmetricKey[0]);
   }
 
   /***
-   * <p>Sets the omega parameter of the Galoise field.</p>
+   * <p>Sets the omega parameter of the Galois field.</p>
    *
    * @param omega the omega of the new GF
    * @return the previous omega parameter of the GF.
@@ -310,7 +287,7 @@ public abstract class AbstractRedundancyOperation
   public final int setGfSize(int omega) {
     if (omega < 2 || omega > 16
         || this.redundancyStripes + this.dataStripes > BitShifter.lshift(2, omega, (byte) 33)) {
-      throw new ArithmeticException("galois field too small for the stripes to be acomodated");
+      throw new ArithmeticException("galois field too small for the stripes to be accommodated");
     }
     int old = this.gfSize;
     this.gfSize = omega;
@@ -324,7 +301,7 @@ public abstract class AbstractRedundancyOperation
   /***
    * <p>Sets the id of the first output block of the function.</p>
    *
-   * @param id the first id to ber ised
+   * @param id the first id to be used
    * @return old first value (before the write
    */
   public int setOutputId(int id) {

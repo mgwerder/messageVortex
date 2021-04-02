@@ -33,10 +33,10 @@ import net.messagevortex.transport.ServerConnection;
 import net.messagevortex.transport.StoppableThread;
 
 public class ImapConnection extends ServerConnection
-        implements Comparable<ImapConnection> {
+    implements Comparable<ImapConnection> {
 
   private static final Logger LOGGER;
-  private static int id = 1;
+  private static final int id = 1;
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -68,13 +68,13 @@ public class ImapConnection extends ServerConnection
               imapConnectionRunner = null;
             } else {
               LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line)
-                      + "\"");
+                  + "\"");
 
               String[] reply = processCommand(line + CRLF);
               if (reply != null) {
                 for (String r : reply) {
                   LOGGER.log(Level.INFO, "sending reply to client \"" + ImapLine.commandEncoder(r)
-                          + "\"");
+                      + "\"");
                   if (r != null) {
                     write(r);
                   }
@@ -89,13 +89,13 @@ public class ImapConnection extends ServerConnection
               }
             }
           } catch (TimeoutException te) {
-            LOGGER.log(Level.WARNING,"got timeout exception when reading", te);
+            LOGGER.log(Level.WARNING, "got timeout exception when reading", te);
           }
         }
         LOGGER.log(Level.INFO, "left main loop (shutting down)");
       } catch (IOException | ImapException ioe) {
         LOGGER.log(Level.WARNING, "got exception while waiting for lines ("
-                + shutdownImapRunner + ")", ioe);
+            + shutdownImapRunner + ")", ioe);
       }
       imapConnectionRunner = null;
       shutdownImapRunner = true;
@@ -104,6 +104,9 @@ public class ImapConnection extends ServerConnection
 
     @Override
     public void shutdown() throws IOException {
+      if (!shutdownImapRunner) {
+        throw new IOException("No Imap runner running");
+      }
       shutdownImapRunner = true;
     }
 
@@ -128,9 +131,8 @@ public class ImapConnection extends ServerConnection
    *
    * @param ac the connection to be wrapped
    * @param proxy the authentication proxy to be used for login
-   * @throws IOException if communication with peer fails
    */
-  public ImapConnection(AbstractConnection ac, AuthenticationProxy proxy) throws IOException {
+  public ImapConnection(AbstractConnection ac, AuthenticationProxy proxy) {
     super(ac);
     setAuth(proxy);
     init();
@@ -139,7 +141,7 @@ public class ImapConnection extends ServerConnection
   /***
    * <p>Creates an imapConnection.</p>
    ***/
-  private void init() throws IOException {
+  private void init() {
     imapConnectionRunner = new ImapConnectionRunner();
     setId(Thread.currentThread().getName() + "-conn" + id);
     imapConnectionRunner.start();
@@ -151,7 +153,7 @@ public class ImapConnection extends ServerConnection
    * @param authProxy the proxy to be set
    * @return the previously set proxy
    */
-  public AuthenticationProxy setAuth(AuthenticationProxy authProxy) {
+  public final AuthenticationProxy setAuth(AuthenticationProxy authProxy) {
     AuthenticationProxy oldProxyAuth = getAuth();
     this.authProxy = authProxy;
     if (authProxy != null) {
@@ -219,33 +221,32 @@ public class ImapConnection extends ServerConnection
     } catch (ImapBlankLineException ie) {
       // just ignore blank lines
       LOGGER.log(Level.INFO, "got a blank line as command", ie);
-      return new String[]{"* BAD empty line"};
+      return new String[] {"* BAD empty line"};
     } catch (ImapException ie) {
       // If line violates the form <tag> <command> refuse processing
       LOGGER.log(Level.WARNING, "got invalid line", ie);
-      return new String[]{"* BAD invalid line"};
+      return new String[] {"* BAD invalid line"};
     }
 
     LOGGER.log(Level.INFO, "got command \"" + il.getTag() + " " + il.getCommand() + "\".");
-    ImapCommand c = ImapCommand.getCommand(il.getCommand());
+    ImapCommand c = ImapCommandFactory.getCommand(il.getCommand());
     if (c == null) {
       throw new ImapException(il, "Command \"" + il.getCommand() + "\" is not implemented");
     }
     LOGGER.log(Level.FINEST, "found command in connection " + Thread.currentThread().getName()
-            + ".");
+        + ".");
     String[] s = c.processCommand(il);
 
     LOGGER.log(Level.INFO, "got command \"" + il.getTag() + " " + il.getCommand()
-            + "\". Reply is \"" + ImapLine.commandEncoder(s == null ? "null" : s[s.length - 1])
-            + "\" (" + (s != null ? s.length : "Null") + ").");
+        + "\". Reply is \"" + ImapLine.commandEncoder(s == null ? "null" : s[s.length - 1])
+        + "\" (" + (s != null ? s.length : "Null") + ").");
     return s;
   }
 
   /***
    * <p>Tear down connection handler thread.</p>
-   * @throws IOException if shutdown failed
    */
-  public void shutdown() throws IOException {
+  public void shutdown() {
     boolean conRunner = false;
     if (imapConnectionRunner != null) {
       conRunner = true;
@@ -253,9 +254,17 @@ public class ImapConnection extends ServerConnection
       ImapConnectionRunner icr = imapConnectionRunner;
       imapConnectionRunner = null;
       LOGGER.log(Level.INFO, "shut down for connection " + rname + " runner called");
-      icr.shutdown();
+      try {
+        icr.shutdown();
+      } catch (IOException ex) {
+        // ignore error due to non running connectors
+      }
       LOGGER.log(Level.INFO, "shut down of abstract connection of " + rname + " called");
-      super.shutdown();
+      try {
+        super.shutdown();
+      } catch (IOException ex) {
+        // ignore error due to non running connectors
+      }
       LOGGER.log(Level.INFO, "waiting for shutdown of " + rname + " runner");
       icr.waitForShutdown();
       LOGGER.log(Level.INFO, "shut down connection " + rname + " completed");

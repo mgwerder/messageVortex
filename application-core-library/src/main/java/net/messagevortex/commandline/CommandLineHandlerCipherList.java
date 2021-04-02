@@ -5,6 +5,7 @@ import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherT
 import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.PAD;
 import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.SYM;
 
+
 import java.io.IOException;
 import java.util.concurrent.Callable;
 import net.messagevortex.MessageVortexLogger;
@@ -29,7 +30,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
     ASYM,
     SYM,
     MODE,
-    PAD;
+    PAD
   }
 
   private static final java.util.logging.Logger LOGGER;
@@ -38,7 +39,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  @CommandLine.Option(names = {"--type", "-t"}, required = false,
+  @CommandLine.Option(names = {"--type", "-t"},
       description = "type of information (ASYM, SYM, MODE, PAD)")
   CipherType[] types = {ASYM, SYM, MODE, PAD};
 
@@ -57,7 +58,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
         case ASYM:
           System.out.println("Asymmetric cpiher types:");
           for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.ASYMMETRIC)) {
-            System.out.print("  " + a.toString());
+            System.out.print("  " + a);
             System.out.print(" (modes: ");
             int i = 0;
             for (Mode m : Mode.getModes(a)) {
@@ -74,15 +75,15 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
                 System.out.print(", ");
               }
               i++;
-              System.out.print(p.toString());
+              System.out.print(p);
             }
-            System.out.println(")");
+            System.out.println(')');
           }
           break;
         case SYM:
           System.out.println("Symmetric cpiher types:");
           for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.SYMMETRIC)) {
-            System.out.print("  " + a.toString());
+            System.out.print("  " + a);
             System.out.print(" (modes: ");
             int i = 0;
             for (Mode m : Mode.getModes(a)) {
@@ -99,9 +100,9 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
                 System.out.print(", ");
               }
               i++;
-              System.out.print(p.toString());
+              System.out.print(p);
             }
-            System.out.println(")");
+            System.out.println(')');
           }
           break;
         case MODE:
@@ -120,7 +121,7 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
           System.err.println("ERROR: Unknown type specified");
           throw new IOException("Unknown type specified");
       }
-      System.out.println("");
+      System.out.println();
       System.out.flush();
     }
     return 0;

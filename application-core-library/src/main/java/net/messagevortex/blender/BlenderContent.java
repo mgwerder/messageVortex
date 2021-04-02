@@ -5,7 +5,7 @@ import java.util.Vector;
 
 public class BlenderContent {
 
-  private Vector<String> attachments = new Vector<>();
+  private final Vector<String> attachments = new Vector<>();
 
   private String text = "";
 

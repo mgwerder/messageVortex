@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class TooltipContainer {
   
-  private Map<TooltipExtent, String> tips = new HashMap<>();
+  private final Map<TooltipExtent, String> tips = new HashMap<>();
   
   /**
    * <p>Adds a tooltip at the given position.</p>

@@ -1,25 +1,25 @@
-\gdef\shadowshift{-3pt}
-\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
 
 \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
 
 % Hexagon
 \path[
  	fill={rgb, 255:red, 255; green, 226; blue, 226 },
  	draw=black,
  	xshift=100, 
- 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=-3pt,shadow yshift=-3pt}
+ 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=\shadowshift,shadow yshift=\shadowshift}
  	] (0:200) -- (60:200) -- (120:200) -- (180:200) -- (240:200) -- (300:200) -- (0:200);
 % square
 \path[fill={rgb, 255:red, 217; green, 248; blue, 217 },draw=black,rounded corners=5pt,
- 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=-3pt,shadow yshift=-3pt}
+ 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=\shadowshift,shadow yshift=\shadowshift}
 	] (70,-30) rectangle +(120,60) node [pos=.5,scale=2] {$split$};
 % Input arrow
-\draw [color=black  ,draw opacity=1,-Latex ]   (130,-100) -- +(0,70)  node [pos=.5,xshift=15,scale=2] {$I$} node [yshift=70,scale=2] {$Input$};
+\draw [color=black  ,draw opacity=1,-Latex ]   (130,-100) -- +(0,70)  node [pos=.5,xshift=15,scale=2] {$I$} node [yshift=70,scale=2] {Input};
 % output arrow
-\draw [color=black  ,draw opacity=1,-Latex]   (100,30) -- +(0,70)  node [pos=.5,xshift=-15,scale=2] {$O_1$} node [yshift=-10,scale=2,xshift=10] {$Output$};
+\draw [color=black  ,draw opacity=1,-Latex]   (100,30) -- +(0,70)  node [pos=.5,xshift=-15,scale=2] {$O_1$} node [yshift=-10,scale=2,xshift=10] {Output};
 \draw [color=black  ,draw opacity=1,-Latex]   (160,30) -- +(0,70)  node [pos=.5,xshift=15,scale=2] {$O_2$} ;
 
+\draw [color=black,draw opacity=1,Latex- ]   (70,0) -- +(-190,0)  node[scale=2,left] {$f$};
 \end{tikzpicture}
 
 %\end{document}

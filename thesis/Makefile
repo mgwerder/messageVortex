@@ -8,14 +8,14 @@ MKFILEP := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 .PHONY: all clean dirs
 
-all: $(OUTDIR)/messageVortex.pdf $(OUTDIR)/messageVortex_attachdocs.pdf dirs $(OUTDIR)/filet.pdf $(OUTDIR)/MessageVortexExcerpt.pdf
+all: $(OUTDIR)/messageVortex.pdf $(OUTDIR)/messageVortex_attachdocs.pdf dirs 
 
 clean:
 	@rm -r target 2>/dev/null; /bin/true
 
 dirs:
 	@-for i in aux bbl bcf; do find . -name "*.$i" -exec rm \{} \; ;done
-	@-mkdir -p $(OUTDIR) $(INTERDIR)/rfc 2>/dev/null 
+	@-mkdir -p $(OUTDIR) $(INTERDIR) $(INTERDIR)/rfc 2>/dev/null 
 	
 prepInterdir:
 	@cp ../rfc/target/xml2rfc/*.pdf $(INTERDIR)/rfc
@@ -46,31 +46,6 @@ $(INTERDIR)/messageVortex_attachdocs.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/
 	(cd $(INTERDIR)/; makeindex messageVortex_attachdocs )
 	(cd $(INTERDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -shell-escape -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{extbook}\input{messageVortex.tex}")
         
-$(INTERDIR)/filet.pdf: $(SRCDIR)/papers/filet/filet.tex $(SRCDIR)/messageVortex.bib 
-	@make dirs
-	@echo "building tmp pdf file $@"
-	@make prepInterdir
-	-rm $(INTERDIR)//papers/filet/filet.aux $(INTERDIR)/papers/filet/filet.bbl
-	touch $(INTERDIR)/papers/filet/filet.aux $(INTERDIR)/papers/filet/filet.bbl $(INTERDIR)/papers/filet/filet.log
-	(cd $(INTERDIR)/papers/filet; pdflatex -shell-escape filet.tex )
-	-(cd $(INTERDIR)/papers/filet; bibtex filet )
-	(cd $(INTERDIR)/papers/filet; pdflatex -shell-escape filet.tex )
-	(cd $(INTERDIR)/papers/filet; pdflatex -shell-escape filet.tex )
-	cp $(INTERDIR)/papers/filet/*.pdf $(INTERDIR)
-
-$(INTERDIR)/MessageVortexExcerpt.pdf: $(SRCDIR)/papers/filet/MessageVortexExcerpt.tex $(SRCDIR)/messageVortex.bib 
-	@make dirs
-	@echo "building tmp pdf file $@"
-	@make prepInterdir
-	-rm $(INTERDIR)/MessageVortexExcerpt.aux $(INTERDIR)/MessageVortexExcerpt.bbl
-	touch $(INTERDIR)/MessageVortexExcerpt.aux $(INTERDIR)/MessageVortexExcerpt.bbl $(INTERDIR)/MessageVortexExcerpt.log
-	(cd $(INTERDIR); pdflatex -shell-escape messageVortex.tex )
-	(cd $(INTERDIR)/papers/filet; pdflatex -shell-escape -output-directory=../../../../../$(INTERDIR)/papers/filet MessageVortexExcerpt.tex )	
-	-(cd $(INTERDIR)/; bibtex MessageVortexExcerpt )
-	(cd $(INTERDIR)/papers/filet; pdflatex -shell-escape MessageVortexExcerpt.tex )
-	(cd $(INTERDIR)/papers/filet; pdflatex -shell-escape MessageVortexExcerpt.tex )
-	cp $(INTERDIR)/papers/filet/*.pdf $(INTERDIR)
-
 $(OUTDIR)/%.pdf: $(INTERDIR)/%.pdf
 	cp $< $@
 

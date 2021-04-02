@@ -112,7 +112,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
         LOGGER.log(Level.WARNING, "Parsing of prefix block failed", ioe);
         setDecryptionKey(null);
         key = null;
-        encrypted = Arrays.copyOf(to,to.length);
+        encrypted = Arrays.copyOf(to, to.length);
       }
     }
   }
@@ -121,11 +121,10 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   protected final void parse(ASN1Encodable to) throws IOException {
     encrypted = null;
     LOGGER.log(Level.FINER, "Executing parse()");
-    int i = 0;
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
 
     // getting key
-    key = new SymmetricKey(toDer(s1.getObjectAt(i++).toASN1Primitive()), null);
+    key = new SymmetricKey(toDer(s1.getObjectAt(0).toASN1Primitive()), null);
   }
 
   /***
@@ -174,7 +173,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
     if (getKey() == null && isEncrypted()) {
       throw new IOException("only encrypted form may be dumped without providing a valid "
-              + "decryption key");
+          + "decryption key");
     }
     ASN1EncodableVector v = new ASN1EncodableVector();
     ASN1Encodable o = getKey().toAsn1Object(dumpType);
@@ -197,7 +196,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
       // dump as unecrypted structure
       sb.append("plain  {").append(CRLF);
       sb.append(prefix).append("  key ").append(key.dumpValueNotation(prefix + "  ", dumpType))
-                       .append(CRLF);
+          .append(CRLF);
       sb.append(prefix).append('}');
     }
     return sb.toString();
@@ -250,11 +249,11 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
       byte[] b = toBytes(DumpType.PUBLIC_ONLY);
       if (maxSize < b.length) {
         throw new IOException("unable to encrypt current prefix block (prefixSize: " + b.length
-                + "; maxSize: " + maxSize + ")");
+            + "; maxSize: " + maxSize + ")");
       }
       return decryptionKey.encrypt(b);
     } else {
-      if ( encrypted==null) {
+      if (encrypted == null) {
         return null;
       } else {
         return encrypted.clone();
