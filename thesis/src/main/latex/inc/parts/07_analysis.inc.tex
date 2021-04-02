@@ -97,13 +97,13 @@ We analyzed the files by calculating the entropy of blocks 256 bytes with a slid
 
 \begin{figure*}[ht]
 	\includegraphics[width=\textwidth]{inc/statanalysis_graph}
-	\caption{Distribution Analysis of Different, Common Graphics Formats}
+	\caption{Distribution Analysis of Different, Common Graphics Formats.}
 	\label{fig:statGraph}
 \end{figure*}
 
 \begin{figure*}[ht]
 	\includegraphics[width=\textwidth]{inc/statanalysis_mv}
-	\caption{Distribution analysis of a MessageVortex block}
+	\caption{Distribution analysis of a MessageVortex block.}
 	\label{fig:statMvGraph}
 \end{figure*}
 
@@ -126,7 +126,7 @@ We then carried out an analysis identifying the typical entropy and the inner st
 		MVaes     & 7.176  & 0.072 & Without length padding as reference encrypted with AES 256 CBC\\
 		MVcam     & 7.175  & 0.070 & Without length padding as reference encrypted with Camellia 256 CBC\\\hline
 	\end{tabular}    
-	\caption{comparison of protocols in terms of the suitability criteria as transport layer}
+	\caption{Comparison of potential transport layer.}
 	\label{tab:fileEntropy}
 \end{table*}
 
@@ -160,7 +160,7 @@ Thus, we reconsidered the whole operation. The choice of the Reed--Solomon (RS)-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[!t]\centering
 	\includegraphics[width=1\textwidth]{inc/randomblock_10kb}
-	\caption{Resulting entropy of addRedundancy with and without the encryption step}
+	\caption{Entropy of addRedundancy with and without the encryption step.}
 	\label{fig:entropy}
 \end{figure*}
 
@@ -305,7 +305,7 @@ From an inside perspective, we take additional information into account. First, 
 	\resizebox{.9\linewidth}{!}{
 		\input{inc/reducedGraphs.inc.tex}
 	}
-	\caption{A randomly generated graph assuming that all nodes except node 0 and 1 are collaborating.}
+	\caption{The graph of \ref{fig:messageGraphPaths} assuming all nodes except node 0 and 1 are evil.}
 	\label{fig:reducedMessageGraphPaths}
 \end{figure*}
 
@@ -427,7 +427,7 @@ As the communication pattern is defined by the RBB and is not always the same, i
 	\centering\resizebox{.95\linewidth}{!}{
 		\input{inc/flowAnalysis.inc.tex}
 	}
-	\caption{A possible path of a VortexMessage}
+	\caption{A possible path of a VortexMessage.}
 	\label{fig:messagePaths}
 \end{figure}
 
@@ -529,7 +529,7 @@ Having the possibility of mimicking a type 3 remailer and improving the communic
 
 \begin{figure*}[ht]\centering
 	\input{inc/mixminion.inc.tex}
-	\caption{A typical Mixminion mix cascade}
+	\caption{A typical Mixminion mix cascade.}
 	\label{fig:mmCommPattern}
 \end{figure*}
 
@@ -559,7 +559,7 @@ Having the possibility of mimicking a DC network and improving the communication
 
 \begin{figure*}[ht]\centering
 	\input{inc/dcnet.inc.tex}
-	\caption{A typical DC network communication pattern}
+	\caption{A typical DC network communication pattern.}
 	\label{fig:dcCommPattern}
 \end{figure*}
 
@@ -569,7 +569,7 @@ A broadcast-based network (BCN) hides a message transfer so that every involved 
 
 \begin{figure*}[ht]\centering
 	\input{inc/bcnets.inc.tex}
-	\caption{A typical broadcast network communication pattern (full mesh)}
+	\caption{A typical broadcast network communication pattern (full mesh).}
 	\label{fig:bcCommPattern}
 \end{figure*}
 
@@ -577,7 +577,7 @@ A BCN is a high-load network with a very suspicious and uncommon communication p
 
 \begin{figure*}[ht]\centering
 	\input{inc/redbcnets.inc.tex}
-	\caption{A reduced broadcast network communication pattern (single broadcast)}
+	\caption{A reduced broadcast network communication pattern (single broadcast).}
 	\label{fig:bcRedCommPattern}
 \end{figure*}
 

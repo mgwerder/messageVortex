@@ -692,7 +692,7 @@ The sending of a message is triggered by a routing block in the workspace, as sh
 
 All mapping operations are then carried out. If a payload has not yet been calculated, appropriate operations in the workspace are searched and executed to create the missing payloads. If a payload is not created successfully, the payload in the message is omitted. 
 
-The message is assembled by building the $InnerMessageBlock$ with $cPrefix$, $header$, $routing$ from the routing combo and the payloads generated. This block is DER-encoded and then encrypted with $peerKey$. The resulting octet-stream is prepended with $mPrefix$ from the routing combo and then passed to an appropriate blending layer for the requested transport using $blendingSpecc$.
+The message is assembled by building the $InnerMessageBlock$ with $cPrefix$, $header$, $routing$ from the routing combo and the payloads generated (see \cref{fig:messageOutline} and \cref{fig:mathMessage}). This block is DER-encoded and then encrypted with $peerKey$. The resulting octet-stream is prepended with $mPrefix$ from the routing combo and then passed to an appropriate blending layer for the requested transport using $blendingSpecc$.
 
 The resulting message is a valid \VortexMessage, but the generating node has no relevant knowledge about the message or its content except for the recipient address. %FIXMEX large space following this paragraph
 
