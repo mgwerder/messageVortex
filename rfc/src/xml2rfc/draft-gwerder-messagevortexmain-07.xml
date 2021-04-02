@@ -1305,50 +1305,50 @@ function incomming_message(VortexMessage blendedMessage) {
       <t>The following sections contain the ASN.1 modules specifying the MessageVortex Protocol.</t>
 
       <section anchor="asnOne_schema" title="The Main MessageVortex Blocks">
-        <t><figure>
-            <artwork src="asn/MessageVortex-Schema.asn" alt="The main MessageVortex blocks"/>
-          </figure></t>
+         <figure>
+              <artwork type="asn.1" src="asn/MessageVortex-Schema.asn"/>
+         </figure>
       </section>
 
       <section anchor="asnOne_Ciphers"
                title="The MessageVortex Ciphers Structures">
         <t><figure>
-            <artwork src="asn/MessageVortex-Ciphers.asn" alt=""/>
+            <artwork type="asn.1" src="asn/MessageVortex-Ciphers.asn" alt=""/>
           </figure></t>
       </section>
 
       <section anchor="asnOne_requests"
                title="The MessageVortex Request Structures">
         <t><figure>
-            <artwork src="asn/MessageVortex-Requests.asn"/>
+            <artwork type="asn.1" src="asn/MessageVortex-Requests.asn"/>
           </figure></t>
       </section>
 
       <section anchor="asnOne_replies"
                title="The MessageVortex Replies Structures">
         <t><figure>
-            <artwork src="asn/MessageVortex-Replies.asn"/>
+            <artwork type="asn.1" src="asn/MessageVortex-Replies.asn"/>
           </figure></t>
       </section>
 
       <section anchor="asnOne_requirements"
                title="The MessageVortex Requirements Structures">
         <t><figure>
-            <artwork src="asn/MessageVortex-Requirements.asn"/>
+            <artwork type="asn.1" src="asn/MessageVortex-Requirements.asn"/>
           </figure></t>
       </section>
 
       <section anchor="asnOne_helpers"
                title="The MessageVortex Helpers Structures">
         <t><figure>
-            <artwork src="asn/MessageVortex-Helpers.asn"/>
+            <artwork type="asn.1" src="asn/MessageVortex-Helpers.asn"/>
           </figure></t>
       </section>
 
       <section anchor="asnOne_additional"
                title="The MessageVortex Additional Structures">
         <t><figure>
-            <artwork src="asn/MessageVortex-NonProtocolBlocks.asn"/>
+            <artwork type="asn.1" src="asn/MessageVortex-NonProtocolBlocks.asn"/>
           </figure></t>
       </section>
     </section>
