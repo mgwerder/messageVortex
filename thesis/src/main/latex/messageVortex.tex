@@ -100,7 +100,6 @@
 %enable hyperlinks
 \makeatletter
 \hypersetup{	
-	pdftitle={\thetitle},
 	pdfpagelayout=TwoPageRight,
 	linktoc=all,
 	breaklinks=true,
@@ -545,10 +544,9 @@
 \gdef\savedreq#1#2{\expandafter\gdef\csname req#1\endcsname{#2}}
 %% This macro will save the given requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
 \def\recordrequirement#1{\immediate\write\@mainaux{\string\savedreq{\the\value{requirements}}{#1}}}
-\AtEndDocument{
-	\refstepcounter{requirements}
-	\immediate\write\@mainaux{\string\xdef\string\totalreqsplusone{\the\value{requirements}}}
-}
+
+\AtEndDocument{\refstepcounter{requirements}\immediate\write\@mainaux{\string\xdef\string\totalreqsplusone{\the\value{requirements}}}}
+
 \NewEnviron{requirement}[2]{
 	\noindent
 	\begingroup

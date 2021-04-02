@@ -8,7 +8,10 @@
 \else	
 \fi
 \makeatother
-\pagecolor{gray}\afterpage{\nopagecolor}
+%\pagecolor{gray}\afterpage{\nopagecolor}
+\begin{tikzpicture}[remember picture,overlay]
+	\node [fill, rectangle, left color=white, right color=gray, anchor=north, minimum width=\paperwidth, minimum height=\paperheight] (box) at (current page.north){};
+\end{tikzpicture}
 \begin{center}~\\[-2.5cm]
 \includegraphics[height=0.3\paperwidth]{../../../../website/src/main/jbake/assets/images/MessageVortexLogo_huge}~\\[1cm]
 

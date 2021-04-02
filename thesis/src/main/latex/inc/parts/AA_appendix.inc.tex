@@ -22,7 +22,7 @@
 \clearpage\chapter{Glossary}
 
 \begin{entry}
-	\mainentry{adversary}{In this work, we are referring to an adverser to any entity opposing to the privacy of a message. For a more throughout definition, refer to section~\ref{sec:adversary}}
+	\mainentry{adversary}{In this work, we referr to an adversary as any entity opposing to the privacy of a message. For a more throughout definition, refer to section~\ref{sec:adversary}}
 \end{entry}
 
 \begin{entry}
@@ -37,7 +37,7 @@
 
 
 \begin{entry}
-	\mainentry{carrier message}{A transport layer message containg an embedded \VortexMessage. In an ideal implementation a carrier message is not identifiable as a carrier of a \VortexMessage.}
+	\mainentry{carrier message}{A transport layer message containing an embedded \VortexMessage. In an ideal implementation a carrier message is not identifiable as a carrier of a \VortexMessage.}
 \end{entry}
 
 \begin{entry}
@@ -53,15 +53,15 @@
 \end{entry}
 
 \begin{entry}
-	\mainentry{identity}{A tuple of a routable address and a public key. This tuple is a long-living tuple but may be exchanged from time to time. An Identity is always assigned to a nod, but one node may have multiple identities.}
+	\mainentry{identity}{A tuple of a routable address and a public key. This tuple is a long-living tuple but may be exchanged from time to time. An Identity is always assigned to a node, but one node may have multiple identities.}
 \end{entry}
 
 \begin{entry}
-	\mainentry{jurisdiction}{A geographical area where a set of legal rules created by a single actor or a group of actors apply, which contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules. Most of these legal rules are based on their specific physical location (e.g., German law is limited to the jurisdiction of Germany). Some jurisdictions may over-arch multiple separated geographical locations (e.g., laws of the European Union) or specific to some handpicked countries (e.g., International Covenant on Civil and Political Rights). Due to there overlapping nature, multiple jurisdictions may have contradictory rules applying for the same event.}
+	\mainentry{jurisdiction}{A geographical area where a set of legal rules created by a single actor or a group of actors apply, which contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules. Most of these legal rules are based on their specific physical location (e.g., German law is limited to the jurisdiction of Germany). Some jurisdictions may over-arch multiple separated geographical locations (e.g., laws of the European Union) or specific to some handpicked countries (e.g., International Covenant on Civil and Political Rights). Due to their overlapping nature, multiple jurisdictions may have contradictory rules applying for the same event.}
 \end{entry}
 
 \begin{entry}
-	\mainentry{IMAP}{IMAP (currently IMAPv4) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{rfc3501}. The protocol is capable of fully maintaining a server-based message store. This includes the capability of adding, modifying, and deleting messages and folders of a mailstore. It does not include, however, sending emails to other destinations outside the server-based store.}
+	\mainentry{IMAP}{IMAP (currently IMAPv4) is a typical protocol used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{rfc3501}. The protocol is capable of fully maintaining a server-based message store. This includes the capability of adding, modifying, and deleting messages and folders of a mailstore. It does not include, however, sending emails to other destinations outside the server-based store.}
 \end{entry}
 
 \begin{entry}
@@ -82,8 +82,8 @@
 
 \begin{entry}
 	\mainentry{MDA}{An MDA provides uniform access to a local message store.}
-	\subentry{Remote MDA}{A Remote MDA is typically supporting a specific access protocol to access the data stored within a local message store.}
-	\subentry{Local MDA}{A Local MDA is typically giving local applications access to a server store. This may be done thru an API, a named socket, or similar mechanisms.}
+	\subentry{Remote MDA}{A Remote MDA typically supports a specific access protocol to access the data stored within a local message store.}
+	\subentry{Local MDA}{A Local MDA typically gives local applications access to a server store. This may be done through an API, a named socket, or similar mechanisms.}
 \end{entry}
 
 \begin{entry}
@@ -97,7 +97,7 @@
 \begin{entry}
 	\mainentry{MRA}{A Mail Receiving Agent is an agent, which receives emails from another agent. Depending on the used protocol, two subtypes of MRAs are available.}
 	\subentry{Client MRA}{A client MRA picks up emails in the server mail storage from a remote MDA. Client MRAs usually connect through a standard protocol that was designed for client access. Examples for such protocols are POP or IMAP.}
-	\subentry{Server MRA}{Unlike a Client MRA, a server MRA listens passively for incoming connections and forwards received messages to an MTA for delivery and routing. A typical protocol supported by a server MRA is SMTP}
+	\subentry{Server MRA}{Unlike a client MRA, a server MRA listens passively for incoming connections and forwards received messages to an MTA for delivery and routing. A typical protocol supported by a server MRA is SMTP}
 \end{entry}
 
 \begin{entry}
@@ -118,7 +118,7 @@
 \end{entry}
 
 \begin{entry}
-	\mainentry{MSS}{A Mail Storage Service. This is a set of agents providing a reliable store for local mail accounts. It also provides Interfacing, which enables clients to access the users' mail.}
+	\mainentry{MSS}{A Mail Storage Service. This is a set of agents providing a reliable store for local mail accounts. It also provides interfacing, which enables clients to access the users' mail.}
 \end{entry}
 
 \begin{entry}
@@ -126,11 +126,11 @@
 \end{entry}
 
 \begin{entry}
-	\mainentry{MURB}{A multi-use reply block. This type of routing block is provided by a sender to give a node the possibility to route back answers without the knowledge of the location of the sender. In contrast to a SURB, a MURB may be used multiple times. The number of times is regulated by the $maxReplay$ field. Furthermore, a MURB must provide multiple peer keys for all routing steps to avoid repeating patterns of key blocks. This structure makes a MURB much bigger than a SURB.}
+	\mainentry{MURB}{A multi-use reply block. This type of routing block is provided by a sender to give a node the possibility to route back answers without the knowledge of the location of the sender. In contrast to a SURB, a MURB may be used multiple times. The number of times is regulated by the $maxReplay$ field. Furthermore, a MURB must provide multiple peer keys for all routing steps to avoid repeating patterns of key blocks. This structure makes a MURB much larger than a SURB.}
 \end{entry}
 
 \begin{entry}
-	\mainentry{operation}{A function transforming the content of a \defref{payload block}. \MessageVortex{} supports four categories of operations. Relevant for the service are $addRedundancy$/$removeRedundancy$, $encrypt$/$decrypt$, and $split$/$merge$. Additionally for operation there is a $mapping$ operation allowing to map the payloads of a message into the payload space or vice-versa.}
+	\mainentry{operation}{A function transforming the content of a \defref{payload block}. \MessageVortex{} supports four categories of operations. Relevant for the service are $addRedundancy$/$removeRedundancy$, $encrypt$/$decrypt$, and $split$/$merge$. Additionally for operations there is a $mapping$ operation allowing to map the payloads of a message into the payload space or vice-versa.}
 \end{entry}
 
 \begin{entry}
@@ -138,7 +138,7 @@
 \end{entry}
 
 \begin{entry}
-\mainentry{payload block}{A single block attached to a \VortexMessage{} representing either message content or decoy content.}
+\mainentry{payload block}{A single block attached to a \VortexMessage{} representing either the message or the decoy content.}
 \end{entry}
 
 \begin{entry}
@@ -165,7 +165,7 @@
 \end{entry}
 
 \begin{entry}
-\mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP}, it is not able to maintain a mail store. Its sole purpose is to fetch and delete emails in a server-based store. Modifying Mails or even handling a complex folder structure is not doable with POP}
+\mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP}, it is not able to maintain a mail store. Its sole purpose is to fetch and delete emails in a server-based store. Modifying Mails or even handling a complex folder structure is not feasible with POP}.
 \end{entry}
 
 \begin{entry}
@@ -177,7 +177,7 @@
 \end{entry}
 
 \begin{entry}
-\mainentry{routing block}{A block in the \VortexMessage containing all the instructions for processing the current message. It may contain, furthermore, additional routing blocks to compose subsequent messages. The routing block is protected by the sender key $K_{sender}$.}
+\mainentry{routing block}{A block in the \VortexMessage containing all the instructions for processing the current message. It may furthermore contain additional routing blocks to compose subsequent messages. The routing block is protected by the sender key $K_{sender}$.}
 \end{entry}
 
 \begin{entry}
@@ -195,11 +195,11 @@
 \end{entry}
 
 \begin{entry}
-\mainentry{server admin}{We do regard a server admin as a person with high privileges and profound technical knowledge of a server and its associated technology. A Server Admin may have access to one or multiple servers of the same kind.}
+\mainentry{server admin}{We regard a server admin as a person with high privileges and profound technical knowledge of a server and its associated technology. A server admin may have access to one or multiple servers of the same kind.}
 \end{entry}
 
 \begin{entry}
-\mainentry{service}{A service is an endpoint on a server providing the functionality to a client. This service may consist of several Agents (\defref{agent}).}
+\mainentry{service}{A service is an endpoint on a server providing the functionality to a client. This service may consist of several agents (\defref{agent}).}
 \end{entry}
 
 \begin{entry}
@@ -258,7 +258,7 @@
 \end{entry}
 
 \begin{entry}
-\mainentry{VortexMessage}{The encoded message passed from one \VortexNode{} to another one. The \VortexMessage{} is typically considered before any embedding takes place.}
+\mainentry{VortexMessage}{The encoded message passed from one \VortexNode{} to another. The \VortexMessage{} is typically considered before any embedding takes place.}
 \end{entry}
 
 \begin{entry}
