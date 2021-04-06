@@ -24,7 +24,6 @@
           <street>Bahnhofstrasse 5</street>
           <code>5210</code>
           <city>Windisch</city>
-          <region>AG</region>
           <country>Switzerland</country>
         </postal>
         <phone>+41 56 202 76 81</phone>
@@ -32,7 +31,7 @@
       </address>
     </author>
 
-    <date day="17" month="09" year="2021"/>
+    <date day="03" month="04" year="2021"/>
 
     <area>General</area>
 
@@ -1362,46 +1361,36 @@ function incomming_message(VortexMessage blendedMessage) {
         <ttcol align="left">Changes</ttcol>
 
         <c>0</c>
-
         <c>11-2018</c>
-
         <c>Initial version</c>
 
         <c>1</c>
-
         <c>02-2019</c>
-
         <c>Removed term block and added more precise spec about blending. Change in spec for XMPP blending (from XEP-234 to XEP-231). Restructured ASN.1.</c>
 
         <c>2</c>
-
         <c>03-2019</c>
-
         <c>Language and consistency improvements. Added example for chunked plain embedding. Added pseudo-code for incoming message processing. Improved wording of hashes in ASN.1.</c>
 
         <c>3</c>
-
         <c>09-2019</c>
-
         <c>Removed LaTeX notation in padding.</c>
 
         <c>4</c>
-
         <c>03-2020</c>
-
         <c>Added spec for Software update using MV. Minor language improvements.</c>
 
         <c>5</c>
-
         <c>09-2020</c>
-
         <c>Reinserted lost ASN.1 specs (unintentinally lost in last two versions). Added changelog. Modified padding to improve credibility of bad values.</c>
 
         <c>6</c>
-
         <c>02-2021</c>
-
         <c>Removed some outdated references and updated draft according to the final research document. Refining of language.</c>
+
+        <c>7</c>
+        <c>04-2021</c>
+        <c>Lectorate and improved rendering.</c>
       </texttable>
 
       <t/>

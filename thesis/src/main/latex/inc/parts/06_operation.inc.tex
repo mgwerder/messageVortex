@@ -259,7 +259,7 @@ To create a routing block, we first need a graph representing the message flow. 
 To create a graph, we use the function~\funcref{alg:getRoutingGraph}{} on line~\ref{alg:getRoutingGraph-line} as shown in algorithm~\ref{alg:simpleGraph}. It creates an ordered set of nodes (\texttt{nodes}), whereas the first node in the set is the sender and the second node of the set is the final recipient. It then adds randomly known nodes until the anonymity set is as large as requested. Next, we assign the edges by calling function~\funcref{alg:getEdges}{} (Line~\ref{alg:getEdges-line}). The function loops until the requested minimum number of edges are reached, and all nodes of the graph receive at least one message. On each loop, an edge is added to the graph, that points from any already reached node to a random, different node.
 
 \begin{breakablealgorithm}
-	\captionof{figure}[Simple graph for routing block. (PseudoCode)]{Simple Graph for Routing Block}\label{alg:simpleGraph}
+	\captionof{figure}[Simple graph for routing block. (PseudoCode)]{Simple Graph for Routing Block.}\label{alg:simpleGraph}
 	\begin{algorithmic}[1]
 		\Function{getRoutingGraph}{startNode,endNode, numNodes, minEdges, universe}\funclabel{alg:getRoutingGraph}\label{alg:getRoutingGraph-line}
 		\LineComment{The maximum number of seconds until the message needs to be delivered}
@@ -326,7 +326,7 @@ We use a custom random distribution called \funcref{alg:getRandomTime} (line~\re
 We assign the timing information by looping through our ordered set of edges. First, we calculate the earliest ($\text{earliestTime}$) and the maximum available time starting then ($\text{maxShare}$) until the message has to be sent. We calculate when the message has to be sent in relation to $\text{earliestTime}$ ($\text{share}$). Finally, we generate a time when an edge may be executed earliest ($\text{minTime}$; line~\ref{alg:minTime-line}) and latest ($\text{maxTime}$; line~\ref{alg:maxTime-line}).
 
 \begin{breakablealgorithm}
-	\captionof{figure}[Assign Timing Information to a Graph (PseudoCode)]{Assign Timing Information to a Graph}\label{alg:simpleTiming}
+	\captionof{figure}[Assign Timing Information to a Graph. (PseudoCode)]{Assign Timing Information to a Graph.}\label{alg:simpleTiming}
 	\begin{algorithmic}[1]
 		\Function{assignTiming}{edges, maxTime,minHopTime, universe}\funclabel{alg:assignTiming}\label{alg:assignTiming-line}
 		\If{$\text{len(edges)} \times \text{(minHopTime - 1)} > \text{maxTime}$}
@@ -372,7 +372,7 @@ Operations are assigned in a recursive manner. First, we identify the routes we 
 Operations are chosen in two ways: either we create an $addRedundancy$ operation of type $n-1$ of $n$, or we use a simple encryption step. In each case, we apply an operation on the current node a, and on the final node we apply the reverse operation, thus rebuilding the message on the last node simultaneously.
 
 \begin{breakablealgorithm}
-	\captionof{figure}[Assign Routing Information to a Graph (PseudoCode)]{Assign Routing Information to a Graph}\label{alg:simpleRouting}
+	\captionof{figure}[Assign Routing Information to a Graph. (PseudoCode)]{Assign Routing Information to a Graph.}\label{alg:simpleRouting}
 	\begin{algorithmic}[1]
 		\Function{assignRouting}{edges, redundantRoutes, messageId, universe}\funclabel{alg:assignRouting}\label{alg:assignRouting-line}
 		\If{$redundantRoutes<1$}

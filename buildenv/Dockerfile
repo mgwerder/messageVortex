@@ -12,6 +12,7 @@ RUN mkdir /var/tmp/messagevortex && \
                texlive-latex-base texlive-extra-utils texlive-latex-extra texlive-publishers texlive-fonts-extra \
                texlive-bibtex-extra texlive-luatex \
                texlive-lang-german texlive-lang-english xzdec biber texlive-publishers texlive-science \
+               cm-super \
                ghostscript gsfonts gsfonts-other gsfonts-x11 \
                pandoc calibre enscript \
                fig2dev \
@@ -37,5 +38,5 @@ RUN cd /var/tmp/messagevortex && \
     unzip -c /tmp/AdobeICCProfilesWin_end-user.zip  "Adobe ICC Profiles (end-user)/RGB Profiles/AdobeRGB1998.icc" >$(dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc && \
     sed "s~/ICCProfile (srgb.icc)~/ICCProfile ($( dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc)~" <$(dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/PDFA_def.ps >/tmp/PDFA_def.ps.new && mv /tmp/PDFA_def.ps.new $( dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc && \
     MAVEN_CONFIG=/var/lib/maven/ mvn dependency:go-offline dependency:resolve-plugins
-RUN mkdir /root ;rm -r /root/texmf;tlmgr --repository ftp://tug.org/historic/systems/texlive/2018/tlnet-final init-usertree;tlmgr --repository ftp://tug.org/historic/systems/texlive/2018/tlnet-final update --self && tlmgr install --repository ftp://tug.org/historic/systems/texlive/2018/tlnet-final pdfx colorprofiles acmart ; /bin/true
+RUN mkdir /root ;rm -r /root/texmf;tlmgr --repository ftp://tug.org/historic/systems/texlive/2018/tlnet-final init-usertree;tlmgr --repository ftp://tug.org/historic/systems/texlive/2018/tlnet-final update --self ; tlmgr install --repository ftp://tug.org/historic/systems/texlive/2018/tlnet-final pdfx colorprofiles acmart ; tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet ; tlmgr update --self; tlmgr update --list ; tlmgr update --all ; /bin/true
 CMD [ "/var/tmp/messagevortex/buildenv/runDockerTasks.sh" ]
