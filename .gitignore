@@ -10,7 +10,7 @@ build
 api
 cobertura
 target
-/**/.idea/
+**/.idea/
 /sonar.properties
 /app/null.tmp
 /ETHZ/~$$ASL_Architecture.~vsdx
