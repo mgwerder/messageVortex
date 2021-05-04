@@ -17,7 +17,7 @@ pipeline {
     }
     stage ('Build') {
       steps {
-        sh 'mvn -DskipTests compile'
+        sh 'mvn -DskipTests -pl application-core-library compile'
       }
     }
     stage ('Test on JDK8') {
@@ -35,17 +35,6 @@ pipeline {
         }
       }
     }
-    stage ('Package all') {
-      steps {
-        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests package'
-      }
-    }
-    stage ('Site build') {
-      steps {
-        sh 'mvn -pl application-core-library -DskipTests site'
-      }
-    }
     stage('SonarQube analysis') {
       steps {
         withSonarQubeEnv('SonarQube') {
@@ -58,12 +47,23 @@ pipeline {
         sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
       }
     }
+    stage ('Package all') {
+      steps {
+        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
+        sh 'mvn -DskipTests package'
+      }
+    }
+    stage ('Site build') {
+      steps {
+        sh 'mvn -pl application-core-library -DskipTests site'
+      }
+    }
     /* stage ('Test other JDKs') {
        parallel { */
         stage ('Test on JDK10') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-10'
+                image 'maven:3-jdk-10-slim'
                 args '--mount type=bind,source="$HOME/.m2",target="/root/.m2" --mount type=bind,source="$HOME/MessageVortexKeyCache",target="/root/keyCache"'
             }
           }
@@ -77,7 +77,7 @@ pipeline {
         stage ('Test on JDK11') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-11-slim'
+                image 'maven:3-jdk-11-slim'
                 args '--mount type=bind,source="$HOME/.m2",target="/root/.m2" --mount type=bind,source="$HOME/MessageVortexKeyCache",target="/root/keyCache"'
             }
           }
@@ -93,7 +93,7 @@ pipeline {
         stage ('Test on JDK12') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-12'
+                image 'maven:3-jdk-12-slim'
                 args '--mount type=bind,source="$HOME/.m2",target="/root/.m2" --mount type=bind,source="$HOME/MessageVortexKeyCache",target="/root/keyCache"'
             }
           }

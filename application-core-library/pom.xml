@@ -112,9 +112,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <!--<version>3.7.2</version>-->
             <version>4.0.2</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
@@ -136,8 +134,8 @@
             <groupId>org.jruby</groupId>
             <artifactId>jruby-complete</artifactId>
             <version>9.2.13.0</version>
-            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15to18</artifactId>
@@ -147,14 +145,12 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <!--<version>1.60</version>-->
             <version>1.68</version>
         </dependency>
 
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <!--<version>3.9.5</version>-->
             <version>4.5.1</version>
         </dependency>
 
@@ -661,7 +657,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.1.1</version>
             </plugin>
 
             <plugin>
@@ -672,7 +667,7 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
                     <configLocation>google_checks.xml</configLocation>
