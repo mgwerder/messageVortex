@@ -35,10 +35,10 @@ pipeline {
         }
       }
     }
-    stage ('Package all') {
+    stage ('Package Java') {
       steps {
         sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests package'
+        sh 'mvn -DskipTests  -pl application-core-library  package'
       }
     }
     stage('SonarQube analysis') {
@@ -124,6 +124,12 @@ pipeline {
         }
       /*}
     }*/
+    stage ('Package all') {
+      steps {
+        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
+        sh 'mvn -DskipTests package'
+      }
+    }
   }
   post {
     success {
