@@ -22,6 +22,13 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.*;
+import org.bouncycastle.util.encoders.Base64;
+
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.sasl.Sasl;
+import javax.security.sasl.SaslClient;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
@@ -32,16 +39,6 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.sasl.Sasl;
-import javax.security.sasl.SaslClient;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.ClientConnection;
-import net.messagevortex.transport.Credentials;
-import net.messagevortex.transport.SaslClientCallbackHandler;
-import net.messagevortex.transport.SaslMechanisms;
-import net.messagevortex.transport.SecurityContext;
-import org.bouncycastle.util.encoders.Base64;
 
 public class ImapClient extends ClientConnection {
   

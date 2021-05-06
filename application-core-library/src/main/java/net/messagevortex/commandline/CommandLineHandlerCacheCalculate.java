@@ -1,10 +1,11 @@
 package net.messagevortex.commandline;
 
-import java.io.IOException;
-import java.util.concurrent.Callable;
 import net.messagevortex.asn1.AsymmetricKey;
 import picocli.CommandLine;
 import sun.misc.Signal;
+
+import java.io.IOException;
+import java.util.concurrent.Callable;
 
 /**
  * <p>Commandline handler for pre-populating keys in cache.</p>

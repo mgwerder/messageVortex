@@ -1,5 +1,13 @@
 package net.messagevortex.asn1;
 
+import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.encryption.AlgorithmType;
+import net.messagevortex.asn1.encryption.Mode;
+import net.messagevortex.asn1.encryption.Padding;
+import net.messagevortex.asn1.encryption.Parameter;
+import picocli.CommandLine;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -8,21 +16,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.LinkedTransferQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortex;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.encryption.AlgorithmType;
-import net.messagevortex.asn1.encryption.Mode;
-import net.messagevortex.asn1.encryption.Padding;
-import net.messagevortex.asn1.encryption.Parameter;
-import picocli.CommandLine;
 
 /**
  * <p>This is a class to precalculate keys.</p>

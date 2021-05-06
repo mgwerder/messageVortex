@@ -1,24 +1,23 @@
 
 package net.messagevortex.test.asn1;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.IdentityStore;
+import net.messagevortex.asn1.encryption.DumpType;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.IdentityStore;
-import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 
 /**
  * Created by martin.gwerder on 30.05.2016.
  */
-@RunWith(JUnit4.class)
 public class IdentityStoreTest {
 
   private static final java.util.logging.Logger LOGGER;
@@ -45,7 +44,7 @@ public class IdentityStoreTest {
       }
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "Unexpected exception", e);
-      fail("fuzzer encountered exception in IdentityStore (" + e.toString() + ")");
+      fail("fuzzer encountered exception in IdentityStore (" + e + ")");
     }
   }
 
@@ -83,7 +82,7 @@ public class IdentityStoreTest {
       }
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "Unexpected exception", e);
-      fail("fuzzer encountered exception in IdentityStore (" + e.toString() + ")");
+      fail("fuzzer encountered exception in IdentityStore (" + e + ")");
     }
   }
 

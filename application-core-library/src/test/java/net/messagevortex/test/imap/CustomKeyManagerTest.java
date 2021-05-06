@@ -1,23 +1,19 @@
 package net.messagevortex.test.imap;
 
+import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.CustomKeyManager;
-import net.messagevortex.MessageVortex;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * booleanConfigHandlings for {@link MessageVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class CustomKeyManagerTest {
 
     private static final java.util.logging.Logger LOGGER;
@@ -31,7 +27,8 @@ public class CustomKeyManagerTest {
     }
 
     @Test
-    public void loadKeyStore() {
+    @DisplayName("Testing successful loading of keystore")
+    public void loadKeyStoreTests() {
         try{
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"Loading keystore");
@@ -39,25 +36,25 @@ public class CustomKeyManagerTest {
             new CustomKeyManager("keystore.jks","changeme", "mykey3");
         } catch(Exception e) {
             LOGGER.log(Level.SEVERE,"Unexpected Exception",e);
-            fail("Exception should not be thrown ("+e+") in directory "+System.getProperty("user.dir"));
+            Assertions.fail("Exception should not be thrown ("+e+") in directory "+System.getProperty("user.dir"));
         }
         try{
             new CustomKeyManager("keystore.jks_does_not_exist","changeme", "mykey3");
-            fail("should throw an exception as the keystore does not exist");
+            Assertions.fail("should throw an exception as the keystore does not exist");
         } catch(Exception e) {
-            assertTrue("keystore shoult not be found",true);
+            Assertions.assertTrue(true, "keystore shoult not be found");
         }
         try{
             new CustomKeyManager("keystore.jks","BAD_PASSWORD", "mykey3");
-            fail("should throw an exception as the password is bad");
+            Assertions.fail("should throw an exception as the password is bad");
         } catch(Exception e) {
-            assertTrue("keystore pw is wrong",true);
+            Assertions.assertTrue(true, "keystore pw is wrong");
         }
         try{
             new CustomKeyManager("keystore.jks","changeme", "KEY_DOES_NOT_EXIST");
-            fail("should throw an exception as the key alias does not exist");
+            Assertions.fail("should throw an exception as the key alias does not exist");
         } catch(Exception e) {
-            assertTrue("keystore content not found",true);
+            Assertions.assertTrue(true, "keystore content not found");
         }
     }
 
@@ -67,21 +64,21 @@ public class CustomKeyManagerTest {
         try{
             ckm=new CustomKeyManager("keystore.jks","changeme", "mykey3");
         } catch(Exception e) {
-            fail("Exception should not be thrown ("+e+")");
+            Assertions.fail("Exception should not be thrown ("+e+")");
         }
         try{
             ckm.getClientAliases("",null);
         } catch( UnsupportedOperationException uoe) {
-            assertTrue("This is expected to be thrown",true);
+            Assertions.assertTrue(true, "This is expected to be thrown");
         } catch(Exception e) {
-            fail("Different Exception expected");
+            Assertions.fail("Different Exception expected");
         }
         try{
             ckm.chooseClientAlias(new String[] {""},null,null);
         } catch( UnsupportedOperationException uoe) {
-            assertTrue("This is expected to be thrown",true);
+            Assertions.assertTrue(true, "This is expected to be thrown");
         } catch(Exception e) {
-            fail("Different Exception expected");
+            Assertions.fail("Different Exception expected");
         }
     }
 }

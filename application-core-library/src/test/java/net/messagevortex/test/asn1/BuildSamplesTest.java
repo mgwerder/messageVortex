@@ -4,9 +4,7 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractBlock;
 import net.messagevortex.asn1.AsymmetricKey;
 import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,7 +16,6 @@ import java.util.logging.Level;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class BuildSamplesTest {
 
     private static final java.util.logging.Logger LOGGER;

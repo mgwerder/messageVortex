@@ -22,13 +22,14 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.messagevortex.MessageVortexLogger;
 
 // FIXME Limit strings and literals to a certain length (otherwise it is litterally unlimited)
 // FIXME Code will fail if Line.length()&gt;Maxint or out of memory

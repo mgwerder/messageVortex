@@ -25,7 +25,7 @@ pipeline {
         timeout(time: 120, unit: 'MINUTES')
       }
       steps{
-        sh "mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site"
+        sh "mvn -pl application-core-library test site"
       }
       post {
         success {
@@ -33,6 +33,12 @@ pipeline {
           jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'
           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'application-core-library/target/site', reportFiles: 'index.html', reportName: 'MessageVortex Report', reportTitles: 'MessageVortex'])
         }
+      }
+    }
+    stage ('Package Java') {
+      steps {
+        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
+        sh 'mvn -DskipTests  -pl application-core-library  package'
       }
     }
     stage('SonarQube analysis') {
@@ -45,12 +51,6 @@ pipeline {
     stage('Publish artifacts') {
       steps {
         sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
-      }
-    }
-    stage ('Package all') {
-      steps {
-        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests package'
       }
     }
     stage ('Site build') {
@@ -124,6 +124,12 @@ pipeline {
         }
       /*}
     }*/
+    stage ('Package all') {
+      steps {
+        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
+        sh 'mvn -DskipTests package'
+      }
+    }
   }
   post {
     success {

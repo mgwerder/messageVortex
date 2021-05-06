@@ -22,6 +22,17 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.RandomString;
+import net.messagevortex.transport.SaslMechanisms;
+import net.messagevortex.transport.SaslPlainServer;
+import net.messagevortex.transport.SaslServerCallbackHandler;
+import org.bouncycastle.util.encoders.Base64;
+
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.sasl.Sasl;
+import javax.security.sasl.SaslException;
+import javax.security.sasl.SaslServer;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Security;
@@ -30,17 +41,6 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.sasl.Sasl;
-import javax.security.sasl.SaslException;
-import javax.security.sasl.SaslServer;
-
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.RandomString;
-import net.messagevortex.transport.SaslMechanisms;
-import net.messagevortex.transport.SaslPlainServer;
-import net.messagevortex.transport.SaslServerCallbackHandler;
-import org.bouncycastle.util.encoders.Base64;
 
 /***
  * <p>Provides the the Authenticate command to the IMAP server.</p>

@@ -22,8 +22,9 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.IOException;
 import net.messagevortex.asn1.encryption.DumpType;
+
+import java.io.IOException;
 
 
 /**

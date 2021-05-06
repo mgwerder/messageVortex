@@ -1,18 +1,18 @@
 package net.messagevortex.commandline;
 
+import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.IdentityStore;
+import net.messagevortex.asn1.encryption.DumpType;
+import picocli.CommandLine;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortex;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.IdentityStore;
-import net.messagevortex.asn1.encryption.DumpType;
-import picocli.CommandLine;
 
 @CommandLine.Command(
         description = "remove an identity and dump store",

@@ -1,20 +1,17 @@
 package net.messagevortex.commandline;
 
+import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.router.operation.AddRedundancy;
+import picocli.CommandLine;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
-
-import net.messagevortex.MessageVortex;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.router.operation.AddRedundancy;
-
-import picocli.CommandLine;
 
 
 @CommandLine.Command(

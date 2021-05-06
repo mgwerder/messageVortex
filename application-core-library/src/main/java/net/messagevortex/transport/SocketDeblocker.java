@@ -22,12 +22,13 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import java.net.ConnectException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-import net.messagevortex.MessageVortexLogger;
 
 public class SocketDeblocker extends Thread {
 

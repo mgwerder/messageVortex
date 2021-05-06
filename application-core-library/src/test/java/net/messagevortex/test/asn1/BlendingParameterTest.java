@@ -3,19 +3,14 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.BlendingParameter;
 import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.logging.Level;
-
-import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.fail;
 
 /**
  * Created by martin.gwerder on 18.04.2018.
  */
-@RunWith( JUnit4.class)
 public class BlendingParameterTest {
 
     private static final java.util.logging.Logger LOGGER;
@@ -30,10 +25,10 @@ public class BlendingParameterTest {
         try {
             BlendingParameter s = new BlendingParameter( BlendingParameter.BlendingParameterChoice.OFFSET );
             BlendingParameter s2 = new BlendingParameter(s.toAsn1Object(DumpType.ALL));
-            assertTrue( "Reencoded BlendingParameter is not equal", s2.equals(s) );
+            Assertions.assertTrue(s2.equals(s), "Reencoded BlendingParameter is not equal");
         }catch( Exception e) {
             e.printStackTrace();
-            fail( "catched unexpected exception" );
+            Assertions.fail( "catched unexpected exception" );
         }
     }
 

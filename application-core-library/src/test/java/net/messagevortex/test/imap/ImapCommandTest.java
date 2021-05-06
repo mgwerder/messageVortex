@@ -1,24 +1,13 @@
 package net.messagevortex.test.imap;
 
-import static net.messagevortex.transport.SecurityRequirement.PLAIN;
-import static net.messagevortex.transport.SecurityRequirement.SSLTLS;
-import static net.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.*;
+import net.messagevortex.transport.imap.*;
+import org.bouncycastle.util.encoders.Base64;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetSocketAddress;
-import java.security.Security;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509KeyManager;
@@ -27,34 +16,21 @@ import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslClient;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.AllTrustManager;
-import net.messagevortex.transport.AuthenticationProxy;
-import net.messagevortex.transport.Credentials;
-import net.messagevortex.transport.CustomKeyManager;
-import net.messagevortex.transport.SaslClientCallbackHandler;
-import net.messagevortex.transport.SaslMechanisms;
-import net.messagevortex.transport.SaslPlainServer;
-import net.messagevortex.transport.SaslServerCallbackHandler;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.SecurityRequirement;
-import net.messagevortex.transport.imap.ImapClient;
-import net.messagevortex.transport.imap.ImapCommand;
-import net.messagevortex.transport.imap.ImapConnection;
-import net.messagevortex.transport.imap.ImapLine;
-import net.messagevortex.transport.imap.ImapServer;
-import org.bouncycastle.util.encoders.Base64;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.security.Security;
+import java.util.*;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+
+import static net.messagevortex.transport.SecurityRequirement.*;
 
 /**
  * Tests for {@link ImapCommand}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class ImapCommandTest {
 
     private final static boolean  DO_NOT_TEST_ENCRYPTION=false;
@@ -79,11 +55,11 @@ public class ImapCommandTest {
             for(String v:s) {
                 LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v));
             }
-            assertTrue("command \""+command+"\" has not been answered properly (expected \""+reply+"\" but got \""+s[s.length-1]+"\")",s[s.length-1].startsWith(reply));
+            Assertions.assertTrue(s[s.length-1].startsWith(reply), "command \""+command+"\" has not been answered properly (expected \""+reply+"\" but got \""+s[s.length-1]+"\")");
             return s;
         } catch(TimeoutException e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail("got timeout while waiting for reply to command "+command);
+            Assertions.fail("got timeout while waiting for reply to command "+command);
         }
         return null;
     }
@@ -97,18 +73,18 @@ public class ImapCommandTest {
             Set<Thread> threadSet = ImapSSLTest.getThreadList();
             ImapServer is=new ImapServer(new InetSocketAddress( "0.0.0.0", 0 ), new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
             ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
-            assertTrue("test default Timeout", ImapClient.getDefaultTimeout() == ImapClient.setDefaultTimeout(123) );
-            assertTrue("test default Timeout", ImapClient.getDefaultTimeout() == 123 );
+            Assertions.assertTrue(ImapClient.getDefaultTimeout() == ImapClient.setDefaultTimeout(123), "test default Timeout");
+            Assertions.assertTrue(ImapClient.getDefaultTimeout() == 123, "test default Timeout");
             ImapClient.setDefaultTimeout( 3600*1000 );
-            assertTrue("test  Timeout set", ic.getTimeout() == ic.setTimeout(123) );
-            assertTrue("test  Timeout get", ic.getTimeout() == 123 );
+            Assertions.assertTrue(ic.getTimeout() == ic.setTimeout(123), "test  Timeout set");
+            Assertions.assertTrue(ic.getTimeout() == 123, "test  Timeout get");
             ic.setTimeout( 3600*1000 );
             is.shutdown();
             ic.shutdown();
-            assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
+            Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size()==0, "error searching for hangig threads");
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail("Exception thrown ("+e+")");
+            Assertions.fail("Exception thrown ("+e+")");
         }
     }
 
@@ -128,13 +104,13 @@ public class ImapCommandTest {
             ic.sendCommand( "a0 IWantATimeout", 300 );
             ic.setTimeout( 3600*1000 );
             Thread.sleep( 1000 );
-            fail( "Timeout not issued" );
+            Assertions.fail( "Timeout not issued" );
         } catch( TimeoutException toe ) {
             // Exception reached as planed
-            assertTrue( "Got expected timeout", true );
+            Assertions.assertTrue(true, "Got expected timeout");
         } catch( Exception e ) {
             LOGGER.log( Level.WARNING, "Unexpected exception", e );
-            fail( "Exception thrown (" + e + ")" );
+            Assertions.fail( "Exception thrown (" + e + ")" );
         }
         ImapConnection.setDefaultTimeout( 10000 );
         if( is != null ) {
@@ -143,7 +119,7 @@ public class ImapCommandTest {
         if( ic != null ) {
             ic.shutdown();
         }
-        assertTrue( "error searching for hangig threads", ImapSSLTest.verifyHangingThreads( threadSet ).size() == 0 );
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads( threadSet ).size() == 0, "error searching for hangig threads");
     }
 
     @Test
@@ -163,17 +139,17 @@ public class ImapCommandTest {
             Thread.sleep(300);
             ic.sendCommand("a0 IWantATimeout",300);
             Thread.sleep(1000);
-            fail("Timeout not issued");
+            Assertions.fail("Timeout not issued");
         } catch(TimeoutException toe) {
             // Exception reached as planed
-            assertTrue("Got expected timeout",true);
+            Assertions.assertTrue(true, "Got expected timeout");
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail("Exception thrown ("+e+")");
+            Assertions.fail("Exception thrown ("+e+")");
         }
         if(is!=null) is.shutdown();
         if(ic!=null) ic.shutdown();
-        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size()==0, "error searching for hangig threads");
     }
 
     @Test
@@ -192,18 +168,18 @@ public class ImapCommandTest {
             Thread.sleep(300);
             ic.sendCommand("a0 IWantATimeout",300);
             Thread.sleep(1000);
-            fail("Timeout not issued");
+            Assertions.fail("Timeout not issued");
         } catch(TimeoutException toe) {
             // Exception reached as planed
-            assertTrue("Got expected timeout",true);
+            Assertions.assertTrue(true, "Got expected timeout");
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail("Exception thrown ("+e+")");
+            Assertions.fail("Exception thrown ("+e+")");
         }
         ImapClient.setDefaultTimeout(10000);
         if(is!=null) is.shutdown();
         if(ic!=null) ic.shutdown();
-        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size()==0, "error searching for hangig threads");
     }
 
     @Test
@@ -219,14 +195,14 @@ public class ImapCommandTest {
             c.connect();
             ImapConnection.setDefaultTimeout(2000);
             String tag=ImapLine.getNextTag();
-            assertTrue("command logut failed BYE-check",sendCommand(c,tag+" LOGOUT",tag+" OK")[0].startsWith("* BYE"));
+            Assertions.assertTrue(sendCommand(c,tag+" LOGOUT",tag+" OK")[0].startsWith("* BYE"), "command logut failed BYE-check");
             s.shutdown();
             c.shutdown();
         } catch (Exception toe) {
             LOGGER.log( Level.WARNING, "unexpected exception", toe );
-            fail("exception thrown ("+toe.toString()+") while testing");
+            Assertions.fail("exception thrown ("+ toe +") while testing");
         }
-        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size()==0, "error searching for hangig threads");
     }
 
     @Test
@@ -238,7 +214,7 @@ public class ImapCommandTest {
                 final SSLContext context=SSLContext.getInstance("TLS");
                 String ks="keystore.jks";
                 InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
-                assertTrue("Keystore check", (stream != null));
+                Assertions.assertTrue((stream != null), "Keystore check");
                 context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
                 ImapServer s=new ImapServer( new InetSocketAddress( "0.0.0.0", 0 ), new SecurityContext( context, encrypted ? SSLTLS : PLAIN ) );
                 LOGGER.log(Level.INFO,"************************************************************************");
@@ -248,18 +224,18 @@ public class ImapCommandTest {
                 AuthenticationProxy ap=new AuthenticationProxy();
                 ap.addUser("USER","password");
 
-                assertFalse("check for fail if user is null",ap.login(null,"a"));
-                assertFalse("check for fail if password is null",ap.login("USER",null));
-                assertFalse("check for fail if user is unknown",ap.login("USER1","password"));
-                assertFalse("check for fail if password is bad",ap.login("USER","password1"));
-                assertTrue("check for success if password is true",ap.login("USER","password"));
-                assertTrue("check for success if username casing does not match",ap.login("User","password"));
+                Assertions.assertFalse(ap.login(null,"a"), "check for fail if user is null");
+                Assertions.assertFalse(ap.login("USER",null), "check for fail if password is null");
+                Assertions.assertFalse(ap.login("USER1","password"), "check for fail if user is unknown");
+                Assertions.assertFalse(ap.login("USER","password1"), "check for fail if password is bad");
+                Assertions.assertTrue(ap.login("USER","password"), "check for success if password is true");
+                Assertions.assertTrue(ap.login("User","password"), "check for success if username casing does not match");
 
                 s.setAuth(ap);
                 ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),new SecurityContext( context,encrypted?SSLTLS:PLAIN ));
                 c.setTimeout(2000);
                 c.connect();
-                assertTrue("check encryption ("+encrypted+"/"+c.isTls()+")", encrypted==c.isTls());
+                Assertions.assertTrue(encrypted==c.isTls(), "check encryption ("+encrypted+"/"+c.isTls()+")");
                 String tag=ImapLine.getNextTag();
                 String[] ret=sendCommand(c,tag+" NOOP",tag+" OK");
                 LOGGER.log( Level.INFO, "reply to NOOP " + Arrays.toString( ret ) );
@@ -268,7 +244,7 @@ public class ImapCommandTest {
                 LOGGER.log( Level.INFO, "reply to CAPABILITY " + Arrays.toString( ret ) );
                 List<String> l = new Vector<>( Arrays.asList( ret ) );
                 // check that PLAIN IS not offered when doing unencrypted auth
-                assertTrue( "Capabilities not as expected (left=" + Arrays.toString( ret ) + ")", ( l.get(0).contains( "LOGINDISABLED" ) && ! c.isTls() ) || ( ! l.get(0).contains( "LOGINDISABLED" ) && c.isTls() ) );
+                Assertions.assertTrue(( l.get(0).contains( "LOGINDISABLED" ) && ! c.isTls() ) || ( ! l.get(0).contains( "LOGINDISABLED" ) && c.isTls() ), "Capabilities not as expected (left=" + Arrays.toString( ret ) + ")");
                 tag=ImapLine.getNextTag();
                 if(encrypted) {
                     sendCommand(c,tag+" LOGIN user password",tag+" OK");
@@ -285,11 +261,11 @@ public class ImapCommandTest {
                 c.shutdown();
             } catch (Exception toe) {
                 LOGGER.log(Level.WARNING,"Unexpected exception",toe);
-                fail("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted+" at "+toe.getStackTrace()[0]);
+                Assertions.fail("exception thrown ("+ toe +") while testing using encryption="+encrypted+" at "+toe.getStackTrace()[0]);
             }
             encrypted=!encrypted;
         } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
-        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size()==0, "error searching for hangig threads");
     }
 
 
@@ -317,8 +293,8 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO, "Getting client and server for SASL " + mech );
             SaslClient sc = Sasl.createSaslClient(new String[]{mech.toString()}, "username", "IMAP", "FQHN", props, clientHandler);
             SaslServer ss = Sasl.createSaslServer(mech.toString(), "IMAP", "FQHN", props, serverHandler);
-            assertTrue( "No Sasl server found for "+mech,ss!=null );
-            assertTrue( "No Sasl client found for "+mech,sc!=null );
+            Assertions.assertTrue(ss!=null, "No Sasl server found for "+mech);
+            Assertions.assertTrue(sc!=null, "No Sasl client found for "+mech);
 
             // get Challenge
             LOGGER.log(Level.INFO, "Getting challenge for SASL " + mech );
@@ -334,7 +310,7 @@ public class ImapCommandTest {
             try {
                 LOGGER.log(Level.INFO, "evaluating response for SASL " + mech );
                 ss.evaluateResponse(response);
-                assertTrue( "logon unexpectedly failed when using "+mech, ss.isComplete() );
+                Assertions.assertTrue(ss.isComplete(), "logon unexpectedly failed when using "+mech);
                 if (ss.isComplete()) {
                     LOGGER.log(Level.INFO, "Authentication successful.");
                 } else {
@@ -350,7 +326,7 @@ public class ImapCommandTest {
                 challenge = ss.evaluateResponse(new byte[0]);
                 response = sc.evaluateChallenge(challenge);
                 ss.evaluateResponse(response);
-                assertTrue("logon unexpectedly succeeded with bad password using mech " + mech, !ss.isComplete());
+                Assertions.assertTrue(!ss.isComplete(), "logon unexpectedly succeeded with bad password using mech " + mech);
             } catch(IOException e) {
                 LOGGER.log(Level.INFO, "Authentication failed due to exception (this is expected)", e );
             }
@@ -363,7 +339,7 @@ public class ImapCommandTest {
             final SSLContext context=SSLContext.getInstance("TLS");
             String ks="keystore.jks";
             InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
-            assertTrue("Keystore check", (stream != null));
+            Assertions.assertTrue((stream != null), "Keystore check");
             context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
             ImapServer s=new ImapServer(new InetSocketAddress("localhost",0),new SecurityContext(context,UNTRUSTED_SSLTLS));
             AuthenticationProxy ap=new AuthenticationProxy();
@@ -378,12 +354,12 @@ public class ImapCommandTest {
                 ImapClient c = new ImapClient(new InetSocketAddress("localhost", s.getPort()), new SecurityContext(context, UNTRUSTED_SSLTLS ));
                 c.setTimeout(2000);
                 c.connect();
-                assertTrue("check encryption", c.isTls());
+                Assertions.assertTrue(c.isTls(), "check encryption");
                 String tag = ImapLine.getNextTag();
                 tag = ImapLine.getNextTag();
                 String[] ret;
                 sendCommand(c, tag + " CAPABILITY", tag + " OK");
-                assertTrue("authentication unexpectedly failed when using "+mech,c.authenticate(new Credentials("user", "password", "theRealm" ), mech ));
+                Assertions.assertTrue(c.authenticate(new Credentials("user", "password", "theRealm" ), mech ), "authentication unexpectedly failed when using "+mech);
                 tag = ImapLine.getNextTag();
                 sendCommand(c, tag + " LOGOUT", tag + " OK");
                 c.shutdown();
@@ -393,10 +369,10 @@ public class ImapCommandTest {
                 c = new ImapClient(new InetSocketAddress("localhost", s.getPort()), new SecurityContext(context, UNTRUSTED_SSLTLS ));
                 c.setTimeout(2000);
                 c.connect();
-                assertTrue("check encryption", c.isTls());
+                Assertions.assertTrue(c.isTls(), "check encryption");
                 tag = ImapLine.getNextTag();
                 sendCommand(c, tag + " CAPABILITY", tag + " OK");
-                assertTrue("authentication unexpectedly succeeded when using "+mech,!c.authenticate(new Credentials("user", "password1", "theRealm" ), mech ));
+                Assertions.assertTrue(!c.authenticate(new Credentials("user", "password1", "theRealm" ), mech ), "authentication unexpectedly succeeded when using "+mech);
                 tag = ImapLine.getNextTag();
                 sendCommand(c, tag + " LOGOUT", tag + " OK");
                 c.shutdown();
@@ -404,7 +380,7 @@ public class ImapCommandTest {
             s.shutdown();
         } catch (Exception toe) {
             LOGGER.log(Level.WARNING,"Unexpected exception",toe);
-            fail("exception thrown ("+toe.toString()+") while testing (at "+toe.getStackTrace()[0]+")");
+            Assertions.fail("exception thrown ("+ toe +") while testing (at "+toe.getStackTrace()[0]+")");
         }
     }
 

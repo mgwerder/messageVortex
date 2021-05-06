@@ -1,8 +1,5 @@
 package net.messagevortex;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.IdentityStore;
@@ -11,6 +8,10 @@ import net.messagevortex.router.Router;
 import net.messagevortex.router.operation.InternalPayloadSpace;
 import net.messagevortex.router.operation.InternalPayloadSpaceStore;
 import net.messagevortex.transport.Transport;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageVortexRepository {
 

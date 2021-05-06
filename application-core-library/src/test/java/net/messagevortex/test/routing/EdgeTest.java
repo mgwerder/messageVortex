@@ -1,22 +1,18 @@
 package net.messagevortex.test.routing;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.router.Edge;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.logging.Level;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by martin.gwerder on 19.04.2017.
  */
-@RunWith(JUnit4.class)
 public class EdgeTest {
 
   private static final java.util.logging.Logger LOGGER;
@@ -44,7 +40,7 @@ public class EdgeTest {
     } catch (NullPointerException e) {
       // this is expected
     } catch (Exception e) {
-      fail("exception is not expected (" + e.toString() + ")");
+      fail("exception is not expected (" + e + ")");
     }
 
     try {
@@ -53,7 +49,7 @@ public class EdgeTest {
     } catch (NullPointerException e) {
       // this is expected
     } catch (Exception e) {
-      fail("exception is not expected (" + e.toString() + ")");
+      fail("exception is not expected (" + e + ")");
     }
 
     try {
@@ -62,7 +58,7 @@ public class EdgeTest {
     } catch (IllegalArgumentException e) {
       // this is expected
     } catch (Exception e) {
-      fail("exception is not expected (" + e.toString() + ")");
+      fail("exception is not expected (" + e + ")");
     }
 
     assertFalse("IdentityStorBlock precondition (0)", isb[0] == null);

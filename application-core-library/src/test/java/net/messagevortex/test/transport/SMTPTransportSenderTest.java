@@ -1,6 +1,14 @@
 package net.messagevortex.test.transport;
 
-import static org.junit.Assert.assertTrue;
+import net.messagevortex.AbstractDaemon;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.imap.ImapSSLTest;
+import net.messagevortex.transport.SecurityContext;
+import net.messagevortex.transport.SecurityRequirement;
+import net.messagevortex.transport.TransportReceiver;
+import net.messagevortex.transport.smtp.SmtpReceiver;
+import net.messagevortex.transport.smtp.SmtpSender;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,24 +21,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
-import net.messagevortex.AbstractDaemon;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.test.imap.ImapSSLTest;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.SecurityRequirement;
-import net.messagevortex.transport.TransportReceiver;
-import net.messagevortex.transport.smtp.SmtpReceiver;
-import net.messagevortex.transport.smtp.SmtpSender;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * <p>Teastclass for sending and receiving SMTP based messages.</p>
  *
  * Created by Martin on 26.01.2018.
  */
-@RunWith(JUnit4.class)
 public class SMTPTransportSenderTest extends AbstractDaemon implements TransportReceiver {
 
   public static final String CRLF = "\r\n";

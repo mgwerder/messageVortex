@@ -22,16 +22,17 @@ package net.messagevortex.router.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.PayloadChunk;
+import net.messagevortex.asn1.RemoveRedundancyOperation;
+import net.messagevortex.asn1.VortexMessage;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.PayloadChunk;
-import net.messagevortex.asn1.RemoveRedundancyOperation;
-import net.messagevortex.asn1.VortexMessage;
 
 /**
  * <p>This is the core of the redundancy remove operation.</p>

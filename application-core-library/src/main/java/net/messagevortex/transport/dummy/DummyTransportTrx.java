@@ -2,6 +2,15 @@ package net.messagevortex.transport.dummy;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import net.messagevortex.AbstractDaemon;
+import net.messagevortex.Config;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
+import net.messagevortex.transport.ByteArrayBuilder;
+import net.messagevortex.transport.RandomString;
+import net.messagevortex.transport.Transport;
+import net.messagevortex.transport.TransportReceiver;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,14 +21,6 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.messagevortex.AbstractDaemon;
-import net.messagevortex.Config;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.MessageVortexRepository;
-import net.messagevortex.transport.ByteArrayBuilder;
-import net.messagevortex.transport.RandomString;
-import net.messagevortex.transport.Transport;
-import net.messagevortex.transport.TransportReceiver;
 
 public class DummyTransportTrx extends AbstractDaemon implements Transport {
 

@@ -21,9 +21,17 @@ package net.messagevortex.test.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.transport.SMTPTransportSenderTest;
+import net.messagevortex.transport.*;
+import net.messagevortex.transport.imap.ImapClient;
+import net.messagevortex.transport.imap.ImapLine;
+import net.messagevortex.transport.imap.ImapServer;
+import org.junit.jupiter.api.Test;
 
+import javax.net.ssl.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -37,31 +45,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLException;
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509KeyManager;
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.MessageVortex;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.test.transport.SMTPTransportSenderTest;
-import net.messagevortex.transport.AllTrustManager;
-import net.messagevortex.transport.CustomKeyManager;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.SecurityRequirement;
-import net.messagevortex.transport.SocketDeblocker;
-import net.messagevortex.transport.imap.ImapClient;
-import net.messagevortex.transport.imap.ImapLine;
-import net.messagevortex.transport.imap.ImapServer;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -69,7 +55,6 @@ import org.junit.runners.JUnit4;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class ImapSSLTest {
 
   private static final java.util.logging.Logger LOGGER;
@@ -207,10 +192,10 @@ public class ImapSSLTest {
         if (numread > 0) {
           start += numread;
           sb.append((char) (b[0]));
-          LOGGER.log(Level.INFO, "got " + start + " bytes (" + sb.toString() + ")");
+          LOGGER.log(Level.INFO, "got " + start + " bytes (" + sb + ")");
         }
       }
-      LOGGER.log(Level.INFO, "got sequence \"" + sb.toString() + "\"");
+      LOGGER.log(Level.INFO, "got sequence \"" + sb + "\"");
       s.close();
       is.shutdown();
       assertTrue("error searching for hangig threads", verifyHangingThreads(threadSet).size() == 0);

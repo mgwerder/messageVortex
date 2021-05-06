@@ -5,9 +5,7 @@ import net.messagevortex.transport.imap.ImapBlankLineException;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.transport.imap.ImapNullLineException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -22,7 +20,6 @@ import static org.junit.Assert.fail;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class ImapLineTest {
 
     private static final java.util.logging.Logger LOGGER;
@@ -147,7 +144,7 @@ public class ImapLineTest {
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
-            fail("Imap Exception rised (should have been ImaplBlankLineException but is \""+ie.toString()+"\")");
+            fail("Imap Exception rised (should have been ImaplBlankLineException but is \""+ ie +"\")");
         }
     }
 

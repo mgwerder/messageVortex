@@ -1,32 +1,22 @@
 package net.messagevortex.asn1;
 
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.RunningDaemon;
+import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.commandline.CommandLineHandlerIdentityStoreCreate;
+import org.bouncycastle.asn1.*;
+import picocli.CommandLine;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.Vector;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.RunningDaemon;
-import net.messagevortex.asn1.encryption.DumpType;
-import net.messagevortex.commandline.CommandLineHandlerIdentityStoreCreate;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1EncodableVector;
-import org.bouncycastle.asn1.ASN1InputStream;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.DERSequence;
-import picocli.CommandLine;
 
 /**
  * Stores all known identities of a node. Identities are stored as IdentityStoreBlocks.

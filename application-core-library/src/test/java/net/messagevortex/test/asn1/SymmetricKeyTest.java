@@ -1,7 +1,10 @@
 package net.messagevortex.test.asn1;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.SymmetricKey;
+import net.messagevortex.asn1.encryption.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,15 +13,7 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.asn1.encryption.Algorithm;
-import net.messagevortex.asn1.encryption.AlgorithmType;
-import net.messagevortex.asn1.encryption.DumpType;
-import net.messagevortex.asn1.encryption.Mode;
-import net.messagevortex.asn1.encryption.Padding;
-import net.messagevortex.asn1.encryption.SecurityLevel;
-import org.junit.Test;
+
 
 /**
  * Tests basic functions of symmetric encryption.
@@ -39,10 +34,10 @@ public class SymmetricKeyTest {
 
     @Test
     public void symmetricKeySizeTest() {
-        assertTrue( "getKeySize for AES256 is bad", Algorithm.AES128.getKeySize() == 128 );
-        assertTrue( "getKeySize for AES256 is bad", Algorithm.AES256.getKeySize() == 256 );
-        assertTrue( "getKeySize for CAMELLIA256 is bad", Algorithm.CAMELLIA192.getKeySize() == 192 );
-        assertTrue( "getKeySize for CAMELLIA256 is bad", Algorithm.CAMELLIA256.getKeySize() == 256 );
+        Assertions.assertTrue(Algorithm.AES128.getKeySize() == 128, "getKeySize for AES256 is bad");
+        Assertions.assertTrue(Algorithm.AES256.getKeySize() == 256, "getKeySize for AES256 is bad");
+        Assertions.assertTrue(Algorithm.CAMELLIA192.getKeySize() == 192, "getKeySize for CAMELLIA256 is bad");
+        Assertions.assertTrue(Algorithm.CAMELLIA256.getKeySize() == 256, "getKeySize for CAMELLIA256 is bad");
     }
 
     private void symmetricEncryptionTestRun(Algorithm alg,int size) {
@@ -53,7 +48,7 @@ public class SymmetricKeyTest {
             s = new SymmetricKey(alg, Padding.getDefault(alg.getAlgorithmType()) , Mode.getDefault(alg.getAlgorithmType()));
         } catch (Exception ioe) {
             LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-            fail("Constructor threw IOException");
+            Assertions.fail("Constructor threw IOException");
         }
         byte[] b1 = new byte[0];
         while (b1.length < 10) {
@@ -68,17 +63,17 @@ public class SymmetricKeyTest {
             b3 = s.decrypt(b2);
         } catch (IOException ioe) {
             LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-            fail("IOException while reencrypting");
+            Assertions.fail("IOException while reencrypting");
         }
-        assertTrue("error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals(b1, b3));
+        Assertions.assertTrue(Arrays.equals(b1, b3), "error in encrypt/decrypt cycle with " + alg + " (same object)");
         LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key");
         try {
             b3 = (new SymmetricKey(s.toBytes(DumpType.ALL_UNENCRYPTED))).decrypt(b2);
         } catch (Exception ioe) {
             LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-            fail("Constructor threw IOException");
+            Assertions.fail("Constructor threw IOException");
         }
-        assertTrue("error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals(b1, b3));
+        Assertions.assertTrue(Arrays.equals(b1, b3), "error in encrypt/decrypt cycle with " + alg + " (same reserialized object)");
     }
 
     @Test
@@ -93,7 +88,7 @@ public class SymmetricKeyTest {
                     }
                 } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Unexpected exception", e);
-                    fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString());
+                    Assertions.fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg);
                 }
             }
         }
@@ -104,7 +99,7 @@ public class SymmetricKeyTest {
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             int size = alg.getKeySize();
             try {
-                LOGGER.log( Level.INFO, "starting tests with " + alg.toString() + " and keysize " + size );
+                LOGGER.log( Level.INFO, "starting tests with " + alg + " and keysize " + size );
                 for (int i = 0; i < ksDisc / size; i++) {
                     LOGGER.log( Level.FINE, "starting test " + (i + 1) + " of " + ksDisc / size );
                     System.out.print(".");
@@ -112,13 +107,13 @@ public class SymmetricKeyTest {
                     SymmetricKey k2 = new SymmetricKey(alg, Padding.getDefault(AlgorithmType.SYMMETRIC),Mode.getDefault( AlgorithmType.SYMMETRIC ));
                     k2.setKey( k1.getKey() );
                     k2.setIv( k1.getIv() );
-                    assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2 ));
-                    assertTrue( "reencode error in key transfer cycle with "+alg+" ",Arrays.equals(k1.toBytes(DumpType.ALL_UNENCRYPTED),k2.toBytes(DumpType.ALL_UNENCRYPTED)));
+                    Assertions.assertTrue(k1.equals( k2 ), "error in key transfer cycle with "+alg+" ");
+                    Assertions.assertTrue(Arrays.equals(k1.toBytes(DumpType.ALL_UNENCRYPTED),k2.toBytes(DumpType.ALL_UNENCRYPTED)), "reencode error in key transfer cycle with "+alg+" ");
                 }
                 System.out.println("");
             } catch(Exception e) {
                 LOGGER.log( Level.WARNING,"Unexpected exception",e);
-                fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm "+alg.toString());
+                Assertions.fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm "+ alg);
             }
         }
     }
@@ -153,13 +148,13 @@ public class SymmetricKeyTest {
                     LOGGER.log( Level.INFO, "  testing " + a + "/" + p + " with level "+sl+" (size: "+maximumPayload+")" );
                     for (int i = 0; i < 100; i++) {
                         SymmetricKey ak = new SymmetricKey( a, p, Mode.getDefault( AlgorithmType.SYMMETRIC ) );
-                        assertTrue( "negative maximum payload for " + a.toString() + "/" + size + "/" + p.toString(), maximumPayload > 1 );
+                        Assertions.assertTrue(maximumPayload > 1, "negative maximum payload for " + a + "/" + size + "/" + p);
                         byte[] b = new byte[maximumPayload];
                         sr.nextBytes(b);
                         byte[] b2 = ak.decrypt(ak.encrypt(b));
 
-                        assertTrue("byte arrays must be of equal size after redecryption (b: "+b.length+"; b2: "+b2.length+")", b.length==b2.length );
-                        assertTrue("byte arrays must be equal after redecryption", Arrays.equals(b, b2));
+                        Assertions.assertTrue(b.length==b2.length, "byte arrays must be of equal size after redecryption (b: "+b.length+"; b2: "+b2.length+")");
+                        Assertions.assertTrue(Arrays.equals(b, b2), "byte arrays must be equal after redecryption");
                     }
                     LOGGER.log( Level.INFO, "  done " + a + "/" + p + " with level "+sl );
 
@@ -176,13 +171,13 @@ public class SymmetricKeyTest {
             for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.SYMMETRIC)) {
                 try {
                     SymmetricKey ak = new SymmetricKey(a, p, Mode.getDefault(AlgorithmType.SYMMETRIC));
-                    File f = new File("testfile_SymmetricKey_" +p.toString()+"_"+ a.getAlgorithmFamily() + ".der");
+                    File f = new File("testfile_SymmetricKey_" + p +"_"+ a.getAlgorithmFamily() + ".der");
                     OutputStream o = new FileOutputStream(f);
                     o.write(ak.toBytes(DumpType.ALL_UNENCRYPTED));
                     o.close();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    fail("unexpected exception");
+                    Assertions.fail("unexpected exception");
                 }
             }
         }

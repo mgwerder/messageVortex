@@ -22,12 +22,13 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+
+import javax.net.ssl.SSLEngine;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Logger;
-import javax.net.ssl.SSLEngine;
-import net.messagevortex.MessageVortexLogger;
 
 public class ClientConnection extends AbstractConnection {
 

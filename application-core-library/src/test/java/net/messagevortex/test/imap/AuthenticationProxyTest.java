@@ -1,13 +1,11 @@
 package net.messagevortex.test.imap;
 
+import net.messagevortex.MessageVortex;
 import net.messagevortex.transport.AuthenticationProxy;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.imap.ImapConnection;
-import net.messagevortex.MessageVortex;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Set;
@@ -20,7 +18,6 @@ import static org.junit.Assert.assertTrue;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class AuthenticationProxyTest {
 
     @Test

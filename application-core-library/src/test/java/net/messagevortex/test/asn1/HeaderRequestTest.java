@@ -7,15 +7,11 @@ import net.messagevortex.asn1.HeaderRequestIncreaseTransferQuota;
 import net.messagevortex.asn1.UsagePeriod;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertTrue;
 
-@RunWith(JUnit4.class)
 public class HeaderRequestTest {
 
   @Test

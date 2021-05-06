@@ -1,14 +1,15 @@
 package net.messagevortex.commandline;
 
-import java.io.File;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.yaml.snakeyaml.Yaml;
 import picocli.CommandLine;
+
+import java.io.File;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
 
 @CommandLine.Command(
     description = "dump content of IdentityStore",
