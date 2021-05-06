@@ -4,7 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import net.messagevortex.MessageVortex;
 import net.messagevortex.Version;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -13,19 +14,18 @@ import org.junit.runners.JUnit4;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class VersionTest {
 
     @Test
     public void testVersion() {
         System.out.println("Version is "+ Version.getStringVersion());
-        assertTrue("Version String does not match regexp",Version.getStringVersion().matches("[0-9]+\\.[0-9]+\\.[0-9]+"));
+        Assertions.assertTrue(Version.getStringVersion().matches("[0-9]+\\.[0-9]+\\.[0-9]+"), "Version String does not match regexp");
     }
 
     @Test
     public void testBuild() {
         System.out.println("Build is "+ Version.getBuild());
-        assertTrue("Build String ("+Version.getBuild()+") does not match regexp.",Version.getBuild()!=null && Version.getBuild().matches("[0-9]+\\.[0-9]+\\.[0-9]+ \\([0-9a-f]+\\)"));
+        Assertions.assertTrue(Version.getBuild()!=null && Version.getBuild().matches("[0-9]+\\.[0-9]+\\.[0-9]+ \\([0-9a-f]+\\)"), "Build String ("+Version.getBuild()+") does not match regexp.");
     }
 
 }

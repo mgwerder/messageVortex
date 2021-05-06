@@ -5,7 +5,7 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractBlock;
 import net.messagevortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.DERBitString;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -51,7 +51,7 @@ public class AbstractBlockTest {
         assertTrue("fromHex(\"\") is not byte[0]", Arrays.equals(new byte[0],AbstractBlock.fromHex( "" )));
         ExtendedSecureRandom esr=new ExtendedSecureRandom();
         for(int i=0;i<100;i++) {
-            byte[]arr=esr.generateSeed(257 );
+            byte[]arr= ExtendedSecureRandom.generateSeed(257 );
             assertTrue("fromHex(\"\") fuzzer rounf "+i, Arrays.equals(arr,AbstractBlock.fromHex( AbstractBlock.toHex(arr) )));
         }
     }

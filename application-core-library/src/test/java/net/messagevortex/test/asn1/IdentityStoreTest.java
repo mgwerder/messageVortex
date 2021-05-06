@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -45,7 +45,7 @@ public class IdentityStoreTest {
       }
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "Unexpected exception", e);
-      fail("fuzzer encountered exception in IdentityStore (" + e.toString() + ")");
+      fail("fuzzer encountered exception in IdentityStore (" + e + ")");
     }
   }
 
@@ -83,7 +83,7 @@ public class IdentityStoreTest {
       }
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "Unexpected exception", e);
-      fail("fuzzer encountered exception in IdentityStore (" + e.toString() + ")");
+      fail("fuzzer encountered exception in IdentityStore (" + e + ")");
     }
   }
 

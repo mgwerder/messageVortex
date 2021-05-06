@@ -2,7 +2,7 @@ package net.messagevortex.test.asn1;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.SecurityLevel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

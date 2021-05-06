@@ -15,7 +15,7 @@ import net.messagevortex.test.routing.MathModeTest;
 import net.messagevortex.test.routing.MatrixTest;
 import net.messagevortex.test.routing.MessageFactoryTest;
 import net.messagevortex.test.routing.OperationProcessingTest;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -33,7 +33,7 @@ import org.junit.runners.Suite;
 
 public class MainRoutingSuite {
 
-    @Before
+    @BeforeEach
     public void init() {
         AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
     }

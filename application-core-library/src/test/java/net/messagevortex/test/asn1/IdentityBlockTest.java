@@ -13,7 +13,7 @@ import net.messagevortex.asn1.HeaderRequestIncreaseMessageQuota;
 import net.messagevortex.asn1.HeaderRequestQueryQuota;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -51,7 +51,7 @@ public class IdentityBlockTest {
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING,"Unexpected exception",e);
-            fail( "fuzzer encountered exception in IdentityBlock ("+e.toString()+")" );
+            fail( "fuzzer encountered exception in IdentityBlock ("+ e +")" );
         }
     }
 

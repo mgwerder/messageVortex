@@ -59,7 +59,7 @@ import net.messagevortex.transport.SocketDeblocker;
 import net.messagevortex.transport.imap.ImapClient;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.transport.imap.ImapServer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -207,10 +207,10 @@ public class ImapSSLTest {
         if (numread > 0) {
           start += numread;
           sb.append((char) (b[0]));
-          LOGGER.log(Level.INFO, "got " + start + " bytes (" + sb.toString() + ")");
+          LOGGER.log(Level.INFO, "got " + start + " bytes (" + sb + ")");
         }
       }
-      LOGGER.log(Level.INFO, "got sequence \"" + sb.toString() + "\"");
+      LOGGER.log(Level.INFO, "got sequence \"" + sb + "\"");
       s.close();
       is.shutdown();
       assertTrue("error searching for hangig threads", verifyHangingThreads(threadSet).size() == 0);

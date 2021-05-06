@@ -4,7 +4,6 @@ package net.messagevortex.test;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
 import net.messagevortex.asn1.AsymmetricKey;
-import net.messagevortex.asn1.HeaderRequest;
 import net.messagevortex.test.asn1.AbstractBlockTest;
 import net.messagevortex.test.asn1.AsymmetricKeyReencodingTest;
 import net.messagevortex.test.asn1.AsymmetricKeyTest;
@@ -20,7 +19,7 @@ import net.messagevortex.test.asn1.PaddingTest;
 import net.messagevortex.test.asn1.SecurityLevelTest;
 import net.messagevortex.test.asn1.SymmetricKeyTest;
 import net.messagevortex.test.asn1.VortexMessageTest;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -48,7 +47,7 @@ import org.junit.runners.Suite;
  */
 public class MainASN1Suite {
 
-  @Before
+  @BeforeEach
   public void init() {
     AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
   }

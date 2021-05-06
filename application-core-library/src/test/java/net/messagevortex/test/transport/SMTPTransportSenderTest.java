@@ -21,7 +21,7 @@ import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.TransportReceiver;
 import net.messagevortex.transport.smtp.SmtpReceiver;
 import net.messagevortex.transport.smtp.SmtpSender;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

@@ -15,7 +15,7 @@ import net.messagevortex.test.imap.ImapLineExceptionTest;
 import net.messagevortex.test.imap.ImapLineTest;
 import net.messagevortex.test.imap.ImapSSLTest;
 import net.messagevortex.test.imap.ImapURLParser;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -38,7 +38,7 @@ import org.junit.runners.Suite;
 
 public class MainIMAPSuite {
 
-    @Before
+    @BeforeEach
     public void init() {
             AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
       }

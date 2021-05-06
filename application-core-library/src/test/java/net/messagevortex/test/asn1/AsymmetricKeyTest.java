@@ -25,7 +25,7 @@ import net.messagevortex.asn1.encryption.Mode;
 import net.messagevortex.asn1.encryption.Padding;
 import net.messagevortex.asn1.encryption.Parameter;
 import net.messagevortex.asn1.encryption.SecurityLevel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -178,7 +178,7 @@ public class AsymmetricKeyTest {
           }
         } catch (Exception e) {
           LOGGER.log(Level.WARNING, "Unexpected exception", e);
-          fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString());
+          fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg);
         }
       }
     }
@@ -214,7 +214,7 @@ public class AsymmetricKeyTest {
     for (Algorithm alg : Algorithm.getAlgorithms(AlgorithmType.ASYMMETRIC)) {
       int size = alg.getKeySize();
       try {
-        LOGGER.log(Level.INFO, "starting tests with " + alg.toString() + " and keysize " + size);
+        LOGGER.log(Level.INFO, "starting tests with " + alg + " and keysize " + size);
         for (int i = 0; i < ksDisc / size; i++) {
           LOGGER.log(Level.FINE, "starting test " + (i + 1) + " of " + ksDisc / size);
           System.out.print(".");
@@ -231,7 +231,7 @@ public class AsymmetricKeyTest {
         System.out.println("");
       } catch (Exception e) {
         LOGGER.log(Level.WARNING, "Unexpected exception", e);
-        fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString());
+        fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg);
       }
     }
   }
@@ -308,7 +308,7 @@ public class AsymmetricKeyTest {
             for (int i = 0; i < 100; i++) {
               ak = new AsymmetricKey(a.getParameters(sl));
               ak.setPadding(p);
-              assertTrue("negative maximum payload for " + a.toString() + "/" + size + "/" + p.toString(), maximumPayload > 1);
+              assertTrue("negative maximum payload for " + a + "/" + size + "/" + p, maximumPayload > 1);
               maximumPayload = ak.getPadding().getMaxSize(size);
               byte[] b = new byte[maximumPayload];
               LOGGER.log(Level.INFO, "    Algorithm " + ak.getAlgorithm() + "[keySize=" + ak.getKeySize() + "]/" + ak.getMode() + "/" + ak.toString().toString() + "/maxPayload=" + maximumPayload);
@@ -318,7 +318,7 @@ public class AsymmetricKeyTest {
                 assertTrue("byte arrays must be equal after re-decryption (" + b.length + "!=" + b2.length + ";padding:" + ak.getPadding() + ";max_payload:" + ak.getPadding().getMaxSize(ak.getKeySize()) + ")", Arrays.equals(b, b2));
               } catch (Exception e) {
                 e.printStackTrace();
-                fail("Exception while using " + b.length + " bytes on " + ak.toString());
+                fail("Exception while using " + b.length + " bytes on " + ak);
               }
             }
           }

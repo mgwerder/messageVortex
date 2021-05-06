@@ -5,7 +5,7 @@ import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.MessageVortex;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

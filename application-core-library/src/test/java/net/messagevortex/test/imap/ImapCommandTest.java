@@ -45,7 +45,7 @@ import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.transport.imap.ImapServer;
 import org.bouncycastle.util.encoders.Base64;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -224,7 +224,7 @@ public class ImapCommandTest {
             c.shutdown();
         } catch (Exception toe) {
             LOGGER.log( Level.WARNING, "unexpected exception", toe );
-            fail("exception thrown ("+toe.toString()+") while testing");
+            fail("exception thrown ("+ toe +") while testing");
         }
         assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
@@ -285,7 +285,7 @@ public class ImapCommandTest {
                 c.shutdown();
             } catch (Exception toe) {
                 LOGGER.log(Level.WARNING,"Unexpected exception",toe);
-                fail("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted+" at "+toe.getStackTrace()[0]);
+                fail("exception thrown ("+ toe +") while testing using encryption="+encrypted+" at "+toe.getStackTrace()[0]);
             }
             encrypted=!encrypted;
         } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
@@ -404,7 +404,7 @@ public class ImapCommandTest {
             s.shutdown();
         } catch (Exception toe) {
             LOGGER.log(Level.WARNING,"Unexpected exception",toe);
-            fail("exception thrown ("+toe.toString()+") while testing (at "+toe.getStackTrace()[0]+")");
+            fail("exception thrown ("+ toe +") while testing (at "+toe.getStackTrace()[0]+")");
         }
     }
 

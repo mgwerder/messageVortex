@@ -1,8 +1,5 @@
 package net.messagevortex.test.transport;
 
-import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.fail;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -34,7 +31,8 @@ import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.ServerConnection;
 import net.messagevortex.transport.SocketListener;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LineTRXTest {
 
@@ -60,8 +58,8 @@ public class LineTRXTest {
     private class SenderThread extends Thread {
 
         ServerSocket s;
-        String sText[];
-        String rText[];
+        String[] sText;
+        String[] rText;
         boolean encrypted;
 
         public SenderThread( String sText, String rText, boolean encrypted ) throws IOException {
@@ -148,7 +146,7 @@ public class LineTRXTest {
 
         public void isFailed() {
             if(fail) {
-                fail( "failure in sender thread" );
+                Assertions.fail("failure in sender thread");
             }
             try {
                 this.join();
@@ -184,9 +182,9 @@ public class LineTRXTest {
 
         } catch(IOException ioe) {
             ioe.printStackTrace();
-            fail( "got IOException while handling the client side" );
+            Assertions.fail("got IOException while handling the client side");
         }
-        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     }
 
     @Test
@@ -211,7 +209,7 @@ public class LineTRXTest {
                 LOGGER.log(Level.INFO, "  client reading");
                 String result = ss.read( 1000 );
                 LOGGER.log(Level.INFO, "  client got \"" + result +"\"" );
-                assertTrue( "failed to read text (result=" + result + "; expected=" + test + ")", result == null ? false : test.equals(result));
+                Assert.assertTrue("failed to read text (result=" + result + "; expected=" + test + ")",result == null ? false : test.equals(result));
 
                 LOGGER.log(Level.INFO, "  initiating client shutdown");
                 ss.shutdown();
@@ -222,9 +220,9 @@ public class LineTRXTest {
             }
         } catch(Exception ioe) {
             ioe.printStackTrace();
-            fail( "got exception while handling the client side" );
+            Assertions.fail("got exception while handling the client side");
         }
-        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     }
 
     @Test
@@ -258,9 +256,9 @@ public class LineTRXTest {
             }
         } catch(IOException ioe) {
             ioe.printStackTrace();
-            fail( "got IOException while handling the client side" );
+            Assertions.fail("got IOException while handling the client side");
         }
-        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     }
 
     @Test
@@ -282,10 +280,10 @@ public class LineTRXTest {
             ss.connect();
 
             String result = ss.readln();
-            assertTrue("failed to read text (result: " + result + ")", result == null ? false : "line1".equals(result));
+            Assert.assertTrue("failed to read text (result: " + result + ")", result == null ? false : "line1".equals(result));
 
             result = ss.readln();
-            assertTrue("failed to read text (result: " + result + ")", result == null ? false : "line2".equals(result));
+            Assert.assertTrue("failed to read text (result: " + result + ")", result == null ? false : "line2".equals(result));
 
             LOGGER.log(Level.INFO, "  initiating client shutdown");
             ss.shutdown();
@@ -294,9 +292,9 @@ public class LineTRXTest {
             t.isFailed();
         } catch(Exception ioe) {
             ioe.printStackTrace();
-            fail( "got exception while handling the client side" );
+            Assertions.fail("got exception while handling the client side");
         }
-        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     }
 
     @Test
@@ -345,9 +343,9 @@ public class LineTRXTest {
 
         } catch(Exception ioe) {
             ioe.printStackTrace();
-            fail( "got Exception while handling the client side" );
+            Assertions.fail("got Exception while handling the client side");
         }
-        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     }
 
     @Test
@@ -367,7 +365,7 @@ public class LineTRXTest {
                 SSLContext c = SSLContext.getInstance("TLS");
                 String ks="keystore.jks";
                 InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
-                Assert.assertTrue("Keystore check", (stream != null));
+                Assertions.assertTrue((stream != null), "Keystore check");
                 c.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
 
                 SecurityContext sc = new SecurityContext();
@@ -387,7 +385,7 @@ public class LineTRXTest {
                 LOGGER.log(Level.INFO, "  Reading server reply");
                 String result = ss.read();
                 LOGGER.log(Level.INFO, "    result is " + result );
-                assertTrue("failed to read text (result: " + result + ")", result == null ? false : test.equals(result));
+                Assert.assertTrue("failed to read text (result: " + result + ")", result == null ? false : test.equals(result));
 
                 LOGGER.log(Level.INFO, "  initiating client shutdown");
                 ss.shutdown();
@@ -397,9 +395,9 @@ public class LineTRXTest {
             }
         } catch(Exception ioe) {
             ioe.printStackTrace();
-            fail( "got Exception while handling the client side" );
+            Assertions.fail("got Exception while handling the client side");
         }
-        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     }
 
     @Test
@@ -420,12 +418,12 @@ public class LineTRXTest {
             Thread.sleep( 50 );
             t.shutdown();
             listener.shutdown();
-            assertTrue( "illegal number of connects (is: "+l.numConnects+")",l.numConnects==1);
+            Assert.assertTrue("illegal number of connects (is: "+l.numConnects+")", l.numConnects==1);
         } catch(IOException|NoSuchAlgorithmException |KeyManagementException ioe) {
             ioe.printStackTrace();
-            fail( "got Exception while handling the client side" );
+            Assertions.fail("got Exception while handling the client side");
         }
-        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     }
 
 }

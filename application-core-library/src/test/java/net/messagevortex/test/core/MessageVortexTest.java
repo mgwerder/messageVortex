@@ -12,8 +12,8 @@ import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -31,7 +31,7 @@ public class MessageVortexTest {
     LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void init() {
       try {
         Config cfg=MessageVortexConfig.getDefault();

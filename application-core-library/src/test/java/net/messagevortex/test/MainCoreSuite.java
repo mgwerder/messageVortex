@@ -7,7 +7,7 @@ import net.messagevortex.test.core.ConfigTest;
 import net.messagevortex.test.core.MessageVortexTest;
 import net.messagevortex.test.core.RandomTest;
 import net.messagevortex.test.core.VersionTest;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -20,7 +20,7 @@ import org.junit.runners.Suite;
 
 public class MainCoreSuite {
 
-    @Before
+    @BeforeEach
     public void init() {
         AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
     }

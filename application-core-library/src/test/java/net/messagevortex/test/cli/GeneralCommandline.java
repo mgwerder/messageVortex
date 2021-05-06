@@ -1,7 +1,6 @@
 package net.messagevortex.test.cli;
 
 import static net.messagevortex.MessageVortex.ARGUMENT_FAIL;
-import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -9,7 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class GeneralCommandline {
 
@@ -65,14 +65,13 @@ public class GeneralCommandline {
     System.out.println("## out: "+out);
     System.out.println("## err: "+err);
 
-    assertTrue("Help text not found (1)", out.contains("Commands:"));
-    assertTrue("Help text not found (2)", out.contains("--help"));
-    assertTrue("Help text not found (3)", out.contains("--version"));
+    Assertions.assertTrue(out.contains("Commands:"), "Help text not found (1)");
+    Assertions.assertTrue(out.contains("--help"), "Help text not found (2)");
+    Assertions.assertTrue(out.contains("--version"), "Help text not found (3)");
     // assertTrue("Help text not found (4)", err.contains(Version.getBuild()));
-    assertTrue(
-            "Return value is not " + ARGUMENT_FAIL,
-            ((Integer) (o[0])).intValue() == ARGUMENT_FAIL
-    );
+    Assertions.assertTrue(
+            ((Integer) (o[0])).intValue() == ARGUMENT_FAIL,
+            "Return value is not " + ARGUMENT_FAIL);
   }
 
 }

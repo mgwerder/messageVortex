@@ -26,7 +26,7 @@ import net.messagevortex.blender.DummyBlender;
 import net.messagevortex.test.imap.ImapSSLTest;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

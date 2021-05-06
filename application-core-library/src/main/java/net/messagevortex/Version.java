@@ -44,7 +44,7 @@ public class Version implements CommandLine.IVersionProvider {
   private static int MAJOR = -1; //@major@
   private static int MINOR = -1; //@minor@
   private static int REVISION = -1; //@revision@
-  private static final String GIT_BUILD = "$Id$";
+  private static final String GIT_BUILD = "$Id: c8eea54fdacbce7fcb86c4b9bb969451e097c274 $";
   private static final String BUILD = GIT_BUILD.substring(5, GIT_BUILD.length() - 2);
 
   private static String VERSION_STRING = null;
@@ -109,7 +109,7 @@ public class Version implements CommandLine.IVersionProvider {
           LOGGER.log(Level.SEVERE, "Version " + intVersion
                   + " does not match the required regular expression");
           LOGGER.log(Level.SEVERE, "If this happens while testing in IDE try to"
-                  + " run 'mvn package'.");
+                  + " run 'mvn -DskipTests package'.");
         }
       } else {
         LOGGER.log(Level.SEVERE, "unable to get version number of application");

@@ -8,7 +8,7 @@ import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
 import net.messagevortex.asn1.AsymmetricKey;
 import net.messagevortex.test.cli.GeneralCommandline;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -19,7 +19,7 @@ import org.junit.runners.Suite;
 
 public class MainCliSuite {
 
-  @Before
+  @BeforeEach
   public void init() {
     AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
   }

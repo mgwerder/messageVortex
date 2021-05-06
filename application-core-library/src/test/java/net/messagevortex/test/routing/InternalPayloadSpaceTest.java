@@ -8,8 +8,9 @@ import net.messagevortex.router.operation.InternalPayloadSpace;
 import net.messagevortex.router.operation.InternalPayloadSpaceStore;
 import net.messagevortex.router.operation.Operation;
 import net.messagevortex.transport.RandomString;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -17,7 +18,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)
@@ -32,7 +32,7 @@ public class InternalPayloadSpaceTest {
     IdentityBlock[] identity;
     InternalPayloadSpaceStore[] space;
 
-    @Before
+    @BeforeEach
     public void setup() {
         try {
             identity = new IdentityBlock[]{new IdentityBlock(), new IdentityBlock(), new IdentityBlock(), new IdentityBlock()};
@@ -56,13 +56,13 @@ public class InternalPayloadSpaceTest {
     @Test
     public void payloadSpaceIsolationTest()  {
         // testing isolation of identities
-        assertTrue("PayloadSpace isolation test 0",space[0].getInternalPayload(identity[0])==space[0].getInternalPayload(identity[0]));
-        assertTrue("PayloadSpace isolation test 1",space[0].getInternalPayload(identity[0])!=space[0].getInternalPayload(identity[1]));
-        assertTrue("PayloadSpace isolation test 2",space[0].getInternalPayload(identity[0])!=space[0].getInternalPayload(identity[2]));
-        assertTrue("PayloadSpace isolation test 3",space[0].getInternalPayload(identity[0])!=space[0].getInternalPayload(identity[3]));
+        Assert.assertTrue("PayloadSpace isolation test 0",space[0].getInternalPayload(identity[0])==space[0].getInternalPayload(identity[0]));
+        Assert.assertTrue("PayloadSpace isolation test 1",space[0].getInternalPayload(identity[0])!=space[0].getInternalPayload(identity[1]));
+        Assert.assertTrue("PayloadSpace isolation test 2",space[0].getInternalPayload(identity[0])!=space[0].getInternalPayload(identity[2]));
+        Assert.assertTrue("PayloadSpace isolation test 3",space[0].getInternalPayload(identity[0])!=space[0].getInternalPayload(identity[3]));
 
-        assertTrue("PayloadSpace isolation test 4",space[0].getInternalPayload(identity[0])!=space[1].getInternalPayload(identity[0]));
-        assertTrue("PayloadSpace isolation test 5",space[0].getInternalPayload(identity[0])!=space[2].getInternalPayload(identity[0]));
+        Assert.assertTrue("PayloadSpace isolation test 4",space[0].getInternalPayload(identity[0])!=space[1].getInternalPayload(identity[0]));
+        Assert.assertTrue("PayloadSpace isolation test 5",space[0].getInternalPayload(identity[0])!=space[2].getInternalPayload(identity[0]));
     }
 
     @Test
@@ -70,8 +70,8 @@ public class InternalPayloadSpaceTest {
         InternalPayloadSpace p=space[0].getInternalPayload(identity[0]);
         String pl=RandomString.nextString((int)(Math.random()*1024*10+1));
         PayloadChunk pc =new PayloadChunk(100,pl.getBytes(StandardCharsets.UTF_8),null);
-        assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
-        assertTrue("payload space previously unexpetedly not equal",pl.equals(new String(p.getPayload(100).getPayload(), StandardCharsets.UTF_8)));
+        Assert.assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
+        Assert.assertTrue("payload space previously unexpetedly not equal",pl.equals(new String(p.getPayload(100).getPayload(), StandardCharsets.UTF_8)));
     }
 
     @Test
@@ -93,14 +93,14 @@ public class InternalPayloadSpaceTest {
         InternalPayloadSpace p=space[0].getInternalPayload(identity[0]);
         PayloadChunk pc =new PayloadChunk(200,s.getBytes(StandardCharsets.UTF_8),null);
         Operation op=new IdMapOperation(200,201,1);
-        assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
-        assertTrue("addin of operation unexpectedly rejected",p.addOperation(op)==true);
-        assertTrue("target  payload should not be null",p.getPayload(201)!=null);
-        assertTrue("target  payload should be identical",s.equals(new String(p.getPayload(201).getPayload(),StandardCharsets.UTF_8)));
+        Assert.assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
+        Assert.assertTrue("addin of operation unexpectedly rejected",p.addOperation(op)==true);
+        Assert.assertTrue("target  payload should not be null",p.getPayload(201)!=null);
+        Assert.assertTrue("target  payload should be identical",s.equals(new String(p.getPayload(201).getPayload(),StandardCharsets.UTF_8)));
         p.setPayload(new PayloadChunk(200, null,null)); //remove the payload chunk from store
-        assertTrue("source payload should be null",p.getPayload(200)==null);
-        assertTrue("target payload should be null",p.getPayload(201)==null);
-        assertTrue("removal of operation "+op.toString()+" unexpectedly failed",p.removeOperation(op)==true);
+        Assert.assertTrue("source payload should be null",p.getPayload(200)==null);
+        Assert.assertTrue("target payload should be null",p.getPayload(201)==null);
+        Assert.assertTrue("removal of operation "+ op +" unexpectedly failed",p.removeOperation(op)==true);
     }
 
 

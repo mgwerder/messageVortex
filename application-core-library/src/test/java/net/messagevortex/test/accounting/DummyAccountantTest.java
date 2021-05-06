@@ -3,7 +3,7 @@ package net.messagevortex.test.accounting;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.accounting.DummyAccountant;
 import net.messagevortex.accounting.HeaderVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

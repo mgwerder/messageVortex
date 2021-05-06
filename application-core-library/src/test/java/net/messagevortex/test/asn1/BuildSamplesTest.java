@@ -4,7 +4,7 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractBlock;
 import net.messagevortex.asn1.AsymmetricKey;
 import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

@@ -3,7 +3,7 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.Prng;
 import net.messagevortex.router.operation.AddRedundancy;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

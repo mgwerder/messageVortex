@@ -22,7 +22,7 @@ import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import net.messagevortex.test.TestHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

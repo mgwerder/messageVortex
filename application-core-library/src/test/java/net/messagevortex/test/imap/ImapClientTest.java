@@ -28,11 +28,10 @@ import net.messagevortex.transport.CustomKeyManager;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.imap.ImapClient;
-import net.messagevortex.transport.imap.ImapCommand;
 import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapServer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

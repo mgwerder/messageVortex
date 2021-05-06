@@ -35,7 +35,7 @@ import net.messagevortex.asn1.SymmetricKey;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -78,7 +78,7 @@ public class VortexMessageTest {
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING,"Unexpected exception",e);
-            Assert.fail( "fuzzer encountered exception in VortexMessage ("+e.toString()+")" );
+            Assert.fail( "fuzzer encountered exception in VortexMessage ("+ e +")" );
         }
     }
 
@@ -121,7 +121,7 @@ public class VortexMessageTest {
             PrefixBlock randomPrefixBlock=new PrefixBlock();
             VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock, randomRoutingCombo));
             File f = new File("testfile_VortexMessage_encrypted.der");
-            try ( FileOutputStream o = new FileOutputStream(f); ) {
+            try ( FileOutputStream o = new FileOutputStream(f)) {
                 o.write(s.toBytes(DumpType.ALL_UNENCRYPTED));
             }
 

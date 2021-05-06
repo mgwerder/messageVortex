@@ -14,7 +14,7 @@ import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

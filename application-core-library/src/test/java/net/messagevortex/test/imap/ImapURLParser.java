@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.ImapPassthruServer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

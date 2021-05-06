@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.router.Edge;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -44,7 +44,7 @@ public class EdgeTest {
     } catch (NullPointerException e) {
       // this is expected
     } catch (Exception e) {
-      fail("exception is not expected (" + e.toString() + ")");
+      fail("exception is not expected (" + e + ")");
     }
 
     try {
@@ -53,7 +53,7 @@ public class EdgeTest {
     } catch (NullPointerException e) {
       // this is expected
     } catch (Exception e) {
-      fail("exception is not expected (" + e.toString() + ")");
+      fail("exception is not expected (" + e + ")");
     }
 
     try {
@@ -62,7 +62,7 @@ public class EdgeTest {
     } catch (IllegalArgumentException e) {
       // this is expected
     } catch (Exception e) {
-      fail("exception is not expected (" + e.toString() + ")");
+      fail("exception is not expected (" + e + ")");
     }
 
     assertFalse("IdentityStorBlock precondition (0)", isb[0] == null);

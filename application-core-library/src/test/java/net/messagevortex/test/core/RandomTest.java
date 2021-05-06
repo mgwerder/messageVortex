@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -119,7 +119,7 @@ public class RandomTest {
       long t = (long) (Math.max(280, sample[i] * mul / 100000 * 0.2));
       assertTrue("failed at pos " + i + " (result:" + classes[i] + "; expect:" + sample[i] * mul / 100000 + ")", classes[i] >= (sample[i] * mul / 100000 - t) && classes[i] <= (sample[i] * mul / 100000 + t));
     }
-    System.out.println(sb.toString() + "}");
+    System.out.println(sb + "}");
   }
 
   private String plot(long[] classes) {
@@ -170,7 +170,7 @@ public class RandomTest {
       }
       sb.append("\r\n");
     }
-    return "maxY=" + maxY / interval + "\r\n" + sb.toString();
+    return "maxY=" + maxY / interval + "\r\n" + sb;
 
   }
 

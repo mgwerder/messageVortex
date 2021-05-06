@@ -6,7 +6,7 @@ import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.MessageVortex;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

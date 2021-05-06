@@ -12,7 +12,7 @@ import net.messagevortex.asn1.AsymmetricKey;
 import net.messagevortex.test.transport.DummyTransportSenderTest;
 import net.messagevortex.test.transport.LineTRXTest;
 import net.messagevortex.test.transport.SMTPTransportSenderTest;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -25,7 +25,7 @@ import org.junit.runners.Suite;
 
 public class MainTransportSuite {
 
-    @Before
+    @BeforeEach
     public void init() {
         AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
     }

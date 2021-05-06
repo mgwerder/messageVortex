@@ -13,7 +13,7 @@ import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

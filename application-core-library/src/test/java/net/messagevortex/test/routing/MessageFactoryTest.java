@@ -18,7 +18,7 @@ import net.messagevortex.router.MessageFactory;
 import net.messagevortex.router.SimpleMessageFactory;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OutputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

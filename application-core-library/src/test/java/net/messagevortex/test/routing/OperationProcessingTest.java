@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,7 @@ import net.messagevortex.router.operation.InternalPayloadSpace;
 import net.messagevortex.router.operation.InternalPayloadSpaceStore;
 import net.messagevortex.router.operation.Operation;
 import net.messagevortex.router.operation.RemoveRedundancy;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

@@ -26,7 +26,7 @@ import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -95,7 +95,7 @@ public class FuzzerTest {
             }
         } catch (Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail( "fuzzer encountered exception in PayloadChunk ("+e.toString()+")" );
+            fail( "fuzzer encountered exception in PayloadChunk ("+ e +")" );
         }
     }
 
@@ -115,7 +115,7 @@ public class FuzzerTest {
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING, "Unexpected exception (" + lastTuple + ")", e );
-            fail( "fuzzer encountered exception in IdentityBlock ("+e.toString()+")" );
+            fail( "fuzzer encountered exception in IdentityBlock ("+ e +")" );
         }
     }
 
@@ -142,7 +142,7 @@ public class FuzzerTest {
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING, "Unexpected exception (" + lastTuple + ")", e );
-            fail( "fuzzer encountered exception in UsagePeriod ("+e.toString()+")" );
+            fail( "fuzzer encountered exception in UsagePeriod ("+ e +")" );
         }
     }
 
@@ -218,7 +218,7 @@ public class FuzzerTest {
     @Test
     public void fuzzingRoutingBlock() throws Exception {
         try{
-            for (int i = 0; i < ksDisc/8192; i++) {;
+            for (int i = 0; i < ksDisc/8192; i++) {
                 LOGGER.log(Level.INFO,"creating router block");
                 RoutingCombo routing=new RoutingCombo();
                 assertTrue( "Routing Block may not be null",routing!=null);
