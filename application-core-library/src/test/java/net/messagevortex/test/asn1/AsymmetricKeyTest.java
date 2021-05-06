@@ -26,15 +26,13 @@ import net.messagevortex.asn1.encryption.Padding;
 import net.messagevortex.asn1.encryption.Parameter;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 /**
  * Tests for AsymmetricKey class.
  * <p>
  * Created by martin.gwerder on 31.05.2016.
  */
-@RunWith(JUnit4.class)
 public class AsymmetricKeyTest {
 
   private static final java.util.logging.Logger LOGGER;

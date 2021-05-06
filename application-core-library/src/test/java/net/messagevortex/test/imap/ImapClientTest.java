@@ -32,15 +32,13 @@ import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapServer;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 /**
  * Tests for {@link ImapClient}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class ImapClientTest {
 
   private static final java.util.logging.Logger LOGGER;

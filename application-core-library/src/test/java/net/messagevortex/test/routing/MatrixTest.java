@@ -14,10 +14,8 @@ import net.messagevortex.router.operation.RealMathMode;
 import net.messagevortex.router.operation.RedundancyMatrix;
 import net.messagevortex.router.operation.VandermondeMatrix;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-@RunWith(JUnit4.class)
+
 public class MatrixTest {
 
   private static final java.util.logging.Logger LOGGER;

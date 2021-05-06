@@ -7,10 +7,9 @@ import net.messagevortex.asn1.CipherSpec;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.CipherUsage;
 import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 import java.util.logging.Level;
 
@@ -19,7 +18,6 @@ import java.util.logging.Level;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class CipherSpecTest {
 
     private static final java.util.logging.Logger LOGGER;
@@ -35,10 +33,10 @@ public class CipherSpecTest {
             AsymmetricAlgorithmSpec aas = new AsymmetricAlgorithmSpec(Algorithm.AES256, new AlgorithmParameter());
             s.setAsymmetricSpec(aas);
             CipherSpec s2 = new CipherSpec(s.toAsn1Object(DumpType.ALL));
-            Assert.assertTrue( "Reencoded CipherSpec is not equal", s2.equals(s) );
+            Assertions.assertTrue(s2.equals(s), "Reencoded CipherSpec is not equal");
         }catch( Exception e) {
             e.printStackTrace();
-            Assert.fail( "catched unexpected exception" );
+            Assertions.fail( "catched unexpected exception" );
         }
     }
 

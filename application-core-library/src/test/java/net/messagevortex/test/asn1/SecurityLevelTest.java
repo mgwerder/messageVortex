@@ -3,8 +3,7 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 import java.util.logging.Level;
 
@@ -13,7 +12,6 @@ import static org.junit.Assert.assertTrue;
 /*
  * Created by martin.gwerder on 06.06.2016.
  */
-@RunWith(JUnit4.class)
 public class SecurityLevelTest {
 
     private static final java.util.logging.Logger LOGGER;

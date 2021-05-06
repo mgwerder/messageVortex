@@ -59,6 +59,7 @@ import net.messagevortex.transport.SocketDeblocker;
 import net.messagevortex.transport.imap.ImapClient;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.transport.imap.ImapServer;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -69,7 +70,6 @@ import org.junit.runners.JUnit4;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class ImapSSLTest {
 
   private static final java.util.logging.Logger LOGGER;

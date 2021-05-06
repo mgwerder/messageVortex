@@ -15,7 +15,6 @@ import net.messagevortex.router.JGraph;
 import net.messagevortex.router.SimpleMessageFactory;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OutputStream;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -57,7 +56,7 @@ public class JGraphTest {
             System.out.println();
             LOGGER.log(Level.INFO, "printing graph... got " + smf.getGraph().getRoutes().length + " routes");
             new File("graphTest.jpg").delete();
-            Assert.assertTrue("checking for deleted image", !new File("graphTest.jpg").exists());
+            Assertions.assertTrue(!new File("graphTest.jpg").exists(), "checking for deleted image");
             final JGraph jg = new JGraph(smf.getGraph());
             Thread t = new Thread() {
                 public void run() {
@@ -76,7 +75,7 @@ public class JGraphTest {
             } catch (InterruptedException ie) {
                 Assertions.fail("got interrupted exception");
             }
-            Assert.assertTrue("checking for written image", new File("graphTest.jpg").exists());
+            Assertions.assertTrue(new File("graphTest.jpg").exists(), "checking for written image");
         } catch (IOException ioe) {
             ioe.printStackTrace();
             Assertions.fail("got unexpected exception");

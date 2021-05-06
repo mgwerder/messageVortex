@@ -30,9 +30,10 @@ import net.messagevortex.transport.ListeningSocketChannel;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.ServerConnection;
 import net.messagevortex.transport.SocketListener;
-import org.junit.Assert;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
 
 public class LineTRXTest {
 
@@ -209,7 +210,7 @@ public class LineTRXTest {
                 LOGGER.log(Level.INFO, "  client reading");
                 String result = ss.read( 1000 );
                 LOGGER.log(Level.INFO, "  client got \"" + result +"\"" );
-                Assert.assertTrue("failed to read text (result=" + result + "; expected=" + test + ")",result == null ? false : test.equals(result));
+                Assertions.assertTrue(result == null ? false : test.equals(result), "failed to read text (result=" + result + "; expected=" + test + ")");
 
                 LOGGER.log(Level.INFO, "  initiating client shutdown");
                 ss.shutdown();
@@ -280,10 +281,10 @@ public class LineTRXTest {
             ss.connect();
 
             String result = ss.readln();
-            Assert.assertTrue("failed to read text (result: " + result + ")", result == null ? false : "line1".equals(result));
+            Assertions.assertTrue(result == null ? false : "line1".equals(result), "failed to read text (result: " + result + ")");
 
             result = ss.readln();
-            Assert.assertTrue("failed to read text (result: " + result + ")", result == null ? false : "line2".equals(result));
+            Assertions.assertTrue(result == null ? false : "line2".equals(result), "failed to read text (result: " + result + ")");
 
             LOGGER.log(Level.INFO, "  initiating client shutdown");
             ss.shutdown();
@@ -385,7 +386,7 @@ public class LineTRXTest {
                 LOGGER.log(Level.INFO, "  Reading server reply");
                 String result = ss.read();
                 LOGGER.log(Level.INFO, "    result is " + result );
-                Assert.assertTrue("failed to read text (result: " + result + ")", result == null ? false : test.equals(result));
+                Assertions.assertTrue(result == null ? false : test.equals(result), "failed to read text (result: " + result + ")");
 
                 LOGGER.log(Level.INFO, "  initiating client shutdown");
                 ss.shutdown();
@@ -418,7 +419,7 @@ public class LineTRXTest {
             Thread.sleep( 50 );
             t.shutdown();
             listener.shutdown();
-            Assert.assertTrue("illegal number of connects (is: "+l.numConnects+")", l.numConnects==1);
+            Assertions.assertTrue(l.numConnects==1, "illegal number of connects (is: "+l.numConnects+")");
         } catch(IOException|NoSuchAlgorithmException |KeyManagementException ioe) {
             ioe.printStackTrace();
             Assertions.fail("got Exception while handling the client side");

@@ -15,15 +15,13 @@ import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 /**
  * General Test class for all unspecific Block tests.
  *
  * Created by martin.gwerder on 30.05.2016.
  */
-@RunWith(JUnit4.class)
 public class MacAlgorithmTest {
 
     private static final java.util.logging.Logger LOGGER;

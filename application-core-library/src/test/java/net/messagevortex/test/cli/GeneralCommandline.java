@@ -11,6 +11,7 @@ import net.messagevortex.MessageVortexLogger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+
 public class GeneralCommandline {
 
   private static final Logger LOGGER;

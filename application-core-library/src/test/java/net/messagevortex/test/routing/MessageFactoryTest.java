@@ -18,6 +18,7 @@ import net.messagevortex.router.MessageFactory;
 import net.messagevortex.router.SimpleMessageFactory;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OutputStream;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -25,7 +26,6 @@ import org.junit.runners.JUnit4;
 /**
  * Created by martin.gwerder on 13.06.2016.
  */
-@RunWith(JUnit4.class)
 public class MessageFactoryTest {
   
   private static final java.util.logging.Logger LOGGER;

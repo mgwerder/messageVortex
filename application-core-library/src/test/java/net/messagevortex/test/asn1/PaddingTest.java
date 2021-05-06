@@ -4,8 +4,7 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.Prng;
 import net.messagevortex.router.operation.AddRedundancy;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -15,7 +14,6 @@ import java.util.logging.Level;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-@RunWith(JUnit4.class)
 public class PaddingTest {
 
   private static final java.util.logging.Logger LOGGER;

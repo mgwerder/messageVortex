@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.router.Edge;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -16,7 +17,6 @@ import org.junit.runners.JUnit4;
 /**
  * Created by martin.gwerder on 19.04.2017.
  */
-@RunWith(JUnit4.class)
 public class EdgeTest {
 
   private static final java.util.logging.Logger LOGGER;

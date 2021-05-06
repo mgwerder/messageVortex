@@ -7,8 +7,7 @@ import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.MessageVortex;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 import java.util.logging.Level;
 
@@ -19,7 +18,6 @@ import static org.junit.Assert.fail;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class ImapCommandNoopTest {
 
     static {

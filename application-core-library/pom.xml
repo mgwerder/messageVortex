@@ -13,8 +13,8 @@
     <properties>
         <jdk.version>1.8</jdk.version>
         <junit.version>5.7.1</junit.version>
-        <jacoco.version>0.8.3</jacoco.version>
-        <surefire.version>2.22.0</surefire.version>
+        <jacoco.version>0.8.7</jacoco.version>
+        <surefire.version>2.22.2</surefire.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -98,17 +98,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
             <version>2.2</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>-->
 
         <!--<dependency>
             <groupId>org.codehaus.izpack</groupId>
@@ -174,7 +172,7 @@
 
     <build>
         <finalName>MessageVortex</finalName>
-         <plugins>
+        <plugins>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
@@ -226,9 +224,17 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
+                    <includes>
+                        <include>**/*Test*</include>
+                    </includes>
                     <argLine>${argLine} @{argLine}</argLine>
-                    <useSystemClassLoader>false</useSystemClassLoader><!-- Required to run on JDK10 and JDK12 -->
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${surefire.version}</version>
             </plugin>
 
             <plugin>
@@ -673,7 +679,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>2.9</version>
             </plugin>
 
             <plugin>
@@ -683,9 +689,9 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.2</version>
+                <groupId>com.puppycrawl.tools</groupId>
+                <artifactId>checkstyle</artifactId>
+                <version>8.42</version>
                 <configuration>
                     <configLocation>google_checks.xml</configLocation>
                 </configuration>

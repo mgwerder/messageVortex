@@ -25,15 +25,13 @@ import net.messagevortex.blender.BlendingReceiver;
 import net.messagevortex.blender.DummyBlender;
 import net.messagevortex.test.imap.ImapSSLTest;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 /**
  * Created by martin.gwerder on 19.04.2017.
  */
-@RunWith(JUnit4.class)
 public class DummyBlendingTest implements BlendingReceiver {
   
   private static final java.util.logging.Logger LOGGER;
@@ -99,7 +97,7 @@ public class DummyBlendingTest implements BlendingReceiver {
     for (int i = 0; i < dt.length; i++) {
       dt[i].shutdownDaemon();
     }
-    Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+    Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     DummyTransportTrx.clearDummyEndpoints();
   }
   

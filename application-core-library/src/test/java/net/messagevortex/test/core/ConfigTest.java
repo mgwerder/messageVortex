@@ -14,15 +14,13 @@ import net.messagevortex.MessageVortexConfig;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 /**
  * booleanConfigHandlings for {@link MessageVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class ConfigTest {
 
   private static final Logger LOGGER;

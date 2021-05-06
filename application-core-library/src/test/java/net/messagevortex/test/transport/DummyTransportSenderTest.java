@@ -14,6 +14,7 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.test.imap.ImapSSLTest;
 import net.messagevortex.transport.TransportReceiver;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -21,7 +22,6 @@ import org.junit.runners.JUnit4;
 /**
  * Created by martin.gwerder on 19.04.2017.
  */
-@RunWith(JUnit4.class)
 public class DummyTransportSenderTest extends AbstractDaemon implements TransportReceiver {
 
   private List<InputStream> msgs = new Vector<>();

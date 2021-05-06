@@ -27,15 +27,13 @@ import net.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 /**
  * Fuzzer Tests for ASN1 Parser Classes {@link AbstractBlock}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class FuzzerTest {
 
     public static final int BLOCK_FUZZER_CYCLES = 30;

@@ -2,6 +2,7 @@ package net.messagevortex.test.imap;
 
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -13,7 +14,6 @@ import static org.junit.Assert.assertTrue;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
 public class ImapLineExceptionTest {
 
     @Test

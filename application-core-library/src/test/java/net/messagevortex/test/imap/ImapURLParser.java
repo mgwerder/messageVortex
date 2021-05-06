@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.ImapPassthruServer;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -16,7 +17,6 @@ import org.junit.runners.JUnit4;
 /**
  * Created by Martin on 13.04.2018.
  */
-@RunWith(JUnit4.class)
 public class ImapURLParser {
 
     private static final java.util.logging.Logger LOGGER;
