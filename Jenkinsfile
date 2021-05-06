@@ -35,6 +35,12 @@ pipeline {
         }
       }
     }
+    stage ('Package all') {
+      steps {
+        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
+        sh 'mvn -DskipTests package'
+      }
+    }
     stage('SonarQube analysis') {
       steps {
         withSonarQubeEnv('SonarQube') {
@@ -45,12 +51,6 @@ pipeline {
     stage('Publish artifacts') {
       steps {
         sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
-      }
-    }
-    stage ('Package all') {
-      steps {
-        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests package'
       }
     }
     stage ('Site build') {
