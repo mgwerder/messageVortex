@@ -125,7 +125,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.30</version>
-            <scope>compile</scope>
+            <!--<scope>compile</scope>-->
         </dependency>
 
         <dependency>
@@ -157,15 +157,6 @@
     <build>
         <finalName>MessageVortex</finalName>
          <plugins>
-             <plugin>
-                 <groupId>org.jenkins-ci.tools</groupId>
-                 <artifactId>maven-hpi-plugin</artifactId>
-                 <version>3.17</version>
-                 <configuration>
-                     <minimumJavaVersion>${jdk.version}</minimumJavaVersion>
-                     <pluginFirstClassLoader>true</pluginFirstClassLoader>
-                 </configuration>
-             </plugin>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
