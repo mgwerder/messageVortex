@@ -22,27 +22,14 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.ByteArrayOutputStream;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.*;
+
+import java.io.*;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1EncodableVector;
-import org.bouncycastle.asn1.ASN1InputStream;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1OctetString;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.ASN1TaggedObject;
-import org.bouncycastle.asn1.DEROctetString;
-import org.bouncycastle.asn1.DERSequence;
-import org.bouncycastle.asn1.DERTaggedObject;
 
 /***
  * <p>The main class representing the main message object.</p>

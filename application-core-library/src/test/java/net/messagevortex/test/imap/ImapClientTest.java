@@ -1,26 +1,5 @@
 package net.messagevortex.test.imap;
 
-import static net.messagevortex.transport.SecurityRequirement.PLAIN;
-import static net.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import javax.net.SocketFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509KeyManager;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.AllTrustManager;
@@ -32,6 +11,26 @@ import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapServer;
 import org.junit.jupiter.api.Test;
+
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509KeyManager;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+
+import static net.messagevortex.transport.SecurityRequirement.PLAIN;
+import static net.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
+import static org.junit.Assert.*;
 
 
 /**

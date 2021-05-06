@@ -22,9 +22,10 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.IOException;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Object;
+
+import java.io.IOException;
 
 public interface Dumpable {
   /***

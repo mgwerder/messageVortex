@@ -1,9 +1,10 @@
 package net.messagevortex.blender;
 
-import java.io.IOException;
 import net.messagevortex.RunningDaemon;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.VortexMessage;
+
+import java.io.IOException;
 
 /**
  * Created by Martin on 04.02.2018.

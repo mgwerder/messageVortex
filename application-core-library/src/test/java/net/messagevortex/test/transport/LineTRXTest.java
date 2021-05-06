@@ -1,5 +1,13 @@
 package net.messagevortex.test.transport;
 
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.imap.ImapSSLTest;
+import net.messagevortex.transport.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import javax.net.ssl.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -14,25 +22,6 @@ import java.security.SecureRandom;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509KeyManager;
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.test.imap.ImapSSLTest;
-import net.messagevortex.transport.AllTrustManager;
-import net.messagevortex.transport.ClientConnection;
-import net.messagevortex.transport.CustomKeyManager;
-import net.messagevortex.transport.ListeningSocketChannel;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.ServerConnection;
-import net.messagevortex.transport.SocketListener;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 
 public class LineTRXTest {

@@ -1,19 +1,14 @@
 package net.messagevortex.test.routing;
 
-import static org.junit.Assert.assertTrue;
-
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.router.operation.*;
+import org.junit.jupiter.api.Test;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.router.operation.GaloisFieldMathMode;
-import net.messagevortex.router.operation.MathMode;
-import net.messagevortex.router.operation.Matrix;
-import net.messagevortex.router.operation.RealMathMode;
-import net.messagevortex.router.operation.RedundancyMatrix;
-import net.messagevortex.router.operation.VandermondeMatrix;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertTrue;
 
 
 public class MatrixTest {

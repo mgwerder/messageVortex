@@ -1,6 +1,7 @@
 package net.messagevortex;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +12,8 @@ import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class MessageVortexController implements SignalHandler {
   

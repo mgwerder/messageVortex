@@ -1,13 +1,14 @@
 package net.messagevortex.router;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.RoutingCombo;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 
 public class SimpleMessageFactory extends MessageFactory {
 

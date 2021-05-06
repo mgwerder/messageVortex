@@ -22,10 +22,10 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.transport.imap.ImapConnection;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import net.messagevortex.transport.imap.ImapConnection;
 
 public class AuthenticationProxy {
 

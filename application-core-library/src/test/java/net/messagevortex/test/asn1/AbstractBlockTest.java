@@ -8,11 +8,8 @@ import org.bouncycastle.asn1.DERBitString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.Arrays;
 import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * General Test class for all unspecific Block tests.

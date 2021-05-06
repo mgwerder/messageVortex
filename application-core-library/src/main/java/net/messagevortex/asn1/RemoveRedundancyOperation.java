@@ -22,10 +22,11 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import org.bouncycastle.asn1.ASN1Encodable;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-import org.bouncycastle.asn1.ASN1Encodable;
 
 /**
  * Represents a remove redundancy operation.

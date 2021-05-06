@@ -4,7 +4,6 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;

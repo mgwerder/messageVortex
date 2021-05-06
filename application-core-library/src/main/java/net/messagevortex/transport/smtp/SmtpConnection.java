@@ -1,5 +1,13 @@
 package net.messagevortex.transport.smtp;
 
+import net.messagevortex.Config;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.ClientConnection;
+import net.messagevortex.transport.Credentials;
+import net.messagevortex.transport.SecurityContext;
+import net.messagevortex.transport.TransportReceiver;
+import org.bouncycastle.util.encoders.Base64;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -9,13 +17,6 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
-import net.messagevortex.Config;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.ClientConnection;
-import net.messagevortex.transport.Credentials;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.TransportReceiver;
-import org.bouncycastle.util.encoders.Base64;
 
 /**
  * <p>Creates a connection to a SMTP Server Socket.</p>

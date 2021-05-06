@@ -21,21 +21,16 @@ package net.messagevortex.test.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.*;
+import net.messagevortex.asn1.encryption.DumpType;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AbstractBlock;
-import net.messagevortex.asn1.IdentityBlock;
-import net.messagevortex.asn1.InnerMessageBlock;
-import net.messagevortex.asn1.PrefixBlock;
-import net.messagevortex.asn1.RoutingCombo;
-import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.asn1.VortexMessage;
-import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 
 /**

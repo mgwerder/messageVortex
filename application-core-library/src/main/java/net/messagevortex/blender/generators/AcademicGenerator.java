@@ -1,11 +1,11 @@
 package net.messagevortex.blender.generators;
 
-import java.io.IOException;
-
 import net.messagevortex.asn1.BlendingParameter;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.blender.BlenderContent;
+
+import java.io.IOException;
 
 
 /**

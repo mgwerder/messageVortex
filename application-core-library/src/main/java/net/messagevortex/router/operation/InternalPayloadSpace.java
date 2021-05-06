@@ -1,18 +1,13 @@
 package net.messagevortex.router.operation;
 
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.PayloadChunk;
+
+import java.security.InvalidParameterException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 /**
  * <p>Represents a payload space of an identity in memory for processing.</p>

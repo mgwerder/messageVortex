@@ -22,17 +22,14 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import static net.messagevortex.asn1.BlendingParameter.BlendingParameterChoice.F5;
-import static net.messagevortex.asn1.BlendingParameter.BlendingParameterChoice.OFFSET;
+import net.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.io.Serializable;
-import net.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Integer;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1TaggedObject;
-import org.bouncycastle.asn1.DERTaggedObject;
+
+import static net.messagevortex.asn1.BlendingParameter.BlendingParameterChoice.F5;
+import static net.messagevortex.asn1.BlendingParameter.BlendingParameterChoice.OFFSET;
 
 /**
  * <p>Blending Parameter Block representation.</p>

@@ -1,12 +1,11 @@
 package net.messagevortex.test.imap;
 
+import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.CustomKeyManager;
-import net.messagevortex.MessageVortex;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 
 import java.util.logging.Level;
 

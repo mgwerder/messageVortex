@@ -7,7 +7,6 @@ import net.messagevortex.router.operation.MathMode;
 import net.messagevortex.router.operation.RealMathMode;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.Arrays;
 import java.util.logging.Level;
 

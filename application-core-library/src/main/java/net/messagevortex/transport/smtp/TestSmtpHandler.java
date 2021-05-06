@@ -3,6 +3,17 @@ package net.messagevortex.transport.smtp;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
+import net.messagevortex.AbstractDaemon;
+import net.messagevortex.Config;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.MessageVortexRepository;
+import net.messagevortex.transport.Transport;
+import net.messagevortex.transport.TransportReceiver;
+
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,16 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
-import net.messagevortex.AbstractDaemon;
-import net.messagevortex.Config;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.MessageVortexRepository;
-import net.messagevortex.transport.Transport;
-import net.messagevortex.transport.TransportReceiver;
 
 /**
  * FIXME: This implementation uses a Greenmail SMTP server.

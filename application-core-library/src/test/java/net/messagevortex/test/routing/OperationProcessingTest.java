@@ -1,30 +1,20 @@
 package net.messagevortex.test.routing;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.*;
+import net.messagevortex.router.operation.Operation;
+import net.messagevortex.router.operation.*;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AddRedundancyOperation;
-import net.messagevortex.asn1.IdentityBlock;
-import net.messagevortex.asn1.PayloadChunk;
-import net.messagevortex.asn1.RemoveRedundancyOperation;
-import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.router.operation.AddRedundancy;
-import net.messagevortex.router.operation.IdMapOperation;
-import net.messagevortex.router.operation.InternalPayloadSpace;
-import net.messagevortex.router.operation.InternalPayloadSpaceStore;
-import net.messagevortex.router.operation.Operation;
-import net.messagevortex.router.operation.RemoveRedundancy;
 
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class OperationProcessingTest {
 

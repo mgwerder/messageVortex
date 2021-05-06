@@ -1,5 +1,11 @@
 package net.messagevortex.test.asn1;
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.SymmetricKey;
+import net.messagevortex.asn1.encryption.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,16 +13,6 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.asn1.encryption.Algorithm;
-import net.messagevortex.asn1.encryption.AlgorithmType;
-import net.messagevortex.asn1.encryption.DumpType;
-import net.messagevortex.asn1.encryption.Mode;
-import net.messagevortex.asn1.encryption.Padding;
-import net.messagevortex.asn1.encryption.SecurityLevel;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 
 /**

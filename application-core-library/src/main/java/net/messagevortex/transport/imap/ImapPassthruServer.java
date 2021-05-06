@@ -22,15 +22,16 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.AuthenticationProxy;
+import net.messagevortex.transport.Credentials;
+import net.messagevortex.transport.SecurityContext;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.AuthenticationProxy;
-import net.messagevortex.transport.Credentials;
-import net.messagevortex.transport.SecurityContext;
 
 public class ImapPassthruServer {
 

@@ -22,15 +22,16 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.AbstractConnection;
 import net.messagevortex.transport.AuthenticationProxy;
 import net.messagevortex.transport.ServerConnection;
 import net.messagevortex.transport.StoppableThread;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ImapConnection extends ServerConnection
     implements Comparable<ImapConnection> {

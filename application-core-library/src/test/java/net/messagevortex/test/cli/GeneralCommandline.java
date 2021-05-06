@@ -1,15 +1,16 @@
 package net.messagevortex.test.cli;
 
-import static net.messagevortex.MessageVortex.ARGUMENT_FAIL;
+import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexLogger;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.messagevortex.MessageVortex;
-import net.messagevortex.MessageVortexLogger;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+
+import static net.messagevortex.MessageVortex.ARGUMENT_FAIL;
 
 
 public class GeneralCommandline {

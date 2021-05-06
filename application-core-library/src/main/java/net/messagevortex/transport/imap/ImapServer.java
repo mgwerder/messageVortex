@@ -1,8 +1,7 @@
 package net.messagevortex.transport.imap;
 
-import static net.messagevortex.transport.SecurityRequirement.SSLTLS;
-import static net.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
-
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.*;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -12,13 +11,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.AuthenticationProxy;
-import net.messagevortex.transport.ListeningSocketChannel;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.ServerConnection;
-import net.messagevortex.transport.SocketListener;
-import net.messagevortex.transport.StoppableThread;
+
+import static net.messagevortex.transport.SecurityRequirement.SSLTLS;
+import static net.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
 
 
 public class ImapServer extends ListeningSocketChannel implements StoppableThread, SocketListener {

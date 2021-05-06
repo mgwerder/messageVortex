@@ -1,13 +1,13 @@
 package net.messagevortex.test.core;
 
-import static org.junit.Assert.assertTrue;
-
-
-import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import org.junit.jupiter.api.Test;
+
+import java.util.logging.Level;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**

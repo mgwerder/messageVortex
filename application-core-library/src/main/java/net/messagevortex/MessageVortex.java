@@ -22,6 +22,18 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.accounting.Accountant;
+import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
+import net.messagevortex.asn1.IdentityStore;
+import net.messagevortex.blender.Blender;
+import net.messagevortex.blender.recipes.BlenderRecipe;
+import net.messagevortex.commandline.*;
+import net.messagevortex.router.Router;
+import net.messagevortex.transport.Transport;
+import net.messagevortex.transport.dummy.DummyTransportTrx;
+import picocli.CommandLine;
+
+import javax.crypto.Cipher;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -33,22 +45,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.crypto.Cipher;
-import net.messagevortex.accounting.Accountant;
-import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
-import net.messagevortex.asn1.IdentityStore;
-import net.messagevortex.blender.Blender;
-import net.messagevortex.blender.recipes.BlenderRecipe;
-import net.messagevortex.commandline.CommandLineHandlerCipher;
-import net.messagevortex.commandline.CommandLineHandlerExamples;
-import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
-import net.messagevortex.commandline.CommandLineHandlerInit;
-import net.messagevortex.commandline.CommandLineHandlerRedundancy;
-import net.messagevortex.commandline.CommandLineHandlerVersion;
-import net.messagevortex.router.Router;
-import net.messagevortex.transport.Transport;
-import net.messagevortex.transport.dummy.DummyTransportTrx;
-import picocli.CommandLine;
 
 @CommandLine.Command(
     description = "A MessageVortex implementation for the privacy aware person.",

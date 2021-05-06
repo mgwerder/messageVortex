@@ -1,12 +1,11 @@
 package net.messagevortex.test.imap;
 
+import net.messagevortex.MessageVortex;
 import net.messagevortex.transport.AuthenticationProxy;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.imap.ImapConnection;
-import net.messagevortex.MessageVortex;
 import org.junit.jupiter.api.Test;
-
 
 import java.io.IOException;
 import java.util.Set;

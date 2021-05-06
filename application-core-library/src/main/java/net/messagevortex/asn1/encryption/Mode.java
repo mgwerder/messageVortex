@@ -22,10 +22,9 @@ package net.messagevortex.asn1.encryption;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import org.bouncycastle.asn1.ASN1Enumerated;
+
+import java.util.ArrayList;
 
 /**
  * Enumeration to list available encryption modes.

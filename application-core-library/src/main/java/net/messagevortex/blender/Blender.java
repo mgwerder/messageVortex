@@ -22,7 +22,6 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.IOException;
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.accounting.HeaderVerifier;
 import net.messagevortex.asn1.BlendingSpec;
@@ -30,6 +29,8 @@ import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.router.IncomingMessageRouterListener;
 import net.messagevortex.transport.TransportReceiver;
 import net.messagevortex.transport.TransportSender;
+
+import java.io.IOException;
 
 /**
  * Interface specifying a blender.

@@ -1,5 +1,9 @@
 package net.messagevortex.router.operation;
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.*;
+import net.messagevortex.asn1.encryption.Prng;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -7,13 +11,6 @@ import java.util.Random;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AbstractRedundancyOperation;
-import net.messagevortex.asn1.AddRedundancyOperation;
-import net.messagevortex.asn1.PayloadChunk;
-import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.asn1.VortexMessage;
-import net.messagevortex.asn1.encryption.Prng;
 
 /**
  * <p>This is the core of the redundancy add operation.</p>

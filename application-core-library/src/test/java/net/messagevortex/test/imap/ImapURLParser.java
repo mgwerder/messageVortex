@@ -1,18 +1,16 @@
 package net.messagevortex.test.imap;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.imap.ImapPassthruServer;
+import org.junit.jupiter.api.Test;
 
 import java.net.InetSocketAddress;
 import java.text.ParseException;
 import java.util.logging.Level;
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.imap.ImapPassthruServer;
 
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by Martin on 13.04.2018.

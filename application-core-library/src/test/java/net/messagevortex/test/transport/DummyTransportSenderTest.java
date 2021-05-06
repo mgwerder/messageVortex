@@ -1,7 +1,11 @@
 package net.messagevortex.test.transport;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import net.messagevortex.AbstractDaemon;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.imap.ImapSSLTest;
+import net.messagevortex.transport.TransportReceiver;
+import net.messagevortex.transport.dummy.DummyTransportTrx;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,15 +13,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
-import net.messagevortex.AbstractDaemon;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.test.imap.ImapSSLTest;
-import net.messagevortex.transport.TransportReceiver;
-import net.messagevortex.transport.dummy.DummyTransportTrx;
 
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by martin.gwerder on 19.04.2017.

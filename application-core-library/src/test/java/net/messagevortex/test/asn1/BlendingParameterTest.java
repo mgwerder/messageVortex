@@ -6,7 +6,6 @@ import net.messagevortex.asn1.encryption.DumpType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.logging.Level;
 
 /**

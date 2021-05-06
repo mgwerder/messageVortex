@@ -22,42 +22,24 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.logging.Level;
-import javax.activation.DataHandler;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
-
-import net.messagevortex.Config;
-import net.messagevortex.MessageVortex;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.MessageVortexRepository;
-import net.messagevortex.NotImplementedException;
 import net.messagevortex.Version;
+import net.messagevortex.*;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
+
+import javax.activation.DataHandler;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.mail.util.ByteArrayDataSource;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
 
 /***
  * <p>This Dummy blender supports only plain blending without an offset.</p>

@@ -1,19 +1,16 @@
 package net.messagevortex.commandline;
 
-import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.ASYM;
-import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.MODE;
-import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.PAD;
-import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.SYM;
-
-
-import java.io.IOException;
-import java.util.concurrent.Callable;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.Mode;
 import net.messagevortex.asn1.encryption.Padding;
 import picocli.CommandLine;
+
+import java.io.IOException;
+import java.util.concurrent.Callable;
+
+import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.*;
 
 /**
  * <p>Commandline handler to list available ciphers.</p>

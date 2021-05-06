@@ -1,9 +1,9 @@
 package net.messagevortex.asn1;
 
+import org.bouncycastle.asn1.ASN1Encodable;
+
 import java.io.IOException;
 import java.io.Serializable;
-
-import org.bouncycastle.asn1.ASN1Encodable;
 
 public class DecryptPayloadOperation extends AbstractCryptPayloadOperation implements Serializable {
 

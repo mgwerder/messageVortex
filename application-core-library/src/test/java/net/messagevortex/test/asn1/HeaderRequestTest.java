@@ -10,7 +10,6 @@ import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.junit.jupiter.api.Test;
 
-
 import static org.junit.Assert.assertTrue;
 
 public class HeaderRequestTest {

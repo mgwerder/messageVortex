@@ -22,12 +22,11 @@ package net.messagevortex.router.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.asn1.IdentityBlock;
+
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import net.messagevortex.asn1.IdentityBlock;
 
 public class InternalPayloadSpaceStore {
 

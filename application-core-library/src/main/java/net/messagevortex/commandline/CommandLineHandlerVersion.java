@@ -1,8 +1,9 @@
 package net.messagevortex.commandline;
 
-import java.util.concurrent.Callable;
 import net.messagevortex.Version;
 import picocli.CommandLine;
+
+import java.util.concurrent.Callable;
 
 @CommandLine.Command(
     description = "Get detailed version information",

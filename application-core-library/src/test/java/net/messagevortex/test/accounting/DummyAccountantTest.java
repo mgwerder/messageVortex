@@ -6,7 +6,6 @@ import net.messagevortex.accounting.HeaderVerifier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.logging.Level;
 
 /**

@@ -1,25 +1,8 @@
 package net.messagevortex.test.asn1;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Random;
-import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AbstractBlock;
-import net.messagevortex.asn1.AsymmetricKey;
-import net.messagevortex.asn1.IdentityBlock;
-import net.messagevortex.asn1.IdentityStore;
-import net.messagevortex.asn1.InnerMessageBlock;
-import net.messagevortex.asn1.PayloadChunk;
-import net.messagevortex.asn1.PrefixBlock;
-import net.messagevortex.asn1.RoutingCombo;
-import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.asn1.UsagePeriod;
-import net.messagevortex.asn1.VortexMessage;
+import net.messagevortex.asn1.*;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.DumpType;
@@ -27,6 +10,14 @@ import net.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Random;
+import java.util.logging.Level;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 /**

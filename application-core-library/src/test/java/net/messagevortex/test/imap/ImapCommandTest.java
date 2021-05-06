@@ -1,22 +1,13 @@
 package net.messagevortex.test.imap;
 
-import static net.messagevortex.transport.SecurityRequirement.PLAIN;
-import static net.messagevortex.transport.SecurityRequirement.SSLTLS;
-import static net.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
-import static org.junit.Assert.assertTrue;
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.*;
+import net.messagevortex.transport.imap.*;
+import org.bouncycastle.util.encoders.Base64;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetSocketAddress;
-import java.security.Security;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509KeyManager;
@@ -25,27 +16,15 @@ import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslClient;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.AllTrustManager;
-import net.messagevortex.transport.AuthenticationProxy;
-import net.messagevortex.transport.Credentials;
-import net.messagevortex.transport.CustomKeyManager;
-import net.messagevortex.transport.SaslClientCallbackHandler;
-import net.messagevortex.transport.SaslMechanisms;
-import net.messagevortex.transport.SaslPlainServer;
-import net.messagevortex.transport.SaslServerCallbackHandler;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.SecurityRequirement;
-import net.messagevortex.transport.imap.ImapClient;
-import net.messagevortex.transport.imap.ImapCommand;
-import net.messagevortex.transport.imap.ImapConnection;
-import net.messagevortex.transport.imap.ImapLine;
-import net.messagevortex.transport.imap.ImapServer;
-import org.bouncycastle.util.encoders.Base64;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.security.Security;
+import java.util.*;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import static net.messagevortex.transport.SecurityRequirement.*;
 
 /**
  * Tests for {@link ImapCommand}.

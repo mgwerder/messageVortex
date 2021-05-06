@@ -22,18 +22,14 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.nio.charset.StandardCharsets;
-import java.security.Provider;
-import java.util.Map;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
-import javax.security.sasl.AuthorizeCallback;
-import javax.security.sasl.Sasl;
-import javax.security.sasl.SaslException;
-import javax.security.sasl.SaslServer;
-import javax.security.sasl.SaslServerFactory;
+import javax.security.sasl.*;
+import java.nio.charset.StandardCharsets;
+import java.security.Provider;
+import java.util.Map;
 
 
 public class SaslPlainServer implements SaslServer {

@@ -22,11 +22,11 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.InputStream;
-import net.messagevortex.NotImplementedException;
 import net.messagevortex.accounting.HeaderVerifier;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.VortexMessage;
+
+import java.io.InputStream;
 
 public class SmtpBlender extends Blender {
 
