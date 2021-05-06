@@ -6,6 +6,8 @@ import net.messagevortex.test.imap.ImapSSLTest;
 import net.messagevortex.transport.TransportReceiver;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +22,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by martin.gwerder on 19.04.2017.
  */
+@Execution(ExecutionMode.SAME_THREAD)
 public class DummyTransportSenderTest extends AbstractDaemon implements TransportReceiver {
 
   private List<InputStream> msgs = new Vector<>();
@@ -31,6 +34,7 @@ public class DummyTransportSenderTest extends AbstractDaemon implements Transpor
   }
 
   @Test
+  @Execution(ExecutionMode.SAME_THREAD)
   public void dummyTransportEndpointTest() {
     Set<Thread> threadSet = ImapSSLTest.getThreadList();
     LOGGER.log(Level.INFO, "Setting up dummy network");

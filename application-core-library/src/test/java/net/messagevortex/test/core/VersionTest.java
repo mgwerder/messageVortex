@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for {@link MessageVortex}.
+ * Tests for {@link MessageVortex} Version output.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */

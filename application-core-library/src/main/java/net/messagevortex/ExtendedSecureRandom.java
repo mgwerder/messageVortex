@@ -132,7 +132,7 @@ public final class ExtendedSecureRandom {
                     + ")<peak(" + peak + ")<end(" + end + ")]");
         }
         double ret = -1;
-        LOGGER.log(Level.FINEST, "Getting random Time " + start + "/" + peak + "/" + end);
+        // LOGGER.log(Level.FINEST, "Getting random Time " + start + "/" + peak + "/" + end);
         while (ret < start || ret > end) {
             ret = sr.nextGaussian();
             double d = sr.nextDouble();
@@ -142,7 +142,7 @@ public final class ExtendedSecureRandom {
                 ret = peak + (Math.abs(ret) * (end - peak) / 5.0);
             }
         }
-        LOGGER.log(Level.FINEST, "Done getting random Time (" + (ret) + ")");
+        // LOGGER.log(Level.FINEST, "Done getting random Time (" + (ret) + ")");
         return ret;
     }
 
