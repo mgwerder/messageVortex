@@ -6,6 +6,9 @@ import net.messagevortex.MessageVortexConfig;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +33,7 @@ public class ConfigTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void basicConfigHandling() {
 
     try {
@@ -42,6 +46,7 @@ public class ConfigTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void stringConfigHandling() {
     try {
       MessageVortexConfig.getDefault().getStringValue(null, "stringConfigHandling");
@@ -101,6 +106,7 @@ public class ConfigTest {
 
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void fileHandling() {
     try {
       // clear all unwanted rubish
@@ -119,6 +125,7 @@ public class ConfigTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void numericConfigHandling() {
     try {
       MessageVortexConfig.getDefault().getNumericValue(null, "numericConfigHandling");
@@ -193,6 +200,7 @@ public class ConfigTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void booleanConfigHandling() {
     try {
       MessageVortexConfig.getDefault().getBooleanValue(null, "booleanConfigHandling");
@@ -269,6 +277,7 @@ public class ConfigTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void writingParsingConfigFile() {
     try {
       LOGGER.log(Level.INFO, "Getting std config");

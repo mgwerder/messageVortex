@@ -7,6 +7,9 @@ import net.messagevortex.transport.imap.*;
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -65,6 +68,7 @@ public class ImapCommandTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void checkSetClientTimeout() {
         try{
             LOGGER.log(Level.INFO,"************************************************************************");
@@ -89,6 +93,7 @@ public class ImapCommandTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void checkServerTimeout() throws IOException {
         ImapServer is=null;
         ImapClient ic=null;
@@ -123,6 +128,7 @@ public class ImapCommandTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void checkClientTimeout() throws IOException {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         ImapServer is=null;
@@ -153,6 +159,7 @@ public class ImapCommandTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void checkClientDefaultTimeout() throws IOException {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         ImapClient ic=null;
@@ -183,6 +190,7 @@ public class ImapCommandTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void checkFullLogout() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         try{
@@ -206,6 +214,7 @@ public class ImapCommandTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void checkFullLoginLogout() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         boolean encrypted=false;
@@ -270,6 +279,7 @@ public class ImapCommandTest {
 
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void SaslImplementationTests() throws SaslException {
         Security.addProvider( new SaslPlainServer.SecurityProvider() );
 
@@ -334,6 +344,7 @@ public class ImapCommandTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void loginSasl() {
         try{
             final SSLContext context=SSLContext.getInstance("TLS");

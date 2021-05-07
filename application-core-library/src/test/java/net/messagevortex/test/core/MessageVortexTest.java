@@ -7,8 +7,7 @@ import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.parallel.*;
 
 import javax.crypto.Cipher;
 import java.io.IOException;
@@ -23,7 +22,6 @@ import java.util.logging.Logger;
  * @author martin@gwerder.net (Martin GWERDER)
  */
 @DisplayName("Running MessageVortex from scratch")
-@Execution(ExecutionMode.SAME_THREAD)
 public class MessageVortexTest {
 
   private static final Logger LOGGER;
@@ -48,7 +46,7 @@ public class MessageVortexTest {
 
   @Test
   @DisplayName("Getting help on the commandline")
-  @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void getHelp() {
     init();
     int e = MessageVortex.mainReturn(new String[]{"--help"});
@@ -57,7 +55,7 @@ public class MessageVortexTest {
 
   @Test
   @DisplayName("getting the version information on commandline")
-  @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void getVersion() {
     init();
     Integer e = MessageVortex.mainReturn(new String[]{"--version"});
@@ -66,7 +64,7 @@ public class MessageVortexTest {
 
   @Test
   @DisplayName("Running MessageVortex with a zero timeout (shutdown immediately")
-  @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void runRegularlyAndShutdown() {
     init();
     try {
@@ -81,7 +79,7 @@ public class MessageVortexTest {
 
   @Test
   @DisplayName("Look for remaining processes when reusing JVM")
-  @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void runRegularlyAndShutdownTwice() {
     init();
     runRegularlyAndShutdown();
@@ -90,7 +88,7 @@ public class MessageVortexTest {
 
   @Test
   @DisplayName("Running MessageVortex with a timeout")
-  @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void runRegularlyWithTimeout() {
     init();
     try {
@@ -112,7 +110,7 @@ public class MessageVortexTest {
 
   @Test
   @DisplayName("test current JRE for suitability from CLI")
-  @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void testJREReadiness() {
     init();
     try {

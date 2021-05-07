@@ -30,6 +30,9 @@ import net.messagevortex.transport.imap.ImapClient;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.transport.imap.ImapServer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 
 import javax.net.ssl.*;
 import java.io.IOException;
@@ -66,6 +69,7 @@ public class ImapSSLTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void testInitalSSLClient() {
     try {
       LOGGER.log(Level.INFO, "************************************************************************");
@@ -159,6 +163,7 @@ public class ImapSSLTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void testInitalSSLServer() {
     try {
       LOGGER.log(Level.INFO, "************************************************************************");
@@ -206,6 +211,7 @@ public class ImapSSLTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void testInitalSSLBoth() {
     try {
       LOGGER.log(Level.INFO, "************************************************************************");

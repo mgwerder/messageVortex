@@ -6,6 +6,9 @@ import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.imap.ImapConnection;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 
 import java.io.IOException;
 import java.util.Set;
@@ -21,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 public class AuthenticationProxyTest {
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void setGetConnection() throws IOException {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         AuthenticationProxy ap=new AuthenticationProxy();
@@ -35,6 +39,7 @@ public class AuthenticationProxyTest {
         assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
+    @Test
     public void plainAuthTest() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         AuthenticationProxy ap=new AuthenticationProxy();

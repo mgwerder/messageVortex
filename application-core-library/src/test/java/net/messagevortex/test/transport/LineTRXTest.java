@@ -6,6 +6,9 @@ import net.messagevortex.test.imap.ImapSSLTest;
 import net.messagevortex.transport.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 
 import javax.net.ssl.*;
 import java.io.IOException;
@@ -147,6 +150,7 @@ public class LineTRXTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void plainConnectionTest() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -178,6 +182,7 @@ public class LineTRXTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void plainConnectionReadTest() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -216,6 +221,7 @@ public class LineTRXTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void plainConnectionWriteTest() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -252,6 +258,7 @@ public class LineTRXTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void plainConnectionReadLineTest() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -288,6 +295,7 @@ public class LineTRXTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void encryptedConnectionTest() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         try {
@@ -339,6 +347,7 @@ public class LineTRXTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void encryptedConnectionReadTest() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -391,6 +400,7 @@ public class LineTRXTest {
     }
 
     @Test
+    @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
     public void lineReceiverPlainTest() throws InterruptedException {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );

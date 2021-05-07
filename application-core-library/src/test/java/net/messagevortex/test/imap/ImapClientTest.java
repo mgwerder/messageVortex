@@ -11,6 +11,9 @@ import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapServer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
@@ -127,6 +130,7 @@ public class ImapClientTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void ImapClientEncryptedTest1() {
     try {
       LOGGER.log(Level.INFO, "************************************************************************");
@@ -166,6 +170,7 @@ public class ImapClientTest {
   }
 
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void ImapClientTimeoutTest() {
     LOGGER.log(Level.INFO, "************************************************************************");
     LOGGER.log(Level.INFO, "IMAP Client Timeout Test");

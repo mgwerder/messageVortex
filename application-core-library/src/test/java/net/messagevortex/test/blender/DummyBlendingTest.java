@@ -10,6 +10,9 @@ import net.messagevortex.test.imap.ImapSSLTest;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -36,6 +39,7 @@ public class DummyBlendingTest implements BlendingReceiver {
   private List<VortexMessage> msgs = new Vector<>();
   
   @Test
+  @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
   public void dummyBlenderEndpointTest() {
     Set<Thread> threadSet = ImapSSLTest.getThreadList();
     LOGGER.log(Level.INFO, "Setting up dummy network");
