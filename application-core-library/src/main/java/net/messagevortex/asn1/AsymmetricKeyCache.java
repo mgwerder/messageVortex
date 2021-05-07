@@ -53,7 +53,7 @@ public class AsymmetricKeyCache implements Serializable {
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
   
-  private Map<AlgorithmParameter, CacheElement> cache = new TreeMap<>();
+  private final Map<AlgorithmParameter, CacheElement> cache = new TreeMap<>();
   
   private static class CacheElement implements Serializable {
     
@@ -539,9 +539,11 @@ public class AsymmetricKeyCache implements Serializable {
   private void readObject(ObjectInputStream in) throws IOException {
     try {
       int i = in.readInt();
-      cache = new HashMap<>(i);
-      for (int j = 0; j < i; j++) {
-        cache.put((AlgorithmParameter) in.readObject(), (CacheElement) in.readObject());
+      synchronized(cache) {
+        cache.clear();
+        for (int j = 0; j < i; j++) {
+          cache.put((AlgorithmParameter) in.readObject(), (CacheElement) in.readObject());
+        }
       }
     } catch (ClassNotFoundException cnfe) {
       throw new IOException("Exception while reading cache file", cnfe);

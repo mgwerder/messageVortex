@@ -11,6 +11,7 @@ import net.messagevortex.router.MessageFactory;
 import net.messagevortex.router.SimpleMessageFactory;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OutputStream;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -58,18 +59,18 @@ public class MessageFactoryTest {
       smf.build();
       GraphSet gs = smf.getGraph();
       for (Edge gt : gs) {
-        assertTrue("unreached endpoint", gs.targetReached(gt.getFrom()) && gs.targetReached(gt.getTo()));
+        Assertions.assertTrue(gs.targetReached(gt.getFrom()) && gs.targetReached(gt.getTo()), "unreached endpoint");
       }
       LOGGER.log(Level.INFO, "  getting routes (" + i + " of " + maxTests + ")");
       GraphSet[] g = gs.getRoutes();
       if (g == null || g.length == 0) {
         System.out.println(gs.dump());
-        fail("Routes not found (" + (g != null ? g.length : -1) + ")");
+        Assertions.fail("Routes not found (" + (g != null ? g.length : -1) + ")");
       }
       LOGGER.log(Level.INFO, "  testing full GraphSet (" + i + " of " + maxTests + ")");
       for (GraphSet gt : g) {
         for (Edge gt2 : gt) {
-          assertTrue("unreached endpoint", gt.targetReached(gt2.getFrom()) && gt.targetReached(gt2.getTo()));
+          Assertions.assertTrue(gt.targetReached(gt2.getFrom()) && gt.targetReached(gt2.getTo()), "unreached endpoint");
         }
       }
     }

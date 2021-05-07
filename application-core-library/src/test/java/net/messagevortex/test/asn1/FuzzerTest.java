@@ -9,6 +9,7 @@ import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -52,13 +53,13 @@ public class FuzzerTest {
                 IdentityBlock identity=new IdentityBlock();
                 RoutingCombo routing=new RoutingCombo();
                 VortexMessage s = new VortexMessage( p,new InnerMessageBlock( new PrefixBlock(),identity,routing ) );
-                assertTrue( "VortexMessage may not be null", s != null );
+                Assertions.assertTrue(s != null, "VortexMessage may not be null");
                 byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte representation may not be null", b1 != null );
+                Assertions.assertTrue(b1 != null, "Byte representation may not be null");
                 VortexMessage s2=new VortexMessage( b1,null );
-                assertTrue( "Contained PrefixBlock is not considered equivalent (original key="+s.getPrefix().getKey()+";new key="+s2.getPrefix().getKey()+")", s.getPrefix().equals(s2.getPrefix()) );
+                Assertions.assertTrue(s.getPrefix().equals(s2.getPrefix()), "Contained PrefixBlock is not considered equivalent (original key="+s.getPrefix().getKey()+";new key="+s2.getPrefix().getKey()+")");
                 byte[] b2 = (s2).toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
+                Assertions.assertTrue(Arrays.equals( b1, b2 ), "Byte arrays should be equal when reencoding");
             }
         } catch (Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
@@ -76,15 +77,15 @@ public class FuzzerTest {
                 esr.nextBytes( plb );
                 s.setPayload(plb);
                 s.setId(1000);
-                assertTrue( "PayloadChunk may not be null", s != null );
+                Assertions.assertTrue(s != null, "PayloadChunk may not be null");
                 byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte representation may not be null", b1 != null );
+                Assertions.assertTrue(b1 != null, "Byte representation may not be null");
                 byte[] b2 = (new PayloadChunk( new ASN1InputStream(b1).readObject(),null )).toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
+                Assertions.assertTrue(Arrays.equals( b1, b2 ), "Byte arrays should be equal when reencoding");
             }
         } catch (Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail( "fuzzer encountered exception in PayloadChunk ("+ e +")" );
+            Assertions.fail("fuzzer encountered exception in PayloadChunk ("+ e +")");
         }
     }
 
@@ -94,17 +95,17 @@ public class FuzzerTest {
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 IdentityBlock s = new IdentityBlock();
-                assertTrue( "IdentityBlock may not be null", s != null );
+                Assertions.assertTrue(s != null, "IdentityBlock may not be null");
                 byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte representation may not be null", b1 != null );
+                Assertions.assertTrue(b1 != null, "Byte representation may not be null");
                 IdentityBlock s2 = new IdentityBlock( b1 );
                 byte[] b2 = (s2).toBytes(DumpType.ALL_UNENCRYPTED);
                 lastTuple = s.dumpValueNotation( "" ) + "\n" + s2.dumpValueNotation( "" );
-                assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
+                Assertions.assertTrue(Arrays.equals( b1, b2 ), "Byte arrays should be equal when reencoding");
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING, "Unexpected exception (" + lastTuple + ")", e );
-            fail( "fuzzer encountered exception in IdentityBlock ("+ e +")" );
+            Assertions.fail("fuzzer encountered exception in IdentityBlock ("+ e +")");
         }
     }
 
@@ -121,17 +122,17 @@ public class FuzzerTest {
                 if(r.nextInt(10)>8) {
                     s.setNotAfter(new Date());
                 }
-                assertTrue( "UsagePeriod may not be null", s != null );
+                Assertions.assertTrue(s != null, "UsagePeriod may not be null");
                 byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte representation may not be null", b1 != null );
+                Assertions.assertTrue(b1 != null, "Byte representation may not be null");
                 UsagePeriod s2=new UsagePeriod( b1 );
                 byte[] b2 = (s2).toBytes(DumpType.ALL_UNENCRYPTED);
                 lastTuple = s.dumpValueNotation( "",DumpType.ALL_UNENCRYPTED ) + "\n" + s2.dumpValueNotation( "",DumpType.ALL_UNENCRYPTED );
-                assertTrue( "Byte arrays should be equal when reencoding ("+s.getNotBefore()+"/"+s.getNotAfter()+") ["+b1.length+"/"+b2.length+"]", Arrays.equals( b1, b2 ) );
+                Assertions.assertTrue(Arrays.equals( b1, b2 ), "Byte arrays should be equal when reencoding ("+s.getNotBefore()+"/"+s.getNotAfter()+") ["+b1.length+"/"+b2.length+"]");
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING, "Unexpected exception (" + lastTuple + ")", e );
-            fail( "fuzzer encountered exception in UsagePeriod ("+ e +")" );
+            Assertions.fail("fuzzer encountered exception in UsagePeriod ("+ e +")");
         }
     }
 
@@ -145,13 +146,13 @@ public class FuzzerTest {
                     byte[] b1=new byte[esr.nextInt(64*1024)];
                     esr.nextBytes( b1 );
                     byte[] b2=s.decrypt( s.encrypt(b1) );
-                    assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same object)",Arrays.equals( b1,b2));
+                    Assertions.assertTrue(Arrays.equals( b1,b2), "error in encrypt/decrypt cycle with "+alg+" (same object)");
                     b2=(new SymmetricKey(s.toBytes(DumpType.ALL_UNENCRYPTED))).decrypt( s.encrypt(b1) );
-                    assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same reserialized object)",Arrays.equals( b1,b2));
+                    Assertions.assertTrue(Arrays.equals( b1,b2), "error in encrypt/decrypt cycle with "+alg+" (same reserialized object)");
                 }
             } catch(Exception e) {
                 LOGGER.log(Level.WARNING,"Unexpected exception",e);
-                fail("fuzzer encountered exception in Symmetric en/decryp test with algorithm "+alg.toString());
+                Assertions.fail("fuzzer encountered exception in Symmetric en/decryp test with algorithm "+alg.toString());
             }
         }
     }
@@ -164,11 +165,11 @@ public class FuzzerTest {
                 LOGGER.log(Level.INFO,"testing "+alg+" ("+ksDisc/size+")");
                 for (int i = 0; i < ksDisc/size; i++) {
                     SymmetricKey s = new SymmetricKey( alg );
-                    assertTrue( "Symmetric may not be null",s!=null);
+                    Assertions.assertTrue(s!=null, "Symmetric may not be null");
                     byte[] b1=s.toBytes(DumpType.ALL_UNENCRYPTED);
-                    assertTrue( "Byte representation may not be null",b1!=null);
+                    Assertions.assertTrue(b1!=null, "Byte representation may not be null");
                     byte[] b2 = (new SymmetricKey( b1, null )).toBytes(DumpType.ALL_UNENCRYPTED);
-                    assertTrue( "Byte arrays should be equal when reencoding",Arrays.equals(b1,b2));
+                    Assertions.assertTrue(Arrays.equals(b1,b2), "Byte arrays should be equal when reencoding");
                 }
             } catch(Exception e) {
                 LOGGER.log(Level.WARNING,"Unexpected exception",e);
@@ -185,17 +186,17 @@ public class FuzzerTest {
                 IdentityStore.resetDemo();
                 LOGGER.log(Level.INFO,"creating store");
                 IdentityStore s = IdentityStore.getIdentityStoreDemo();
-                assertTrue( "IdentityStore may not be null",s!=null);
+                Assertions.assertTrue(s!=null, "IdentityStore may not be null");
                 LOGGER.log(Level.INFO,"encoding demo binary");
                 byte[] b1=s.toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte representation may not be null",b1!=null);
+                Assertions.assertTrue(b1!=null, "Byte representation may not be null");
                 LOGGER.log(Level.INFO,"reencoding demo binary");
                 byte[] b2=(new IdentityStore(b1)).toBytes(DumpType.ALL_UNENCRYPTED);
                 if(!Arrays.equals(b1,b2)) {
                     System.out.println((new IdentityStore( b1 ) ).dumpValueNotation( "",DumpType.ALL_UNENCRYPTED ));
                     System.out.println((new IdentityStore( b2 ) ).dumpValueNotation( "",DumpType.ALL_UNENCRYPTED ));
                     System.out.flush();
-                    fail( "Byte arrays should be equal when reencoding" );
+                    Assertions.fail("Byte arrays should be equal when reencoding");
                 }
             }
         } catch(Exception e) {
@@ -210,17 +211,17 @@ public class FuzzerTest {
             for (int i = 0; i < ksDisc/8192; i++) {
                 LOGGER.log(Level.INFO,"creating router block");
                 RoutingCombo routing=new RoutingCombo();
-                assertTrue( "Routing Block may not be null",routing!=null);
+                Assertions.assertTrue(routing!=null, "Routing Block may not be null");
                 LOGGER.log(Level.INFO,"encoding binary");
                 byte[] b1=routing.toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte representation may not be null",b1!=null);
+                Assertions.assertTrue(b1!=null, "Byte representation may not be null");
                 LOGGER.log(Level.INFO,"reencoding from binary");
                 RoutingCombo routing2=new RoutingCombo(ASN1Sequence.getInstance(b1));
                 byte[] b2=(routing2).toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte arrays should be equal when reencoding" ,Arrays.equals(b1,b2));
-                assertTrue( "ASN1 value dumps should be equal when reencoding (ALL_UNENCRYPTED)" ,routing.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(routing2.dumpValueNotation("",DumpType.ALL_UNENCRYPTED)));
-                assertTrue( "ASN1 value dumps should be equal when reencoding (PUBLIC_ONLY)" ,routing.dumpValueNotation("",DumpType.PUBLIC_ONLY).equals(routing2.dumpValueNotation("",DumpType.PUBLIC_ONLY)));
-                assertTrue( "equal() should be true when reencoding" ,routing.equals(routing2));
+                Assertions.assertTrue(Arrays.equals(b1,b2), "Byte arrays should be equal when reencoding");
+                Assertions.assertTrue(routing.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(routing2.dumpValueNotation("",DumpType.ALL_UNENCRYPTED)), "ASN1 value dumps should be equal when reencoding (ALL_UNENCRYPTED)");
+                Assertions.assertTrue(routing.dumpValueNotation("",DumpType.PUBLIC_ONLY).equals(routing2.dumpValueNotation("",DumpType.PUBLIC_ONLY)), "ASN1 value dumps should be equal when reencoding (PUBLIC_ONLY)");
+                Assertions.assertTrue(routing.equals(routing2), "equal() should be true when reencoding");
             }
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);

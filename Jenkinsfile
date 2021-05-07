@@ -90,10 +90,10 @@ pipeline {
             }
           }
         }
-        stage ('Test on JDK12') {
+        stage ('Test on OPENJDK17') {
           agent {
             docker {
-                image 'maven:3-jdk-12-slim'
+                image 'maven:3-openjdk-17-slim'
                 args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
             }
           }
@@ -109,7 +109,7 @@ pipeline {
         stage ('Test on JDK13') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-13'
+                image 'maven:3.6.0-amazoncorreto-16'
                 args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
             }
           }

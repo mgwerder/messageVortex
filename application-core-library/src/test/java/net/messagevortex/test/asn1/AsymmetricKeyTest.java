@@ -4,6 +4,7 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AlgorithmParameter;
 import net.messagevortex.asn1.AsymmetricKey;
 import net.messagevortex.asn1.encryption.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -52,7 +53,7 @@ public class AsymmetricKeyTest {
       as = new AsymmetricKey(p);
     } catch (IOException ioe) {
       LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-      fail("Constructor threw IOException");
+      Assertions.fail("Constructor threw IOException");
     }
     byte[] b1 = new byte[payloadSize];
     as.setMode(m);
@@ -65,17 +66,17 @@ public class AsymmetricKeyTest {
       b3 = as.decrypt(b2);
     } catch (IOException ioe) {
       LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-      fail("IOException while reencrypting");
+      Assertions.fail("IOException while reencrypting");
     }
-    assertTrue("error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals(b1, b3));
+    Assertions.assertTrue(Arrays.equals(b1, b3), "error in encrypt/decrypt cycle with " + alg + " (same object)");
     LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key");
     try {
       b3 = (new AsymmetricKey(as.toBytes(DumpType.ALL_UNENCRYPTED))).decrypt(b2);
     } catch (IOException ioe) {
       LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-      fail("Constructor threw IOException");
+      Assertions.fail("Constructor threw IOException");
     }
-    assertTrue("error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals(b1, b3));
+    Assertions.assertTrue(Arrays.equals(b1, b3), "error in encrypt/decrypt cycle with " + alg + " (same reserialized object)");
   }
 
   private void asymmetricEncryptionTestRun(Algorithm alg, int size) {
@@ -93,7 +94,7 @@ public class AsymmetricKeyTest {
         s = new AsymmetricKey(p);
       } catch (IOException ioe) {
         LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-        fail("Constructor threw IOException");
+        Assertions.fail("Constructor threw IOException");
       }
       byte[] b1 = new byte[0];
       while (b1.length < 10) {
@@ -109,17 +110,17 @@ public class AsymmetricKeyTest {
         b3 = s.decrypt(b2);
       } catch (IOException ioe) {
         LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-        fail("IOException while reencrypting");
+        Assertions.fail("IOException while reencrypting");
       }
-      assertTrue("error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals(b1, b3));
+      Assertions.assertTrue(Arrays.equals(b1, b3), "error in encrypt/decrypt cycle with " + alg + " (same object)");
       LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key");
       try {
         b3 = (new AsymmetricKey(s.toBytes(DumpType.ALL_UNENCRYPTED))).decrypt(b2);
       } catch (IOException ioe) {
         LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-        fail("Constructor threw IOException");
+        Assertions.fail("Constructor threw IOException");
       }
-      assertTrue("error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals(b1, b3));
+      Assertions.assertTrue(Arrays.equals(b1, b3), "error in encrypt/decrypt cycle with " + alg + " (same reserialized object)");
       for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.HASHING)) {
         b1 = new byte[sr.nextInt(4096) + 2048];
         sr.nextBytes(b1);
@@ -128,14 +129,14 @@ public class AsymmetricKeyTest {
           sig = s.sign(b1, a);
         } catch (IOException ioe) {
           LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-          fail("Constructor threw IOException");
+          Assertions.fail("Constructor threw IOException");
         }
         try {
           LOGGER.log(Level.INFO, "  signing with " + a + " (signature size:" + sig.length + "; message size:" + b1.length + ")");
-          assertTrue("error in signature verification " + a + "With" + alg + "", s.verify(b1, sig, a));
+          Assertions.assertTrue(s.verify(b1, sig, a), "error in signature verification " + a + "With" + alg + "");
         } catch (IOException ioe) {
           LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-          fail("Constructor threw IOException");
+          Assertions.fail("Constructor threw IOException");
         }
         try {
           int pos = -1;
@@ -146,7 +147,7 @@ public class AsymmetricKeyTest {
           }
           byte old = b1[pos];
           b1[pos] = (byte) value;
-          assertFalse("Error while verifying a bad signature (returned good; old was " + old + "; new was " + value + "; pos was " + pos + ")", s.verify(b1, sig, a));
+          Assertions.assertFalse(s.verify(b1, sig, a), "Error while verifying a bad signature (returned good; old was " + old + "; new was " + value + "; pos was " + pos + ")");
         } catch (IOException ioe) {
           LOGGER.log(Level.FINE, "verification of bad signature threw an exception (this is OK)");
         }
@@ -167,7 +168,7 @@ public class AsymmetricKeyTest {
           }
         } catch (Exception e) {
           LOGGER.log(Level.WARNING, "Unexpected exception", e);
-          fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg);
+          Assertions.fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg);
         }
       }
     }
@@ -190,7 +191,7 @@ public class AsymmetricKeyTest {
               }
             } catch (Exception e) {
               LOGGER.log(Level.WARNING, "Unexpected exception", e);
-              fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString());
+              Assertions.fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString());
             }
           }
         }
@@ -212,28 +213,28 @@ public class AsymmetricKeyTest {
           AsymmetricKey k2 = new AsymmetricKey(p);
           k2.setPrivateKey(k1.getPrivateKey());
           k2.setPublicKey(k1.getPublicKey());
-          assertTrue("error in key transfer cycle with " + alg + " ", k1.equals(k2));
-          assertTrue("error in key size 1", Integer.parseInt(p.get(Parameter.KEYSIZE)) == k1.getKeySize());
-          assertTrue("error in key size 2", Integer.parseInt(p.get(Parameter.KEYSIZE)) == k2.getKeySize());
-          assertTrue("reencode error in key transfer cycle with " + alg + " ", Arrays.equals(k1.toBytes(DumpType.ALL_UNENCRYPTED), k2.toBytes(DumpType.ALL_UNENCRYPTED)));
+          Assertions.assertTrue(k1.equals(k2), "error in key transfer cycle with " + alg + " ");
+          Assertions.assertTrue(Integer.parseInt(p.get(Parameter.KEYSIZE)) == k1.getKeySize(), "error in key size 1");
+          Assertions.assertTrue(Integer.parseInt(p.get(Parameter.KEYSIZE)) == k2.getKeySize(), "error in key size 2");
+          Assertions.assertTrue(Arrays.equals(k1.toBytes(DumpType.ALL_UNENCRYPTED), k2.toBytes(DumpType.ALL_UNENCRYPTED)), "reencode error in key transfer cycle with " + alg + " ");
         }
         System.out.println("");
       } catch (Exception e) {
         LOGGER.log(Level.WARNING, "Unexpected exception", e);
-        fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg);
+        Assertions.fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg);
       }
     }
   }
 
   @Test
   public void asymmetricKeySizeTest() {
-    assertTrue("getKeySize for RSA LOW is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.LOW) + ")", Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024);
-    assertTrue("getKeySize for RSA MEDIUM is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.MEDIUM) + ")", Algorithm.RSA.getKeySize(SecurityLevel.MEDIUM) == 2048);
-    assertTrue("getKeySize for RSA HIGH is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.HIGH) + ")", Algorithm.RSA.getKeySize(SecurityLevel.HIGH) == 4096);
-    assertTrue("getKeySize for RSA QUANTUM is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.QUANTUM) + ")", Algorithm.RSA.getKeySize(SecurityLevel.QUANTUM) == 8192);
-    assertTrue("getKeySize for RSA LOW 2 is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.LOW) + ")", Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024);
-    assertTrue("getKeySize for EC QUANTUM is bad (got " + Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) + ")", Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) == 521);
-    assertTrue("getKeySize for EC LOW is bad (got " + Algorithm.EC.getKeySize(SecurityLevel.LOW) + ")", Algorithm.EC.getKeySize(SecurityLevel.LOW) == 384);
+    Assertions.assertTrue(Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024, "getKeySize for RSA LOW is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.LOW) + ")");
+    Assertions.assertTrue(Algorithm.RSA.getKeySize(SecurityLevel.MEDIUM) == 2048, "getKeySize for RSA MEDIUM is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.MEDIUM) + ")");
+    Assertions.assertTrue(Algorithm.RSA.getKeySize(SecurityLevel.HIGH) == 4096, "getKeySize for RSA HIGH is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.HIGH) + ")");
+    Assertions.assertTrue(Algorithm.RSA.getKeySize(SecurityLevel.QUANTUM) == 8192, "getKeySize for RSA QUANTUM is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.QUANTUM) + ")");
+    Assertions.assertTrue(Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024, "getKeySize for RSA LOW 2 is bad (got " + Algorithm.RSA.getKeySize(SecurityLevel.LOW) + ")");
+    Assertions.assertTrue(Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) == 521, "getKeySize for EC QUANTUM is bad (got " + Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) + ")");
+    Assertions.assertTrue(Algorithm.EC.getKeySize(SecurityLevel.LOW) == 384, "getKeySize for EC LOW is bad (got " + Algorithm.EC.getKeySize(SecurityLevel.LOW) + ")");
 
     Algorithm[] a = Algorithm.values();
     SecurityLevel[] sl = SecurityLevel.values();
@@ -253,7 +254,7 @@ public class AsymmetricKeyTest {
         lm.put(s, ta.getKeySize(ts));
       } else {
         Integer size2 = lm.get(s);
-        assertTrue("Failed fuzzing for " + s + " (was: " + size2.intValue() + "; is new:" + size.intValue() + ")", size2.intValue() == size.intValue());
+        Assertions.assertTrue(size2.intValue() == size.intValue(), "Failed fuzzing for " + s + " (was: " + size2.intValue() + "; is new:" + size.intValue() + ")");
       }
     }
   }
@@ -297,17 +298,17 @@ public class AsymmetricKeyTest {
             for (int i = 0; i < 100; i++) {
               ak = new AsymmetricKey(a.getParameters(sl));
               ak.setPadding(p);
-              assertTrue("negative maximum payload for " + a + "/" + size + "/" + p, maximumPayload > 1);
+              Assertions.assertTrue(maximumPayload > 1, "negative maximum payload for " + a + "/" + size + "/" + p);
               maximumPayload = ak.getPadding().getMaxSize(size);
               byte[] b = new byte[maximumPayload];
               LOGGER.log(Level.INFO, "    Algorithm " + ak.getAlgorithm() + "[keySize=" + ak.getKeySize() + "]/" + ak.getMode() + "/" + ak.toString().toString() + "/maxPayload=" + maximumPayload);
               sr.nextBytes(b);
               try {
                 byte[] b2 = ak.decrypt(ak.encrypt(b));
-                assertTrue("byte arrays must be equal after re-decryption (" + b.length + "!=" + b2.length + ";padding:" + ak.getPadding() + ";max_payload:" + ak.getPadding().getMaxSize(ak.getKeySize()) + ")", Arrays.equals(b, b2));
+                Assertions.assertTrue(Arrays.equals(b, b2), "byte arrays must be equal after re-decryption (" + b.length + "!=" + b2.length + ";padding:" + ak.getPadding() + ";max_payload:" + ak.getPadding().getMaxSize(ak.getKeySize()) + ")");
               } catch (Exception e) {
                 e.printStackTrace();
-                fail("Exception while using " + b.length + " bytes on " + ak);
+                Assertions.fail("Exception while using " + b.length + " bytes on " + ak);
               }
             }
           }
@@ -316,7 +317,7 @@ public class AsymmetricKeyTest {
         }
       } catch (IOException ioe) {
         ioe.printStackTrace();
-        fail("got exception while fuzzing padding");
+        Assertions.fail("got exception while fuzzing padding");
       }
     }
   }
@@ -331,7 +332,7 @@ public class AsymmetricKeyTest {
         o.write(ak.toBytes(DumpType.ALL_UNENCRYPTED));
         o.close();
       } catch (Exception e) {
-        fail("unexpected exception");
+        Assertions.fail("unexpected exception");
       }
     }
   }

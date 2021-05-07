@@ -4,6 +4,7 @@ import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Level;
@@ -40,42 +41,42 @@ public class ImapCommandLoginTest {
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login\r\n"));
-            fail("error Noop test for \"A1 Login\"");
+            Assertions.fail("error Noop test for \"A1 Login\"");
         } catch(ImapException ie) {
 
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login \r\n"));
-            fail("error Noop test for \"A1 Login \"");
+            Assertions.fail("error Noop test for \"A1 Login \"");
         } catch(ImapException ie) {
 
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login a\r\n"));
-            fail("error Noop test for \"A1 Login a\"");
+            Assertions.fail("error Noop test for \"A1 Login a\"");
         } catch(ImapException ie) {
 
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login a*\r\n"));
-            fail("error Noop test for \"A1 Login a*\"");
+            Assertions.fail("error Noop test for \"A1 Login a*\"");
         } catch(ImapException ie) {
 
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login a *\r\n"));
-            fail("error Noop test for \"A1 Login a *\"");
+            Assertions.fail("error Noop test for \"A1 Login a *\"");
         } catch(ImapException ie) {
 
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login a b *\r\n"));
-            fail("error Noop test for \"A1 Login a b *\"");
+            Assertions.fail("error Noop test for \"A1 Login a b *\"");
         } catch(ImapException ie) {
 
         }

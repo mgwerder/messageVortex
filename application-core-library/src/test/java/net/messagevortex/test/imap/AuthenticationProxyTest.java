@@ -5,6 +5,7 @@ import net.messagevortex.transport.AuthenticationProxy;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.imap.ImapConnection;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
@@ -30,13 +31,13 @@ public class AuthenticationProxyTest {
         AuthenticationProxy ap=new AuthenticationProxy();
         ap.addUser("Test","Testpw");
         ImapConnection ic=new ImapConnectionDummy() {};
-        assertTrue("ImapConnection should be null if uninited",ap.getImapConnection()==null);
-        assertTrue("ImapConnection should be null if uninited",ap.setImapConnection(ic)==null);
-        assertTrue("ImapConnection should return set value",ap.getImapConnection()==ic);
-        assertTrue("ImapConnection should return set value",ap.setImapConnection(null)==ic);
-        assertTrue("ImapConnection should be null if set to null",ap.getImapConnection()==null);
+        Assertions.assertTrue(ap.getImapConnection()==null, "ImapConnection should be null if uninited");
+        Assertions.assertTrue(ap.setImapConnection(ic)==null, "ImapConnection should be null if uninited");
+        Assertions.assertTrue(ap.getImapConnection()==ic, "ImapConnection should return set value");
+        Assertions.assertTrue(ap.setImapConnection(null)==ic, "ImapConnection should return set value");
+        Assertions.assertTrue(ap.getImapConnection()==null, "ImapConnection should be null if set to null");
         ic.shutdown();
-        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size()==0, "error searching for hangig threads");
     }
 
     @Test
@@ -44,21 +45,21 @@ public class AuthenticationProxyTest {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         AuthenticationProxy ap=new AuthenticationProxy();
         ap.addUser("Test","Testpw");
-        assertFalse("UserID is null (1)",ap.login(null,"Testpw"));
-        assertFalse("password is null (1)",ap.login("Test",null));
-        assertFalse("UserID and password is null (1)",ap.login(null,null));
-        assertFalse("UserID does not exist",ap.login("testNotExistingUser","testNotExistingUser"));
-        assertTrue("UserID is not handled case insensitive (1)",ap.login("TEST","Testpw"));
-        assertTrue("UserID is not handled case insensitive (2)",ap.login("test","Testpw"));
-        assertFalse("unknown user handling failed",ap.login("test1","Testpw"));
-        assertFalse("unknown user handling failed",ap.login("","Testpw"));
-        assertFalse("unknown user handling failed",ap.login(null,"Testpw"));
-        assertFalse("bad password handling failed (1)",ap.login("test","Testpw1"));
-        assertFalse("bad password handling failed (1)",ap.login("test","TestPW"));
-        assertFalse("bad password handling failed (1)",ap.login("test",""));
-        assertFalse("bad password handling failed (1)",ap.login("test",null));
-        assertFalse("bad password handling failed (1)",ap.login("test","T"));
-        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
+        Assertions.assertFalse(ap.login(null,"Testpw"), "UserID is null (1)");
+        Assertions.assertFalse(ap.login("Test",null), "password is null (1)");
+        Assertions.assertFalse(ap.login(null,null), "UserID and password is null (1)");
+        Assertions.assertFalse(ap.login("testNotExistingUser","testNotExistingUser"), "UserID does not exist");
+        Assertions.assertTrue(ap.login("TEST","Testpw"), "UserID is not handled case insensitive (1)");
+        Assertions.assertTrue(ap.login("test","Testpw"), "UserID is not handled case insensitive (2)");
+        Assertions.assertFalse(ap.login("test1","Testpw"), "unknown user handling failed");
+        Assertions.assertFalse(ap.login("","Testpw"), "unknown user handling failed");
+        Assertions.assertFalse(ap.login(null,"Testpw"), "unknown user handling failed");
+        Assertions.assertFalse(ap.login("test","Testpw1"), "bad password handling failed (1)");
+        Assertions.assertFalse(ap.login("test","TestPW"), "bad password handling failed (1)");
+        Assertions.assertFalse(ap.login("test",""), "bad password handling failed (1)");
+        Assertions.assertFalse(ap.login("test",null), "bad password handling failed (1)");
+        Assertions.assertFalse(ap.login("test","T"), "bad password handling failed (1)");
+        Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size()==0, "error searching for hangig threads");
     }
 
     private static class ImapConnectionDummy extends ImapConnection {

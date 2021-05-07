@@ -104,7 +104,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     if (!canRun() || id == null) {
       return new int[0];
     }
-    LOGGER.log(Level.INFO, "executing add redundancy operation (" + toString() + ")");
+    LOGGER.log(Level.INFO, "executing add redundancy operation (" + this + ")");
     byte[] in = payload.getPayload(operation.getInputId()).getPayload();
 
     Matrix out = executeInt(in);

@@ -6,6 +6,7 @@ import net.messagevortex.transport.imap.ImapCommand;
 import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Level;
@@ -29,12 +30,12 @@ public class ImapCommandLogoutTest {
         try{
             ic.processCommand(new ImapLine(null,"A1 Logout\r\n"));
         } catch(ImapException ie) {
-            fail("error logout test for \"A1 Logout\" ("+ie+")");
+            Assertions.fail("error logout test for \"A1 Logout\" ("+ie+")");
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Logout error trigger\r\n"));
-            fail("error logout test for \"A1 logout error trigger\"");
+            Assertions.fail("error logout test for \"A1 logout error trigger\"");
         } catch(ImapException ie) {
 
         }

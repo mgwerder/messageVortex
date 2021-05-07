@@ -3,6 +3,7 @@ package net.messagevortex.test.imap;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Level;
@@ -24,12 +25,12 @@ public class ImapCommandCapabilityTest {
     try {
       ic.processCommand(new ImapLine(null, "A1 Noop\r\n"));
     } catch (ImapException ie) {
-      fail("error Noop test for \"A1 Noop\" (" + ie + ")");
+      Assertions.fail("error Noop test for \"A1 Noop\" (" + ie + ")");
     }
 
     try {
       ic.processCommand(new ImapLine(null, "A1 Noop error trigger\r\n"));
-      fail("error Noop test for \"A1 Noop error trigger\"");
+      Assertions.fail("error Noop test for \"A1 Noop error trigger\"");
     } catch (ImapException ie) {
 
     }
@@ -63,10 +64,10 @@ public class ImapCommandCapabilityTest {
       String[] a = ic.processCommand(new ImapLine(null, "A1 CAPABILITY\r\n"));
       String toCheck = a[0].replace('\r', ' ').replace('\n', ' ');
       if ((toCheck + " ").indexOf(" CapabilityParser=two,one ") == -1) {
-        fail("Capabilities wrong or missing (" + toCheck + ")");
+        Assertions.fail("Capabilities wrong or missing (" + toCheck + ")");
       }
     } catch (ImapException ie) {
-      fail("Got unexpected exception while checking capabilities");
+      Assertions.fail("Got unexpected exception while checking capabilities");
     }
 
 

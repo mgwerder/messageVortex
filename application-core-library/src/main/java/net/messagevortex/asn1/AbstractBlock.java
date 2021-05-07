@@ -71,7 +71,7 @@ public abstract class AbstractBlock implements Block {
     for (byte b : bytes) {
       sb.append(String.format("%02X", b));
     }
-    return "'" + (sb.toString()) + "'H";
+    return "'" + sb + "'H";
   }
 
   /***

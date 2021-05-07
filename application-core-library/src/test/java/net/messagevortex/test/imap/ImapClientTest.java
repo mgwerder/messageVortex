@@ -10,6 +10,7 @@ import net.messagevortex.transport.imap.ImapClient;
 import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapServer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
@@ -105,7 +106,7 @@ public class ImapClientTest {
           LOGGER.log(Level.INFO, "got connection on dead socket port");
           deadSockets.add(s);
         } catch (Exception sorry) {
-          assertTrue("Exception should not be rised", false);
+          Assertions.assertTrue(false, "Exception should not be rised");
         }
         counter--;
         if (counter == 0) {
@@ -142,7 +143,7 @@ public class ImapClientTest {
         final SSLContext context = SSLContext.getInstance("TLS");
         String ks = "keystore.jks";
         InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
-        assertTrue("Keystore check", (stream != null));
+        Assertions.assertTrue((stream != null), "Keystore check");
         context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, new TrustManager[]{new AllTrustManager()}, esr.getSecureRandom());
         ImapServer is = new ImapServer(new InetSocketAddress("0.0.0.0", 0), new SecurityContext(context, UNTRUSTED_SSLTLS));
         LOGGER.log(Level.INFO, "creating imap client");
@@ -151,21 +152,21 @@ public class ImapClientTest {
         LOGGER.log(Level.INFO, "connecting imap client to server");
         ic.connect();
         LOGGER.log(Level.INFO, "checking TLS status of connection");
-        assertTrue("TLS is not as expected", ic.isTls());
+        Assertions.assertTrue(ic.isTls(), "TLS is not as expected");
         LOGGER.log(Level.INFO, "closing client");
         ic.shutdown();
         is.shutdown();
       } catch (IOException ioe) {
         ioe.printStackTrace();
-        fail("IOException while handling client");
+        Assertions.fail("IOException while handling client");
       }
 
       LOGGER.log(Level.INFO, "shutting down server");
       Set<Thread> tl = ImapSSLTest.verifyHangingThreads(threadSet);
-      assertTrue("error searching for hanging threads", tl.size() == 0);
+      Assertions.assertTrue(tl.size() == 0, "error searching for hanging threads");
     } catch (Exception e) {
       e.printStackTrace();
-      fail("Exception while creating server");
+      Assertions.fail("Exception while creating server");
     }
   }
 
@@ -183,21 +184,21 @@ public class ImapClientTest {
       ic.connect();
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "got unexpected IOException", ioe);
-      fail("got unexpected IOException");
+      Assertions.fail("got unexpected IOException");
     }
-    assertTrue("ImapClient is unexpectedly null", ic != null);
-    assertTrue("TLS is not as expected", !ic.isTls());
+    Assertions.assertTrue(ic != null, "ImapClient is unexpectedly null");
+    Assertions.assertTrue(!ic.isTls(), "TLS is not as expected");
     long start = System.currentTimeMillis();
     ImapCommandIWantATimeout ict = new ImapCommandIWantATimeout();
     ict.init();
     try {
       ic.setTimeout(2000);
       for (String s : ic.sendCommand("a0 IWantATimeout", 300)) System.out.println("Reply was: " + s);
-      fail("No timeoutException was raised");
+      Assertions.fail("No timeoutException was raised");
     } catch (TimeoutException te) {
       long el = (System.currentTimeMillis() - start);
-      assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
-      assertFalse("Did wait too long", el > 2100);
+      Assertions.assertTrue(el >= 300, "Did not wait until end of timeout was reached (just " + el + ")");
+      Assertions.assertFalse(el > 2100, "Did wait too long");
     }
     ImapCommandFactory.deregisterCommand("IWantATimeout");
     ict.shutdown();
@@ -205,10 +206,10 @@ public class ImapClientTest {
       ic.shutdown();
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "got unexpected IOException while shutting down connection", ioe);
-      fail("got unexpected IOException");
+      Assertions.fail("got unexpected IOException");
     }
     ds.shutdown();
-    assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+    Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
   }
 
 }

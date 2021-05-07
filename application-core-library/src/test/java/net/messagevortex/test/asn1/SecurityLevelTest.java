@@ -2,6 +2,7 @@ package net.messagevortex.test.asn1;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.SecurityLevel;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Level;
@@ -24,10 +25,10 @@ public class SecurityLevelTest {
      * Testing null behaviour of toHex()
      */
     public void incrementTest() {
-        assertTrue( "incrementing LOW (got " + SecurityLevel.LOW.next() + ")", SecurityLevel.LOW.next() == SecurityLevel.MEDIUM );
-        assertTrue( "incrementing MEDIUM", SecurityLevel.MEDIUM.next() == SecurityLevel.HIGH );
-        assertTrue( "incrementing HIGH", SecurityLevel.HIGH.next() == SecurityLevel.QUANTUM );
-        assertTrue( "incrementing QUANTUM", SecurityLevel.QUANTUM.next() == null );
+        Assertions.assertTrue(SecurityLevel.LOW.next() == SecurityLevel.MEDIUM, "incrementing LOW (got " + SecurityLevel.LOW.next() + ")");
+        Assertions.assertTrue(SecurityLevel.MEDIUM.next() == SecurityLevel.HIGH, "incrementing MEDIUM");
+        Assertions.assertTrue(SecurityLevel.HIGH.next() == SecurityLevel.QUANTUM, "incrementing HIGH");
+        Assertions.assertTrue(SecurityLevel.QUANTUM.next() == null, "incrementing QUANTUM");
     }
 }
 

@@ -6,6 +6,7 @@ import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public class MacAlgorithmTest {
         } catch(NullPointerException ioe) {
             // this is expected benhaviour
         } catch(Exception e) {
-            fail("got unexpected exception");
+            Assertions.fail("got unexpected exception");
         }
         // null on ASN1§Encodeable
         try {
@@ -47,7 +48,7 @@ public class MacAlgorithmTest {
         } catch(NullPointerException ioe) {
             // this is expected benhaviour
         } catch(Exception e) {
-            fail("got unexpected exception ("+e+")");
+            Assertions.fail("got unexpected exception ("+e+")");
         }
         // bad algorithm
         try {
@@ -55,31 +56,31 @@ public class MacAlgorithmTest {
         } catch(IOException ioe) {
             // this is expected benhaviour
         } catch(Exception e) {
-            fail("got unexpected exception");
+            Assertions.fail("got unexpected exception");
         }
         MacAlgorithm ma=null;
         try {
             ma=new MacAlgorithm(Algorithm.SHA512);
         } catch(Exception e) {
-            fail("got unexpected exception");
+            Assertions.fail("got unexpected exception");
         }
-        assertTrue("error verifying AlgTypeSetting",ma.getAlgorithm().equals(Algorithm.SHA512));
+        Assertions.assertTrue(ma.getAlgorithm().equals(Algorithm.SHA512), "error verifying AlgTypeSetting");
         try {
-            assertTrue("error verifying AlgTypeSetting (2)",ma.setAlgorithm(Algorithm.SHA384).equals(Algorithm.SHA512));
+            Assertions.assertTrue(ma.setAlgorithm(Algorithm.SHA384).equals(Algorithm.SHA512), "error verifying AlgTypeSetting (2)");
         } catch(Exception e) {
-            fail("got unexpected exception");
+            Assertions.fail("got unexpected exception");
         }
         try {
-            assertTrue("error verifying AlgTypeSetting (3)",ma.setAlgorithm(Algorithm.SHA512).equals(Algorithm.SHA384));
+            Assertions.assertTrue(ma.setAlgorithm(Algorithm.SHA512).equals(Algorithm.SHA384), "error verifying AlgTypeSetting (3)");
         } catch(Exception e) {
-            fail("got unexpected exception");
+            Assertions.fail("got unexpected exception");
         }
         try {
             if(ma!=null) ma.setAlgorithm(Algorithm.RSA);
         } catch(IOException ioe) {
             // this is expected benhaviour
         } catch(Exception e) {
-            fail("got unexpected exception");
+            Assertions.fail("got unexpected exception");
         }
     }
 
@@ -93,7 +94,7 @@ public class MacAlgorithmTest {
                 o.write(ak.toBytes(DumpType.ALL_UNENCRYPTED));
                 o.close();
             } catch (Exception e) {
-                fail("unexpected exception");
+                Assertions.fail("unexpected exception");
             }
         }
     }

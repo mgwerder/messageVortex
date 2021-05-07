@@ -3,6 +3,7 @@ package net.messagevortex.test.imap;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.ImapPassthruServer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.net.InetSocketAddress;
@@ -35,10 +36,10 @@ public class ImapURLParser {
         };
         for( String st:s ) {
             try {
-                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 143 ).equals( ImapPassthruServer.getSocketAddressFromUrl(st) ) );
+                Assertions.assertTrue(new InetSocketAddress( "localhost", 143 ).equals( ImapPassthruServer.getSocketAddressFromUrl(st) ), "Error while checking " + st);
             } catch( ParseException ioe ) {
                 ioe.printStackTrace();
-                fail( "unexpected exception raised" );
+                Assertions.fail("unexpected exception raised");
             }
         }
         s = new String[] {
@@ -49,10 +50,10 @@ public class ImapURLParser {
         };
         for( String st:s ) {
             try {
-                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 993 ).equals( ImapPassthruServer.getSocketAddressFromUrl(st) ) );
+                Assertions.assertTrue(new InetSocketAddress( "localhost", 993 ).equals( ImapPassthruServer.getSocketAddressFromUrl(st) ), "Error while checking " + st);
             } catch( ParseException ioe ) {
                 ioe.printStackTrace();
-                fail( "unexpected exception raised" );
+                Assertions.fail("unexpected exception raised");
             }
         }
     }
@@ -76,22 +77,22 @@ public class ImapURLParser {
         for( String st:s ) {
             try {
                 ImapPassthruServer.getSocketAddressFromUrl(st);
-                fail( "unexpectedly no exception raised when testing "+st );
+                Assertions.fail("unexpectedly no exception raised when testing "+st);
             } catch( ParseException ioe ) {
                 // this is expected
             } catch( Exception e ) {
                 e.printStackTrace();
-                fail( "wrong exception raised" );
+                Assertions.fail("wrong exception raised");
             }
         }
         try {
             ImapPassthruServer.getSocketAddressFromUrl( null );
-            fail( "unexpectedly no exception raised" );
+            Assertions.fail("unexpectedly no exception raised");
         } catch( NullPointerException npe ) {
             // this is expected
         } catch( Exception e ) {
             e.printStackTrace();
-            fail( "wrong exception raised" );
+            Assertions.fail("wrong exception raised");
         }
     }
 

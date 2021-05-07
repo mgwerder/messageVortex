@@ -29,6 +29,7 @@ import net.messagevortex.transport.*;
 import net.messagevortex.transport.imap.ImapClient;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.transport.imap.ImapServer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
@@ -78,7 +79,7 @@ public class ImapSSLTest {
 
       String ks = "keystore.jks";
       InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
-      assertTrue("Keystore check", (stream != null));
+      Assertions.assertTrue((stream != null), "Keystore check");
       KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
       keyStore.load(stream, "changeme".toCharArray());
       stream.close();
@@ -140,7 +141,7 @@ public class ImapSSLTest {
             ss.close();
           } catch (IOException ioe) {
             LOGGER.log(Level.WARNING, "Unexpected Exception", ioe);
-            fail("Exception risen in server (" + ioe + ") while communicating");
+            Assertions.fail("Exception risen in server (" + ioe + ") while communicating");
           }
         }
       }).start();
@@ -149,14 +150,14 @@ public class ImapSSLTest {
       ic.setTimeout(1000);
       ic.connect();
       ic.sendCommand("a1 test");
-      assertTrue("check client socket state", ic.isTls());
+      Assertions.assertTrue(ic.isTls(), "check client socket state");
       ic.shutdown();
 
       // Self test
-      assertTrue("error searching for hangig threads", verifyHangingThreads(threadSet).size() == 0);
+      Assertions.assertTrue(verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     } catch (Exception ioe) {
       LOGGER.log(Level.WARNING, "Unexpected Exception", ioe);
-      fail("Exception rised  in client(" + ioe + ") while communicating");
+      Assertions.fail("Exception rised  in client(" + ioe + ") while communicating");
     } finally {
       MessageVortexLogger.flush();
     }
@@ -175,7 +176,7 @@ public class ImapSSLTest {
       final SSLContext context = SSLContext.getInstance("TLS");
       String ks = "keystore.jks";
       InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
-      assertTrue("Keystore check", (stream != null));
+      Assertions.assertTrue((stream != null), "Keystore check");
       context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, new TrustManager[]{new AllTrustManager()}, esr.getSecureRandom());
       SSLContext.setDefault(context);
 
@@ -203,10 +204,10 @@ public class ImapSSLTest {
       LOGGER.log(Level.INFO, "got sequence \"" + sb + "\"");
       s.close();
       is.shutdown();
-      assertTrue("error searching for hangig threads", verifyHangingThreads(threadSet).size() == 0);
+      Assertions.assertTrue(verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     } catch (Exception ioe) {
       LOGGER.log(Level.WARNING, "Unexpected Exception", ioe);
-      fail("Exception rised  in client(" + ioe + ") while communicating");
+      Assertions.fail("Exception rised  in client(" + ioe + ") while communicating");
     }
   }
 
@@ -221,7 +222,7 @@ public class ImapSSLTest {
       final SSLContext context = SSLContext.getInstance("TLS");
       String ks = "keystore.jks";
       InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
-      assertTrue("Keystore check", (stream != null));
+      Assertions.assertTrue((stream != null), "Keystore check");
       context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, new TrustManager[]{new AllTrustManager()}, esr.getSecureRandom());
       ImapServer is = new ImapServer(new InetSocketAddress("0.0.0.0", 0), new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS));
       is.setTimeout(10000);
@@ -242,11 +243,11 @@ public class ImapSSLTest {
       ic.shutdown();
       LOGGER.log(Level.INFO, "done");
       Thread.sleep(300);
-      assertTrue("error searching for hangig threads", verifyHangingThreads(threadSet).size() == 0);
+      Assertions.assertTrue(verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
     } catch (Exception ioe) {
       LOGGER.log(Level.WARNING, "Unexpected Exception", ioe);
       ioe.printStackTrace();
-      fail("Exception rised  in client(" + ioe + ") while communicating");
+      Assertions.fail("Exception rised  in client(" + ioe + ") while communicating");
     }
   }
 

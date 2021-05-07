@@ -8,6 +8,7 @@ import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.TransportReceiver;
 import net.messagevortex.transport.smtp.SmtpReceiver;
 import net.messagevortex.transport.smtp.SmtpSender;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -59,8 +60,8 @@ public class SMTPTransportSenderTest extends AbstractDaemon implements Transport
       LOGGER.log(Level.SEVERE, "got unexpected exception while sending message", ioe);
     }
     receiver.shutdown();
-    assertTrue("Message not arrived (yet?)", msgs.size() == 1);
-    assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+    Assertions.assertTrue(msgs.size() == 1, "Message not arrived (yet?)");
+    Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
   }
 
 

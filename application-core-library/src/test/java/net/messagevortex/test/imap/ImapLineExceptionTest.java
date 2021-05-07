@@ -2,6 +2,7 @@ package net.messagevortex.test.imap;
 
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -27,7 +28,7 @@ public class ImapLineExceptionTest {
         } catch(ImapException ie) {
           id++;
         }
-        assertTrue("Code coverage for imapException failed", id==2);
+        Assertions.assertTrue(id==2, "Code coverage for imapException failed");
     }
 
 }

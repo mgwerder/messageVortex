@@ -6,6 +6,7 @@ import net.messagevortex.transport.imap.ImapCommand;
 import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Level;
@@ -29,12 +30,12 @@ public class ImapCommandNoopTest {
         try{
             ic.processCommand(new ImapLine(null,"A1 Noop\r\n"));
         } catch(ImapException ie) {
-            fail("error Noop test for \"A1 Noop\" ("+ie+")");
+            Assertions.fail("error Noop test for \"A1 Noop\" ("+ie+")");
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Noop error trigger\r\n"));
-            fail("error Noop test for \"A1 Noop error trigger\"");
+            Assertions.fail("error Noop test for \"A1 Noop error trigger\"");
         } catch(ImapException ie) {
 
         }
