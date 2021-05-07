@@ -58,8 +58,8 @@ pipeline {
         sh 'mvn -pl application-core-library -DskipTests site'
       }
     }
-    /* stage ('Test other JDKs') {
-       parallel { */
+    stage ('Test other JDKs') {
+       parallel { 
         stage ('Test on JDK10') {
           agent {
             docker {
@@ -71,7 +71,7 @@ pipeline {
             timeout(time: 120, unit: 'MINUTES')
           }
           steps{
-                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh 'mvn -pl application-core-library test'
           }
         }
         stage ('Test on JDK11') {
@@ -86,7 +86,7 @@ pipeline {
           }
           steps{
             script {
-              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh 'mvn -pl application-core-library test'
             }
           }
         }
@@ -102,7 +102,7 @@ pipeline {
           }
           steps {
             script {
-              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh 'mvn -pl application-core-library test'
             }
           }
         }
@@ -118,12 +118,28 @@ pipeline {
           }
           steps {
             script {
-              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh 'mvn -pl application-core-library test'
             }
           }
         }
-      /*}
-    }*/
+        stage ('Test on JDK14') {
+          agent {
+            docker {
+                image 'maven:3.6.0-jdk-14'
+                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
+            }
+          }
+          options {
+            timeout(time: 120, unit: 'MINUTES')
+          }
+          steps {
+            script {
+                sh 'mvn -pl application-core-library test'
+            }
+          }
+        }
+      }
+    }
     stage ('Package all') {
       steps {
         sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
