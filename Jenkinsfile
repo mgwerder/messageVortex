@@ -71,7 +71,9 @@ pipeline {
             timeout(time: 120, unit: 'MINUTES')
           }
           steps{
+			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                 sh 'mvn -pl application-core-library test'
+			}
           }
         }
         stage ('Test on JDK11') {
@@ -86,7 +88,9 @@ pipeline {
           }
           steps{
             script {
-                sh 'mvn -pl application-core-library test'
+				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+					sh 'mvn -pl application-core-library test'
+				}
             }
           }
         }
@@ -102,7 +106,9 @@ pipeline {
           }
           steps {
             script {
-                sh 'mvn -pl application-core-library test'
+				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+					sh 'mvn -pl application-core-library test'
+				}
             }
           }
         }
@@ -118,7 +124,9 @@ pipeline {
           }
           steps {
             script {
-                sh 'mvn -pl application-core-library test'
+				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+					sh 'mvn -pl application-core-library test'
+				}
             }
           }
         }
@@ -134,7 +142,9 @@ pipeline {
           }
           steps {
             script {
-                sh 'mvn -pl application-core-library test'
+				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+					sh 'mvn -pl application-core-library test'
+				}
             }
           }
         }
