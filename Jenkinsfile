@@ -106,7 +106,7 @@ pipeline {
             }
           }
         }
-        stage ('Test on JDK13') {
+        stage ('Test on Amazon Correto 16') {
           agent {
             docker {
                 image 'maven:3.6.0-amazoncorreto-16'

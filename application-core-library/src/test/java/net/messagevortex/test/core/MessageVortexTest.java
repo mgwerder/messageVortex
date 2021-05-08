@@ -70,7 +70,7 @@ public class MessageVortexTest {
     try {
       DummyTransportTrx.clearDummyEndpoints();
       DummyTransportTrx.setLocalMode(true);
-      Assertions.assertTrue(MessageVortex.mainReturn(new String[] {"--timeoutAndDie=0"}) == 0, "Errorcode is not 0");
+      Assertions.assertEquals(0, MessageVortex.mainReturn(new String[] {"--timeoutAndDie=0"}), "Errorcode is not 0");
     } catch (Exception e) {
       e.printStackTrace();
       Assertions.fail("got unexpected exception " + e + "\n" + e.getStackTrace()[0].toString() );
