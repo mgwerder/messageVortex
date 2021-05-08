@@ -115,7 +115,7 @@ pipeline {
         stage ('Test on Amazon Correto 16') {
           agent {
             docker {
-                image 'maven:3.6.0-amazoncorreto-16'
+                image 'maven:3-amazoncorretto-16'
                 args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
             }
           }
@@ -130,10 +130,10 @@ pipeline {
             }
           }
         }
-        stage ('Test on JDK14') {
+        stage ('Test on (latest)') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-14'
+                image 'maven:latest'
                 args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
             }
           }

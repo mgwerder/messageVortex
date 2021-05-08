@@ -1,4 +1,4 @@
-package net.messagevortex.test.imap;
+package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
@@ -18,24 +18,24 @@ import static org.junit.Assert.fail;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-public class ImapCommandLogoutTest {
+public class ImapCommandNoopTest {
 
     static {
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     @Test
-    public void logoutParsing() {
-        ImapCommand ic= ImapCommandFactory.getCommand("logout");
+    public void noopParsing() {
+        ImapCommand ic= ImapCommandFactory.getCommand("Noop");
         try{
-            ic.processCommand(new ImapLine(null,"A1 Logout\r\n"));
+            ic.processCommand(new ImapLine(null,"A1 Noop\r\n"));
         } catch(ImapException ie) {
-            Assertions.fail("error logout test for \"A1 Logout\" ("+ie+")");
+            Assertions.fail("error Noop test for \"A1 Noop\" ("+ie+")");
         }
 
         try{
-            ic.processCommand(new ImapLine(null,"A1 Logout error trigger\r\n"));
-            Assertions.fail("error logout test for \"A1 logout error trigger\"");
+            ic.processCommand(new ImapLine(null,"A1 Noop error trigger\r\n"));
+            Assertions.fail("error Noop test for \"A1 Noop error trigger\"");
         } catch(ImapException ie) {
 
         }

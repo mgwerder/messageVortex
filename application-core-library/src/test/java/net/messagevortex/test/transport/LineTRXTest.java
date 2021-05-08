@@ -2,7 +2,7 @@ package net.messagevortex.test.transport;
 
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.test.imap.ImapSSLTest;
+import net.messagevortex.test.transport.imap.ImapSSLTest;
 import net.messagevortex.transport.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

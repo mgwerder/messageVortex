@@ -2,7 +2,7 @@ package net.messagevortex.test.transport;
 
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.test.imap.ImapSSLTest;
+import net.messagevortex.test.transport.imap.ImapSSLTest;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.TransportReceiver;

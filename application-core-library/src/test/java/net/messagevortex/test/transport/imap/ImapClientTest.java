@@ -1,4 +1,4 @@
-package net.messagevortex.test.imap;
+package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
@@ -34,7 +34,6 @@ import java.util.logging.Level;
 
 import static net.messagevortex.transport.SecurityRequirement.PLAIN;
 import static net.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
-import static org.junit.Assert.*;
 
 
 /**

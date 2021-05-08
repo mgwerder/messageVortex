@@ -1,4 +1,4 @@
-package net.messagevortex.test.imap;
+package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.MessageVortex;
 import net.messagevortex.transport.AuthenticationProxy;

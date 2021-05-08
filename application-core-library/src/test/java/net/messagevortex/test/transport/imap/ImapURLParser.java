@@ -1,4 +1,4 @@
-package net.messagevortex.test.imap;
+package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;

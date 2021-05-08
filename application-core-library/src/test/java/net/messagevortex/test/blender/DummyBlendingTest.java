@@ -6,7 +6,7 @@ import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import net.messagevortex.blender.BlendingReceiver;
 import net.messagevortex.blender.DummyBlender;
-import net.messagevortex.test.imap.ImapSSLTest;
+import net.messagevortex.test.transport.imap.ImapSSLTest;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
-
-import static org.junit.Assert.*;
 
 
 /**

@@ -1,27 +1,5 @@
 package net.messagevortex.blender;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.accounting.HeaderVerifier;
 import net.messagevortex.asn1.BlendingSpec;
@@ -38,9 +16,9 @@ import java.io.IOException;
 public abstract class Blender extends AbstractDaemon implements TransportReceiver,BlendingSender {
 
   private IncomingMessageRouterListener listener = null;
-  private HeaderVerifier verifyer = null;
+  private HeaderVerifier headerVerifier = null;
   private BlendingReceiver blendingReceiver = null;
-  private TransportSender sender = null;
+  private TransportSender transportSender = null;
 
   public Blender(BlendingReceiver receiver, HeaderVerifier verifier) {
     setBlenderReceiver(receiver);
@@ -61,7 +39,7 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
   }
 
   public final HeaderVerifier getVerifier() {
-    return verifyer;
+    return headerVerifier;
   }
 
   /***
@@ -72,7 +50,7 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
    */
   public final HeaderVerifier setVerifier(HeaderVerifier verifier) {
     HeaderVerifier ret = getVerifier();
-    this.verifyer = verifier;
+    this.headerVerifier = verifier;
     return ret;
   }
 
@@ -100,8 +78,8 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
    * @return The old/previous router layer
    */
   public final TransportSender setTransportSender(TransportSender sender) {
-    TransportSender ret = this.sender;
-    this.sender = sender;
+    TransportSender ret = this.transportSender;
+    this.transportSender = sender;
     return ret;
   }
 
@@ -111,7 +89,7 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
    * @return The old/previous router layer
    */
   public final TransportSender getTransportSender() {
-    return sender;
+    return transportSender;
   }
 
   /***

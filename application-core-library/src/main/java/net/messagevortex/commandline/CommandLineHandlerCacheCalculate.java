@@ -11,9 +11,9 @@ import java.util.concurrent.Callable;
  * <p>Commandline handler for pre-populating keys in cache.</p>
  */
 @CommandLine.Command(
-        description = "Add key to cache",
-        name = "cache",
-        aliases = {"cache"},
+        description = "Add keys to cache",
+        name = "cache2",
+        aliases = {"cache2"},
         mixinStandardHelpOptions = true
 )
 public class CommandLineHandlerCacheCalculate implements Callable<Integer> {

@@ -1,4 +1,4 @@
-package net.messagevortex.test.imap;
+package net.messagevortex.test.transport.imap;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
