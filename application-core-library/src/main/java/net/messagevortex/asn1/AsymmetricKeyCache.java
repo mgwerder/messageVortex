@@ -52,7 +52,7 @@ public class AsymmetricKeyCache implements Serializable {
         }
 
         public CacheElement(int initialSize) {
-            setMaxSize(initialSize);
+            maxSize = initialSize;
         }
 
         /***
@@ -229,7 +229,7 @@ public class AsymmetricKeyCache implements Serializable {
             averageCalcTime = (long) (in.readObject());
             numberOfCalcTimes = (Integer) in.readObject();
             int i = (Integer) in.readObject();
-            if(elementCache==null) {
+            if (elementCache == null) {
                 elementCache = new ArrayDeque<>();
             }
             elementCache.clear();
@@ -547,7 +547,7 @@ public class AsymmetricKeyCache implements Serializable {
     private void readObject(ObjectInputStream in) throws IOException {
         try {
             int i = in.readInt();
-            if(cache==null) {
+            if (cache == null) {
                 cache = new TreeMap<>();
             }
             this.cache.clear();

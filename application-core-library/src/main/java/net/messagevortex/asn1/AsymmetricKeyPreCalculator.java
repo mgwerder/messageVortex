@@ -33,6 +33,8 @@ import java.util.logging.Level;
 )
 public class AsymmetricKeyPreCalculator implements Serializable, Callable<Integer> {
 
+    public static final String DEFAULT_CACHE_FILENAME = "AsymmetricKey.cache";
+
     public static final long serialVersionUID = 100000000031L;
 
     private static final String TMP_PREFIX = "Precalc";
@@ -295,7 +297,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
      */
     public static String setCacheFileName(String name) {
         if ("".equals(filename)) {
-            filename = "AsymmetricKey.cache";
+            filename = DEFAULT_CACHE_FILENAME;
         }
 
         // if the same name is set again do nothing
@@ -326,8 +328,8 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     @CommandLine.Command(name = "run", description = "pre-populates the cache")
     public static void fillCache() {
         try {
-            if (filename == null) {
-                filename = "AsymmetricKey.cache";
+            if (filename == null || "".equals(filename)) {
+                filename = DEFAULT_CACHE_FILENAME;
             }
             setCacheFileName(filename);
             stopIfFull = true;
@@ -422,7 +424,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         if (cache.isEmpty()) {
             try {
                 if (filename == null) {
-                    filename = "AsymmetricKey.cache";
+                    filename = DEFAULT_CACHE_FILENAME;
                 }
                 load(filename, true);
             } catch (IOException ioe) {
