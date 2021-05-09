@@ -5,8 +5,10 @@ import net.messagevortex.router.operation.BitShifter;
 import net.messagevortex.router.operation.GaloisFieldMathMode;
 import net.messagevortex.router.operation.MathMode;
 import net.messagevortex.router.operation.RealMathMode;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -14,6 +16,7 @@ import java.util.logging.Level;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@ExtendWith(GlobalJunitExtension.class)
 public class MathModeTest {
 
     private static final java.util.logging.Logger LOGGER;

@@ -8,16 +8,19 @@ import net.messagevortex.router.operation.IdMapOperation;
 import net.messagevortex.router.operation.InternalPayloadSpace;
 import net.messagevortex.router.operation.InternalPayloadSpaceStore;
 import net.messagevortex.router.operation.Operation;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.RandomString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
 @DisplayName("Testing the internal payload space implementation")
+@ExtendWith(GlobalJunitExtension.class)
 public class InternalPayloadSpaceTest {
 
     private static final java.util.logging.Logger LOGGER;

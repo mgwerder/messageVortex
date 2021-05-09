@@ -1,18 +1,18 @@
 package net.messagevortex.test.asn1;
 
 import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.asn1.HeaderRequestIdentity;
-import net.messagevortex.asn1.HeaderRequestIncreaseMessageQuota;
-import net.messagevortex.asn1.HeaderRequestIncreaseTransferQuota;
-import net.messagevortex.asn1.UsagePeriod;
+import net.messagevortex.asn1.*;
 import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.Assert.assertTrue;
 
+@ExtendWith(GlobalJunitExtension.class)
 public class HeaderRequestTest {
 
   @Test

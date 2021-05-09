@@ -3,8 +3,10 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.*;
 import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -16,6 +18,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by martin.gwerder on 30.05.2016.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class IdentityBlockTest {
 
     private static final java.util.logging.Logger LOGGER;

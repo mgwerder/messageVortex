@@ -3,10 +3,12 @@ package net.messagevortex.test.core;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.*;
 
 import javax.crypto.Cipher;
@@ -22,6 +24,7 @@ import java.util.logging.Logger;
  * @author martin@gwerder.net (Martin GWERDER)
  */
 @DisplayName("Running MessageVortex from scratch")
+@ExtendWith(GlobalJunitExtension.class)
 public class MessageVortexTest {
 
   private static final Logger LOGGER;

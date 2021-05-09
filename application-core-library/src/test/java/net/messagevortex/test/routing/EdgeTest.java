@@ -3,8 +3,10 @@ package net.messagevortex.test.routing;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.router.Edge;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -14,6 +16,7 @@ import static org.junit.Assert.*;
 /**
  * Created by martin.gwerder on 19.04.2017.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class EdgeTest {
 
   private static final java.util.logging.Logger LOGGER;

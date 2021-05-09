@@ -3,6 +3,7 @@ package net.messagevortex.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.Parameter;
+import net.messagevortex.asn1.encryption.SecurityLevel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,8 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 
 /**
@@ -22,7 +21,7 @@ import java.util.logging.Level;
  */
 public class AsymmetricKeyCache implements Serializable {
 
-    public static final long serialVersionUID = 1123123181L;
+    public static final long serialVersionUID = 12312123L;
 
     public static final SecureRandom esr = new SecureRandom();
 
@@ -33,7 +32,7 @@ public class AsymmetricKeyCache implements Serializable {
         //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
-    private transient final Map<AlgorithmParameter, CacheElement> cache;
+    private transient Map<AlgorithmParameter, CacheElement> cache = new TreeMap<>();
 
     private static class CacheElement implements Serializable {
 
@@ -45,7 +44,16 @@ public class AsymmetricKeyCache implements Serializable {
         private int maxSize = 1;
         private long averageCalcTime = 100;
         private int numberOfCalcTimes = 0;
-        private final Queue<AsymmetricKey> elementCache = new ArrayDeque<>();
+        private Queue<AsymmetricKey> elementCache = new ArrayDeque<>();
+
+        public CacheElement() {
+            this(1);
+            elementCache = new ArrayDeque<>();
+        }
+
+        public CacheElement(int initialSize) {
+            setMaxSize(initialSize);
+        }
 
         /***
          * <p>Gets the maximum size of the cache element.</p>
@@ -221,6 +229,9 @@ public class AsymmetricKeyCache implements Serializable {
             averageCalcTime = (long) (in.readObject());
             numberOfCalcTimes = (Integer) in.readObject();
             int i = (Integer) in.readObject();
+            if(elementCache==null) {
+                elementCache = new ArrayDeque<>();
+            }
             elementCache.clear();
             for (int j = 0; j < i; j++) {
                 push((AsymmetricKey) in.readObject());
@@ -237,7 +248,7 @@ public class AsymmetricKeyCache implements Serializable {
     }
 
     public AsymmetricKeyCache() {
-        this.cache = new TreeMap<>();
+        super();
     }
 
     /***
@@ -292,11 +303,25 @@ public class AsymmetricKeyCache implements Serializable {
                         }
                     }
                 }
-            } catch (ClassNotFoundException cnfe) {
-                throw new IOException("got unexpected exception when deserializing", cnfe);
+            } catch (ClassNotFoundException | NullPointerException cnfe) {
+                LOGGER.log(Level.WARNING, "got unexpected exception when deserializing "
+                        + "(old cache)... initializing with standard values", cnfe);
+                initCache();
             }
 
         }
+    }
+
+    private void initCache() {
+        cache.clear();
+        cache.put(Algorithm.RSA.getParameters(SecurityLevel.LOW), new CacheElement(40000));
+        cache.put(Algorithm.RSA.getParameters(SecurityLevel.MEDIUM), new CacheElement(4000));
+        cache.put(Algorithm.RSA.getParameters(SecurityLevel.HIGH), new CacheElement(400));
+        cache.put(Algorithm.RSA.getParameters(SecurityLevel.QUANTUM), new CacheElement(40));
+        cache.put(Algorithm.EC.getParameters(SecurityLevel.LOW), new CacheElement(40000));
+        cache.put(Algorithm.EC.getParameters(SecurityLevel.MEDIUM), new CacheElement(4000));
+        cache.put(Algorithm.EC.getParameters(SecurityLevel.HIGH), new CacheElement(400));
+        cache.put(Algorithm.EC.getParameters(SecurityLevel.QUANTUM), new CacheElement(40));
     }
 
     /***
@@ -522,6 +547,9 @@ public class AsymmetricKeyCache implements Serializable {
     private void readObject(ObjectInputStream in) throws IOException {
         try {
             int i = in.readInt();
+            if(cache==null) {
+                cache = new TreeMap<>();
+            }
             this.cache.clear();
             for (int j = 0; j < i; j++) {
                 this.cache.put((AlgorithmParameter) in.readObject(), (CacheElement) in.readObject());

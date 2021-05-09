@@ -6,10 +6,12 @@ import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.router.JGraph;
 import net.messagevortex.router.SimpleMessageFactory;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OutputStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,6 +20,7 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@ExtendWith(GlobalJunitExtension.class)
 public class JGraphTest {
 
     private static final Logger LOGGER;

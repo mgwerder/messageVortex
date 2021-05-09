@@ -5,8 +5,10 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.*;
 import net.messagevortex.router.operation.Operation;
 import net.messagevortex.router.operation.*;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,6 +19,7 @@ import java.util.logging.Level;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@ExtendWith(GlobalJunitExtension.class)
 public class OperationProcessingTest {
 
   private static final java.util.logging.Logger LOGGER;

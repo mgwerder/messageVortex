@@ -2,11 +2,13 @@ package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.*;
 import net.messagevortex.transport.imap.*;
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
@@ -34,6 +36,7 @@ import static net.messagevortex.transport.SecurityRequirement.*;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class ImapCommandTest {
 
     private final static boolean  DO_NOT_TEST_ENCRYPTION=false;

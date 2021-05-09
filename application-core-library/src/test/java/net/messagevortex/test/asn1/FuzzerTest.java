@@ -7,10 +7,12 @@ import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.asn1.encryption.SecurityLevel;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -26,6 +28,7 @@ import static org.junit.Assert.fail;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class FuzzerTest {
 
     public static final int BLOCK_FUZZER_CYCLES = 30;
@@ -207,6 +210,7 @@ public class FuzzerTest {
 
     @Test
     public void fuzzingRoutingBlock() throws Exception {
+        AsymmetricKeyPreCalculator.setCacheFileName("");
         try{
             for (int i = 0; i < ksDisc/8192; i++) {
                 LOGGER.log(Level.INFO,"creating router block");

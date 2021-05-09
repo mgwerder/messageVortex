@@ -2,9 +2,11 @@ package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.imap.ImapPassthruServer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.net.InetSocketAddress;
 import java.text.ParseException;
@@ -16,6 +18,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by Martin on 13.04.2018.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class ImapURLParser {
 
     private static final java.util.logging.Logger LOGGER;

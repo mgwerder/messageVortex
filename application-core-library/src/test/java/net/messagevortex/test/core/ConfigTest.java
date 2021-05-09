@@ -4,9 +4,11 @@ import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
@@ -24,6 +26,7 @@ import static org.junit.Assert.*;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class ConfigTest {
 
   private static final Logger LOGGER;

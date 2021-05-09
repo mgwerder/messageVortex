@@ -3,8 +3,10 @@ package net.messagevortex.test.accounting;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.accounting.DummyAccountant;
 import net.messagevortex.accounting.HeaderVerifier;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.logging.Level;
 
@@ -13,7 +15,7 @@ import java.util.logging.Level;
  * <p>
  * Created by martin.gwerder on 30.05.2016.
  */
-
+@ExtendWith(GlobalJunitExtension.class)
 public class DummyAccountantTest {
 
     private static final java.util.logging.Logger LOGGER;

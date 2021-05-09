@@ -4,8 +4,11 @@ import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AlgorithmParameter;
 import net.messagevortex.asn1.AsymmetricKey;
+import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.asn1.encryption.*;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -23,6 +26,7 @@ import static org.junit.Assert.fail;
  * <p>
  * Created by martin.gwerder on 31.05.2016.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class AsymmetricKeyReencodingTest {
 
     static {

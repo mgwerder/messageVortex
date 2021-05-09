@@ -2,6 +2,7 @@ package net.messagevortex.test.transport;
 
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.test.transport.imap.ImapSSLTest;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
@@ -10,6 +11,7 @@ import net.messagevortex.transport.smtp.SmtpReceiver;
 import net.messagevortex.transport.smtp.SmtpSender;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -30,6 +32,7 @@ import static org.junit.Assert.assertTrue;
  *
  * Created by Martin on 26.01.2018.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class SMTPTransportSenderTest extends AbstractDaemon implements TransportReceiver {
 
   public static final String CRLF = "\r\n";

@@ -3,8 +3,10 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.SymmetricKey;
 import net.messagevortex.asn1.encryption.*;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,6 +22,7 @@ import java.util.logging.Level;
  *
  * Created by martin.gwerder on 03.06.2016.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class SymmetricKeyTest {
 
     private static final java.util.logging.Logger LOGGER;

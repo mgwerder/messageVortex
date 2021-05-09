@@ -2,10 +2,12 @@ package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.CustomKeyManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.logging.Level;
 
@@ -14,6 +16,7 @@ import java.util.logging.Level;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class CustomKeyManagerTest {
 
     private static final java.util.logging.Logger LOGGER;

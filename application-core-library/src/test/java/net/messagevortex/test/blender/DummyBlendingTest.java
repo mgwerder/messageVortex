@@ -6,10 +6,12 @@ import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import net.messagevortex.blender.BlendingReceiver;
 import net.messagevortex.blender.DummyBlender;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.test.transport.imap.ImapSSLTest;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
@@ -25,6 +27,7 @@ import java.util.logging.Level;
 /**
  * Created by martin.gwerder on 19.04.2017.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class DummyBlendingTest implements BlendingReceiver {
   
   private static final java.util.logging.Logger LOGGER;

@@ -2,14 +2,17 @@ package net.messagevortex.test.core;
 
 import net.messagevortex.MessageVortex;
 import net.messagevortex.Version;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Tests for {@link MessageVortex} Version output.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class VersionTest {
 
     @Test

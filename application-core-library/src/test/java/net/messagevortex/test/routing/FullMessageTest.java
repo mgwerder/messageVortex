@@ -5,9 +5,11 @@ import net.messagevortex.asn1.*;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.asn1.encryption.SecurityLevel;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.test.TestHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by martin.gwerder on 13.05.2017.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class FullMessageTest {
 
   private static final Logger LOGGER;

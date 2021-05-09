@@ -3,9 +3,11 @@ package net.messagevortex.test.transport.imap;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.imap.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.logging.Level;
 
@@ -16,6 +18,7 @@ import static org.junit.Assert.fail;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class ImapCommandLoginTest {
 
 

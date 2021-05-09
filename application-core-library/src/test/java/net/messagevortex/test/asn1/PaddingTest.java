@@ -3,8 +3,10 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.Prng;
 import net.messagevortex.router.operation.AddRedundancy;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -13,6 +15,7 @@ import java.util.logging.Level;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@ExtendWith(GlobalJunitExtension.class)
 public class PaddingTest {
 
   private static final java.util.logging.Logger LOGGER;

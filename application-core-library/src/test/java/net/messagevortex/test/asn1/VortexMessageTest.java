@@ -51,6 +51,7 @@ public class VortexMessageTest {
      */
     @Test
     public void fuzzingMessage() {
+        AsymmetricKeyPreCalculator.setCacheFileName("");
         try {
             final int TESTS=10;
             for (int i = 0; i < TESTS; i++) {
@@ -77,6 +78,7 @@ public class VortexMessageTest {
 
     @Test
     public void fuzzingIntToByteConverter() {
+        AsymmetricKeyPreCalculator.setCacheFileName("");
         LOGGER.log( Level.INFO, "Testing basic byte reencoding length 4");
         testIntByteConverter( 0,4 );
         testIntByteConverter( 1,4 );
@@ -105,6 +107,7 @@ public class VortexMessageTest {
 
     @Test
     public void writeAsAsn1() {
+        AsymmetricKeyPreCalculator.setCacheFileName("");
         try {
             // FIXME build a full message with all possible blocks
             PrefixBlock randomOuterPrefixBlock=new PrefixBlock();
@@ -128,6 +131,7 @@ public class VortexMessageTest {
 
     @Test
     public void ByteToLongConversionTest() {
+        AsymmetricKeyPreCalculator.setCacheFileName("");
         Assertions.assertTrue(0==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0)), "error testing byte conversion with 0 ["+VortexMessage.toHex(VortexMessage.getLongAsBytes(0))+"->"+VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0))+"]");
         Assertions.assertTrue(1==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(1)), "error testing byte conversion with 1");
         Assertions.assertTrue(Arrays.equals(new byte[]{1, 0, 0, 0}, VortexMessage.getLongAsBytes(1)), "error testing byte conversion with 1 to bytes");

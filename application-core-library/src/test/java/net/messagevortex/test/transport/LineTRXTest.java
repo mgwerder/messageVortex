@@ -2,10 +2,12 @@ package net.messagevortex.test.transport;
 
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.test.transport.imap.ImapSSLTest;
 import net.messagevortex.transport.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
@@ -27,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+@ExtendWith(GlobalJunitExtension.class)
 public class LineTRXTest {
 
     private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();

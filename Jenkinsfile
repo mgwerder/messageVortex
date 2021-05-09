@@ -68,7 +68,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 180, unit: 'MINUTES')
           }
           steps{
 			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
@@ -84,7 +84,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 180, unit: 'MINUTES')
           }
           steps{
             script {
@@ -102,7 +102,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 180, unit: 'MINUTES')
           }
           steps {
             script {
@@ -120,7 +120,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 180, unit: 'MINUTES')
           }
           steps {
             script {
@@ -138,7 +138,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 180, unit: 'MINUTES')
           }
           steps {
             script {

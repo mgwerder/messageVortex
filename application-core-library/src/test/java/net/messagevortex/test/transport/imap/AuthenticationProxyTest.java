@@ -1,12 +1,14 @@
 package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.MessageVortex;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.AuthenticationProxy;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.imap.ImapConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
@@ -22,6 +24,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class AuthenticationProxyTest {
 
     @Test

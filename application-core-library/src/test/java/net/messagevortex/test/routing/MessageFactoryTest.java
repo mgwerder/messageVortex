@@ -9,10 +9,12 @@ import net.messagevortex.router.Edge;
 import net.messagevortex.router.GraphSet;
 import net.messagevortex.router.MessageFactory;
 import net.messagevortex.router.SimpleMessageFactory;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OutputStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +27,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by martin.gwerder on 13.06.2016.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class MessageFactoryTest {
   
   private static final java.util.logging.Logger LOGGER;

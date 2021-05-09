@@ -4,9 +4,11 @@ import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractBlock;
 import net.messagevortex.asn1.encryption.Parameter;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.bouncycastle.asn1.DERBitString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -16,6 +18,7 @@ import java.util.logging.Level;
  *
  * Created by martin.gwerder on 30.05.2016.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class AbstractBlockTest {
 
     private static final java.util.logging.Logger LOGGER;

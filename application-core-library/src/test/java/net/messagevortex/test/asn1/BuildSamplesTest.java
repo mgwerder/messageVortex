@@ -3,8 +3,11 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractBlock;
 import net.messagevortex.asn1.AsymmetricKey;
+import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,6 +19,7 @@ import java.util.logging.Level;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class BuildSamplesTest {
 
     private static final java.util.logging.Logger LOGGER;

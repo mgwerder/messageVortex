@@ -2,11 +2,13 @@ package net.messagevortex.test.transport;
 
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.test.transport.imap.ImapSSLTest;
 import net.messagevortex.transport.TransportReceiver;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.*;
 
 import java.io.IOException;
@@ -22,6 +24,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by martin.gwerder on 19.04.2017.
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class DummyTransportSenderTest extends AbstractDaemon implements TransportReceiver {
 
   private List<InputStream> msgs = new Vector<>();

@@ -2,8 +2,10 @@ package net.messagevortex.test.cli;
 
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -13,6 +15,7 @@ import java.util.logging.Logger;
 import static net.messagevortex.MessageVortex.ARGUMENT_FAIL;
 
 
+@ExtendWith(GlobalJunitExtension.class)
 public class GeneralCommandline {
 
   private static final Logger LOGGER;

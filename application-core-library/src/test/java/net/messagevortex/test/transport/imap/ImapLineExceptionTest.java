@@ -1,9 +1,11 @@
 package net.messagevortex.test.transport.imap;
 
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.Assert.assertTrue;
 
@@ -12,6 +14,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class ImapLineExceptionTest {
 
     @Test

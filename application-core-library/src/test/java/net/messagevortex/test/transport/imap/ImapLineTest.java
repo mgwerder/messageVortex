@@ -1,12 +1,14 @@
 package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.imap.ImapBlankLineException;
 import net.messagevortex.transport.imap.ImapException;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.transport.imap.ImapNullLineException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -21,6 +23,7 @@ import static org.junit.Assert.fail;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class ImapLineTest {
 
     private static final java.util.logging.Logger LOGGER;

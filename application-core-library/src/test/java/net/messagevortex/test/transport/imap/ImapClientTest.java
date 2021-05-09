@@ -2,6 +2,7 @@ package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.AllTrustManager;
 import net.messagevortex.transport.CustomKeyManager;
 import net.messagevortex.transport.SecurityContext;
@@ -12,6 +13,7 @@ import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapServer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
@@ -41,6 +43,7 @@ import static net.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
+@ExtendWith(GlobalJunitExtension.class)
 public class ImapClientTest {
 
   private static final java.util.logging.Logger LOGGER;
