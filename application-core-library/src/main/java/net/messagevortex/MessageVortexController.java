@@ -1,8 +1,5 @@
 package net.messagevortex;
 
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,7 +12,7 @@ import java.util.logging.Level;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class MessageVortexController implements SignalHandler {
+public class MessageVortexController {
   
   private static final java.util.logging.Logger LOGGER;
   
@@ -130,16 +127,9 @@ public class MessageVortexController implements SignalHandler {
     t.setName("MessageVortexShutdownController:" + port);
     runner.setThread(t);
     t.start();
-  }
-  
-  @Override
-  public void handle(Signal signal) {
-    if ("INT".equals(signal.getName())) {
-      LOGGER.log(Level.INFO, "Received SIGINT signal. Will teardown.");
-      runner.shutdown();
-    } else {
-      LOGGER.log(Level.WARNING, "Received unhandled signal SIG" + signal.getName() + ". IGNORING");
-    }
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      public void run() { runner.shutdown(); }
+    });
   }
   
   /***
