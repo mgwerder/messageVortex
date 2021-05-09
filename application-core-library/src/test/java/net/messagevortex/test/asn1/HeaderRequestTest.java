@@ -1,21 +1,18 @@
 package net.messagevortex.test.asn1;
 
 import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.asn1.HeaderRequestIdentity;
-import net.messagevortex.asn1.HeaderRequestIncreaseMessageQuota;
-import net.messagevortex.asn1.HeaderRequestIncreaseTransferQuota;
-import net.messagevortex.asn1.UsagePeriod;
+import net.messagevortex.asn1.*;
 import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.test.GlobalJunitExtension;
 import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.Assert.assertTrue;
 
-@RunWith(JUnit4.class)
+@ExtendWith(GlobalJunitExtension.class)
 public class HeaderRequestTest {
 
   @Test
@@ -25,8 +22,8 @@ public class HeaderRequestTest {
     imq.setQuota(quota);
     ASN1Encodable enc = ASN1TaggedObject.getInstance(imq.toBytes(DumpType.ALL)).getObject();
     HeaderRequestIncreaseMessageQuota imq2 = new HeaderRequestIncreaseMessageQuota( enc );
-    assertTrue("reencoded is not equal in dump", imq.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(imq2.dumpValueNotation("",DumpType.ALL_UNENCRYPTED)));
-    assertTrue( "quota changed unexpectedly",imq2.getQuota() == imq.getQuota());
+    Assertions.assertTrue(imq.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(imq2.dumpValueNotation("",DumpType.ALL_UNENCRYPTED)), "reencoded is not equal in dump");
+    Assertions.assertTrue(imq2.getQuota() == imq.getQuota(), "quota changed unexpectedly");
   }
 
   @Test
@@ -36,8 +33,8 @@ public class HeaderRequestTest {
     itq.setQuota(quota);
     ASN1Encodable enc = ASN1TaggedObject.getInstance(itq.toBytes(DumpType.ALL)).getObject();
     HeaderRequestIncreaseMessageQuota itq2 = new HeaderRequestIncreaseMessageQuota( enc );
-    assertTrue("reencoded is not equal in dump", itq.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(itq2.dumpValueNotation("",DumpType.ALL_UNENCRYPTED)));
-    assertTrue( "quota changed unexpectedly",itq2.getQuota() == itq.getQuota());
+    Assertions.assertTrue(itq.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(itq2.dumpValueNotation("",DumpType.ALL_UNENCRYPTED)), "reencoded is not equal in dump");
+    Assertions.assertTrue(itq2.getQuota() == itq.getQuota(), "quota changed unexpectedly");
   }
 
   @Test
@@ -49,8 +46,8 @@ public class HeaderRequestTest {
     HeaderRequestIdentity itq2 = new HeaderRequestIdentity( enc );
     System.out.println("source " + itq.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
     System.out.println("target " + itq2.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
-    assertTrue("reencoded is not equal in dump", itq.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(itq2.dumpValueNotation("",DumpType.ALL_UNENCRYPTED)));
-    assertTrue( "usage period changed unexpectedly",itq2.getUsagePeriod().compareTo( itq.getUsagePeriod() ) == 0);
+    Assertions.assertTrue(itq.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(itq2.dumpValueNotation("",DumpType.ALL_UNENCRYPTED)), "reencoded is not equal in dump");
+    Assertions.assertTrue(itq2.getUsagePeriod().compareTo( itq.getUsagePeriod() ) == 0, "usage period changed unexpectedly");
   }
 
 }

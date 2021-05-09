@@ -1,13 +1,14 @@
 package net.messagevortex.router;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.RoutingCombo;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 
 public class SimpleMessageFactory extends MessageFactory {
 
@@ -110,8 +111,8 @@ public class SimpleMessageFactory extends MessageFactory {
       LOGGER.log(Level.FINEST, "calculated shares are maxShare=" + maxShare + "/share=" + share);
       assert share > 0 : "share is negative (" + share + ")";
       long minTime = (long) (ExtendedSecureRandom.nextRandomTime(
-          minArrival + minMessageTransferStart, minArrival + share + 1,
-          minArrival + maxShare + 2));
+          minArrival + minMessageTransferStart, minArrival + minMessageTransferStart + share,
+          minArrival + minMessageTransferStart + maxShare));
       maxRemainingTime = maxMessageTransferTime - minTime; // OK
       maxShare = maxRemainingTime - remainingHops * minStepProcessSTime - 2;
       share = Math.max(1, maxShare / remainingHops);
@@ -126,6 +127,7 @@ public class SimpleMessageFactory extends MessageFactory {
     }
 
     // select operations
+    // FIXME
     return buildRoutingBlock();
   }
 

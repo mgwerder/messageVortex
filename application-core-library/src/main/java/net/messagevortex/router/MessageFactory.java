@@ -1,6 +1,5 @@
 package net.messagevortex.router;
 
-import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.RoutingCombo;

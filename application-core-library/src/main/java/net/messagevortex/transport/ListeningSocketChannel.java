@@ -1,13 +1,13 @@
 package net.messagevortex.transport;
 
+import net.messagevortex.MessageVortexLogger;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import net.messagevortex.MessageVortexLogger;
 
 public class ListeningSocketChannel {
 

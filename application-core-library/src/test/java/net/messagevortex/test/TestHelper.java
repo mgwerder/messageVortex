@@ -5,7 +5,7 @@ package net.messagevortex.test;
  */
 public class TestHelper {
 
-    public static String compareStrings(String s1,String s2) {
+    private static String compareStrings(String s1,String s2) {
         int line = 1;
         int lfpos=0;
         int col=1;

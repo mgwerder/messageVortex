@@ -22,6 +22,12 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -32,11 +38,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-import net.messagevortex.MessageVortexLogger;
 
 /**
  * Created by Martin on 11.03.2018.

@@ -1,7 +1,5 @@
 package net.messagevortex.asn1.yaml;
 
-import java.util.List;
-import java.util.Vector;
 import net.messagevortex.asn1.IdentityStore;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.MappingNode;
@@ -9,6 +7,9 @@ import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Represent;
+
+import java.util.List;
+import java.util.Vector;
 
 public class IdentityStoreYamlHandler extends Constructor implements Represent {
   

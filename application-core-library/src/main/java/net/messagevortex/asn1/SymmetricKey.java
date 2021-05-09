@@ -22,6 +22,16 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.asn1.encryption.*;
+import org.bouncycastle.asn1.*;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -30,29 +40,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.Arrays;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.asn1.encryption.Algorithm;
-import net.messagevortex.asn1.encryption.AlgorithmType;
-import net.messagevortex.asn1.encryption.DumpType;
-import net.messagevortex.asn1.encryption.Mode;
-import net.messagevortex.asn1.encryption.Padding;
-import net.messagevortex.asn1.encryption.Parameter;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1EncodableVector;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1OctetString;
-import org.bouncycastle.asn1.ASN1Primitive;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.DEROctetString;
-import org.bouncycastle.asn1.DERSequence;
 
 /**
  * Represents a Symmetric Key in the ASN.1 structure

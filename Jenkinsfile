@@ -17,7 +17,7 @@ pipeline {
     }
     stage ('Build') {
       steps {
-        sh 'mvn -DskipTests compile'
+        sh 'mvn -DskipTests -pl application-core-library compile'
       }
     }
     stage ('Test on JDK8') {
@@ -25,7 +25,7 @@ pipeline {
         timeout(time: 120, unit: 'MINUTES')
       }
       steps{
-        sh "mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site"
+        sh "mvn -pl application-core-library test site"
       }
       post {
         success {
@@ -35,15 +35,10 @@ pipeline {
         }
       }
     }
-    stage ('Package all') {
+    stage ('Package Java') {
       steps {
         sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests package'
-      }
-    }
-    stage ('Site build') {
-      steps {
-        sh 'mvn -pl application-core-library -DskipTests site'
+        sh 'mvn -DskipTests  -pl application-core-library  package'
       }
     }
     stage('SonarQube analysis') {
@@ -58,72 +53,109 @@ pipeline {
         sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
       }
     }
-    /* stage ('Test other JDKs') {
-       parallel { */
+    stage ('Site build') {
+      steps {
+        sh 'mvn -pl application-core-library -DskipTests site'
+      }
+    }
+    stage ('Test other JDKs') {
+       parallel { 
         stage ('Test on JDK10') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-10'
-                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2" --mount type=bind,source="$HOME/MessageVortexKeyCache",target="/root/keyCache"'
+                image 'maven:3-jdk-10-slim'
+                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 180, unit: 'MINUTES')
           }
           steps{
-                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                sh 'mvn -pl application-core-library test'
+			}
           }
         }
         stage ('Test on JDK11') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-11-slim'
-                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2" --mount type=bind,source="$HOME/MessageVortexKeyCache",target="/root/keyCache"'
+                image 'maven:3-jdk-11-slim'
+                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 180, unit: 'MINUTES')
           }
           steps{
             script {
-              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+					sh 'mvn -pl application-core-library test'
+				}
             }
           }
         }
-        stage ('Test on JDK12') {
+        stage ('Test on OPENJDK17') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-12'
-                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2" --mount type=bind,source="$HOME/MessageVortexKeyCache",target="/root/keyCache"'
+                image 'maven:3-openjdk-17-slim'
+                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 180, unit: 'MINUTES')
           }
           steps {
             script {
-              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+					sh 'mvn -pl application-core-library test'
+				}
             }
           }
         }
-        stage ('Test on JDK13') {
+        stage ('Test on Amazon Correto 16') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-13'
-                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2" --mount type=bind,source="$HOME/MessageVortexKeyCache",target="/root/keyCache"'
+                image 'maven:3-amazoncorretto-16'
+                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 180, unit: 'MINUTES')
           }
           steps {
             script {
-              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+					sh 'mvn -pl application-core-library test'
+				}
             }
           }
         }
-      /*}
-    }*/
+        stage ('Test on (latest)') {
+          agent {
+            docker {
+                image 'maven:latest'
+                args '--mount type=bind,source="$HOME/.m2",target="/root/.m2"'
+            }
+          }
+          options {
+            timeout(time: 180, unit: 'MINUTES')
+          }
+          steps {
+            script {
+				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+					sh 'mvn -pl application-core-library test'
+				}
+            }
+          }
+        }
+      }
+    }
+    stage ('Package all') {
+      steps {
+        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
+        sh 'mvn -DskipTests package'
+      }
+    }
   }
   post {
     success {

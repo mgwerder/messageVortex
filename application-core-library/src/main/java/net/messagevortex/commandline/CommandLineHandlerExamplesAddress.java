@@ -1,8 +1,5 @@
 package net.messagevortex.commandline;
 
-import java.util.Base64;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AlgorithmParameter;
 import net.messagevortex.asn1.AsymmetricKey;
@@ -11,6 +8,10 @@ import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.asn1.encryption.Parameter;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import picocli.CommandLine;
+
+import java.util.Base64;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
 
 /**
  * <p>creates sample adress representations for MessageVortex.</p>

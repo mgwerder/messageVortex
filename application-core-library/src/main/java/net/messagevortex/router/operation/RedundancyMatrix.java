@@ -22,8 +22,9 @@ package net.messagevortex.router.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.util.Arrays;
 import net.messagevortex.MessageVortexLogger;
+
+import java.util.Arrays;
 
 /**
  * Creates a redundancy matrixContent or a recovery matrixContent for the redundancy operations.

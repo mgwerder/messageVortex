@@ -3,19 +3,19 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.Prng;
 import net.messagevortex.router.operation.AddRedundancy;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import net.messagevortex.test.GlobalJunitExtension;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.logging.Level;
 
-
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-@RunWith(JUnit4.class)
+@ExtendWith(GlobalJunitExtension.class)
 public class PaddingTest {
 
   private static final java.util.logging.Logger LOGGER;
@@ -49,9 +49,9 @@ public class PaddingTest {
       byte[] padded = AddRedundancy.pad(blockSize, numberOfOutBlocks, in, prng, c1, c2);
       prng.reset();
       byte[] unpadded = AddRedundancy.unpad(blockSize, numberOfOutBlocks, padded, prng);
-      assertTrue("padding test failed: unpadded array is not of same size", in.length == unpadded.length);
+      Assertions.assertTrue(in.length == unpadded.length, "padding test failed: unpadded array is not of same size");
       for (int a = 0; a < unpadded.length; a++) {
-        assertTrue("Error comparing array at pos " + a, in[a] == unpadded[a]);
+        Assertions.assertTrue(in[a] == unpadded[a], "Error comparing array at pos " + a);
       }
     }
   }
@@ -67,7 +67,7 @@ public class PaddingTest {
       p.reset();
       for (int j = 0; j < b.length; j++) {
         byte c = p.nextByte();
-        assertTrue("Error comparing byte " + j + " (expected; " + b[j] + "; is: " + c, b[j] == c);
+        Assertions.assertTrue(b[j] == c, "Error comparing byte " + j + " (expected; " + b[j] + "; is: " + c);
       }
     }
   }
@@ -98,7 +98,7 @@ public class PaddingTest {
       ioe.printStackTrace();
       System.out.flush();
       System.err.flush();
-      fail("test failed due to exception when unpadding");
+      Assertions.fail("test failed due to exception when unpadding");
     }
   }
 
@@ -118,7 +118,7 @@ public class PaddingTest {
         ioe.printStackTrace();
         System.out.flush();
         System.err.flush();
-        fail("test failed due to exception when unpadding");
+        Assertions.fail("test failed due to exception when unpadding");
       }
     }
   }

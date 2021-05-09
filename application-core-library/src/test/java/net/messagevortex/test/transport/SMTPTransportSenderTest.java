@@ -1,6 +1,17 @@
 package net.messagevortex.test.transport;
 
-import static org.junit.Assert.assertTrue;
+import net.messagevortex.AbstractDaemon;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.GlobalJunitExtension;
+import net.messagevortex.test.transport.imap.ImapSSLTest;
+import net.messagevortex.transport.SecurityContext;
+import net.messagevortex.transport.SecurityRequirement;
+import net.messagevortex.transport.TransportReceiver;
+import net.messagevortex.transport.smtp.SmtpReceiver;
+import net.messagevortex.transport.smtp.SmtpSender;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,24 +24,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
-import net.messagevortex.AbstractDaemon;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.test.imap.ImapSSLTest;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.SecurityRequirement;
-import net.messagevortex.transport.TransportReceiver;
-import net.messagevortex.transport.smtp.SmtpReceiver;
-import net.messagevortex.transport.smtp.SmtpSender;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * <p>Teastclass for sending and receiving SMTP based messages.</p>
  *
  * Created by Martin on 26.01.2018.
  */
-@RunWith(JUnit4.class)
+@ExtendWith(GlobalJunitExtension.class)
 public class SMTPTransportSenderTest extends AbstractDaemon implements TransportReceiver {
 
   public static final String CRLF = "\r\n";
@@ -61,8 +63,8 @@ public class SMTPTransportSenderTest extends AbstractDaemon implements Transport
       LOGGER.log(Level.SEVERE, "got unexpected exception while sending message", ioe);
     }
     receiver.shutdown();
-    assertTrue("Message not arrived (yet?)", msgs.size() == 1);
-    assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+    Assertions.assertTrue(msgs.size() == 1, "Message not arrived (yet?)");
+    Assertions.assertTrue(ImapSSLTest.verifyHangingThreads(threadSet).size() == 0, "error searching for hangig threads");
   }
 
 

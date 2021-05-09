@@ -1,14 +1,15 @@
 package net.messagevortex.transport;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.MessageVortexConfig;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.pop3.TestPop3Handler;
 import net.messagevortex.transport.smtp.TestSmtpHandler;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MailServer extends AbstractDaemon implements Transport {
 

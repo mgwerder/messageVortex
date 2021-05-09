@@ -22,8 +22,9 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
+
+import java.util.logging.Level;
 
 
 public class ImapCommandLogout extends ImapCommand {

@@ -1,9 +1,9 @@
 package net.messagevortex.blender.recipes;
 
-import java.util.List;
-import java.util.Set;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.RoutingCombo;
+
+import java.util.Set;
 
 public class SimplePathRecipe extends BlenderRecipe {
 

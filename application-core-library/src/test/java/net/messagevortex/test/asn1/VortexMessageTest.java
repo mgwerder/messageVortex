@@ -21,30 +21,23 @@ package net.messagevortex.test.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.*;
+import net.messagevortex.asn1.encryption.DumpType;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AbstractBlock;
-import net.messagevortex.asn1.IdentityBlock;
-import net.messagevortex.asn1.InnerMessageBlock;
-import net.messagevortex.asn1.PrefixBlock;
-import net.messagevortex.asn1.RoutingCombo;
-import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.asn1.VortexMessage;
-import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
 
 /**
  * Tests for the VortexMessage class.
  *
  * Created by martin.gwerder on 30.05.2016.
  */
-@RunWith(JUnit4.class)
 public class VortexMessageTest {
 
     private static final java.util.logging.Logger LOGGER;
@@ -58,6 +51,7 @@ public class VortexMessageTest {
      */
     @Test
     public void fuzzingMessage() {
+        AsymmetricKeyPreCalculator.setCacheFileName("");
         try {
             final int TESTS=10;
             for (int i = 0; i < TESTS; i++) {
@@ -70,20 +64,21 @@ public class VortexMessageTest {
                 VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock, randomRoutingCombo));
                 String s1=s.dumpValueNotation( "" );
                 byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
-                Assert.assertTrue( "Byte representation may not be null", b1 != null );
+                Assertions.assertTrue(b1 != null, "Byte representation may not be null");
                 byte[] b2 = (new VortexMessage( b1,null )).toBytes(DumpType.ALL_UNENCRYPTED);
-                Assert.assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
+                Assertions.assertTrue(Arrays.equals( b1, b2 ), "Byte arrays should be equal when reencoding");
                 String s2=s.dumpValueNotation( "" );
-                Assert.assertTrue( "Value Notations should be equal when reencoding", s1.equals( s2 ) );
+                Assertions.assertTrue(s1.equals( s2 ), "Value Notations should be equal when reencoding");
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING,"Unexpected exception",e);
-            Assert.fail( "fuzzer encountered exception in VortexMessage ("+e.toString()+")" );
+            Assertions.fail( "fuzzer encountered exception in VortexMessage ("+ e +")" );
         }
     }
 
     @Test
     public void fuzzingIntToByteConverter() {
+        AsymmetricKeyPreCalculator.setCacheFileName("");
         LOGGER.log( Level.INFO, "Testing basic byte reencoding length 4");
         testIntByteConverter( 0,4 );
         testIntByteConverter( 1,4 );
@@ -106,12 +101,13 @@ public class VortexMessageTest {
 
     private void testIntByteConverter(long i, int len) {
         byte[] b= VortexMessage.getLongAsBytes( i,len );
-        Assert.assertTrue("wrong number of bytes returned (expected="+len+"; received="+b.length+")",b.length==len);
-        Assert.assertTrue( "Error reencoding "+i+ " (old="+i+";"+ AbstractBlock.toHex(b)+";new="+ VortexMessage.getBytesAsLong( b )+"]", VortexMessage.getBytesAsLong( b ) == i );
+        Assertions.assertTrue(b.length==len, "wrong number of bytes returned (expected="+len+"; received="+b.length+")");
+        Assertions.assertTrue(VortexMessage.getBytesAsLong( b ) == i, "Error reencoding "+i+ " (old="+i+";"+ AbstractBlock.toHex(b)+";new="+ VortexMessage.getBytesAsLong( b )+"]");
     }
 
     @Test
     public void writeAsAsn1() {
+        AsymmetricKeyPreCalculator.setCacheFileName("");
         try {
             // FIXME build a full message with all possible blocks
             PrefixBlock randomOuterPrefixBlock=new PrefixBlock();
@@ -121,7 +117,7 @@ public class VortexMessageTest {
             PrefixBlock randomPrefixBlock=new PrefixBlock();
             VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock, randomRoutingCombo));
             File f = new File("testfile_VortexMessage_encrypted.der");
-            try ( FileOutputStream o = new FileOutputStream(f); ) {
+            try ( FileOutputStream o = new FileOutputStream(f)) {
                 o.write(s.toBytes(DumpType.ALL_UNENCRYPTED));
             }
 
@@ -129,24 +125,25 @@ public class VortexMessageTest {
                 o.write(s.toAsn1Object(DumpType.ALL_UNENCRYPTED).getEncoded());
             }
         } catch (Exception e) {
-            Assert.fail("unexpected exception");
+            Assertions.fail("unexpected exception");
         }
     }
 
     @Test
     public void ByteToLongConversionTest() {
-        Assert.assertTrue("error testing byte conversion with 0 ["+VortexMessage.toHex(VortexMessage.getLongAsBytes(0))+"->"+VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0))+"]",0==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0)));
-        Assert.assertTrue("error testing byte conversion with 1",1==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(1)));
-        Assert.assertTrue("error testing byte conversion with 1 to bytes", Arrays.equals(new byte[]{1, 0, 0, 0}, VortexMessage.getLongAsBytes(1)));
-        Assert.assertTrue("error testing byte conversion with 0 to bytes",Arrays.equals(new byte[] {0,0,0,0},VortexMessage.getLongAsBytes(0)));
-        Assert.assertTrue("error testing byte conversion with 256 to bytes",Arrays.equals(new byte[] {0,1,0,0},VortexMessage.getLongAsBytes(256)));
-        Assert.assertTrue("error testing byte conversion with 65536 to bytes",Arrays.equals(new byte[] {0,0,1,0},VortexMessage.getLongAsBytes(65536)));
-        Assert.assertTrue("error testing byte conversion with "+Long.MAX_VALUE,Long.MAX_VALUE==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(Long.MAX_VALUE,8)));
+        AsymmetricKeyPreCalculator.setCacheFileName("");
+        Assertions.assertTrue(0==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0)), "error testing byte conversion with 0 ["+VortexMessage.toHex(VortexMessage.getLongAsBytes(0))+"->"+VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0))+"]");
+        Assertions.assertTrue(1==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(1)), "error testing byte conversion with 1");
+        Assertions.assertTrue(Arrays.equals(new byte[]{1, 0, 0, 0}, VortexMessage.getLongAsBytes(1)), "error testing byte conversion with 1 to bytes");
+        Assertions.assertTrue(Arrays.equals(new byte[] {0,0,0,0},VortexMessage.getLongAsBytes(0)), "error testing byte conversion with 0 to bytes");
+        Assertions.assertTrue(Arrays.equals(new byte[] {0,1,0,0},VortexMessage.getLongAsBytes(256)), "error testing byte conversion with 256 to bytes");
+        Assertions.assertTrue(Arrays.equals(new byte[] {0,0,1,0},VortexMessage.getLongAsBytes(65536)), "error testing byte conversion with 65536 to bytes");
+        Assertions.assertTrue(Long.MAX_VALUE==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(Long.MAX_VALUE,8)), "error testing byte conversion with "+Long.MAX_VALUE);
 
         // fuzzing value
         for(int i=0;i<1000;i++) {
             long r=(long)(Math.random()+Long.MAX_VALUE);
-            Assert.assertTrue( "error fuzzing byte conversion with "+r, r==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(r,8)));
+            Assertions.assertTrue(r==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(r,8)), "error fuzzing byte conversion with "+r);
         }
     }
 

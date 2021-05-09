@@ -22,19 +22,14 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.awt.AWTException;
-import java.awt.Image;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
-import javax.imageio.ImageIO;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class MessageVortexStatus {
 

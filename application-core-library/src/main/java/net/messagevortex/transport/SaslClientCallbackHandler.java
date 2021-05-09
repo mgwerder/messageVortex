@@ -22,15 +22,14 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.IOException;
-import java.util.logging.Level;
+import net.messagevortex.MessageVortexLogger;
+
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
-import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.sasl.RealmCallback;
-import net.messagevortex.MessageVortexLogger;
+import java.util.logging.Level;
 
 public class SaslClientCallbackHandler implements CallbackHandler {
 

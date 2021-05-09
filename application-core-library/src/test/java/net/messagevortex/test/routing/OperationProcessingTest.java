@@ -1,32 +1,25 @@
 package net.messagevortex.test.routing;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.*;
+import net.messagevortex.router.operation.Operation;
+import net.messagevortex.router.operation.*;
+import net.messagevortex.test.GlobalJunitExtension;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AddRedundancyOperation;
-import net.messagevortex.asn1.IdentityBlock;
-import net.messagevortex.asn1.PayloadChunk;
-import net.messagevortex.asn1.RemoveRedundancyOperation;
-import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.router.operation.AddRedundancy;
-import net.messagevortex.router.operation.IdMapOperation;
-import net.messagevortex.router.operation.InternalPayloadSpace;
-import net.messagevortex.router.operation.InternalPayloadSpaceStore;
-import net.messagevortex.router.operation.Operation;
-import net.messagevortex.router.operation.RemoveRedundancy;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-@RunWith(JUnit4.class)
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+@ExtendWith(GlobalJunitExtension.class)
 public class OperationProcessingTest {
 
   private static final java.util.logging.Logger LOGGER;
@@ -58,7 +51,7 @@ public class OperationProcessingTest {
       }
     } catch (IOException ioe) {
       ioe.printStackTrace();
-      fail("Exception while testing redundancy operation");
+      Assertions.fail("Exception while testing redundancy operation");
     }
   }
 
@@ -75,19 +68,19 @@ public class OperationProcessingTest {
     // do the test
     LOGGER.log(Level.INFO, "  fuzzing with dataStipes:" + dataStripes + "/redundancyStripes:" + redundancy + "/GF(" + gfSize + ")/dataSize:" + inBuffer.length + "");
     Operation iop = new AddRedundancy(new AddRedundancyOperation(1, dataStripes, redundancy, Arrays.asList(keys), 1000, gfSize));
-    assertTrue("add operation not added", p.addOperation(iop));
-    assertTrue("payload not added", p.setPayload(new PayloadChunk(1, inBuffer, null)) == null);
+    Assertions.assertTrue(p.addOperation(iop), "add operation not added");
+    Assertions.assertTrue(p.setPayload(new PayloadChunk(1, inBuffer, null)) == null, "payload not added");
 
     // straight operation
     Operation oop = new RemoveRedundancy(new RemoveRedundancyOperation(1000, dataStripes, redundancy, Arrays.asList(keys), 2000, gfSize));
-    assertTrue("remove operation not added", p.addOperation(oop));
+    Assertions.assertTrue(p.addOperation(oop), "remove operation not added");
     byte[] b = p.getPayload(2000).getPayload();
-    assertTrue("error testing straight redundancy calculation", b != null && Arrays.equals(inBuffer, b));
+    Assertions.assertTrue(b != null && Arrays.equals(inBuffer, b), "error testing straight redundancy calculation");
 
     // redundancy operation
     LOGGER.log(Level.INFO, "  Recovery Test");
     Operation oop2 = new RemoveRedundancy(new RemoveRedundancyOperation(3000, dataStripes, redundancy, Arrays.asList(keys), 4000, gfSize));
-    assertTrue("add operation for rebuild test not added", p.addOperation(oop2));
+    Assertions.assertTrue(p.addOperation(oop2), "add operation for rebuild test not added");
     // set random passthrus
     Map<Integer, Operation> l = new HashMap<>();
     while (l.size() < iop.getOutputId().length) {
@@ -97,20 +90,20 @@ public class OperationProcessingTest {
         if (p.addOperation(o)) {
           l.put(i, o);
         } else {
-          fail("add operation failed unexpectedly");
+          Assertions.fail("add operation failed unexpectedly");
         }
       }
     }
-    assertTrue("error in determining canRun", oop2.canRun());
-    assertTrue("error testing redundancy calculation with random stripes", Arrays.equals(inBuffer, p.getPayload(4000).getPayload()));
-    assertTrue("remove operation for rebuild test not added", p.removeOperation(oop2));
+    Assertions.assertTrue(oop2.canRun(), "error in determining canRun");
+    Assertions.assertTrue(Arrays.equals(inBuffer, p.getPayload(4000).getPayload()), "error testing redundancy calculation with random stripes");
+    Assertions.assertTrue(p.removeOperation(oop2), "remove operation for rebuild test not added");
     for (Operation o : l.values()) {
-      assertTrue("error removing passthru operation", p.removeOperation(o));
+      Assertions.assertTrue(p.removeOperation(o), "error removing passthru operation");
     }
 
-    assertTrue("unable to successfully remove add operation", p.removeOperation(iop));
-    assertTrue("unable to successfully remove remove redundancy operation", p.removeOperation(oop));
-    assertTrue("unable remove payload data", p.setPayload(new PayloadChunk(1, null, null)) != null);
+    Assertions.assertTrue(p.removeOperation(iop), "unable to successfully remove add operation");
+    Assertions.assertTrue(p.removeOperation(oop), "unable to successfully remove remove redundancy operation");
+    Assertions.assertTrue(p.setPayload(new PayloadChunk(1, null, null)) != null, "unable remove payload data");
 
   }
 

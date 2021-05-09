@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/maven-v4_0_0.xsd">
+                             https://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.messagevortex</groupId>
@@ -12,9 +12,10 @@
     <packaging>jar</packaging>
     <properties>
         <jdk.version>1.8</jdk.version>
-        <junit.version>4.13.1</junit.version>
-        <jacoco.version>0.8.3</jacoco.version>
-        <surefire.version>2.22.0</surefire.version>
+        <junit.version>5.7.1</junit.version>
+        <jacoco.version>0.8.7</jacoco.version>
+        <surefire.version>2.22.2</surefire.version>
+        <checkstyle.version>3.1.2</checkstyle.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -31,8 +32,8 @@
         <sonar.exclusions>src/test/java/**/*.java</sonar.exclusions>
         <sonar.java.source>${jdk.version}</sonar.java.source>
         <sonar.java.binaries>target/classes</sonar.java.binaries>
-        <sonar.jacoco.reportMissing.force.zero>true</sonar.jacoco.reportMissing.force.zero>
-        <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
+        <!--<sonar.jacoco.reportMissing.force.zero>true</sonar.jacoco.reportMissing.force.zero>
+        <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>-->
         <sonar.junit.reportsPaths>target/surefire-reports</sonar.junit.reportsPaths>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.surefire.reportsPath>target/surefire-reports</sonar.surefire.reportsPath>
@@ -56,6 +57,22 @@
         <git.commit.id>none</git.commit.id>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>mavencentral</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>jenkins</id>
+            <url>https://repo.jenkins-ci.org/releases/</url>
+        </repository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </repositories>
+
+
     <licenses>
         <license>
             <name>MIT License</name>
@@ -68,26 +85,34 @@
     <url>https://messagevortex.net</url>
 
     <dependencies>
+
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <!--<version>1.60</version>-->
-            <version>1.66</version>
-            <scope>compile</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>2.2</version>
         </dependency>
 
         <dependency>
-            <groupId>info.picocli</groupId>
-            <artifactId>picocli</artifactId>
-            <!--<version>3.9.5</version>-->
-            <version>4.5.1</version>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>3.3.9</version>
         </dependency>
 
         <!--<dependency>
@@ -101,45 +126,75 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.26</version>
+            <version>1.28</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <!--<version>3.7.2</version>-->
-            <version>4.0.2</version>
-            <scope>compile</scope>
+            <version>4.2</version>
         </dependency>
 
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
         <dependency>
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
-            <!--<version>1.5.9</version>-->
-            <version>1.6.0</version>
+            <version>1.6.3</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.25</version>
-            <scope>compile</scope>
+            <version>1.7.30</version>
+            <!--<scope>compile</scope>-->
         </dependency>
 
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby-complete</artifactId>
-            <!--<version>1.7.16.1</version>-->
-            <version>9.2.13.0</version>
-            <scope>compile</scope>
+            <version>9.2.17.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15to18</artifactId>
+            <version>1.68</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.68</version>
+        </dependency>
+
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>4.6.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <finalName>MessageVortex</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstyle.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>8.41.1</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
@@ -192,14 +247,30 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
+                    <includes>
+                        <include>**/*Test*</include>
+                    </includes>
                     <argLine>${argLine} @{argLine}</argLine>
-                    <useSystemClassLoader>false</useSystemClassLoader><!-- Required to run on JDK10 and JDK12 -->
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
-
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -219,6 +290,11 @@
                                 <nonFilteredFileExtension>jks</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>jar</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>cfg</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>der</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>png</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>ico</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>icns</nonFilteredFileExtension>
                             </nonFilteredFileExtensions>
                         </configuration>
                     </execution>
@@ -279,8 +355,8 @@
                     <archive>
                         <manifest>
                             <mainClass>net.messagevortex.MessageVortex</mainClass>
-                            <!--<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>-->
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
                     </archive>
                     <classifier>core</classifier>
@@ -306,27 +382,6 @@
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <executions>
-                    <execution>
-                        <id>jacoco-init</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-report</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -623,6 +678,58 @@
                 </execution>
             </executions>
         </plugin> -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-prepare-agent-integration</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report-integration</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <!--<configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.60</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>-->
+                    </execution>
+                </executions>
+            </plugin>
+
 
         </plugins>
     </build>
@@ -633,7 +740,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.2</version>
             </plugin>
 
             <plugin>
@@ -645,7 +752,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>${checkstyle.version}</version>
                 <configuration>
                     <configLocation>google_checks.xml</configLocation>
                 </configuration>

@@ -1,22 +1,24 @@
 package net.messagevortex.test.core;
 
-import static org.junit.Assert.assertTrue;
-
-
-import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import net.messagevortex.test.GlobalJunitExtension;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.logging.Level;
+
+import static org.junit.Assert.assertTrue;
+
 
 /**
  * booleanConfigHandlings for {@link MessageVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
+@ExtendWith(GlobalJunitExtension.class)
 public class RandomTest {
 
   @Test
@@ -36,7 +38,7 @@ public class RandomTest {
     System.out.println(plot(classes));
     // check result (must be all within 10%)
     for (int i = 0; i < classes.length; i++) {
-      assertTrue("failed at pos " + i + " (result:" + classes[i] + ")", classes[i] > (0.90 * mul) && classes[i] < (1.1 * mul));
+      Assertions.assertTrue(classes[i] > (0.90 * mul) && classes[i] < (1.1 * mul), "failed at pos " + i + " (result:" + classes[i] + ")");
     }
   }
 
@@ -61,7 +63,7 @@ public class RandomTest {
     sb.append('{');
     for (int i = 0; i < classes.length; i++) {
       sb.append(classes[i]).append(',');
-      assertTrue("failed at pos " + i + " (result:" + classes[i] + "; expect:" + sample[i] + ")", classes[i] >= (0.8 * sample[i] * mul / 10000) && classes[i] <= (1.2 * sample[i] * mul / 10000));
+      Assertions.assertTrue(classes[i] >= (0.8 * sample[i] * mul / 10000) && classes[i] <= (1.2 * sample[i] * mul / 10000), "failed at pos " + i + " (result:" + classes[i] + "; expect:" + sample[i] + ")");
     }
   }
 
@@ -85,8 +87,8 @@ public class RandomTest {
       double d = -1;
       while (d == -1 || (int) (d) > classes.length - 1) {
         d = ExtendedSecureRandom.nextRandomTime(90, 120, 200);
-        assertTrue("value below start", d >= 90);
-        assertTrue("value above end (expected max is 200; got: " + d + ")", d <= 200);
+        Assertions.assertTrue(d >= 90, "value below start");
+        Assertions.assertTrue(d <= 200, "value above end (expected max is 200; got: " + d + ")");
       }
       classes[(int) (d)]++;
     }
@@ -117,9 +119,9 @@ public class RandomTest {
       }
       sb.append(classes[i]);
       long t = (long) (Math.max(280, sample[i] * mul / 100000 * 0.2));
-      assertTrue("failed at pos " + i + " (result:" + classes[i] + "; expect:" + sample[i] * mul / 100000 + ")", classes[i] >= (sample[i] * mul / 100000 - t) && classes[i] <= (sample[i] * mul / 100000 + t));
+      Assertions.assertTrue(classes[i] >= (sample[i] * mul / 100000 - t) && classes[i] <= (sample[i] * mul / 100000 + t), "failed at pos " + i + " (result:" + classes[i] + "; expect:" + sample[i] * mul / 100000 + ")");
     }
-    System.out.println(sb.toString() + "}");
+    System.out.println(sb + "}");
   }
 
   private String plot(long[] classes) {
@@ -170,7 +172,7 @@ public class RandomTest {
       }
       sb.append("\r\n");
     }
-    return "maxY=" + maxY / interval + "\r\n" + sb.toString();
+    return "maxY=" + maxY / interval + "\r\n" + sb;
 
   }
 

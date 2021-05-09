@@ -3,25 +3,24 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AlgorithmParameter;
 import net.messagevortex.asn1.AsymmetricAlgorithmSpec;
+import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.asn1.CipherSpec;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.CipherUsage;
 import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import net.messagevortex.test.GlobalJunitExtension;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.logging.Level;
-
-import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.fail;
 
 /***
  * Test class for CipherSpec
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
-@RunWith(JUnit4.class)
+@ExtendWith(GlobalJunitExtension.class)
 public class CipherSpecTest {
 
     private static final java.util.logging.Logger LOGGER;
@@ -37,10 +36,10 @@ public class CipherSpecTest {
             AsymmetricAlgorithmSpec aas = new AsymmetricAlgorithmSpec(Algorithm.AES256, new AlgorithmParameter());
             s.setAsymmetricSpec(aas);
             CipherSpec s2 = new CipherSpec(s.toAsn1Object(DumpType.ALL));
-            assertTrue( "Reencoded CipherSpec is not equal", s2.equals(s) );
+            Assertions.assertTrue(s2.equals(s), "Reencoded CipherSpec is not equal");
         }catch( Exception e) {
             e.printStackTrace();
-            fail( "catched unexpected exception" );
+            Assertions.fail( "catched unexpected exception" );
         }
     }
 

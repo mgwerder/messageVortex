@@ -1,8 +1,8 @@
 package net.messagevortex.transport;
 
-import java.io.IOException;
-import java.io.InputStream;
 import net.messagevortex.AbstractDaemon;
+
+import java.io.InputStream;
 
 public class MailConnector extends AbstractDaemon implements Transport {
 

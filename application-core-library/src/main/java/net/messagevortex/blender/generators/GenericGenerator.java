@@ -1,16 +1,16 @@
 package net.messagevortex.blender.generators;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.BlendingParameter;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.blender.BlenderContent;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.logging.Level;
 
 public class GenericGenerator implements BlenderGenerator {
 

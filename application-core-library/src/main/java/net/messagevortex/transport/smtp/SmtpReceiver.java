@@ -22,17 +22,13 @@ package net.messagevortex.transport.smtp;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.*;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.ListeningSocketChannel;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.ServerConnection;
-import net.messagevortex.transport.SocketListener;
-import net.messagevortex.transport.TransportReceiver;
-import net.messagevortex.transport.TransportSender;
 
 public class SmtpReceiver implements SocketListener {
 

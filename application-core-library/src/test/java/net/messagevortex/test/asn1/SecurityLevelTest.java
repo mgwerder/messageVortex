@@ -2,9 +2,10 @@ package net.messagevortex.test.asn1;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.SecurityLevel;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import net.messagevortex.test.GlobalJunitExtension;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.logging.Level;
 
@@ -13,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 /*
  * Created by martin.gwerder on 06.06.2016.
  */
-@RunWith(JUnit4.class)
+@ExtendWith(GlobalJunitExtension.class)
 public class SecurityLevelTest {
 
     private static final java.util.logging.Logger LOGGER;
@@ -27,10 +28,10 @@ public class SecurityLevelTest {
      * Testing null behaviour of toHex()
      */
     public void incrementTest() {
-        assertTrue( "incrementing LOW (got " + SecurityLevel.LOW.next() + ")", SecurityLevel.LOW.next() == SecurityLevel.MEDIUM );
-        assertTrue( "incrementing MEDIUM", SecurityLevel.MEDIUM.next() == SecurityLevel.HIGH );
-        assertTrue( "incrementing HIGH", SecurityLevel.HIGH.next() == SecurityLevel.QUANTUM );
-        assertTrue( "incrementing QUANTUM", SecurityLevel.QUANTUM.next() == null );
+        Assertions.assertTrue(SecurityLevel.LOW.next() == SecurityLevel.MEDIUM, "incrementing LOW (got " + SecurityLevel.LOW.next() + ")");
+        Assertions.assertTrue(SecurityLevel.MEDIUM.next() == SecurityLevel.HIGH, "incrementing MEDIUM");
+        Assertions.assertTrue(SecurityLevel.HIGH.next() == SecurityLevel.QUANTUM, "incrementing HIGH");
+        Assertions.assertTrue(SecurityLevel.QUANTUM.next() == null, "incrementing QUANTUM");
     }
 }
 

@@ -1,23 +1,17 @@
 package net.messagevortex.commandline;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.AlgorithmParameter;
+import net.messagevortex.asn1.AsymmetricKey;
+import net.messagevortex.asn1.SymmetricKey;
+import net.messagevortex.asn1.encryption.*;
+import picocli.CommandLine;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AlgorithmParameter;
-import net.messagevortex.asn1.AsymmetricKey;
-import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.asn1.encryption.Algorithm;
-import net.messagevortex.asn1.encryption.AlgorithmType;
-import net.messagevortex.asn1.encryption.DumpType;
-import net.messagevortex.asn1.encryption.Mode;
-import net.messagevortex.asn1.encryption.Padding;
-import net.messagevortex.asn1.encryption.Parameter;
-import picocli.CommandLine;
 
 /**
  * <p>Commandline handler for symmetric encryption.</p>

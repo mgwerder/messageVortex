@@ -22,9 +22,10 @@ package net.messagevortex.router.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+
 import java.io.Serializable;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
 
 /**
  * This is a dummy operation mainly for testing it maps output to input ids.

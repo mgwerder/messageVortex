@@ -1,24 +1,28 @@
 
 package net.messagevortex.test.asn1;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
+import net.messagevortex.asn1.IdentityStore;
+import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.test.GlobalJunitExtension;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.IdentityStore;
-import net.messagevortex.asn1.encryption.DumpType;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 
 /**
  * Created by martin.gwerder on 30.05.2016.
  */
-@RunWith(JUnit4.class)
+@ExtendWith(GlobalJunitExtension.class)
 public class IdentityStoreTest {
 
   private static final java.util.logging.Logger LOGGER;
@@ -34,18 +38,18 @@ public class IdentityStoreTest {
       for (int i = 0; i < 10; i++) {
         LOGGER.log(Level.INFO, "Testing IdentityBlock Store dumping " + (i + 1) + " of " + 10);
         IdentityStore s = new IdentityStore();
-        assertTrue("IdentityStore may not be null", s != null);
+        Assertions.assertTrue(s != null, "IdentityStore may not be null");
         String s1 = s.dumpValueNotation("", DumpType.ALL_UNENCRYPTED);
         byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
-        assertTrue("Byte representation may not be null", b1 != null);
+        Assertions.assertTrue(b1 != null, "Byte representation may not be null");
         byte[] b2 = (new IdentityStore(b1)).toBytes(DumpType.ALL_UNENCRYPTED);
-        assertTrue("Byte arrays should be equal when reencoding", Arrays.equals(b1, b2));
+        Assertions.assertTrue(Arrays.equals(b1, b2), "Byte arrays should be equal when reencoding");
         String s2 = (new IdentityStore(b2)).dumpValueNotation("", DumpType.ALL_UNENCRYPTED);
-        assertTrue("Value Notations should be equal when reencoding", s1.equals(s2));
+        Assertions.assertTrue(s1.equals(s2), "Value Notations should be equal when reencoding");
       }
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "Unexpected exception", e);
-      fail("fuzzer encountered exception in IdentityStore (" + e.toString() + ")");
+      Assertions.fail("fuzzer encountered exception in IdentityStore (" + e + ")");
     }
   }
 
@@ -68,22 +72,22 @@ public class IdentityStoreTest {
         LOGGER.log(Level.INFO, "Testing IdentityStore reencoding " + (i + 1) + " of " + arr.length);
         start = new Date();
         IdentityStore s1 = arr[i];
-        assertTrue("IdentityStore may not be null", s1 != null);
+        Assertions.assertTrue(s1 != null, "IdentityStore may not be null");
         byte[] b1 = s1.toBytes(DumpType.ALL_UNENCRYPTED);
-        assertTrue("Byte representation may not be null", b1 != null);
+        Assertions.assertTrue(b1 != null, "Byte representation may not be null");
         IdentityStore s2 = new IdentityStore(b1);
         byte[] b2 = s2.toBytes(DumpType.ALL_UNENCRYPTED);
-        assertTrue("Byte arrays should be equal when reencoding", Arrays.equals(b1, b2));
-        assertTrue("Value Notations should be equal when reencoding", (new IdentityStore(b2)).dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals((new IdentityStore(b1)).dumpValueNotation("", DumpType.ALL_UNENCRYPTED)));
+        Assertions.assertTrue(Arrays.equals(b1, b2), "Byte arrays should be equal when reencoding");
+        Assertions.assertTrue((new IdentityStore(b2)).dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals((new IdentityStore(b1)).dumpValueNotation("", DumpType.ALL_UNENCRYPTED)), "Value Notations should be equal when reencoding");
         s2 = arr[(i + 1) % arr.length];
         b2 = s2.toBytes(DumpType.ALL_UNENCRYPTED);
-        assertTrue("Value Notations should NOT be equal when reencoding new demo", !(new IdentityStore(b2)).dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals((new IdentityStore(b1)).dumpValueNotation("", DumpType.ALL_UNENCRYPTED)));
+        Assertions.assertTrue(!(new IdentityStore(b2)).dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals((new IdentityStore(b1)).dumpValueNotation("", DumpType.ALL_UNENCRYPTED)), "Value Notations should NOT be equal when reencoding new demo");
         LOGGER.log(Level.INFO, "Testing IdentityStore reencoding " + (i + 1) + " took " + (((new Date()).getTime() - start.getTime()) / 1000) + " s");
         LOGGER.log(Level.INFO, "Encoded String is " + s2.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
       }
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "Unexpected exception", e);
-      fail("fuzzer encountered exception in IdentityStore (" + e.toString() + ")");
+      Assertions.fail("fuzzer encountered exception in IdentityStore (" + e + ")");
     }
   }
 

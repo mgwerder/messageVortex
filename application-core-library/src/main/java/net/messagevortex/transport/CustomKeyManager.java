@@ -22,6 +22,12 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.X509ExtendedKeyManager;
+import javax.net.ssl.X509KeyManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -32,12 +38,6 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.X509ExtendedKeyManager;
-import javax.net.ssl.X509KeyManager;
-
-import net.messagevortex.MessageVortexLogger;
 
 /***
  * <p>Keymanager enables specification of key alias to be used.</p>

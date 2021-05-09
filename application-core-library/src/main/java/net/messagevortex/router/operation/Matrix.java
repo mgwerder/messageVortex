@@ -1,11 +1,12 @@
 package net.messagevortex.router.operation;
 
+import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortexLogger;
+
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.MessageVortexLogger;
 
 /**
  * <p>Offers matrixContent calculations in different fields.</p>
