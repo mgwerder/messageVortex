@@ -392,8 +392,7 @@ public class ImapCommandTest {
             }
             s.shutdown();
         } catch (Exception toe) {
-            LOGGER.log(Level.WARNING,"Unexpected exception",toe);
-            Assertions.fail("exception thrown ("+ toe +") while testing (at "+toe.getStackTrace()[0]+")");
+            Assertions.fail("Unexpected exception",toe);
         }
     }
 
