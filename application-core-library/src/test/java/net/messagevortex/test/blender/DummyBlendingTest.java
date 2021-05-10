@@ -34,7 +34,6 @@ public class DummyBlendingTest implements BlendingReceiver {
   
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
   
   private List<VortexMessage> msgs = new Vector<>();

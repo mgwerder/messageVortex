@@ -18,10 +18,6 @@ import static org.junit.Assert.fail;
 @ExtendWith(GlobalJunitExtension.class)
 public class ImapCommandCapabilityTest {
 
-  static {
-    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
-  }
-
   @Test
   public void capabilityParsing() {
     ImapCommand ic = ImapCommandFactory.getCommand("Capability");

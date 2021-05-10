@@ -30,7 +30,6 @@ public class SymmetricKeyTest {
 
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
 
     private int ksDisc=16384;

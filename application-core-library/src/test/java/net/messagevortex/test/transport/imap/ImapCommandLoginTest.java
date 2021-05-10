@@ -28,7 +28,6 @@ public class ImapCommandLoginTest {
         ImapConnection.setDefaultTimeout(2000);
         ImapClient.setDefaultTimeout(2000);
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     private ExtendedSecureRandom esr = new ExtendedSecureRandom();

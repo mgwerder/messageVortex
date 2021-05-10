@@ -127,9 +127,6 @@ public class MessageVortexController {
     t.setName("MessageVortexShutdownController:" + port);
     runner.setThread(t);
     t.start();
-    Runtime.getRuntime().addShutdownHook(new Thread() {
-      public void run() { runner.shutdown(); }
-    });
   }
   
   /***

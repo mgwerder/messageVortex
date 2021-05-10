@@ -97,11 +97,14 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
                 try {
                     // force saving of cache on shutdown
                     lastSaved = -1;
+                    LOGGER.log(Level.INFO, "Storing cache state");
                     save();
                     InternalThread it = runner;
                     if (it != null) {
+                        LOGGER.log(Level.INFO, "Shutdown cache runner");
                         it.shutdown();
                     }
+                    LOGGER.log(Level.INFO, "Shutdown hook complete");
                 } catch (IOException | RuntimeException ioe) {
                     LOGGER.log(Level.WARNING, "Error while writing cache", ioe);
                 }
@@ -117,7 +120,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     private int value = -1;
 
     /**
-     * Worker thread class to claculate a new specific asymmetric key.
+     * Worker thread class to calculate a new specific asymmetric key.
      */
     private static class CalculationThread extends Thread {
 

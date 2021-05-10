@@ -49,8 +49,6 @@ public class ImapClient extends ClientConnection {
   
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    LOGGER.setLevel(Level.FINEST);
-    
     java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
   }
   

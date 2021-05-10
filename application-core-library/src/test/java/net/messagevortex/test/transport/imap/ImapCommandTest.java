@@ -48,7 +48,6 @@ public class ImapCommandTest {
         ImapConnection.setDefaultTimeout(2000);
         ImapClient.setDefaultTimeout(2000);
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
 
         // make sure that cache precalc is not interfering
         //AsymmetricKey.setCacheFileName(null);

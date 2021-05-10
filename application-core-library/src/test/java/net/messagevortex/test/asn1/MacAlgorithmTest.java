@@ -32,7 +32,6 @@ public class MacAlgorithmTest {
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     @Test

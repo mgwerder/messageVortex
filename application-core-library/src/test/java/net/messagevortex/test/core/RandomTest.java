@@ -78,8 +78,6 @@ public class RandomTest {
 
     // get random numbers
     int mul = 10000;
-    Level l = MessageVortexLogger.getGlobalLogLevel();
-    MessageVortexLogger.setGlobalLogLevel(Level.INFO);
     for (int i = 0; i < classes.length * mul; i++) {
       if (i % (mul*classes.length/100) == 0) {
         MessageVortexLogger.getGlobalLogger().log(Level.INFO, "  did get " + i + "/" + (mul*classes.length) + " random values ("+(100*i/(mul*classes.length))+"%)");
@@ -92,7 +90,6 @@ public class RandomTest {
       }
       classes[(int) (d)]++;
     }
-    MessageVortexLogger.setGlobalLogLevel(l);
     System.out.println(plot(classes));
 
     // output latex code

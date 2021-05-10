@@ -22,7 +22,6 @@ public class GeneralCommandline {
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
   public static Object[] runCommandline(String[] args) {

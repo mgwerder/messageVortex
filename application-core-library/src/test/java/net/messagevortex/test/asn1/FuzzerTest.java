@@ -38,7 +38,6 @@ public class FuzzerTest {
 
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     private final int ksDisc = 8192;

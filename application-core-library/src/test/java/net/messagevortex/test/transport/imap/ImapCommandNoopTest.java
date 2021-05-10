@@ -23,10 +23,6 @@ import static org.junit.Assert.fail;
 @ExtendWith(GlobalJunitExtension.class)
 public class ImapCommandNoopTest {
 
-    static {
-        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
-    }
-
     @Test
     public void noopParsing() {
         ImapCommand ic= ImapCommandFactory.getCommand("Noop");

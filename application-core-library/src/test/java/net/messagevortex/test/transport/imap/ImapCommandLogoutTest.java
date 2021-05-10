@@ -23,10 +23,6 @@ import static org.junit.Assert.fail;
 @ExtendWith(GlobalJunitExtension.class)
 public class ImapCommandLogoutTest {
 
-    static {
-        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
-    }
-
     @Test
     public void logoutParsing() {
         ImapCommand ic= ImapCommandFactory.getCommand("logout");

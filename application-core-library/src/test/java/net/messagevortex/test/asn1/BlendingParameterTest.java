@@ -21,7 +21,6 @@ public class BlendingParameterTest {
 
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     @Test
