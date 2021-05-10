@@ -58,8 +58,8 @@ pipeline {
         sh 'mvn -pl application-core-library -DskipTests site'
       }
     }
-    stage ('Test other JDKs') {
-       parallel { 
+    /*stage ('Test other JDKs') {
+       parallel { */
         stage ('Test on JDK10') {
           agent {
             docker {
@@ -148,8 +148,8 @@ pipeline {
             }
           }
         }
-      }
-    }
+      /*}
+    }*/
     stage ('Package all') {
       steps {
         sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
