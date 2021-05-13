@@ -391,6 +391,9 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
 
         // store data
         if (filename != null) {
+            if("".equals(filename)) {
+                filename=DEFAULT_CACHE_FILENAME;
+            }
             try {
                 synchronized (cache) {
                     cache.store(filename + ".tmp");

@@ -258,6 +258,9 @@ public class AsymmetricKeyCache implements Serializable {
      * @throws IOException if writing of file fails
      */
     public void store(String filename) throws IOException {
+        if(filename==null || "".equals(filename)) {
+            filename=AsymmetricKeyPreCalculator.DEFAULT_CACHE_FILENAME;
+        }
         Path p = Paths.get(filename);
         try (
                 ObjectOutputStream os = new ObjectOutputStream(Files.newOutputStream(p))
