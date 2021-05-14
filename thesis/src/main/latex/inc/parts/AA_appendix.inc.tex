@@ -280,7 +280,7 @@
 \end{entry}        
 
 \backmatter
-\chapter{Bibliography}
+\chapter*{Bibliography}
 {
 %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
 %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
@@ -288,13 +288,14 @@
 }
 
 % additional reference entries
-\index{Mail transport|see {Message Transport}}
+\index{mail transport|see {message transport}}
+\index{Jabber|see {XMPP}}
 
 % add the index
-\printindex
+\clearpage\printindex
 
-\clearpage\chapter{Short Biography}
-\begin{wrapfigure}{R}{0.3\columnwidth}
-\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
-\end{wrapfigure}
-\input{inc/biography/biotext.inc.tex}
+%\clearpage\chapter{Short Biography}
+%\begin{wrapfigure}{R}{0.3\columnwidth}
+%\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
+%\end{wrapfigure}
+%\input{inc/biography/biotext.inc.tex}

@@ -286,7 +286,7 @@ The following protocols were discarded as we consider them as outdated:
 We furthermore discarded all RPC-related protocols as they would, by definition, violate the symmetry criteria (Ct3: Symmetrically Built).
 
 \subsection{Analysis}
-\hiddensubsubsection{HTTP}
+\hiddensubsubsection{HTTP}\index{HTTP}\index{hyper transfer protocol|see {HTTP}}
 The HTTP protocol allows message transfer from and to a server and is specified in RFC2616~\cite{rfc2616}. It is not suitable as a communication protocol for messages due to the lack of notifications. Some extensions would allow such communications (such as WebDAV). Still, in general even those are not suitable as they require a continuous connection to the server to get notifications. Having a ``rollup'' of notifications when connecting is not there by default but could be implemented on top of it. HTTP servers listen on standard ports 80 or 443 for incoming connects. Port 443 is equivalent to port 80, except that it has a wrapping encryption layer (usuall TLS). The incoming connects (requests) must offer a header part and may contain a body part suitable for transferring messages to the server. The reply to this request is transferred over the same TCP connection containing the same two sections.
 
 HTTP0.9-HTTP/1.1 are cleartext protocols that are human-readable (except for the data part, which might contain binary data). The HTTP/2~\cite{rfc7540} protocol is using the same ports and default behavior. Unlike HTTP/0.9-HTTP/1.1, it is not a cleartext but encodes headers and bodies in binary form. 
@@ -297,26 +297,26 @@ The protocol satisfies the first two main criteria (Ct1: Widely Adopted and Ct2:
 
 It is possible to add such behavior to the blending layer using HTTP servers as pure storage. Such behavior would however most likely be detectable and thus no longer be censorship-resistant.
 
-\hiddensubsubsection{FTP}
+\hiddensubsubsection{FTP}\index{FTP}\index{File Transfer Protocol|see {FTP}}
 FTP is defined in RFC959~\cite{rfc959}. This protocol is intended for authenticated file transfer only. There is an account available for general access (``anonymous''). This account does normally not offer upload rights for security reasons. It is possible to use FTP as a message transfer endpoint. The configuration would work as follows: the user ``anonymous'' only has upload rights. He is unable to download or list a directory. A node may upload a message with a random name. In case a collision arises, the node retries with another random name. The blending layer picks messages up using an authenticated user. This workaround has multiple disadvantages. At first, handling FTP that way is very uncommon and usually requires an own dedicated infrastructure. Such behavior would make the protocol possibly detectable again. Secondly, passwords are always sent in the clear within FTP. Encryption as a wrapping layer (FTPS) is not common, and SFTP (a subsystem of SSH) has nothing in common with FTP except for the fact that it may transfer files as well.
 
 Furthermore, FTP may be problematic when used in active mode for firewalls. All these problems make FTP not very suitable as a transport layer protocol. FTPS and SFTP feature similar weaknesses as the FTP version in terms of detectability of non-standard behavior.
 
 Similar to HTTP, a disadvantage of FTP in terms of a message transport protocol is that this protocol is not symmetrical. A server is always just ``serving requests'' and not sending information actively to peers. This request--reply violates criteria (Ct3: Symmetrically Built) and makes the protocol not a primary choice for message transport. The protocol, however, satisfies the first two criteria (Ct1: Widely Adopted and Ct2: Reliable).
 
-\hiddensubsubsection{TFTP}
+\hiddensubsubsection{TFTP}\index{TFTP}\index{Trivial File Transfer Protocol|see {TFTP}}
 TFTP has, despite its naming similarities to FTP, very little in common with it. TFTP is a UDP-based file transfer protocol without any authentication scheme. The possibility of unauthenticated message access makes it not suitable as a transport layer. The protocol is due to the use of UDP in a meshed network with redundant routes. Since the Internet has many redundant routes, this neglects the use of this protocol.
 
 TFTP is rarely ever used on the Internet, as its UDP-based nature is not suitable for a network with redundant routes. Not being common on the Internet, violates criterion one (Ct1: Widely Adopted). TFTP is asymmetrical. This means that a server is always just ``serving requests'' and not sending information actively to peers. This request--reply violates criteria (Ct3: Symmetrically Built) and makes the protocol not a primary choice for message transport. Furthermore, the protocol violates Ct2 (Ct2: Reliable) as it is based on UDP without any additional error correction.
 
-\hiddensubsubsection{MQTT}
+\hiddensubsubsection{MQTT}\index{MQTT}
 MQTT is an ISO standard (ISO/IEC PRF 20922:2016) and was formerly called MQ Telemetry Transport. The current standard as the time of writing this document was 5.0~\cite{mqtt}. 
 
 The protocol runs by default on the two ports 1883 and 8883 and can be encrypted with TLS. MQTT is a publish/subscribe-based message-passing protocol that is mainly targeted to M2M communication. This protocol requires the receiving party to be subscribed to a central infrastructure to receive messages. Such behavior makes it very difficult to use it in a system without centralistic infrastructure and static routes between senders and recipients. 
 
 The protocol does satisfy the second criterion (Ct2: Reliable). It is in the end-user area (i.e., Internet) not widely adopted, thus violating Criteria 1 (Ct1: Widely Adopted). In terms of decentralization design, the protocol fails as well (Ct3: Symmetrically Built).
 
-\hiddensubsubsection{Advanced Message Queuing Protocol (AMQP)}
+\hiddensubsubsection{Advanced Message Queuing Protocol (AMQP)}\index{AMQP}
 The Advanced Message Queuing Protocol (AMQP) was initially initiated by numerous exponents based mainly on finance-related industries. The AMQP-protocol is either used for communication between two message brokers or between a message broker and a client~\cite{amqp}.
 
 It is designed to be interoperable, stable, reliable, and safe. It supports either SASL- or TLS-secured communication. The immediate sender of a message controls the use of such a tunnel. In its current version 1.0, it does, however, not support a dynamic routing between brokers~\cite{amqp}.
@@ -325,26 +325,26 @@ Due to the lack of a generic routing capability, this protocol is not suitable f
 
 The protocol partially satisfies the first criterion (Ct1: Widely Adopted) and fully meets the second criterion (Ct2: Reliable). However, the third criterion is violated due to the lack of routing capabilities between message brokers (Ct3: Symmetrically Built).
 
-\hiddensubsubsection{Constrained Application Protocol (CoAP)}
+\hiddensubsubsection{Constrained Application Protocol (CoAP)}\index{CoAP}
 The Constrained Application Protocol (CoAP) is a communication protocol that is primarily destined for M2M communication. It is defined in RFC7252~\cite{rfc7252}. It is defined as a lightweight replacement for HTTP in IoT devices and is based on UDP.
 
 The protocol does partially satisfy the first criteria (Ct1: Widely Adopted). The second criterion (Ct2: Reliable) is only partially fulfilled as it is based on UDP and does only add limited session control on its own.
 
 The main disadvantage of a message transport protocol is that this protocol is not (like HTTP) symmetrical. This means that a server is always just ``serving requests'' and not sending information actively to peers. This request--reply violates criteria (Ct3: Symmetrically Built) and makes the protocol not a primary choice for message transport. 
 
-\hiddensubsubsection{Web Application Messaging Protocol (WAMP)}
+\hiddensubsubsection{Web Application Messaging Protocol (WAMP)}\index{WAMP}
 WAMP is a web-socket-based protocol destined to enable M2M communication. Similar to MQTT, the protocol is publish/subscribe-oriented. Unlike MQTT, it allows remote procedure calls (RPC).
 
 The WAMP protocol is not widely adopted (Ct1: Widely Adopted), but it is reliable on a per-node base (Ct2: Reliable). Due to its RPC-based capability, unlike MQTT, a routing-like capability could be implemented. Symmetrical protocol behavior is therefore not available but could be built in relatively easily.
 
-\hiddensubsubsection{XMPP (Jabber)}
+\hiddensubsubsection{XMPP (Jabber)}\index{XMPP}
 XMPP (originally named Jabber) is a synchronous message protocol used in the Internet. It is specified in the documents RFC6120~\cite{rfc6120}, RFC6121~\cite{rfc6121}, RFC3922~\cite{rfc3922}, and RFC3923~\cite{rfc3923}. The protocol is a very advanced chat protocol featuring numerous levels of security including end-to-end signing and object encryption~\cite{rfc3923}. There is also a stream initiation extension for transferring files between endpoints~\cite{xep0096}.
 
 It has generic routing capabilities spanning between known and unknown servers. The protocol offers a message retrieval mechanism for offline messages similar to POP~\cite{xep0013}.
 
 The protocol itself seems to be a strong candidate as a transport layer as it is being actively used on the Internet.
 
-\hiddensubsubsection{SMTP}
+\hiddensubsubsection{SMTP}\index{SMTP}
 The SMTP protocol is currently specified in~\cite{rfc5321}. It specifies a method of reliably delivering asynchronous mail objects through a specific transport medium (most of the time, the Internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information, containing a sender (one) and one or more recipients encoded in 7-bit ASCII. The envelope may additionally contain optional protocol extension material. 
 
 The content should be in 7-bit-ASCII (8-bit-ASCII may be requested, but this feature is not widely adopted). It is split into two parts, which are: the header (which contains meta-information about the message such as subject, reply address, or a comprehensive list of all recipients) and the body, which includes the message itself. All content lines must be terminated with a CRLF and must not be longer than 998 characters, excluding CRLF.
@@ -359,7 +359,7 @@ SMTP is one of the most common messaging protocols on the Internet (Ct1: Widely 
 
 SMTP is considered a strong candidate as a transport layer.  
 
-\hiddensubsubsection{SMS and MMS}
+\hiddensubsubsection{SMS and MMS}\index{SMS}\index{MMS}
 Telephone companies introduced the SMS capability in the SS7 protocol. This protocol allows the message transfer of messages no larger than 144 characters. Due to this restriction in size, it is unlikely to be suitable for this type of communication. The keys required for our protocol are already similarly sized, leaving no space for messages or routing information.
 
 The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messaging Service (MMS). This protocol is mainly a mobile protocol based on telephone networks.
@@ -439,7 +439,7 @@ We worked with F5 blending into jpeg images for our implementation, as this choi
 
 In our current implementation, the housekeeping part was skipped. Instead, we just fetched the newly arrived messages and transferred them to local storage. The email presented to the client is provided by a local IMAP server. The persistence of these messages is not yet implemented. 
 
-\section{Implementation of an XMPP Transport Layer}
+\section{Implementation of an XMPP Transport Layer}\index{XMPP}
 The XMPP protocol (formerly called  Jabber, as specified in~\cite{rfc6120}) is natively not capable of transferring anything but text messages. Unlike email, XMPP is capable of true end-to-end signing and object encryption without solving the initial trust problem. While we may use end-to-end encryption for additional security, relying on this feature is not sensible as we would put trust into the security features of an intermediate node. This would effectively violate \ref{req:zeroTrust} requirement. We decided to use the extension defined in~\cite{xep0231} to transfer our messages, as it is simple and reliable.
 
 To transfer a \VortexMessage{}, we could embed a MIME message just as with SMTP. While this would be technically feasible, the usage of MIME is not common and even discouraged. Instead, the inner structure of an XMPP message relies on XML. 
@@ -514,7 +514,7 @@ Both specifications allow embedding of a \VortexMessage{} and are described in t
 	\label{fig:defOuterBlocks}
 \end{lstfloat}
 
-\subsection{Extraction of the Blended Message}
+\subsection{Extraction of the Blended Message}\index{message!blending}
 In this section, we describe the extraction of a \VortexMessage{} by the blending layer. We describe plain embedding which allows a detectable yet unreadable message, including the chunking applied to minimize detection. Furthermore, we describe the more elaborated method of using F5  blending, which results in undetectable messages at the cost of roughly eight times higher protocol overhead.
 
 \subsection{Plain Embedding}
@@ -580,7 +580,7 @@ Table~\ref{tab:chunkingExamples} shows some valid chunking header bytes and thei
 
 When plain-embedding messages, we have the problem that most of the files have recurring logical structures. Such structures should not be broken. Broken files raise suspicion as they are no longer displayable. Thus, we have to avoid breaking logical file structures and concentrate on structureless portions of the file when embedding. 
 
-\subsection{Implementation of F5 Blending}
+\subsection{Implementation of F5 Blending}\index{F5}
 In this section, we introduce the implementation of F5 blending. It is a more suitable blending than the rather simple $plainBlending$ discussed in the previous section. At the same time, F5 is very old (\citeyear{f5} and renains unbroken. In the reference implementation of F5 was a detectable unintentional double compression~\cite{steganalysisf5}. The authors of the reference implementation fixed this issue~\cite{F5broken}, and we were unable to find newer breaches. Newer derivates, such as nsF5~\cite{fridrich2007statistically} or MSET~\cite{hosseini2015modification}, were proposed. However, we did not consider these as candidates, as an appropriate reference implementation seemed to be unavailable.
 
 F5 hides its information in JPEG, BMP, and GIF images by matrix-encoding its information in the image data. According to~\cite{f5}, it has a capacity exceeding 13\% of the steganograms' size.
@@ -595,7 +595,7 @@ If a \VortexMessage{} is detected, the $prefix$ with the sender key $K_{sender_o
 Depending on the current quota (messages) and the identity status (temporary or established), further processing by the routing layer is acknowledged. For an overarching description of the whole message, processing see \cref{sec:messageProcessing}.
 
 
-\section{Decoy Content Generation}
+\section{Decoy Content Generation}\index{message!decoy}
 The decoy content of a message is an important part of the \MessageVortex{} system. It creates meaningful content for the traffic to be hidden within.
 
 Using F5 or similar mechanisms for blending, we decided to ensure that our content does not rquire to pass a Turing test. Normal email conversations are two-way and have many properties such as references to previous messages and similar contexts. In order not to fall into such traps, we use common machine-generated one-way messages with generated images. Examples of such messages are password recovery requests with Gravatars or monitoring messages with generated graphs (such as current running processes on a system). Such messages are easy to generate in various sizes and are machine-generated for obvious reasons.
@@ -626,7 +626,7 @@ As DER and CER are a subset of BER being more strictly defined, we decided to go
 \section{The Processing of Messages\label{sec:messageProcessing}}
 In this section, we focus on the processing of messages. Messages are processed either upon their arrival or if a routing block is processed. The processing of a routing block is typically relative to the delivery of the message containing the routing block. As an immediate result of processing a routing block, a new message is generated for a routing block or a message for the current node.
 
-\subsection{Workspace Layout}
+\subsection{Workspace Layout}\index{workspace}
 The workspace itself contains payload blocks assigned to workspace IDs. The ID space is divided into three parts as shown in \cref{tab:workspaceId}.
 
 \begin{table*}[ht]\centering\tiny
@@ -650,7 +650,7 @@ The workspace itself contains payload blocks assigned to workspace IDs. The ID s
 \end{table*}
 
 
-\subsection{Processing of Incoming Messages}\label{sec:processingIncommingMessages}
+\subsection{Processing of Incoming Messages}\label{sec:processingIncommingMessages}\index{message!processing in}
 In this section, we focus on the operations carried out by a routing layer on each message extracted by the blending layer. 
 
 A message extracted by the blending layer is passed to the routing layer for further processing. The source of the message (e.g., protocol of the message or sender address) is irrelevant and discarded by the blending layer. 
@@ -679,7 +679,7 @@ If the identity is not temporary, header requests are executed upon authorizatio
 
 As soon as the header requests are executed, the content is processed. The routing block operations are added to the workspace, and the mapping operations remain in the routing combo. 
 
-\subsection{Processing of Outgoing Messages}\label{sec:processingOutgoingMessages}
+\subsection{Processing of Outgoing Messages}\label{sec:processingOutgoingMessages}\index{message!processing out}
 In this section, we focus on the creation of new messages sent to the next hop router. The message creation is triggered in a timed manner based on the content of the $RoutingCombo$ and then passed to the blending layer for blending.
 
 The sending of a message is triggered by a routing block in the workspace, as shown in \cref{fig:msgSendProcessing}. The assembly instructions are processed to collect the payload blocks. Then the encryption is applied to the message and passed on to the blending layer for processing.
@@ -696,7 +696,7 @@ The message is assembled by building the $InnerMessageBlock$ with $cPrefix$, $he
 
 The resulting message is a valid \VortexMessage, but the generating node has no relevant knowledge about the message or its content except for the recipient address. %FIXMEX large space following this paragraph
 
-\subsection{Implementation of Operations\label{sec:implOperations}}
+\subsection{Implementation of Operations\label{sec:implOperations}}\index{operation}
 In this section, we focus on the implemented operations. The operations outlined in \cref{sec:operations} were implemented in exactly the described manner. Additionally, we implemented a mapping operation, copying the content of one payload ID to another one. The implementation and its test showed some weaknesses related to the platform and implementation specifics, which are outlined further.
 
 For our implementation, we used a HashMap to keep a list of all operations. The key of the HashMap is the output ID of the resulting operations. Instead of proactively executing all operations to obtain all possible payload IDs, we build a dependency tree of all required prerequisites. A caching structure allows us to efficiently work with the results of all operations. If an operation expires, all cached output of the respective operations is invalidated. If a payload block expires or is overridden, all outputs taking input from this payload directly or indirectly are invalidated. This allows us to keep a very efficient and compact representation of the payload space, not wasting any memory without necessity.
@@ -732,7 +732,7 @@ A reply is sent as a special message block and must be mapped to workspace ID 12
 	\label{fig:defReply}
 \end{lstfloat}
 
-\subsection{Requesting a new Ephemeral Identity\label{sec:newEID}}
+\subsection{Requesting a new Ephemeral Identity\label{sec:newEID}}\index{identity!ephemeral}
 One of the main requests for the protocol is the request for generating a new ephemeral identity. The goal of this operation is to create a non-hijackable workspace on a node while remaining anonymous. If having multiple \defref{eID}s on the same host, they must be unlinkable. Furthermore, it should be difficult for an adversary to flood a \VortexNode{} with workspace requests to cause a denial-of-service (DoS) attack.
 
 \begin{lstfloat}[ht]
@@ -788,7 +788,7 @@ By signing the request, the sender proves that he is in possession of the old ke
 
 A \VortexNode{} may reply with a ``quotaStatus'' message if the node owner decides to assign a different (possibly unlimited) quota to the identity. 
 
-\subsection{Replacing an Existing Reply Block\label{sec:replaceMURB}}
+\subsection{Replacing an Existing Reply Block\label{sec:replaceMURB}}\index{MURB}
 For sender anonymity, a sender may provide a reply block for single or multiple uses (SURBS and MURBS). These routing blocks use \defref{eID}s, which have by definition a limited lifespan. In this section, we focus on the implementation details for requests replacing such reply blocks.
 
 A routing block has a limited lifespan, which is directly limited by the \defref{eID}s involved. The first expiring \defref{eID} invalidates the block unless redundant paths are included. In this case, only redundancy would be reduced. To keep a message intact, even if a reply block of an anonymous sender expires, the sender may replace any existing reply block with a new routing block.
@@ -907,7 +907,7 @@ The \texttt{ReplyCapability} as shown in listing~\ref{lst:defCapabilityReply} al
 \end{lstfloat}
 
 
-\subsection{Storage Management of Ephemeral Identities,  Operations, and Payload Blocks}
+\subsection{Storage Management of Ephemeral Identities,  Operations, and Payload Blocks}\index{operation}\index{identity!ephemeral}\index{payload}
 The ephemeral identity (\defref{eID}) is the overarching unit of user data. In a normal message server, it may be comparable with the storage required for the queues. Unlike a message queue, \VortexMessages{} are not only kept until sent. \VortexMessages{} have different properties as we have a timed store-and-forward behavior. As a general rule, no data lives longer than its \defref{eID}.
 
 When an \defref{eID} is requested an absolute \texttt{UsagePeriod} (a timezone bound time) is specifies with an \texttt{AbsoluteUsagePeriod} is specified (see listing\ref{lst:defUsage}). Unless used for reply blocks (MURBs), \defref{eID} have a very limited lifespan of a couple hours. This minimizes any storage footprint associated with an \defref{eID}. 

@@ -8,7 +8,7 @@
 In \cref{sec:standardProtocols} we search for common Internet protocols suitable for hiding our traffic or accommodating data. In \cref{sec:informationHiding} we focus on technologies employed for problems related to anonymization or information hiding in general and analyze in \cref{sec:implSystems} available systems in this field.
 
 \chapter{Well Known Standard Protocols}\label{sec:standardProtocols}
-\hiddensection{SMTP and Related Post Office Protocols (1982)}\label{sec:mailTransport}
+\hiddensection{SMTP and Related Post Office Protocols (1982)}\label{sec:mailTransport}\index{email}
 Today's mail transport is mostly carried out via \defref{SMTP}\index{SMTP} protocol, as specified in~\cite{rfc5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from an Mail User Agent (\defref{MUA}) to an SMTP relay of a provider. From there, the message is directly sent to the recipient's SMTP server and then to the recipient's server-based storage. At any time the recipient may connect to his server-based storage and may optionally relocate the message to a client-based (local) storage. The delivery from the server storage to the MUA of the recipient may occur by message polling or by message push (whereas a push--pull mechanism usually implements the latter).
 
 To understand the routing of a mail, it is essential that we understand the whole chain starting from a user(-agent) until arriving at the target user (and being read!). To simplify this, we used a consistent model that includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical mail routing. It is essential to understand that mail routing remains the same regardless of the client. However, the availability of mail at its destination changes drastically depending on the type of client used. Furthermore, the mail flow and control over it may differ on the client and the message processing on the server.
@@ -68,7 +68,7 @@ Server-located clients are an absolute minority. This type of client was common 
 \hiddensubsection{Web Clients}
 Presently, web clients are a common alternative to fat clients. Most large provider companies use their proprietary web client. According to~\cite{clientDistribution2} the most common web clients are "`Gmail"', "`Outlook.com"', and "`Yahoo! Mail"'. All these interfaces do not offer a public plug-in interface. However, they typically do offer IMAP or similar interfaces. This is important for a future, generalistic approach to the problem.
 
-\section{S/MIME (1996)}
+\section{S/MIME (1996)}\index{s/mime}
 S/MIME is an extension of the MIME standard. The MIME standard allows in simple text-oriented mails an alternate representation of the same content (e.g., as text and as HTML) or splitting a message into multiple parts that may be encoded. It is important to note that MIME encoding is only effective in the body part of a mail.
 
 S/MIME, as described in~\cite{rfc3851}, S/MIME extends this standard with the possibility to encrypt mail content or sign it. Practically this is achieved by either putting the encrypted part of the signature into an attachment. It is essential to know that this method leaks significant pieces of the data.
@@ -77,14 +77,14 @@ As the mail travels directly from sender to recipient, both involved parties are
 
 The trust model is based on a centralistic approach involving generally trusted root certification authorities.
 
-\section{Pretty Good Privacy (1996)}
+\section{Pretty Good Privacy (1996)}\index{PGP}
 Exactly as S/MIME, PGP~\cite{rfc4880} builds on the basis of MIME. Since the trust model in PGP is peer-based, the encryption technology does not significantly differ (as seen from the security model).
 
 Similar to S/MIME, PGP does not offer anonymity. Sender and endpoints are known to all routing nodes. Depending on the version of PGP, some meta information or parts of the message content such as the subject line, the sender and receiver's real name, and the message size are leaked.
 
 An important fact from PGP is that peer-based approaches offer limited possibilities for trust. The trust in PGP is based on the peer review of users. This peer review may give an idea of how well verified the key of a user is.
 
-\section{XMPP}
+\section{XMPP}\index{XMPP}
 XMPP (or formerly Jabber) is defined in the RFCs~\cite{rfc6120,rfc6121,rfc3923,rfc3922} and features an own extension process on the base of XEPs. The community is very active in the development and has almost 200 proposed, drafted, active, final, or experimental XEPs. 
 
 At its core, XMPP is an open, secure, decentralized, and extensible standard for real-time capable protocol, allowing the efficient transfer of messages and signal status data. It allows single or multi-user chats and may be used as dialing protocol for voice, video file transfer, and for similar content.
@@ -101,7 +101,7 @@ Lagrange polynomes form an essential part when it comes to networking and privac
 
 Our approach is to use Lagrange not primarily for distributing data but to generate unidentifiable decoy traffic. When applying a Lagrange polynomial to a message, all factors contain parts of the original message. Given enough factors of the polynomial, anyone may reconstruct the original message. As a result, an adversary cannot tell which parts of the traffic are decoy and which part is the message, as all parts can recover the original message.
 
-\section{Mixing}\label{sec:mixNets}
+\section{Mixing}\label{sec:mixNets}\index{mixnet}
 Mixes were first introduced by \citetitle{CHAUM1}~\cite{CHAUM1} in \citeyear{CHAUM1}. The basic concept in a mix is as follows. We do not send a message directly from the source to the target. Instead, we use a proxy server or router in between, which picks up the packet, anonymizes it, and forwards it to the recipient or to another mix. If we assume that we have at least three mixes cascaded, we then can conclude that:
 \begin{itemize}
 	\item Only the first mix knows the true sender
@@ -125,7 +125,7 @@ In \citeyear{RP03-1} \citeauthor{RP03-1} analyzed the suitability for mixes as a
 \end{itemize}
 They concluded that in an ideal implementation, a dynamic mix network where every user operates one mix is the most promising solution as static mixes always might be hunted by an adversary.
 
-\section{Anonymous Remailers}\label{sec:remailers}
+\section{Anonymous Remailers}\label{sec:remailers}\index{remailer}
 Remailers have been in use for quite some time. There are several classes of remailers, and all of them are somehow related to Mix Networks. There are ``types'' of remailers defined. Although these ``types'' offer some hierarchy, none of the more advanced ``types'' seem to have more than one implementation in the wild. 
 
 Pseudonymous remailers (also called Nym Servers) take a message and replace all information pointing to the original sender with a pseudonym. This pseudonym may be used as a reply address. The most well known pseudonymous remailer possibly was anon.penet.fi run by Johan Helsingius. Several times, this service was forced to reveal a pseudonym's true identity before Johan Helsingius decided to shut it down. For a more in-depth discussion of pseudonymous remailers, see \ref{sec:remPseudo}
@@ -145,7 +145,7 @@ Mixminion remailers extend the model of Mixmaster remailers. They still use \def
 For a more in-depth discussion of Mixminion remailers see section \ref{sec:remMixminion}.
 
 
-\section{Onion Routing}
+\section{Onion Routing}\index{onion routing}
 Onion routing is a further development of the concept of mixes. In onion routers, every mix receives a message which is asymmetrically encrypted. By decrypting the message, the next hop's name and the content to be forwarded can be obtained. The main difference in this approach is that the mix decides about the next hop in traditional mix cascades. In an onionized routing system, the message chooses the route. 
 
 Onionized messages typically have the problem of a constant size loss throughout the system. Some systems counter this effect by separating the routing setup from the message path.
@@ -154,10 +154,10 @@ While tagging attacks are far more demanding (if we exclude side-channel attacks
 
 One very well known onion routing network is Tor (\href{https://www.torproject.org}{https://www.torproject.org}). For more information about Tor see section \ref{sec:tor}.
 
-\section{Garlic Routing}
+\section{Garlic Routing}\index{garlic routing}
 Garlic routing is an improved form of onion routing. It stops onionized messages from continuously loose contents on their way. A garlic router collects multiple, independent messages into one message before routing. This compensates for the ``size loss effect'' of onionized systems.
 
-\section{Crowds}
+\section{Crowds}\index{Crowds}
 Crowds is a network that offers anonymity within a local group. It works as follows:
 
 \begin{itemize}
@@ -170,22 +170,22 @@ While crowds, as specified in~\cite{crowds:tissec}, does anonymize the sender fr
 
 Furthermore, the blender is aware of all JonDos and thus of particular interest for any observing or censoring adversary. The control of the blender enables an adversary to split the network into controllable parts, adding a high likelihood of discovering the original sender.
 
-\section{Mimic Routes}
+\section{Mimic Routes}\index{mimic routes}
 Mimics are a set of statical mixes that maintain a constant message flow between the static routes. If legitimate traffic arrives, the pseudo traffic is replaced by legitimate traffic. An outside observer is thus incapable of telling the difference between real traffic and dummy traffic.
 
 If centralized mixes are used, the system lacks the same vulnerabilities of sizing and observing the exit nodes as all previously mentioned systems. If we assume that the sender and receiver operate a mixer themselves, the system would no longer be susceptible to timing or sizing analyses. The mimic routes put a constant load onto the network. This bandwidth is lost and may not be reclaimed. It does not scale well as every new participant increases the need for mimic routes and creates (in the case of user mixes) a new mimic load. Furthermore, the mixes are easily identifiable as their characteristic data stream contrasts with other network service streams.
 
-\section{Distributed Hash Tables}
+\section{Distributed Hash Tables}\index{DHT}\index{distributed hash tables|see {DHT}}
 Anonymous file transfer is sometimes supported by Distributed Hash Tables (DHTs). Systems like $I^2P$ (see \href{https://geti2p.net/}{geti2p.net}), or Freenet~\cite{freenet} base on DHT. Hash tables are typically used for an efficient lookup of data distributed within a system. As they support the distribution of data, they may implicitly support error tolerance, robustness and, thus, availability. They furthermore may be used as distribution mechanism allowing self-organization, load balancing, and scalability.
 
 In most anonymity systems using DHT, DHTs are either used to cloak nodes or services while enabling routing to them, or to build complex anycast structures.
 
-\section{Dining Cryptographer Networks}
+\section{Dining Cryptographer Networks}\index{DC network}
 DC networks are based on the work \citetitle{chaum-dc} by \citeauthor{chaum-dc}~\cite{chaum-dc}. In this work, \citeauthor{chaum-dc} describes a system allowing a one-bit transfer (the specific paper talks about the payment of a meal). Although all the DC net participants are known, the system makes it unable to determine who sent a message. The message in a DC-net is readable for anyone. This network has the disadvantage that a cheating player may disrupt communication without being traceable.
 
 Several attempts have been made to strengthen the proposal of Chaum~\cite{golle:eurocrypt2004,disco,herbivore:tr,Corrigan-Gibbs:2010:DAA:1866307.1866346}. However, no one succeeded without introducing significant disadvantages on the privacy side.
 
-\section{Private Information Retrieval}
+\section{Private Information Retrieval}\index{PIR}
 Private Information Retrieval (PIR)~\cite{chor1995private} was developed by \citeauthor{chor1995private}. It is a  public database organized in slots where some clients write into specific slots and other clients access the whole database so that the server is unable to tell what data was accessed. It is a simplified or weaker version of an oblivious transfer (1-out-of-n). PIR was described in theory and had two different approaches. A computationally secured approach (cPIR), which is the weaker one of the two approaches, and the information-theoretic secured approach (itPIR).
 
 PIR was the foundation or an inspiration for many other systems and extensions such as CSPIR~\cite{lipmaa2009first}, BddCpir~\cite{lipmaa2009first}, Popcorn~\cite{gupta2016scalable}, or Riposte~\cite{corrigan2015riposte}.
@@ -399,31 +399,31 @@ As key indicators for similar protocols, we identified the following characteris
 Unfortunately, all of the protocols found implement their ``own'' protocol, rendering them easily censorable. 
 
 \section{Resenders, Onion Routers, and MixNet-Based Systems}\label{sec:remailersAndMixnets}
-\subsection{Pseudonymous Remailers (1981)\label{sec:remPseudo}}
+\subsection{Pseudonymous Remailers (1981)\label{sec:remPseudo}}\index{remailer!pseudonymous}
 A pseudonymous remailer allows reaching people via a pseudonymous email address. The remailing server removes all traces of the original sender and inserts a pseudonymous email instead. The foundation of these remailers can be found in an early article by David Chaum~\cite{CHAUM1}.
 
 One of the most famous remailers was the Penet remailer (anon.penet.fi). This remailer only lasted from 1993 to 1996 and was shut down after two compromises involving the Chruch of Scientology. Details of the closure can be found in~\cite{penetClosure}.
 
 It drastically shows the problem of legal prosecution even within so-called ``democratic environments''.
 
-\subsection{Cypherpunk Remailers (approx. 1993)\label{sec:remCypherpunk}}
+\subsection{Cypherpunk Remailers (approx. 1993)\label{sec:remCypherpunk}}\index{remailer!cypherpunk}
 With the failing of anon.penet.fi, it became clear that the weakest spot of a single server infrastructure the information stored on the server and the vulnerability of their owner. The new type-1-remailers score over the existing type-0-remailers by using encryption for the message.  The time of the invention of the first type-1-remailers is unclear. Setting up a type-1-remailer was typically achieved by using Procmail together with a small script calling PGP binaries and then sending the resulting message to the next recipient. By combining multiple type-1-remailers, an onion-like structure of the message was achievable. 
 
 This approach was promising, but it was still observable. An observation was possible by correlating the message sizes (e.g., strictly decreasing) and timing information. Furthermore, remailers were known, and authorities were able to ban infrastructure and capable of monitoring their routing activities. The standard mail logs of such servers provided valuable evidence for legal prosecution if not disabled.
 
-\subsection{Babel (1996)}
+\subsection{Babel (1996)}\index{Babel}
 Babel was an academic system defined in a paper by \citeauthor{babel} in \citeyear{babel}~\cite{babel}. It was developed at IBM Zurich Research Laboratory. It was a mixing system using onionized addresses. The sender remains anonymous while he may provide a reply routing block called RPI. If both parties want to remain anonymous, the initiator's RPI was deployed in a forum thread. Anyone using this block adds an RPI for its address to the message.
 
 This system has all the disadvantages of a system using MURBs. Traffic highlighting, timestamps, and similar attacks are possible. Furthermore, the source of the RPIs on the message board was by design unclear and therefore not trustworthy.
 
-\subsection{Mixmaster-Remailers (1996)\label{sec:remMixmaster}}
+\subsection{Mixmaster-Remailers (1996)\label{sec:remMixmaster}}\index{remailer!Mixmaster}
 Similar to Cypherpunk remailers, the Mixmaster remailers worked with onion-like encrypted messages. The protocol was based on Chaum's MixNets in~\cite{CHAUM1} and further developed by L. Cotrell in 1996. 
 
 In contrast to type-1-remailers, the use of cascading systems to remail became systematic. The end-user used specialized software to build and send Mixmaster messages.
 
 Mixmaster messages were still traceable by message size. The system did not support reply blocks. A user had to know all Mixmaster nodes to use the system. The last node was typically an exit node sending the message in the clear to the final recipient. This behavior still allowed the use of Usenet.
 
-\subsection{Crowds (1997)}
+\subsection{Crowds (1997)}\index{Crowds}
 Crowds is an anonymity network for browsing and was the starting point for many similar systems such as D-Crowds, AN.ON and may be seen as a predecessor for Tor specialized in forwarding HTTP requests. 
 
 In Crowds, a user joins a crowd by registering at the blender node of a Crowd network a JonDo service. The network has, in addition to the blender, a variable number of nodes called JonDos. These nodes are forwarding nodes that either send a message to another random JonDo (including themselves) or forward it to the final recipient. The behavior is chosen based on a probability factor. The behavior is constant for a period (connection) and renegotiated from time to time (usually hourly). Furthermore, JonDos are required to strip any personal information from a request. 
@@ -432,7 +432,7 @@ A JonDo acts as a proxy for a web browser or other JonDos. Therefore, JonDos' ha
 
 While the concept of blending into a crowd of members was inspiring for many other solutions, it has specific weaknesses. JonDos may be collaborating, or the blender may create subnetworks of collaborating JonDos' to break anonymity. Furthermore, the strict forwarding property makes it susceptible to the predecessor attack~\cite{wright2004predecessor}, which intersects multiple (past) paths striving to reduce the anonymity set down to isolate the originating node.
 
-\subsection{Tor (2000)}\label{sec:tor}
+\subsection{Tor (2000)}\label{sec:tor}\index{Tor}
 Tor is one of the most common onion router networks these days and onionizes generic TCP streams. It is specified in~\cite{tor-spec}. It might be considered one of the most advanced networks since it has a considerable size, and much research has been carried out.
 
 According to~\cite{onion-routing:pet2000} Tor is a network consisting of multiple onion routers. Each client first picks an entry node. It establishes an identity, obtains a listing of relay servers, and chooses a path through multiple onion routers. The temporary identity links to such a path and should be changed regularly along with its identity. Transferring data works by splitting the data into equally sized cells of 512 bytes.
@@ -453,7 +453,7 @@ According to \url{https://www.torproject.org/docs/pluggable-transports}, it is i
 
 \cite{saleh2018shedding} is an excellent survey listing recent developments and attacks within the Tor project.
 
-\subsection{\texorpdfstring{$I^2P$}{I2P} (2001)}
+\subsection{\texorpdfstring{$I^2P$}{I2P} (2001)}\index{I2P}
 The name $I^2P$ is a derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The first binary release on SourceForge dates back to 2001. The system itself is comparable to Tor for its capabilities. Major differences are:
 \begin{itemize}
 	\item P2P-based.
@@ -467,7 +467,7 @@ $I^2P$ has not attracted as much attention as Tor so far. Thus, it is difficult 
 
 In \citeyear{pets2011-i2p} \citeauthor{pets2011-i2p} presented in~\cite{pets2011-i2p} an attack. As $I^2P$s security model is chosen based on IP addresses, the authors propose to use several cloud providers in different B-Class networks. By selectively flooding peers, an adversary may extract statistical information. The paper proposes an attack based on the heuristic performance-based peer selection. The paper's main critics were that the peer selection might be influenced by an adversary, enabling him to recover data on a statistical basis.
 
-\subsection{Mixminion-Remailers (2002)\label{sec:remMixminion}}
+\subsection{Mixminion-Remailers (2002)\label{sec:remMixminion}}\index{remailer!Mixminion}
 Mixminion was the standard implementation of a type-3-remailer. It tried to address many previously unresolved issues. 
 
 A Mixminion router splits messages in equally sized chunks and supports SURBs. Furthermore,  replay protection and key rotation were available. Unlike the previous remailer types, Mixminion was no longer using \defref{SMTP} as the transport protocol. Instead, Mixminion introduced a new transport protocol. The sources of this remailer are available on GitHub under \url{https://github.com/mixminion/mixminion}.
@@ -483,29 +483,29 @@ Mixminion-Networks have been privacy-wise criticized for the following:
 
 According to \url{https://mixminion.net}, the software's first release was in December 2002 and was discontinued in 2008. Since 2011, the sources are available on GitHub. There were forks in 2011, but currently, all forks seem to be inactive since at least 2016 as there are no new commits.
 
-\subsection{\texorpdfstring{$\mathcal{P}^5$}{P5} (2002)}
+\subsection{\texorpdfstring{$\mathcal{P}^5$}{P5} (2002)}\index{P5}\index{peer-to-peer privacy protocol|see {P5}}
 The Peer-to-Peer Personal Privacy Protocol is defined in~\cite{sherwood-protocol}. It provides sender-, receiver- and sender--receiver anonymity. According to the project page of $\mathcal{P}^5$, there is only one simulator available for the protocol.
 
 The transport layer problem has been wholly ignored, as there is no precise protocol specification. As there is only a rough outline of the messaging and the crypto operations, $\mathcal{P}^5$ offers minimal possibilities for analysis.
 
-\subsection{AN.ON (2003)}
+\subsection{AN.ON (2003)}\index{AN.ON}
 AN.ON, as suggested in~\cite{federrath2003system}, is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. Its implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is in many ways similar to the capabilities of Tor. The network was at the time of writing much smaller (10 JonDos compared to 6500 relays in the Tor network).
 
 While the approach is both simple and effective, it is not suitable against a powerful adversary. First, an adversary may be able to observe the forwarding when on the system. Second, due to the timing behavior, tunnels belonging to each other may be identified, and third, the package size information leaks as well.
 
-\subsection{AP3 (2004)}
+\subsection{AP3 (2004)}\index{AP3}
 AP3, as defined in~\cite{mislove2004ap3}, is an anonymous communication system and very similar to crowds. It performs a random walk over a set of known nodes. Not all nodes are known to anyone, and all nodes are aware of the final recipient. 
 
 The system is susceptible to numerous attacks, as shown by~\cite{ccs2008:mittal}, and does not withstand our adversary as the final recipient is known to the routing nodes. 
 
-\subsection{Cashmere (2005)}
+\subsection{Cashmere (2005)}\index{Cashmere}
 Cashmere is specified in~\cite{zhuang2005cashmere}. It defines a protocol for the use of Chaum mixes. Unlike most of the protocols, the Chaum mixes in Cashmere are virtual. So-called relay groups represent them. Each mix in the relay group may be used as an equivalent mix to all other mixes in the same group. 
 
 This design means that the failure of one mix does not result in the non-delivery of a message.
 
 No client implementation could be found on the Internet. The project homepage \href{http://current.cs.ucsb.edu/projects/cashmere/}{http://current.cs.ucsb.edu/projects/cashmere/} has not been updated since 2005. This suggests that this project is either dead or sleeping.
 
-\subsection{SOR (2012)}
+\subsection{SOR (2012)}\index{SOR}\index{ssh based onion routing|see {SOR}}
 SSH-based onion routing (SOR).~\cite{Egners_2012} criticize
 the complex and monocultural landscape of anonymizing software and proclaims a very simple approach based on onionized SSH tunnels to forward TCP streams. The system might be modified further to forward UDP or other protocols asn well by using an instance of netcat converting UDP traffic into a forwardable data stream.
 
@@ -513,21 +513,21 @@ The system was not really up to date at the time. While using a common, encrypte
 
 Unlike most other systems, SOR does not introduce an own protocol but uses an existing protocol with many legitimate uses. This makes it difficult for an adversary to ban the protocol. Its approach in terms of hiding may be seen as somewhat similar to our approach.
 
-\subsection{PGA (2013)}
+\subsection{PGA (2013)}\index{PGA}\index{Pretty Good Anonymity|see {PGA}}
 Pretty Good Anonymity~\cite{standtke2013pretty} attempted to create a single node anonymity service. The client is running a local proxy which encapsulates the client traffic into the ``PGA Tunneling Protocol''. The protocol may hide traffic by adding additional (adaptive) decoy traffic (dummy traffic). It may be seen as a low latency encrypted SSH tunnel with additional anonymity features such as decoy traffic. It is capable of tunneling in a generic way any kind of TCP connection. UDP is not known to be supported.
 
 We did not include it into our table as it never achieved broad adoption and there is no routing involved. 
 
 The system does not withstand our adversary, as the PGA tunnelling protocol is detectable. Unlike most of the systems, an implementation of the system in Java is available.
 
-\subsection{Vuvuzela (2015)}
+\subsection{Vuvuzela (2015)}\index{Vuvuzela}
 Vuvuzela was presented by \citeauthor{van2015vuvuzela} in~\cite{van2015vuvuzela}. It is a scaleable anonymity system offering a high throughput between millions of users. The system is available as a PoC implementation written in Go. An adversary is immediately aware that clients use Vuvuzela. He is, however, unable to match up with communication peers over time. The Vuvuzela client software is available under \href{https://vuvuzela.io/} and connects to a Vuvuzela network forming a centralized infrastructure. According to its authors, Vuvuzela infrastructure may handle up to 10 million users with an average bandwidth cost of 3.7KB/s per user.
 
 Vuvuzela routes user messages through a chain forward and back again before redistributing the final messages to their recipients. Each node adds additional decoy traffic to further improve the anonymity of the message path. The authors calculated that each user contributes $\approx 12 \frac{KB}{s}$ traffic adding up to $30 GB$ per month. A server node had an average throughput $166 \frac{MB}{s}$. Vuvuzela protects the messages of peer partners as long as one server in the used chain is not controlled by the adversary. It however does not protect the fact that both peer partners are using Vuvuzela. 
 
 Vuvuzela assumes that the chain of servers and the involved public keys are known to the client ahead of time. Messages are delivered in synchronized rounds into common, ephemeral dead drops created by the users. The ephemeral dead drop design makes it impossible for an adversary to identify users over time. 
 
-\subsection{Riffle (2016)} %Mix
+\subsection{Riffle (2016)}\index{Riffle} %Mix
 Riffle~\cite{kwon2016riffle} is developed by MIT in Python and Go as an alternative to Tor, addressing some of its flaws. Riffle servers are mixes collecting user information, shuffling it, and sending it to the next mixes or targets. The shuffling is secured by a zero-knowledge-proof while the permutation itself is hidden.
 
 The messages are sent in clusters, whereas every client sends or receives data in every round (mimicking traffic). The sent blocks are padded to a fixed value to prevent size analysis. Such a system is far better protected against timing attacks than Tor at the price of a considerable higher latency and bandwidth. 
@@ -549,7 +549,7 @@ Thus far, the Riffle system has not attracted much interest in the academic worl
 %\fxwarning{ find information on cMIX}
 %
 
-\subsection{MCMix (2017)}
+\subsection{MCMix (2017)}\index{MCMix}
 In~\cite{alexopoulos2017mcmix} \citeauthor{alexopoulos2017mcmix} introduce a messaging system based on Multiparty Computation (MPC) suitable for routing up to 100K users in less than a minute for tweet-sized messages. The protocol has a theoretical parallelizable variant to increase the size of such a group. The network load remains constant, depending on the maximum supported message size. The authors estimated a constant data stream of $78 \frac{MB}{Month}$ when using a 144 (SMS/tweet-sized) message and a round time of 1 minute. As in other protocols (e.g., PIR or Riposte), MCMix uses ``dead drops'' to replace connections to communicate between two or more entities. 
 
 The system uses a predefined hierarchy of entry servers for receiving all input data, an MPC server cluster to handle the MPC calculations, and output servers to provide messages to the final recipients. Accounts are derived by generating a public key from the username. This eliminates the need for a centralized PKI. 
@@ -568,12 +568,12 @@ The authors implemented the input and the output servers but only simulated the 
 %\fxwarning{Add Stadium and classify}%
 %
 
-\subsection{SCION (2017)}
+\subsection{SCION (2017)}\index{SCION}
 SCION~\cite{perrig2017scion} is a clean slate Internet protocol. While SCION is not an anonymizing protocol, it contains many interesting features. Unlike with the traditional networks, we have the possibility of influencing the routing of data within SCION. Furthermore, with PHI~\cite{chen2017phi} and Dovetail~\cite{sankey2014dovetail}, SCION may feature strong and fast anonymity features. 
 
 Unfortunately, as this is a clean slate Internet design, it is currently not commonly available. As it is easily identifiable, it enables easy censorship as the relevance is due to its current availability of no importance. A censoring adversary may just ban and censor SCION entirely. 
 
-\subsection{Karaoke (2018)}
+\subsection{Karaoke (2018)}\index{Karaoke}
 Karaoke~\cite{lazar2018karaoke} is a low latency messaging system offering an alternative to high latency systems such as Vuvuzela or Stadium. Karaoke claims to have a latency up to 10 times lower than Vuvuzela or stadium. 
 
 Karaoke uses `dead drops'' to transport messages. The access is organized in rounds, and in each round, all users access one dead drop. The access itself is controlled by a series of mixes shuffling the requests and replies. The path of the message through the mixes is chosen by the sender. Messages within the Karaoke system have a fixed size.
@@ -582,14 +582,14 @@ Karaoke does not withstand an active adversary. In an environment with a passive
 
 \section{PIR-Based Systems}
 
-\subsection{Riposte (2015)}
+\subsection{Riposte (2015)}\index{Riposte}
 Riposte~\cite{corrigan2015riposte} is an anonymity messaging system inspired by DC networks that scale well for tweet-sized messages. The messages are sent on a regular basis (time epochs). The system achieves sender anonymity by distributing parts of a message over multiple hosts. To reduce the size of the transferred message, Riposte uses a Distributed Point Function (DPF) described in~\cite{gilboa2014distributed}. This reduces the messages transferred to each server to $\sqrt{databaseSize} Bytes$.
 
 In some ways, Riposte turns the PIR system upside down. Instead of someone writing in a database slot and then not disclosing which slot was accessed by a recipient, Riposte makes the writing of the slot anonymous, and the recipient may freely access the interesting slots. The classification is however not clear as it involves mixes as well as DC-nets.
 
 % https://www.youtube.com/watch?v=hL3AnIOfu4Y
 
-\subsection{Pung (2016)}
+\subsection{Pung (2016)}\index{Pung}
 Pung as introduced in~\cite{angel2016unobservable} is a further development of PIR~\cite{chor1995private} which was proposed in \citeyear{chor1995private} and implemented in systems such as Riffle~\cite{kwon2016riffle}, PIR-Tor, or Pynchon Gate.
 
 As many other systems, Pung works in rounds. To reduce the set of records to be fetched from the PIR database, labels are applied to the records. By filtering by labels, the recipient hides within an anonymity set. The sender chooses the labels, and the recipient has to query a sufficient set of labels to create a sufficiently large anonymity set. As this is difficult to accomplish on a random scale while maintaining credible traffic, we believe that this is one of the major weaknesses of Pung.
@@ -603,39 +603,39 @@ As most other anonymity systems, Pung has its protocol and thus remains easily d
 %
 
 \section{Distributed Hash Tables}
-\subsection{Tarzan (2002)}
+\subsection{Tarzan (2002)}\index{Tarzan}
 Tarzan is a P2P IP protocol using UDP to communicate. It is specified in~\cite{tarzan:ccs02}. Tarzan nodes may be used to anonymize Internet traffic in general. An initiator on the original sender machines encapsulates traffic into a layered UDP package and sends the package through a mix like relayd's. The last relayd acts as an exit node. A replier may send answers the opposite way. Each relayd knows its next and previous relayd. To minimize the impact of observation, Tarzan forwards packets only every 20ms and features replay protection.
 
-\subsection{MorphMix (2002)}
+\subsection{MorphMix (2002)}\index{MorphMix}
 MorphMix was a thesis published by \citeauthor{morphmix:wpes2002} in~\cite{morphmix:wpes2002}. MorphMix was among the first to introduce a pure peer-to-peer anonymity protocol. Users and mixes were indistinguishable, and there was no cover traffic generated to save bandwidth. For anonymity, it uses a source-controlled, onionized routing system. Nodes are discovered by querying any random first node. It was a circuit-based mix system for networking anonymity. The core of the network was collision detection. This detection was circumvented by~\cite{morphmix:pet2006}. Since then, no new papers were published and the project seems to be dead.
 
 In many respects, MorphMix may be seen as an ancestor of \MessageVortex. However, \MessageVortex{} goes far beyond the capabilities of MorphMix while eliminating most of its weaknesses.
 
 
-\subsection{Salsa (2008)}
+\subsection{Salsa (2008)}\index{Salsa}
 Salsa was proposed in~\cite{Salsa} and described a circuit-based anonymization pattern based on distributed hash tables (DHT). An implementation for Salsa is available, but it is not public. \cite{ccs2008:mittal} claims that by combining active and passive attacks, anonymity can be compromised.
 
 \section{Dining Cryptographer-Based Networks}
-\subsection{Herbivore (2003)}
+\subsection{Herbivore (2003)}\index{Herbivore}
 Herbivore is a network protocol designed by \citeauthor{herbivore:tr} in~\cite{herbivore:tr}. It is based on the dining cryptographers paper~\cite{chaum-dc}. No herbivore client or an actual protocol implementation could be found on the Internet at the time of writing. Wikipedia lists Herbivore as ``dormant or defunct''.
 
-\subsection{Dissent (2010)}
+\subsection{Dissent (2010)}\index{Dissent}
 Dissent is defined in~\cite{Corrigan-Gibbs:2010:DAA:1866307.1866346}. It is an anonymity network based on DC-nets. A set of servers forms these DC-nets, of which at least one in the used net must be trustworthy, and none may be misbehaving. A server failure results in the stalling of all message delivery using this server.
 
 In an attempt to improve Dissent \citeauthor{wolinsky2012dissent} introduced in~\cite{wolinsky2012dissent} a modified version. This improved version mainly addresses the scalability issues of the original design. Furthermore, the authors addressed some information leakage and scalability flaws in the original approach.
 
-\subsection{Verdict (2013)}
+\subsection{Verdict (2013)}\index{Verdict}
 Verdict~\cite{180367} is an improved version of Dissent using proactively verifiable DC-Nets. It uses zero-knowledge proofs (ZKPs) to detect misbehaving nodes. The authors claim that it can process 1000 senders within 10 seconds.
 
 Unlike many other systems, Verdict withstands an observing adversary as defined within this work. However, due to the message patterns generated when communicating even when steganographically hiding the traffic, a censoring adversary would detect the traffic generated. Tampering with the protocol itself would be detectable, and thus honest nodes could exclude misbehaving nodes from such a DC-net.
 
 \section{Broadcast and Multicast Networks}
-\subsection{Hordes (2002)}
+\subsection{Hordes (2002)}\index{Hordes}
 Hordes was a multicast-based protocol for anonymity specified in~\cite{Levine:2002}. Hordes is a Crowds system that uses multicast services for the reply, thus speeding up the latency loss of Crowds. Hordes uses the ability to handle multicast addresses by routers to generate a dynamic set of receivers and then send messages. It assumes that a single observer or router does not know all participating peers. 
 
 This assumption is correct for a local observer. Unfortunately, it is not sufficient for the adversary defined in this paper.
 
-\subsection{Atom (2016)}
+\subsection{Atom (2016)}\index{Atom}
 Atom~\cite{kwon2016atom} is an asynchronous anonymity service for small messages claiming to be scaleable and transferring up to a million tweet-sized messages in 28 minutes. Its PoC implementation is written in Go and was tested by creating a series of AWS-based EC2 instances. It provides a broadcast primitive with limited reach by grouping its servers into small groups. All messages have equal length, and groups organize all received messages in batches and distribute them to other server groups. This results in a mix cascade somehow similar to the Mixminion system. However, the system extends the mix cascades with zero-knowledge proof so that tampering may be discovered to a certain extent.
 
 According to the paper, many aspects of Atom remain unsolved. Key distribution is proposed to be carried out by trustworthy third party ``directory authorities''. To remain anonymous, at least one honest node per group is required. Identifying malicious users in Atom requires a collaborative effort involving the publications of the entry groups' private keys. Malicious users are proposed to be blacklisted by the directory authorities. 
@@ -648,7 +648,7 @@ As most of the other protocols, Atom implements its protocol making it susceptib
 
 \section{Distributed Storage Systems}
 
-\subsection{Freenet (2000)}
+\subsection{Freenet (2000)}\index{Freenet}
 Freenet was initially designed to be a fully distributed data store~\cite{freenet}. Documents are stored in an encrypted form. Downloaders must know a document descriptor called CHK containing the file hash, the key, and some background about the crypto being used. A file is stored more or less redundantly based on the number of accesses to a stored file. The primary goal of Freenet is to decouple authorship from a particular document. It furthermore provides fault-tolerant storage, which improves the caching of a document if requested more often.
 
 Precisely as $I^2P$, Freenet is not analyzed thoroughly by the scientific world. 
@@ -657,11 +657,11 @@ Freenet features two protocols FCPv2 acts as the client protocol for participati
 
 The Freenet project seems to be under active development as pages about protocols were updated in the near past (the last update on the FCPv2 Page was August \nth{8} 2020 at the time of writing).
 
-\subsection{Gnutella (2000)}
+\subsection{Gnutella (2000)}\index{Gnutella}
 Gnutella is not a protocol for the anonymity world per se. Instead, the Gnutella protocol implements general file sharing on a peer-to-peer basis. This approach is the most interesting aspect of Gnutella in this context. Furthermore, Gnutella is proven to be working with a large number of clients.
 
 The current protocol specification of Gnutella is available at  \href{http://rfc-gnutella.sourceforge.net/developer/stable/index.html}{http://rfc-gnutella.sourceforge.net/}. While the Gnutella network is defunct, the approaches to solving some of the peer-to-peer aspects were very interesting.
 
-\subsection{Gnutella2 (2002)}
+\subsection{Gnutella2 (2002)}\index{Gnutella2}
 Despite its name, Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and was developed in a different direction. The specification of Gnutella2 is available at \url{http://g2.doxu.org}. Just as its predecessor, Gnutella2 seems to be dead. The last update to the main site was in 2016 and the last update to the protocol on 2007. 
 

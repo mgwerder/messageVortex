@@ -128,7 +128,7 @@ We then carried out an analysis identifying the typical entropy and the inner st
 	\end{tabular}    
 	\caption{Comparison of potential transport layer.}
 	\label{tab:fileEntropy}
-\end{table*}
+\end{table*}\index{entropy}
 
 When blending into images, BMP showed a strongly varying entropy within a file. A sampling of ten blocks at random position already resulted in detection with a false positive rate below 5\%. PNG and JPG files showed to be very robust within the sample. We did not succeed in identifying the \MessageVortex{} blending content based on entropy values. GIF images showed to be unsuitable. Archive formats such as zip files were extremely robust. We were able to embed it into a zip file and marking it (generically) as an encrypted file. This embedding was genuinely undetectable. However, such embedding may potentially lead to censorship based on the blacklisting of encrypted zip files.
 
@@ -142,15 +142,15 @@ All movie formats performed similarly to jpg and PNG. However, due to the very c
 \subsection{Analysis of Core Operations}
 The core operations form a toolset for mixing messages. Under the operational restrictions outlined in \cref{sec:routingStrategies}, we analyze in the following section the operations and determine their capability for leaking information or affecting security.
 
-\subsubsection{Splitting and Merging}
+\subsubsection{Splitting and Merging}\index{operation!split}
 The operations $splitPayload$ and $mergePayload$ are the trivial operations of our operations set. The operations by themselves leak some information under the assumption that they were previously encrypted. A split or merge operation on its own leaks possible counterparts as the size should add up to a blocksize common in symmetric cryptography. As we outlined in \cref{sec:mergeAndSplit} and \cref{sec:routingStrategies} either an encryption step or an add redundancy step has to be added before a \VortexNode{} may forward the block to the next layer. When doing so, we can say that the operation leaks no more than any cryptographically secure operation.
 
 For a \VortexNode{} executing the operation, a split operation does not leak any additional properties. The input may be payload or not. Therefore, the output of the operation has the same properties as the input. Unless the \VortexNodes{} knows the incoming payload's nature, the output may be either decoy or true message traffic.
 
-\subsubsection{Encryption and Decryption Operations}
+\subsubsection{Encryption and Decryption Operations}\index{operation!encrypt}
 All encryption steps leak some properties. They may leak the algorithm due to the block size. The chosen parameter may be unique to the RBB. If randomly chosen, this is no longer the case. If chosen by an implementation-specific pattern, the pattern may leak the implementation over time. As the analysis must be completed over a short period (the lifetime of an \defref{eID}), it is up to an RBB to leak as little information as possible. However, we regard the cryptographically secured content as secure. 
 
-\subsubsection{Add and Remove Redundancy Operations}\label{sec:analysisReedSolomon}
+\subsubsection{Add and Remove Redundancy Operations}\label{sec:analysisReedSolomon}\index{operation!redundancy}
 During analysis, the $addRedundancy$ operation showed the undesirable behavior that applying the operation lowered the target blocks' entropy, as shown in \cref{fig:entropy}. 
 
 Thus, we reconsidered the whole operation. The choice of the Reed--Solomon (RS)-operation instead of a Lagrange polynomial seemed logical, as the possibilities to recover from cheaters in an RS setting of varying contexts have already been studied in~\cite{mceliece1981sharing},~\cite{bu2017rasss}, and similar publications.
@@ -237,12 +237,12 @@ One strategy to avoid this would be to put high costs onto cleartext requests so
 
 A node is free to blacklist an identity in case of an early reply. This is an insufficient strategy as a strong adversary may have many identities in stock. Requesting an unusually long key as a plaintext identity does not make sense either, as these as well may be kept in stock. However, we may force a plaintext request to have an identity block with a hash following specific rules. For example, we may put in a requirement that the first four bytes of the hash of a header block correspond to the first four characters of the routing block. At the moment, this was rejected in the standard for practical reasons. First, as the request is unsolicited, a sender is the only one able to decide the hash's algorithm. This would allow a requester to choose upon the complexity of the puzzle. Second, any negotiation of the request's cost would result in the disclosure of the node as \VortexNode, which might be unsuitable.
 
-\subsubsection{Hotspot Attacks}
+\subsubsection{Hotspot Attacks}\index{attack!hotspot}
 Hotspot attacks aim to isolate high traffic sites within a network. By analyzing specific properties, or the general throughput locations with outstanding traffic may be identified. These messages quite often reveal senders or recipients. Sometimes even an intermediate node in an anonymizing system. 
 
 The assumption that a hotspot arises at a specific point in our protocol is wrong. At any point in the lifecycle of a message, either payload blocks are left out until expiry, or additional traffic may be generated using an $addRedundancy$ operation.
 
-\subsubsection{Message Tagging and Tracing}
+\subsubsection{Message Tagging and Tracing}\index{attack!tagging}
 When using an anonymization system, a message may be either fully or partially traced or even tagged. Tagging allows one to recognize a message at a later stage and map it to its predecessors. Protocols with tagable messages are not suitable for anonymization systems.
 
 \VortexMessages{} are not tagable. The constraint ``no repeating pattern'' prohibits the forwarding of any block without an appropriate operation. This denies the possibility of tagging a payload block. All other blocks (prefixes, header, and routing block) are discarded when forwarding the message. The same applies to the carrier message, which is used as transport for the blended \VortexMessage.
@@ -252,7 +252,7 @@ Injecting a value into a payload block and following it would imply that the evi
 \subsubsection{Side-Channel Attacks}
 Side-channel attacks are numerous. Especially important to us are attacks related to either lookup in independent channels (e.g., downloading of auxiliary content of a message) or behavior related to timing patterns.
 
-\subsubsection{Sizing Attacks}
+\subsubsection{Sizing Attacks}\index{attack!sizing}
 There are two types of sizing attacks identified as relevant for us. One is the possibility of matching messages with related sizes, and the other is to relate message size to the original messages. Both attacks may be considered as a tracing attack and will be analyzed accordingly. 
 
 When matching messages in size, an attack is attractive if it allows collapsing the operations of one or multiple honest \VortexNodes{} between two malicious \VortexNodes. To do so, the second evil node may match the sizes of the received payload blocks and hypothesize about which blocks are equal, or it may assign the \defref{eID} of the first evil node to the \defref{eID} of the second node. The matching is not trivial, as\ldots
@@ -263,7 +263,7 @@ When matching messages in size, an attack is attractive if it allows collapsing 
 	\item The size may have been further obfuscated because an onionized encryption does either not add to the size (if an algorithm with the same block size is applied and no padding) or is increases (by the block size). Obfuscation is possible as well, if we apply a $splitPayload$ or $mergePayload$ operation with a subsequent encryption (mandatory to not violate the ``repeating pattern rule'') or an $addRedundancy$ operation.
 \end{enumerate}
 
-\subsubsection{Bugging Attacks}
+\subsubsection{Bugging Attacks}\index{attack!bugging}
 Numerous attacks are available through the bugging of a protocol. In this chapter, we outline some of the possibilities and how they may be countered:
 
 \begin{itemize}
@@ -283,7 +283,7 @@ Numerous attacks are available through the bugging of a protocol. In this chapte
 	A straightforward attack is always to include external resources into a message and wait until they are fetched. In order to avoid this type of attack, plaintext or other self-contained formats should be used when sending a message. As we may not govern the type of contained message, we can make at least recommendations concerning its structure.
 \end{itemize}
 
-\subsubsection{Analysis by Building Interaction Graphs\label{sec:analysisInteractionGraphs}}
+\subsubsection{Analysis by Building Interaction Graphs\label{sec:analysisInteractionGraphs}}\index{attack!interaction graph}
 Building interaction graphs is very difficult to accomplish with our system. Although we cannot quantize the effect, we still may elaborate on the difficulties. We first look at our system from an outside view and then do the same for a powerful adversary inside the system.
 
 When looking from outside the system, interaction graphs are difficult to build as sending and receiving transport addresses, and protocols do not match, which adds tremendously to the complexity. An outside observer may not just observe a specific SMTP server. He must track incoming messages, observe the user (typically obtaining the mail by IMAP) fetch the messages, and then follow all possible connections to other infrastructures known to be supported and asume to be outbound messages. By assuming that an outside observer is able to identify all \VortexMessages{} and surpass all difficulties involved in following the different protocols. Then such an observer is capable of generating a graph having as nodes all \VortexNodes{} and as edges all \VortexMessages{}. An adversary would then require the means to identify the sender and recipient. We first claim that there is no possibility to identify such senders and recipients as there is no guaranteed minimum or maximum time for a message. As an immediate result, any \VortexNode{} sending a message may be a sender of a message or only a router. Inversely, any \VortexNode{} receiving a message may be either a recipient or a router. Due to the operations, sizes may increase or decrease on message paths. Therefore, an outside adversary is unable to match two adjacent messages to the same identity. Any previous message, including all subsequent messages, may have triggered the sending of the message. So from an outside perspective, we have no possibility to identify by message pattern, message size, or message sequence adjacent messages.
@@ -312,10 +312,10 @@ From an inside perspective, we take additional information into account. First, 
 We can therefore tell that we need to trust the sending and receiving node to be safe. Furthermore, we need additional traffic generated by any non-collaborating \VortexNode{}. The fact that there are neither timing nor sizing constraints makes it impossible to match any two messages to the same original sender. Therefore, our message is not traceable if there is additional traffic going through our trusted nodes, and honesty of the initially sending node as well as the final recipient node is assumed.
 
 \subsection{Denial of Service Attacks}
-\subsubsection{Censorship}
+\subsubsection{Censorship}\index{attack!censorship}
 Whereas traditional censorship is widely regarded as selective information filtering and alteration, very repressive censorship can even include the denial of information flows in general. Any anonymity system not offering the possibility to hide in legitimate information flows is therefore not censorship-resistant.
 
-\subsubsection{Denial of Service}
+\subsubsection{Denial of Service}\index{attack!DoS}
 An adversary may flood the system in two ways.
 \begin{itemize}
 	\item He may flood the transport layer exhausting resources of the transport system.\\
@@ -326,7 +326,7 @@ An adversary may flood the system in two ways.
 	Flooding an accounting layer with identities is possible. Since the accounting layer is capable of adapting costs to a new identity, it may counter this attack by giving large puzzles to new identities. This affects all new identities and not only those flooding. If a flooding attack is carried out over a long time, a node may decide to split its identity. All recent active users receive a new identity, whereas the old one opposes high costs. This would force an attacker to work in intervals and is no longer able to make a permanent DoS attack.
 \end{itemize}
 
-\subsubsection{Credibility Attack}
+\subsubsection{Credibility Attack}\index{attack!credibility}
 Another type of DoS attack is the credibility attack. While not a technical attack, it is very effective. A system without a sufficiently big user base is offers thus a lousy level of anonymity because the anonymity set is too small or the traffic concealing message flow is insufficient. 
 
 Another way is to attack the reputation of a system in such a way that the system is no longer used. An adversary has many options to achieve such a reduction in credibility. Examples are:
@@ -343,7 +343,7 @@ Another way is to attack the reputation of a system in such a way that the syste
 	If the infrastructure is known or suspected to be run by a potential adversary, people's willingness to believe in such a system is expected to be drastically reduced.
 \end{itemize}
 
-\subsubsection{Denial of Service by Exhausting Quotas or Limits}
+\subsubsection{Denial of Service by Exhausting Quotas or Limits}\index{attack!exhausting quota}
 A malicious node may try to exhaust quotas or limits. As we trust the sender and recipient, all other nodes are unaware of the forward secrets used in the message. The options for an adversary are then as follows:
 
 \begin{itemize}
@@ -351,11 +351,11 @@ A malicious node may try to exhaust quotas or limits. As we trust the sender and
 	\item Creating intentionally huge, incorrect message content to exhaust transfer quota.
 \end{itemize}
 
-\subsection{Attacking Sending and Receiving Identities of the \MessageVortex{} System}
+\subsection{Attacking Sending and Receiving Identities of the \MessageVortex{} System}\index{attack!identity}
 An adversary's most valuable goal is breaking an entity's anonymity or monitoring their traffic by the content or the metadata. In the following sections, we analyze the possibility of determining the sender or recipient of a message.
 
 
-\subsubsection{Traffic Highlighting}
+\subsubsection{Traffic Highlighting}\index{attack!highlighting}
 Traffic caused by a routing block may be observed to a certain extent on a statistical basis. A node may generate bad message content of exceptionally large or small nature. Such messages might potentially highlight messages involved in message routing using no split or relative split operations as well as addRedundancy operations.
 
 \subsection{Recovery of Previously Carried out Operations}
@@ -363,18 +363,18 @@ An adversary must be unable to recover parameters of a previously carried out op
 
 We have however found a flaw in the $addRedundancy$ operation. When applying this operation to an encrypted block, the resulting block's entropy leaks some of the operation parameters. As a result of this finding, we added a custom padding and an additional encryption step. The repeated analysis showed that the operation no longer leaks these parameters through this channel.
 
-\section{Side Channel Leaking}
+\section{Side Channel Leaking}\index{attack!side channel}
 We tried to minimize the number of possible side channels. Some of the side channels are irrelevant as trusted nodes control them. Some side channels remain unavoidable unless we restrict messages to an unrealistic minimum. 
 
 \subsection{Software Updates and Related Data Streams}
 We consider assuming in today's world that updates are not needed for security reasons a foolish thing. However, downloading a software update may uncover a user. While it is feasible to transport software unseen once, transporting software on a regular basis is a tedious job. Therefore, we included a standard way of querying a new software release and receiving the new release over the \MessageVortex{} protocol allowing the same degree of privacy as with all other messages sent. While the path itself is cryptographically secured, we recommend that the code should still be signed, and the signature should be verified before upgrading to a new software version.
 
-\subsection{Bugging in Transported Messages}
+\subsection{Bugging in Transported Messages}\index{attack!bugging}
 Bugging in transported messages is possible as we have no clear definition of the content of a message. As the transport is currently XMPP and SMTP, the assumption of sending MIME-encoded messages is obvious. The availability of clients and the simple feasibility of gateways make it an obvious choice. If we use MIME as transport encoding, we may leak certain attributes such as the reading location of a message to a sender by including external images or signing the message with a certificate whose verification authority is tapped. Since we trust the sender and recipient node and assume that the RBB is one of them, this argument does not count towards any of the messages. Any other intermediate routing node has no means of injecting any content into the message or the routing bloks. Therefore, in terms of bugging protocol messages, our protocol is rather secure.
 
 This statement leaves some interesting questions unanswered. First, when creating an \defref{eID} on an intermediate node, we have to analyze this situation as well as trust the target node (the node on which an \defref{eID} is allocated), which in such a situation is most likely not trustworthy. While the node is a final node for the request, the node is not regarded as the final destination for a message. In that specific case, the reply block the node receives maps not to ID 0, but 32767 (see \cref{tab:workspaceId}). This difference keeps a routing node to misuse the reply block for sending a bugged message.
 
-\subsection{Exploiting MURBS}
+\subsection{Exploiting MURBS}\index{attack!routing}
 Multi-Use Reply Blocks (\defref{MURB}s) are another source for a side-channel attack. While technically safe, the possibility of creating repeating patterns over a network causes the possibility to recognize the communication pattern. As we have no strict timing for sending our messages, this pattern discovery remains a not easily solvable problem. To make it even more difficult, we restricted the reuse of a MURB by design to 127 times and included the possibility to of using different prefix blocks in each message. Without these prefix blocks, the pattern would have been easily identifiable as the prefix block would have formed a byte sequence that would have been detectable in all messages using the same MURB.
 
 Replaying a message built with a MURB does not necessarily require identifying \VortexMessages{}. It is sufficient to store and replay a suspected message and trying to analyze whether a related communication pattern is visible. The pattern reflects all messages which are triggered by the message. As an adversary is unaware whether he replayed the first or an intermediate message, he cannot tell whether he was able to observe the full graph or just a subset. Furthermore, the graph generated by the replaying (assuming that the replay protection did not catch the message) may be smaller, as other parts of the message traveling through other nodes may not have been replied to, leading to non-sendable messages.
@@ -437,10 +437,10 @@ A routing node $n_{1,}$ may not know if a \VortexMessage{} received from $s$ is 
 
 If all nodes in the anonymization set $a_1$\ldots$a_k$ are honest, any preceding node may not know whether the message ends at that node or the message is just routed through an honest node. Even if some of the anonymization nodes are not honest or collaborating with an adversary, the anonymity set may be reduced in size, but the receiver is still part of the anonymity set spanning the honest anonymization nodes. Thus, we have shown that anonymity, unlinkability, and fault tolerance against a misbehaving node may be achieved depending on the chosen routing block. AN RBB may furthermore send additional \VortexMessages to suspected misbehaving nodes. If misbehavior is reproducible within an ephemeral identity, the RBB may identify it by picking up parts of the previously sent message and comparing them to an expected state. An RBB may even introduce message paths leading back to the RBB itself. Such a message path may allow observation of the progress and success of the message delivery.
 
-\subsection{Attacking Anonymity through Timing Analysis}
+\subsection{Attacking Anonymity through Timing Analysis}\index{attack!timing analysis}
 Timing is under full control of the routing block builder. No information can be derived from the timing. This is even the case if a routing block is reused. The precise timing of the network depends on other factors as well, such as delays through anti-UBE or anti-malware measures or delays through local delivery between multiple nodes.
 
-\subsection{Attacking Anonymity through Throughput Analysis}
+\subsection{Attacking Anonymity through Throughput Analysis}\index{attack!hotspot}
 Increasing the throughput to highlight a message channel is impossible since the replay protection will block such requests. It may be possible for a limited number of times by replaying a MURB. This is one of the reasons why the usage of MURBs is discouraged unless necessary.
 
 \subsection{Attacking Anonymity through Routing Block Analysis}
@@ -456,15 +456,15 @@ To an adversary knowing the decryption key (evil routing node), the header block
 \subsection{Attacking Anonymity through Payload Analysis}
 The payload itself does not leak any information about the message content. All content is cryptographically secured. Content may, however, leak the block size of the applied cipher.
 
-\subsection{Attacking Anonymity through Bugging}
+\subsection{Attacking Anonymity through Bugging}\index{attack!bugging}
 Bugging is one of the most pressing problems. The protocol has been carefully crafted not to allow any bugging. However, the use of MIME messages in the final message enables the bugging of the message itself. A bugged message content may breach receiver anonymity to the sender of the message.
 
 \subsection{Attacking Anonymity through Replay Analysis}
 Due to the replay protection, no traffic may be generated or multiplied except for the attacking node's traffic. As this information is already known to the node, there is no value in doing so. 
 
-\subsection{Diagnosability of Traffic}
+\subsection{Diagnosability of Traffic}\index{message!diagnosis}
 
-\subsubsection{Hijacking of Header and Routing Blocks}
+\subsubsection{Hijacking of Header and Routing Blocks}\index{attack!hijacking}
 An attacker might try to recombine a third party's header block with a routing block crafted to get the workspace content of a different node. To protect against this scenario, every routing block and its corresponding header block has a shared value called forwardSecret. As the content of a hijacked header block is unknown, the attacker cannot guess the forward secret within the block.
 
 It is not possible to brute-force the value due to the replay protection. More precisely, the probability of hijacking a single identity block is $\frac{1}{2^{32}}$. Hijacking such a block allows one-time access to the working space and is visible to the owner due to the manipulated quotas. Failing an attack will result in deleting the ephemeral identity, and a new, unlinked ephemeral identity will be created. 
@@ -501,7 +501,7 @@ A routing node may further improve the effectiveness of the protocol by\ldots
 \chapter[Degree of Anonymization in Comparison]{Analysis of Degree of Anonymization \MessageVortex{} in Comparison to other Systems}
 It is difficult to make a clear statement in terms of anonymity. To allow a comparison, we work with traditional anonymization systems and compare them to our system and outline the differences. 
 
-\section{Comparing \MessageVortex{} to Remailers}
+\section{Comparing \MessageVortex{} to Remailers}\index{remailer}
 All remailer systems are identifiable due to their traffic. We leave aside simple remailer types such as nym remailers and concentrate solely on the most advanced type-3 remailer (Mixminion). Although development has been seized, we can still compare our system's effectiveness compared to a Mixminion system.
 
 Mixminion is an onion routing system working with a fixed message size of 32KB. It relies on a central directory containing all nodes. This is a functionality we can rebuild with \MessageVortex{} by using the $decrypt$ operation. Unlike with the \MessageVortex{} system, Mixminion relies on a public directory. Even compared with a hypothetical system having steganographically hidden services and only locally known routing nodes, our system scores in the following way over a Mixminion router:
@@ -533,7 +533,7 @@ Having the possibility of mimicking a type 3 remailer and improving the communic
 	\label{fig:mmCommPattern}
 \end{figure*}
 
-\section{Comparing \MessageVortex{} to a DC Network-Based System}
+\section{Comparing \MessageVortex{} to a DC Network-Based System}\index{DC net}
 A DC network may not be built with our \MessageVortex{} protocol. However, if we add a hypothetical $XOR$ operation, we may build such a system. In the early stages of development, we had an $XOR$ operation. When analyzing our system, we were unable to discover good use-cases for such an operation. We assume that the sender and recipient are part of the DC network ring. If not, additional problems regarding entry and exit nodes would prevail. 
 
 When comparing such a hypothetical \MessageVortex{} system with an $XOR$ operation with an again hypothetical DC network using steganographically hidden messages, we conclude that \MessageVortex{} could mimic the behavior of such a network. Making further comparisons along those lines, we have to say that \MessageVortex{} scores in the following ways over such a hypothetical system:
@@ -564,7 +564,7 @@ Having the possibility of mimicking a DC network and improving the communication
 \end{figure*}
 
 
-\section{Comparing \MessageVortex{} to a Broadcast-Based System}
+\section{Comparing \MessageVortex{} to a Broadcast-Based System}\index{broadcast-based system}
 A broadcast-based network (BCN) hides a message transfer so that every involved node sends an equally sized message or decoy traffic to all other members of the system. By doing so, they build a full mesh of equally sized messages between all involved nodes, making it impossible for an adversary to identify who was sending message traffic and who was sending a true message. Messages sized larger than a simple message transmission are split up into multiple messages. Again, we were unable to find a system that does not use an own censorable protocol. We therefore,assume again a hypothetical BCN piggybacking a common Internet protocol. In this part, we make two comparisons: One comparison involving a BCN with only one mesh and a second one with a BCN cascading multiple overlapping BCNs, which we refer to as a cBCN. In both cases, the communication mesh, as shown in \cref{fig:bcCommPattern}, is identifiable as this is a very unusual communication pattern in common Internet protocols.
 
 \begin{figure*}[ht]\centering
@@ -604,15 +604,15 @@ To conclude, \MessageVortex{} may offer at least the same properties as a BCN or
 \chapter{Recommendations on Using the \MessageVortex{} Protocol}
 The following sections list recommendations using the \MessageVortex{} protocol. It is a summary of the previous sections.
 
-\section{Reuse of Routing Blocks\label{sec:reuseRB}}
+\section{Reuse of Routing Blocks\label{sec:reuseRB}}\index{MURB}
 Routing blocks should not be reused. The reuse of a routing block may leak some limited information to an adversary node, such as the approximate message size or message frequency of an unknown tupel using this network.
 
-\section{Use of Ephemeral Identities}
+\section{Use of Ephemeral Identities}\index{identity!ephemeral}
 Ephemeral identities should be used for a minimal number of messages. Using multiple identities with overlapping lifespans is considered a good practice. Using different ephemeral identities for the same message is acceptable and can be a good practice as long as operations do not leak the linking between those two identities.
 
 Special care must be taken if using overlapping ephemeral identities across nodes. While ephemeral identities may be completely unlinked on a single node, linking multiple nodes may leave a trace from one identity to the next. It is advisable to recreate regularly all ephemeral identities from scratch. This guarantees an unlinking from previous ephemeral identities.
 
-\section{Recommendations on Operations Applied on Nodes}
+\section{Recommendations on Operations Applied on Nodes}\index{operation}
 All operations carried out on a single node have to be crafted so that no information, whether the operation is a decoy or a real message, is leaked. Otherwise, it becomes possible to narrow down the message flow.
 
 Encryption operations should be either strictly encrypting or strictly decrypting. At no point in the path, a previously applied encryption on an untrusted node should be removed as removal might lead to linking to the previous inverse operation.
@@ -635,7 +635,7 @@ Allowing a user to use more complex representations such as MIME offers many pos
 \subsection{Splitting Message Content}
 Message content should be split and distributed among routing nodes. Splitting should, however, not be done excessively to avoid failure due to too many failing nodes. It furthermore makes diagnostics complicated. 
 
-\section{Routing}
+\section{Routing}\index{message!routing}
 The basics of routing are described in \cref{sec:routingLayer}. We collect in the following sections the recommendations regarding the routing strategies.
 
 \subsection{Redundancy}
