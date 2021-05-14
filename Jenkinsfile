@@ -59,7 +59,7 @@ pipeline {
       }
     }
     /*stage ('Test other JDKs') {
-       parallel { */
+       parallel { 
         stage ('Test on JDK10') {
           agent {
             docker {
@@ -148,7 +148,7 @@ pipeline {
             }
           }
         }
-      /*}
+      }
     }*/
     stage ('Package all') {
       steps {
