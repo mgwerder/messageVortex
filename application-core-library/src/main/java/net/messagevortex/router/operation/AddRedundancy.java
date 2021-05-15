@@ -353,8 +353,4 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     return getInputId()[0] + "->addRedundancy(" + getOutputId().length + ")->" + getOutputId()[0];
   }
 
-  public static void main(String[] args) {
-    System.out.println(MAX_SIZE);
-  }
-
 }

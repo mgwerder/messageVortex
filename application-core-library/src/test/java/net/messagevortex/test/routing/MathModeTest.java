@@ -55,7 +55,7 @@ public class MathModeTest {
         try {
             GaloisFieldMathMode.getGaloisFieldMathMode(17);
             Assertions.fail("GF 17 did not raise exception");
-        } catch (ArithmeticException e) {
+        } catch (IllegalArgumentException e) {
             // this is expected
         }
 

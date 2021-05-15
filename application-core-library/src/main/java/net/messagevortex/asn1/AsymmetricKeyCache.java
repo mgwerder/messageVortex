@@ -498,16 +498,16 @@ public class AsymmetricKeyCache implements Serializable {
      * @return the fill state of cache (bounds 0..1)
      */
     public double getCacheFillGrade() {
-        int maxSize = 0;
-        int currSize = 0;
+        double maxSize = 0;
+        double currSize = 0;
         for (Map.Entry<AlgorithmParameter, CacheElement> e : cache.entrySet()) {
-            maxSize += e.getValue().getMaxSize();
+            maxSize  += e.getValue().getMaxSize();
             currSize += Math.min(e.getValue().size(), e.getValue().getMaxSize());
         }
         if (maxSize == 0) {
             return 1.0;
         } else {
-            double fg = (0.0 + currSize) / maxSize;
+            double fg = (currSize) / maxSize;
             LOGGER.log(Level.FINE, "Cache fill grade is " + fg);
             return fg;
         }

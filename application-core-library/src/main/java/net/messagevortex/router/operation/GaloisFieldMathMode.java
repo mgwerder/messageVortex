@@ -13,14 +13,15 @@ public class GaloisFieldMathMode implements MathMode {
   private final int[] gfLog;
   private final int[] gfInverseLog;
 
+  /** Where did I get this list from **/
   static final int[] PRIM_POLYNOM = new int[] {
-      3, 7, 11, 19, 37, 67, 137, 285, 529,
-      1033, 2053, 4179, 8219, 17475, 32771, 69643
+         3,    7,   11,   19,   37,    67,   137,   285,
+       529, 1033, 2053, 4179, 8219, 17475, 32771, 69643
   };
 
   static final Map<Integer, GaloisFieldMathMode> cachedMathMode = new LinkedHashMap<>();
 
-  private GaloisFieldMathMode(int omega) {
+  public GaloisFieldMathMode(int omega) {
     if (omega < 2 || omega > 16) {
       throw new ArithmeticException("illegal GF size " + omega + " (PRIM_POLYNOM unknown)");
     }
@@ -49,8 +50,8 @@ public class GaloisFieldMathMode implements MathMode {
    * @return the math mode (singleton)
    */
   public static GaloisFieldMathMode getGaloisFieldMathMode(int omega) {
-    if (omega < 1 || omega > 32) {
-      throw new IllegalArgumentException("omega (" + omega + ") out of range 1..32");
+    if (omega < 1 || omega > 16) {
+      throw new IllegalArgumentException("omega (" + omega + ") out of range 1..16");
     }
     GaloisFieldMathMode ret = cachedMathMode.get(omega);
     if (ret == null) {
@@ -116,38 +117,36 @@ public class GaloisFieldMathMode implements MathMode {
   /**
    * <p>dumps transformation table of GF-Field.</p>
    */
-  public void dumpTable() {
-    System.out.printf("omega=" + omega + System.lineSeparator());
-    System.out.printf("Add:xor; sub=xor; " + System.lineSeparator());
-    System.out.printf("mul=iif (c1 == 0 || c2 == 0;0; gfilog[gfLog[c1] + gfLog[c2]-iif(gfLog[c1] + "
+  public String getTableDump() {
+    StringBuilder sb =new StringBuilder();
+    sb.append("omega=" + omega + System.lineSeparator());
+    sb.append("Add:xor; sub=xor; " + System.lineSeparator());
+    sb.append("mul=iif (c1 == 0 || c2 == 0;0; gfilog[gfLog[c1] + gfLog[c2]-iif(gfLog[c1] + "
         + "gfLog[c2]>2^" + omega + "-1;2^\"+omega+\"-1;0)]" + System.lineSeparator());
-    System.out.printf("div=iif (c1 == 0;0;iif(c2==0;illegal;gfilog[gfLog[c1] - gfLog[c2]+iif("
+    sb.append("div=iif (c1 == 0;0;iif(c2==0;illegal;gfilog[gfLog[c1] - gfLog[c2]+iif("
         + "gfLog[c1] - gfLog[c2]<>0;2^\"+omega+\"-1;0))]" + System.lineSeparator());
-    System.out.println();
+    sb.append(System.lineSeparator());
 
     int cols = (int) (Math.ceil(Math.sqrt(Math.pow(2, omega)) / 2));
     for (int x = 0; x < cols; x++) {
-      System.out.printf("| num | log |ilog |  ");
+      sb.append("| num | log   | ilog  |  ");
     }
-    System.out.println();
+    sb.append(System.lineSeparator());
     for (int x = 0; x < cols; x++) {
-      System.out.printf("+-----+-----+-----+  ");
+      sb.append("+-----+-------+-------+  ");
     }
-    System.out.println();
+    sb.append(System.lineSeparator());
     int rows = (int) (Math.ceil(Math.pow(2, omega) / cols));
     for (int y = 0; y < rows; y++) {
       for (int x = 0; x < cols; x++) {
         int i = x * rows + y;
         if (i < Math.pow(2, omega)) {
-          System.out.printf("| %3d | %3d | %3d |  ", i, gfLog[i], gfInverseLog[i]);
+          sb.append(String.format("| %3d | %5d | %5d |  ", i, gfLog[i], gfInverseLog[i]));
         }
       }
-      System.out.println();
+      sb.append(System.lineSeparator());
     }
+    return sb.toString();
   }
 
-  public static void main(String[] args) {
-    GaloisFieldMathMode mm = new GaloisFieldMathMode(8);
-    mm.dumpTable();
-  }
 }
