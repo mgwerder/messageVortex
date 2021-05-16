@@ -23,9 +23,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 
-/**
- * Created by martin.gwerder on 19.04.2017.
- */
 @ExtendWith(GlobalJunitExtension.class)
 public class DummyTransportSenderTest extends AbstractDaemon implements TransportReceiver {
 

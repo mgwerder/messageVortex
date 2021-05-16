@@ -119,12 +119,12 @@ public class GaloisFieldMathMode implements MathMode {
    */
   public String getTableDump() {
     StringBuilder sb =new StringBuilder();
-    sb.append("omega=" + omega + System.lineSeparator());
-    sb.append("Add:xor; sub=xor; " + System.lineSeparator());
-    sb.append("mul=iif (c1 == 0 || c2 == 0;0; gfilog[gfLog[c1] + gfLog[c2]-iif(gfLog[c1] + "
-        + "gfLog[c2]>2^" + omega + "-1;2^\"+omega+\"-1;0)]" + System.lineSeparator());
-    sb.append("div=iif (c1 == 0;0;iif(c2==0;illegal;gfilog[gfLog[c1] - gfLog[c2]+iif("
-        + "gfLog[c1] - gfLog[c2]<>0;2^\"+omega+\"-1;0))]" + System.lineSeparator());
+    sb.append("omega=").append( omega ).append( System.lineSeparator());
+    sb.append("Add:xor; sub=xor; ").append( System.lineSeparator());
+    sb.append("mul=iif (c1 == 0 || c2 == 0;0; gfilog[gfLog[c1] + gfLog[c2]-iif(gfLog[c1] + ")
+        .append("gfLog[c2]>2^").append( omega ).append( "-1;2^\"+omega+\"-1;0)]").append(System.lineSeparator());
+    sb.append("div=iif (c1 == 0;0;iif(c2==0;illegal;gfilog[gfLog[c1] - gfLog[c2]+iif(")
+        .append("gfLog[c1] - gfLog[c2]<>0;2^\"+omega+\"-1;0))]").append( System.lineSeparator());
     sb.append(System.lineSeparator());
 
     int cols = (int) (Math.ceil(Math.sqrt(Math.pow(2, omega)) / 2));
