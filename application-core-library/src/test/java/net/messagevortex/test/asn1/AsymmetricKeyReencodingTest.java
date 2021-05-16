@@ -4,8 +4,11 @@ import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AlgorithmParameter;
 import net.messagevortex.asn1.AsymmetricKey;
-import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
-import net.messagevortex.asn1.encryption.*;
+import net.messagevortex.asn1.encryption.Algorithm;
+import net.messagevortex.asn1.encryption.AlgorithmType;
+import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.asn1.encryption.Parameter;
+import net.messagevortex.asn1.encryption.SecurityLevel;
 import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,9 +20,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Tests reencoding of asymetric keys.

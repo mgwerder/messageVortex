@@ -23,8 +23,20 @@ package net.messagevortex.asn1;
 // ************************************************************************************
 
 import net.messagevortex.ExtendedSecureRandom;
-import net.messagevortex.asn1.encryption.*;
-import org.bouncycastle.asn1.*;
+import net.messagevortex.asn1.encryption.Algorithm;
+import net.messagevortex.asn1.encryption.AlgorithmType;
+import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.asn1.encryption.Mode;
+import net.messagevortex.asn1.encryption.Padding;
+import net.messagevortex.asn1.encryption.Parameter;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1OctetString;
+import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DEROctetString;
+import org.bouncycastle.asn1.DERSequence;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

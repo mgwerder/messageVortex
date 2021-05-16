@@ -1,6 +1,5 @@
 package net.messagevortex.test.routing;
 
-import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.encryption.DumpType;

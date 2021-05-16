@@ -1,16 +1,15 @@
 package net.messagevortex.test.transport.imap;
 
 import net.messagevortex.MessageVortex;
-import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.test.GlobalJunitExtension;
-import net.messagevortex.transport.imap.*;
+import net.messagevortex.transport.imap.ImapCommand;
+import net.messagevortex.transport.imap.ImapCommandFactory;
+import net.messagevortex.transport.imap.ImapConnection;
+import net.messagevortex.transport.imap.ImapException;
+import net.messagevortex.transport.imap.ImapLine;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import java.util.logging.Level;
-
-import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link MessageVortex}.

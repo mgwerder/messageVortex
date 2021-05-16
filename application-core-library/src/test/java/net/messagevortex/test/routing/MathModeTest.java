@@ -13,9 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Arrays;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 @ExtendWith(GlobalJunitExtension.class)
 public class MathModeTest {
 

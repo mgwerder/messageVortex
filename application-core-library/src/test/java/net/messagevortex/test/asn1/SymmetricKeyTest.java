@@ -2,7 +2,12 @@ package net.messagevortex.test.asn1;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.asn1.encryption.*;
+import net.messagevortex.asn1.encryption.Algorithm;
+import net.messagevortex.asn1.encryption.AlgorithmType;
+import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.asn1.encryption.Mode;
+import net.messagevortex.asn1.encryption.Padding;
+import net.messagevortex.asn1.encryption.SecurityLevel;
 import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

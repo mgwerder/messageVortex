@@ -1,6 +1,5 @@
 package net.messagevortex.test.transport;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.test.GlobalJunitExtension;
@@ -10,18 +9,19 @@ import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.parallel.*;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Created by martin.gwerder on 19.04.2017.

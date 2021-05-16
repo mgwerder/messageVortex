@@ -23,7 +23,11 @@ package net.messagevortex.transport.imap;
 // ************************************************************************************
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.*;
+import net.messagevortex.transport.ClientConnection;
+import net.messagevortex.transport.Credentials;
+import net.messagevortex.transport.SaslClientCallbackHandler;
+import net.messagevortex.transport.SaslMechanisms;
+import net.messagevortex.transport.SecurityContext;
 import org.bouncycastle.util.encoders.Base64;
 
 import javax.security.auth.callback.CallbackHandler;

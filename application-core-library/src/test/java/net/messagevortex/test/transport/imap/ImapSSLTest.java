@@ -26,7 +26,11 @@ import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.test.transport.SMTPTransportSenderTest;
-import net.messagevortex.transport.*;
+import net.messagevortex.transport.AllTrustManager;
+import net.messagevortex.transport.CustomKeyManager;
+import net.messagevortex.transport.SecurityContext;
+import net.messagevortex.transport.SecurityRequirement;
+import net.messagevortex.transport.SocketDeblocker;
 import net.messagevortex.transport.imap.ImapClient;
 import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.transport.imap.ImapServer;
@@ -51,9 +55,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 
 /**

@@ -10,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertTrue;
-
 
 /**
  * booleanConfigHandlings for {@link MessageVortex}.

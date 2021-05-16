@@ -23,7 +23,11 @@ package net.messagevortex.transport.smtp;
 // ************************************************************************************
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.*;
+import net.messagevortex.transport.ListeningSocketChannel;
+import net.messagevortex.transport.SecurityContext;
+import net.messagevortex.transport.ServerConnection;
+import net.messagevortex.transport.SocketListener;
+import net.messagevortex.transport.TransportReceiver;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

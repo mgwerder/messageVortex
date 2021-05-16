@@ -1,15 +1,12 @@
 package net.messagevortex.test.asn1;
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.asn1.BlendingParameter;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import java.util.logging.Level;
 
 /**
  * Created by martin.gwerder on 18.04.2018.

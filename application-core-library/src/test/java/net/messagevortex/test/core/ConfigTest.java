@@ -3,7 +3,6 @@ package net.messagevortex.test.core;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
-import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.jupiter.api.Assertions;
@@ -17,8 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static org.junit.Assert.*;
 
 
 /**

@@ -2,7 +2,6 @@
 package net.messagevortex.test.asn1;
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.test.GlobalJunitExtension;
@@ -14,9 +13,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 
 /**

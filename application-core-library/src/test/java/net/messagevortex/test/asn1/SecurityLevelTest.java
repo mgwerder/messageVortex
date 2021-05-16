@@ -7,10 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
-
 /*
  * Created by martin.gwerder on 06.06.2016.
  */

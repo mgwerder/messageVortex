@@ -23,7 +23,6 @@ package net.messagevortex;
 // ************************************************************************************
 
 import java.security.SecureRandom;
-import java.util.logging.Level;
 
 /**
  * <p>A Specialized random number generator for MessageVortex.</p>

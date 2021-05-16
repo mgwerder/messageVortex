@@ -1,7 +1,14 @@
 package net.messagevortex.test.blender;
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.*;
+import net.messagevortex.asn1.AsymmetricKey;
+import net.messagevortex.asn1.BlendingSpec;
+import net.messagevortex.asn1.IdentityBlock;
+import net.messagevortex.asn1.IdentityStore;
+import net.messagevortex.asn1.InnerMessageBlock;
+import net.messagevortex.asn1.PrefixBlock;
+import net.messagevortex.asn1.RoutingCombo;
+import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import net.messagevortex.blender.BlendingReceiver;

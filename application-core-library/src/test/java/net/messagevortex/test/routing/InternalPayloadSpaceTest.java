@@ -1,6 +1,5 @@
 package net.messagevortex.test.routing;
 
-import junit.framework.Assert;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.PayloadChunk;

@@ -25,7 +25,13 @@ package net.messagevortex.asn1.encryption;
 import org.bouncycastle.asn1.ASN1Enumerated;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>Enumeration listing all available padding types for encryption.</p>

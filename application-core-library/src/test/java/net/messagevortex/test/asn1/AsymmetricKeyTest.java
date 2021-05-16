@@ -3,8 +3,14 @@ package net.messagevortex.test.asn1;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AlgorithmParameter;
 import net.messagevortex.asn1.AsymmetricKey;
-import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
-import net.messagevortex.asn1.encryption.*;
+import net.messagevortex.asn1.encryption.Algorithm;
+import net.messagevortex.asn1.encryption.AlgorithmType;
+import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.asn1.encryption.EllipticCurveType;
+import net.messagevortex.asn1.encryption.Mode;
+import net.messagevortex.asn1.encryption.Padding;
+import net.messagevortex.asn1.encryption.Parameter;
+import net.messagevortex.asn1.encryption.SecurityLevel;
 import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,8 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
-
-import static org.junit.Assert.*;
 
 
 /**

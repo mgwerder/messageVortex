@@ -23,7 +23,11 @@ package net.messagevortex.transport.smtp;
 // ************************************************************************************
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.*;
+import net.messagevortex.transport.ClientConnection;
+import net.messagevortex.transport.Credentials;
+import net.messagevortex.transport.SecurityContext;
+import net.messagevortex.transport.SecurityRequirement;
+import net.messagevortex.transport.TransportSender;
 import org.bouncycastle.util.encoders.Base64;
 
 import java.io.IOException;

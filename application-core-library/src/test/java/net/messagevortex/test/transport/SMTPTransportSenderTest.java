@@ -25,8 +25,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertTrue;
-
 /**
  * <p>Teastclass for sending and receiving SMTP based messages.</p>
  *

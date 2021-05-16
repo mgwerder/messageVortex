@@ -11,8 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by martin.gwerder on 19.04.2017.
  */

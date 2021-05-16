@@ -1,7 +1,12 @@
 package net.messagevortex.transport.imap;
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.*;
+import net.messagevortex.transport.AuthenticationProxy;
+import net.messagevortex.transport.ListeningSocketChannel;
+import net.messagevortex.transport.SecurityContext;
+import net.messagevortex.transport.ServerConnection;
+import net.messagevortex.transport.SocketListener;
+import net.messagevortex.transport.StoppableThread;
 
 import java.io.IOException;
 import java.net.InetAddress;

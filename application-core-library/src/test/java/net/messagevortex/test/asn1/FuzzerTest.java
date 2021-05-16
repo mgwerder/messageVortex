@@ -19,9 +19,6 @@ import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 
 /**
  * Fuzzer Tests for ASN1 Parser Classes {@link AbstractBlock}.

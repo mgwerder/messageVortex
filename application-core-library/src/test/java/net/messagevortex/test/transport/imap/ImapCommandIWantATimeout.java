@@ -1,11 +1,9 @@
 package net.messagevortex.test.transport.imap;
 
-import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.transport.imap.ImapCommand;
 import net.messagevortex.transport.imap.ImapCommandFactory;
 import net.messagevortex.transport.imap.ImapConnection;
 import net.messagevortex.transport.imap.ImapLine;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 class ImapCommandIWantATimeout extends ImapCommand {
 

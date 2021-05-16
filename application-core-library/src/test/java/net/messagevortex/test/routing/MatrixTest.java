@@ -1,7 +1,12 @@
 package net.messagevortex.test.routing;
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.router.operation.*;
+import net.messagevortex.router.operation.GaloisFieldMathMode;
+import net.messagevortex.router.operation.MathMode;
+import net.messagevortex.router.operation.Matrix;
+import net.messagevortex.router.operation.RealMathMode;
+import net.messagevortex.router.operation.RedundancyMatrix;
+import net.messagevortex.router.operation.VandermondeMatrix;
 import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,8 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
 
 
 @ExtendWith(GlobalJunitExtension.class)

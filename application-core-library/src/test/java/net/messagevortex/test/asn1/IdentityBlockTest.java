@@ -1,7 +1,12 @@
 package net.messagevortex.test.asn1;
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.*;
+import net.messagevortex.asn1.HeaderRequest;
+import net.messagevortex.asn1.HeaderRequestCapability;
+import net.messagevortex.asn1.HeaderRequestIdentity;
+import net.messagevortex.asn1.HeaderRequestIncreaseMessageQuota;
+import net.messagevortex.asn1.HeaderRequestQueryQuota;
+import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.test.GlobalJunitExtension;
 import org.junit.jupiter.api.Assertions;
@@ -10,9 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 
 /**

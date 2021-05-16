@@ -12,9 +12,6 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 @ExtendWith(GlobalJunitExtension.class)
 public class PaddingTest {
 

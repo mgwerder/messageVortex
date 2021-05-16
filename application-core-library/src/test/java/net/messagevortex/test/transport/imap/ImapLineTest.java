@@ -15,9 +15,6 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 /**
  * Tests for {@link net.messagevortex.transport.imap.ImapLine}.
  *

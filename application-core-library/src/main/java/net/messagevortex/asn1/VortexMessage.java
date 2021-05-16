@@ -26,7 +26,11 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
