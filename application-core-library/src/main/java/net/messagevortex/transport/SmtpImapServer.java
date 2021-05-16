@@ -21,7 +21,6 @@ public class SmtpImapServer extends AbstractDaemon implements Transport {
     }
 
     private Transport smtp = null;
-    private final Config cfg;
 
     /***
      * <p>Creates a comboo of local SMTP and IMAP server as listener for a client.</p>
@@ -38,7 +37,6 @@ public class SmtpImapServer extends AbstractDaemon implements Transport {
         } else {
             smtp = new TestSmtpHandler(section);
         }
-        cfg = Config.getDefault();
     }
 
     @Override
