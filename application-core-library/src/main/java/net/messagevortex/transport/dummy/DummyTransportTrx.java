@@ -230,7 +230,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
         synchronized (endpoints) {
             endpoints.clear();
             if(!localMode) {
-                ((MapProxyImpl) (idReservation)).destroy();
+                if(idReservation!=null) {
+                    ((MapProxyImpl) (idReservation)).destroy();
+                }
             }
             idReservation = null;
             name = null;
