@@ -159,15 +159,15 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     @Override
     public void shutdownDaemon() {
         // deregister endpoint
+        List<String> l = new Vector<>();
         synchronized (idReservation) {
             // Remove all identities
-            List<String> l = new Vector<>();
             for (Map.Entry<String, String> e : idReservation.entrySet()) {
                 if (e.getValue().equals(defHostname)) {
                     l.add(e.getKey());
                 }
             }
-            for (String key : l) {
+            for (String key : l.toArray(new String[0])) {
                 String hostname = idReservation.remove(key);
                 if (hostname != null && hostname.equals(defHostname)) {
                     LOGGER.log(Level.FINE, "successfully de-registered id " + registeredEndpoint
