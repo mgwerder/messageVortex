@@ -53,6 +53,7 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 	     --mount type=bind,readonly,source="$dir/../buildenv/",target=/var/tmp/messagevortex/buildenv/ \
 	     --mount type=bind,readonly,source="$dir/../application-core-library/src/",target=/var/tmp/messagevortex/application-core-library/src/ \
 	     --mount type=bind,source="/var/tmp/dockermavencache",target=/var/lib/maven/ \
+	     --mount type=bind,source=/var/cache/xml2rfc/,target=/var/cache/xml2rfc/ \
 	     "$@" messagevortexbuild:latest) && \
 	echo "Created container with ID $id" && \
 	sudo docker start -a $id && \

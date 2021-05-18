@@ -4,8 +4,7 @@ OUTDIR  = target/xml2rfc
 INTERDIR= target/tmp
 SRCDIR  = src/xml2rfc
 XML2RFC = /usr/local/bin/xml2rfc
-X2R_OPTS= -N
-X2R_OPTS=
+X2R_OPTS= -N --cache=/var/cache/xml2rfc
 ALLFILES= $(addprefix $(INTERDIR)/draft-gwerder-messagevortexmain-,00 01 02 03 04 05 06 07 08)
 ALLEXP  = $(addsuffix .xmlprep,$(ALLFILES)) $(addsuffix .uixml,$(ALLFILES)) $(addsuffix .nouixml,$(ALLFILES))
 EXTS    = .pdf .ps .xmlflat .html .mobi .epub .txt .rawtxt .legacytxt
@@ -51,7 +50,7 @@ $(INTERDIR)/%.nouixml: $(INTERDIR)/%.xmlprep
 	
 $(OUTDIR)/%.pdf: $(INTERDIR)/%.uixml 
 	@echo "building final file $@"
-	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) $(basename $(<F)).uixml --pdf -q -o ../../$@ )	
+	@( cd $(INTERDIR); $(XML2RFC) $(basename $(<F)).uixml --pdf -q -o ../../$@ )	
 	
 $(OUTDIR)/%.xmlflat: $(INTERDIR)/%.nouixml 
 	@echo "building tmp source file $@"
@@ -63,11 +62,11 @@ $(OUTDIR)/%.txt: $(INTERDIR)/%.nouixml
 	
 $(OUTDIR)/%.legacytxt: $(INTERDIR)/%.nouixml 
 	@echo "building tmp source file $@"
-	@( cd $(INTERDIR); $(XML2RFC) --legacy $(basename $(<F)).nouixml --text -q -o ../../$@)
+	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) --legacy $(basename $(<F)).nouixml --text -q -o ../../$@)
 	
 $(OUTDIR)/%.rawtxt: $(INTERDIR)/%.nouixml 
 	@echo "building tmp source file $@"
-	@( cd $(INTERDIR); $(XML2RFC) --legacy $(basename $(<F)).nouixml --raw -q -o ../../$@)
+	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) --legacy $(basename $(<F)).nouixml --raw -q -o ../../$@)
 	
 $(OUTDIR)/%.html: $(INTERDIR)/%.uixml 
 	@echo "building tmp source file $@"
