@@ -58,8 +58,8 @@ public class Matrix {
      * @param mode   the math mode to be applied
      */
     public Matrix(int x, int y, MathMode mode) {
-        if (x < 0 || y < 0) {
-            throw new IllegalArgumentException("negative matrix size exception (" + x + "/" + y + ")");
+        if (x < 1 || y < 1) {
+            throw new IllegalArgumentException("null or negative matrix size exception (" + x + "/" + y + ")");
         }
         dimension[X] = x;
         dimension[Y] = y;

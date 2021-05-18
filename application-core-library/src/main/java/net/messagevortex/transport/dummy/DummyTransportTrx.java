@@ -2,6 +2,7 @@ package net.messagevortex.transport.dummy;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.impl.proxy.MapProxyImpl;
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortexLogger;
@@ -115,9 +116,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
                 HazelcastInstance hz =
                         Hazelcast.getOrCreateHazelcastInstance(new com.hazelcast.config.Config(name));
                 if (localMode) {
-                    idReservation = hz.getMap("dummyTransportTrxEndpoints");
-                } else {
                     idReservation = new HashMap<>();
+                } else {
+                    idReservation = hz.getMap("dummyTransportTrxEndpoints");
                 }
             }
         }
@@ -228,6 +229,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     public static void clearDummyEndpoints() {
         synchronized (endpoints) {
             endpoints.clear();
+            if(!localMode) {
+                ((MapProxyImpl) (idReservation)).destroy();
+            }
             idReservation = null;
             name = null;
         }
