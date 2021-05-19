@@ -2,9 +2,9 @@ package net.messagevortex.commandline;
 
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.NotImplementedException;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.encryption.DumpType;
-import org.yaml.snakeyaml.Yaml;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -62,8 +62,7 @@ public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
     if (outputFormat == Format.ASN1) {
       out = is.dumpValueNotation("", DumpType.ALL_UNENCRYPTED);
     } else {
-      Yaml yaml = new Yaml();
-      out = yaml.dump(is);
+      throw new NotImplementedException();
     }
     System.out.println(out);
     return 0;
