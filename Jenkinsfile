@@ -25,7 +25,7 @@ pipeline {
         timeout(time: 120, unit: 'MINUTES')
       }
       steps{
-        sh "mvn -pl application-core-library test site"
+        sh "mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site"
       }
       post {
         success {
