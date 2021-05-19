@@ -32,8 +32,8 @@
         <sonar.exclusions>src/test/java/**/*.java</sonar.exclusions>
         <sonar.java.source>${jdk.version}</sonar.java.source>
         <sonar.java.binaries>target/classes</sonar.java.binaries>
-        <!--<sonar.jacoco.reportMissing.force.zero>true</sonar.jacoco.reportMissing.force.zero>
-        <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>-->
+        <sonar.jacoco.reportMissing.force.zero>true</sonar.jacoco.reportMissing.force.zero>
+        <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
         <sonar.junit.reportsPaths>target/surefire-reports</sonar.junit.reportsPaths>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.surefire.reportsPath>target/surefire-reports</sonar.surefire.reportsPath>
