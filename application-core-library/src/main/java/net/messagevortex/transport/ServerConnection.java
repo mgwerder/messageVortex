@@ -8,10 +8,10 @@ import java.nio.channels.SocketChannel;
 public class ServerConnection extends AbstractConnection {
 
   /**
-   * <o>Creates a server connection based on a server channel.</o>
+   * <p>Creates a server connection based on a server channel.</p>
    *
    * @param channel the channel to be used
-   * @param context the security context to be aplied to the connection
+   * @param context the security context to be applied to the connection
    */
   public ServerConnection(SocketChannel channel, SecurityContext context) {
     super(channel, context, false);
