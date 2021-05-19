@@ -21,6 +21,9 @@ import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
+/**
+ * <p>Commandline handler to generate a new set of identities.</p>
+ */
 @CommandLine.Command(
         description = "generate a new identity and dump store",
         name = "generate",

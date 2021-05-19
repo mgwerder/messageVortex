@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * <p>Helper class to debug hanging or uncleared threads.</p>
+ */
 public class ThreadDumper {
 
   private static final String CRLF = System.lineSeparator();
@@ -80,6 +83,8 @@ public class ThreadDumper {
    */
   public static String getThreadDump(boolean dumpDaemon) {
     StringBuilder tdump = new StringBuilder();
+
+    // Build header of table dump
     tdump.append("======================================================================")
         .append(CRLF);
     synchronized (df) {
@@ -88,8 +93,12 @@ public class ThreadDumper {
     }
     tdump.append("======================================================================")
         .append(CRLF);
+
+    // obtain list of running threads
     ThreadMXBean tbean = ManagementFactory.getThreadMXBean();
     ThreadInfo[] threadInfos = tbean.getThreadInfo(tbean.getAllThreadIds(), 100);
+
+    // Dump information for each thread
     for (ThreadInfo threadInfo : threadInfos) {
       Thread.State state = threadInfo.getThreadState();
       Thread t = getThread(threadInfo.getThreadId());

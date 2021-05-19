@@ -15,11 +15,20 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * <p>A simple router implementation providing some basic strategies
+ * for building a routing block.</p>
+ */
 public class SimpleRouterImplementation extends AbstractDaemon implements Router {
 
     private Accountant accountant;
     private final Map<String, Blender> blenders = new HashMap<>();
 
+    /**
+     * <p>Default constructor to build class from configuration object.</p>
+     *
+     * @param section configuration section to be used for obtaining the setup parameters
+     */
     public SimpleRouterImplementation(String section) {
         // get accounting layer
         setAccountant(MessageVortexRepository.getAccountant("", section));

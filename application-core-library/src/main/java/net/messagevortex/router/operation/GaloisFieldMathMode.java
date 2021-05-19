@@ -117,7 +117,7 @@ public class GaloisFieldMathMode implements MathMode {
 
   /**
    * <p>dumps transformation table of GF-Field.</p>
-   * 
+   *
    * @return returns a string representing the current table
    */
   public String getTableDump() {

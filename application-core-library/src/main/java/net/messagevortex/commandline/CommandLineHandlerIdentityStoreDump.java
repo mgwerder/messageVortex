@@ -11,6 +11,9 @@ import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
+/**
+ * <p>Commandline handler for dumping the identity store.</p>
+ */
 @CommandLine.Command(
     description = "dump content of IdentityStore",
     name = "dump",
