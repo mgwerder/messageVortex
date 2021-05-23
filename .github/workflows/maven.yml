@@ -5,15 +5,14 @@ name: Java8 CI with Maven
 
 on:
   push:
-    branches: [ master,integration ]
-  pull_request:
     branches: [ master,integration,development ]
+  pull_request:
+    branches: []
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-
+    runs-on: MessageVortex
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 8
