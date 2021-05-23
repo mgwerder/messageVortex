@@ -5,9 +5,9 @@ name: Java8 CI with Maven
 
 on:
   push:
-    branches: [ master,integration ]
-  pull_request:
     branches: [ master,integration,development ]
+  pull_request:
+    branches: []
 
 jobs:
   build:
