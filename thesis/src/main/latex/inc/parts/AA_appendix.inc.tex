@@ -280,7 +280,8 @@
 \end{entry}        
 
 \backmatter
-\chapter*{Bibliography}
+\refstepcounter{chapter}
+\chapter{Bibliography}
 {
 %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
 %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
@@ -292,6 +293,7 @@
 \index{Jabber|see {XMPP}}
 
 % add the index
+\refstepcounter{chapter}
 \clearpage\printindex
 
 %\clearpage\chapter{Short Biography}
@@ -299,3 +301,5 @@
 %\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
 %\end{wrapfigure}
 %\input{inc/biography/biotext.inc.tex}
+
+\cleardoublepage~\clearpage

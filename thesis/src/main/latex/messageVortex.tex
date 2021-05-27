@@ -1,4 +1,6 @@
 % !TeX spellcheck = en_US
+
+
 \gdef\doctype{extbook}
 \documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=12pt,DIV=calc,12pt,final,utf8]{\doctype} %scrbook
 % add attachdocs to attach all documents
@@ -822,6 +824,13 @@
 
 \graphicspath{{./}{inc/}{../../../../website/src/main/jbake/assets/images/}{../../../../../website/src/main/jbake/assets/images/}}
 
+\makeatletter
+\patchcmd{\backmatter}
+{\@mainmatterfalse}
+{\@mainmatterfalse}
+{}
+{}
+\makeatother
 
 \begin{document}%
 %
