@@ -158,7 +158,7 @@ Thus, we reconsidered the whole operation. The choice of the Reed--Solomon (RS)-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Preplaced float
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[!t]\centering
+\begin{figure*}[htb]\centering
 	\includegraphics[width=1\textwidth]{inc/randomblock_10kb}
 	\caption{Entropy of addRedundancy with and without the encryption step.}
 	\label{fig:entropy}
@@ -286,11 +286,7 @@ Numerous attacks are available through the bugging of a protocol. In this chapte
 \subsubsection{Analysis by Building Interaction Graphs\label{sec:analysisInteractionGraphs}}\index{attack!interaction graph}
 Building interaction graphs is very difficult to accomplish with our system. Although we cannot quantize the effect, we still may elaborate on the difficulties. We first look at our system from an outside view and then do the same for a powerful adversary inside the system.
 
-When looking from outside the system, interaction graphs are difficult to build as sending and receiving transport addresses, and protocols do not match, which adds tremendously to the complexity. An outside observer may not just observe a specific SMTP server. He must track incoming messages, observe the user (typically obtaining the mail by IMAP) fetch the messages, and then follow all possible connections to other infrastructures known to be supported and asume to be outbound messages. By assuming that an outside observer is able to identify all \VortexMessages{} and surpass all difficulties involved in following the different protocols. Then such an observer is capable of generating a graph having as nodes all \VortexNodes{} and as edges all \VortexMessages{}. An adversary would then require the means to identify the sender and recipient. We first claim that there is no possibility to identify such senders and recipients as there is no guaranteed minimum or maximum time for a message. As an immediate result, any \VortexNode{} sending a message may be a sender of a message or only a router. Inversely, any \VortexNode{} receiving a message may be either a recipient or a router. Due to the operations, sizes may increase or decrease on message paths. Therefore, an outside adversary is unable to match two adjacent messages to the same identity. Any previous message, including all subsequent messages, may have triggered the sending of the message. So from an outside perspective, we have no possibility to identify by message pattern, message size, or message sequence adjacent messages.
-
-We assume the example routing graph, as shown in \cref{fig:messageGraphPaths}.
-
-\begin{figure*}[!t]\centering
+\begin{figure*}[htb]\centering
 	\resizebox{.9\linewidth}{!}{
 		\input{inc/graphPaths.inc.tex}
 	}
@@ -298,10 +294,14 @@ We assume the example routing graph, as shown in \cref{fig:messageGraphPaths}.
 	\label{fig:messageGraphPaths}
 \end{figure*}
 
+When looking from outside the system, interaction graphs are difficult to build as sending and receiving transport addresses, and protocols do not match, which adds tremendously to the complexity. An outside observer may not just observe a specific SMTP server. He must track incoming messages, observe the user (typically obtaining the mail by IMAP) fetch the messages, and then follow all possible connections to other infrastructures known to be supported and asume to be outbound messages. By assuming that an outside observer is able to identify all \VortexMessages{} and surpass all difficulties involved in following the different protocols. Then such an observer is capable of generating a graph having as nodes all \VortexNodes{} and as edges all \VortexMessages{}. An adversary would then require the means to identify the sender and recipient. We first claim that there is no possibility to identify such senders and recipients as there is no guaranteed minimum or maximum time for a message. As an immediate result, any \VortexNode{} sending a message may be a sender of a message or only a router. Inversely, any \VortexNode{} receiving a message may be either a recipient or a router. Due to the operations, sizes may increase or decrease on message paths. Therefore, an outside adversary is unable to match two adjacent messages to the same identity. Any previous message, including all subsequent messages, may have triggered the sending of the message. So from an outside perspective, we have no possibility to identify by message pattern, message size, or message sequence adjacent messages.
+
+We assume the example routing graph, as shown in \cref{fig:messageGraphPaths}.
+
 
 From an inside perspective, we take additional information into account. First, if an adversary has control over a routing node, he is aware of all operations carried out by this node. He knows the immediate sender and the immediate recipient of any immediately subsequent messages. If the adversary has control over two or more adjacent \VortexNodes{}, he is able to collapse the operations into one big workspace with the combined operations, whereas the message transfer may be reflected in a simple mapping operation. He is also able to identify subsequent messages using the same \defref{eID}s as messages of the same RBB. He is, however, unable to tell whether or not two subsequent incoming \VortexMessages{} for the same \defref{eID} belong to the same or to two different messages. If the same RBB maintains multiple \defref{eID}s simultaneously on the same routing node, the node is unable to match from those \defref{eID}s to the same RBB as they share no common properties. In a worst-case scenario, this means that all routing nodes chosen by the RBB, with the exception of the sender node and the final recipient node,  are under the control of an adversary. This would effectively collapse an interaction graph to a reduced graph, as shown in \cref{fig:reducedMessageGraphPaths}. An adversary learns that there are two adjacent nodes to his network (node 0 and 1). Such an adversary is however unable to tell whether node 0 was an initial sender, as any incoming message into node 0, regardless of its source or timing, may have been the cause for the original message sending. Arguing the same way, we may say that either node 0 or 1 cannot be the recipient for sure as any other outgoing message, regardless of timing or size, may have been triggered by the incoming target, and the final recipient may be any subsequent node.
 
-\begin{figure*}[!t]\centering
+\begin{figure*}[htb]\centering
 	\resizebox{.9\linewidth}{!}{
 		\input{inc/reducedGraphs.inc.tex}
 	}

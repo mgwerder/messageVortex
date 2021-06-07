@@ -1,4 +1,7 @@
-% !TeX spellcheck = en_US
+%!TeX program=pdflatex
+%!TeX encoding=utf8
+%!TeX spellcheck = en_US
+
 \gdef\doctype{extbook}
 \documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=12pt,DIV=calc,12pt,final,utf8]{\doctype} %scrbook
 % add attachdocs to attach all documents
@@ -28,9 +31,10 @@
 \usepackage{cmap}
 
 % Some index related settings
-\usepackage{imakeidx}
-\makeindex[program=makeindex,columns=3, title=Alphabetical Index]
-
+%\usepackage{imakeidx}
+%\makeindex[columns=3, title=Alphabetical Index]
+\usepackage{makeidx}
+\makeindex
 
 \makeatletter
 \let\inserttitle\@title
@@ -161,10 +165,10 @@
 % map glyphs 
 \input{glyphtounicode.tex}
 \input{glyphtounicode-cmr.tex}
-%\pdfgentounicode=1
+\pdfgentounicode=1
 % deactivate LZW compression
 \pdfobjcompresslevel=0
-%\pdfinclusioncopyfonts=1
+\pdfinclusioncopyfonts=1
 
 % Table environments
 \usepackage{booktabs}
@@ -408,10 +412,6 @@
 
 % enable nice references
 \usepackage{fancyref}
-
-% Enable indexes
-\usepackage{makeidx}
-\makeindex 
 
 % format appendix
 \usepackage{bookmark}
