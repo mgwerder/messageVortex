@@ -27,6 +27,11 @@
 % Make C&P work
 \usepackage{cmap}
 
+% Some index related settings
+\usepackage{imakeidx}
+\makeindex[program=makeindex,columns=3, title=Alphabetical Index]
+
+
 \makeatletter
 \let\inserttitle\@title
 \makeatother
@@ -156,10 +161,10 @@
 % map glyphs 
 \input{glyphtounicode.tex}
 \input{glyphtounicode-cmr.tex}
-\pdfgentounicode=1
+%\pdfgentounicode=1
 % deactivate LZW compression
 \pdfobjcompresslevel=0
-\pdfinclusioncopyfonts=1
+%\pdfinclusioncopyfonts=1
 
 % Table environments
 \usepackage{booktabs}
@@ -710,7 +715,7 @@
 	}
 }{0pt}{\fontsize{33}{40}\selectfont\color{head}#1}[\vskip10pt\Large***\vskip10pt\epigraph{\partepigraphtext}{\partepigraphauthor}\vskip10pt ]
 \titlespacing*{\part}
-{0pt}{50pt}{10pt}
+{5pt}{50pt}{10pt}
 
 
 \makeatletter
