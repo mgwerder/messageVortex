@@ -126,7 +126,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>4.2</version>
+            <version>4.2.4</version>
         </dependency>
 
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
