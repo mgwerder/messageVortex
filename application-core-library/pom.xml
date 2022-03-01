@@ -1,9 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>net.messagevortex</groupId>
     <artifactId>application-core-library</artifactId>
     <version>0.4.0</version>
@@ -20,6 +18,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-ea</argLine>
+        <jacoco.ArgLine/>
+
+        <git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
+        <git.commit.id>none</git.commit.id>
 
         <!-- sonar properties -->
         <sonar.projectKey>net.gwerder.java:messagevortex</sonar.projectKey>
@@ -53,11 +55,13 @@
         <izpack.staging>${project.build.directory}/staging</izpack.staging>
         <izpack.src>${basedir}/src/main/izpack/</izpack.src>
 
-        <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
-        <git.commit.id>none</git.commit.id>
     </properties>
 
     <repositories>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
         <repository>
             <id>mavencentral</id>
             <url>https://repo1.maven.org/maven2/</url>
@@ -65,10 +69,6 @@
         <repository>
             <id>jenkins</id>
             <url>https://repo.jenkins-ci.org/releases/</url>
-        </repository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </repositories>
 
@@ -83,6 +83,15 @@
     </licenses>
 
     <url>https://messagevortex.net</url>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central-repo</id>
+            <name>central</name>
+            <url>https://mvnrepository.com/artifact/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
 
     <dependencies>
 
@@ -126,7 +135,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>4.2</version>
+            <version>4.2.4</version>
         </dependency>
 
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
@@ -168,6 +177,12 @@
             <version>4.6.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <version>3.1.2</version>
+            <type>maven-plugin</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -182,7 +197,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>8.41.1</version>
+                            <version>8.40</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -390,19 +405,19 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.7.1</version>
-                <dependencies>
+                <!--<dependencies>
                     <dependency>
                         <groupId>lt.velykis.maven.skins</groupId>
                         <artifactId>reflow-velocity-tools</artifactId>
                         <version>1.1.1</version>
-                    </dependency>
+                    </dependency>-->
                     <!-- Reflow skin requires Velocity >= 1.7  -->
-                    <dependency>
+                    <!--<dependency>
                         <groupId>org.apache.velocity</groupId>
                         <artifactId>velocity</artifactId>
                         <version>1.7</version>
                     </dependency>
-                </dependencies>
+                </dependencies>-->
             </plugin>
 
             <plugin>
@@ -736,7 +751,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.1.2</version>
             </plugin>
 
             <plugin>

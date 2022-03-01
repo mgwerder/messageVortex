@@ -142,7 +142,8 @@
 \end{entry}
 
 \begin{entry}
-\mainentry{privacy}{From the Oxford English Dictionary: ``
+\mainentry{privacy}{From the Oxford English Dictionary\cite{OXFORD}: 
+	\begin{shadequote}{}
 	\begin{enumerate}
 		\item The state or condition of being withdrawn from the society of others, or from the public interest; seclusion. The state or condition of being alone, undisturbed, or free from public attention, as a matter of choice or right; freedom from interference or intrusion.
 		\item Private or retired place; private apartments; places of retreat.
@@ -150,7 +151,8 @@
 		\item A private matter, a secret; private or personal matters or relations; The private parts.
 		\item Intimacy, confidential relations.
 		\item The state of being privy to some act.
-	\end{enumerate}''\cite{OXFORD}\\
+	\end{enumerate}
+	\end{shadequote}
 	In this work, privacy is related to definition two. Mails should be able to be handled as a virtual private place where no one knows who is talking to whom and about what or how frequent (except for directly involved people).
 }
 \end{entry}
@@ -165,7 +167,7 @@
 \end{entry}
 
 \begin{entry}
-\mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP}, it is not able to maintain a mail store. Its sole purpose is to fetch and delete emails in a server-based store. Modifying Mails or even handling a complex folder structure is not feasible with POP}.
+\mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP}, it is not able to maintain a mail store. Its sole purpose is to fetch and delete emails in a server-based store. Modifying Mails or even handling a complex folder structure is not feasible with POP.}
 \end{entry}
 
 \begin{entry}
@@ -280,8 +282,8 @@
 \end{entry}        
 
 \backmatter
-\refstepcounter{chapter}
-\chapter{Bibliography}
+\setcounter{chapter}{3}
+\chapter*{Bibliography}
 {
 %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
 %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
@@ -292,14 +294,14 @@
 \index{mail transport|see {message transport}}
 \index{Jabber|see {XMPP}}
 
+\setcounter{chapter}{4}
 % add the index
 \refstepcounter{chapter}
 \clearpage\printindex
 
-%\clearpage\chapter{Short Biography}
-%\begin{wrapfigure}{R}{0.3\columnwidth}
-%\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
-%\end{wrapfigure}
-%\input{inc/biography/biotext.inc.tex}
-
-\cleardoublepage~\clearpage
+\setcounter{chapter}{5}
+\cleardoublepage\chapter{Short Biography}
+\begin{wrapfigure}{R}{0.3\columnwidth}
+\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
+\end{wrapfigure}
+\input{inc/biography/biotext.inc.tex}

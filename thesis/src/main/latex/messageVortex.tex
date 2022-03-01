@@ -1,4 +1,8 @@
-% !TeX spellcheck = en_US
+% !BIB TS-program = biber
+%!TeX program=pdflatex
+%!TeX encoding=utf8
+%!TeX spellcheck = en_US
+
 
 
 \gdef\doctype{extbook}
@@ -28,6 +32,12 @@
 
 % Make C&P work
 \usepackage{cmap}
+
+% Some index related settings
+%\usepackage{imakeidx}
+%\makeindex[columns=3, title=Alphabetical Index]
+\usepackage{makeidx}
+\makeindex
 
 \makeatletter
 \let\inserttitle\@title
@@ -89,17 +99,13 @@
 	  hyperfigures,
 	  pdfpagelabels,
 	  final}{hyperref}
-	\usepackage[a-3b]{pdfx}
+	%\usepackage[a-1b]{pdfx}
 	\catcode30=12
 }
 \makeatother
 
-% XMP support 
-\RequirePackage{xmpincl}
-%\includexmp{messageVortex}
-\usepackage{hyperxmp}
-
 %enable hyperlinks
+\RequirePackage{hyperref}
 \makeatletter
 \hypersetup{	
 	pdfpagelayout=TwoPageRight,
@@ -112,11 +118,25 @@
 	pdflang=en,
 	pdfsubject={\myabstract},
 	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
-	pdfcontactemail={martin.gwerder@fhnw.ch},
-	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
-	pdfcopyright={Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland (CC BY-NC-ND 3.0 CH)}
+%	pdfcontactemail={martin.gwerder@fhnw.ch},
+%	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
+%	pdfcopyright={Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland (CC BY-NC-ND 3.0 CH)}
+%	pdfcaptionwriter   = {Martin Gwerder},
+%	pdfcontactaddress  = {Bahnhofstrasse 5},
+%	pdfcontactcity     = {CH-5212 Windisch},
+%	pdfcontactcountry  = {Switzerland},
+%	pdfmetalang        = {en}
 }
 \makeatother
+
+
+
+% XMP support 
+%\usepackage{hyperxmp}
+%\usepackage{xmpincl}
+%\makeatletter
+%\includexmp{pdfa-1b}
+%\makeatother
 
 % enable superscript  for 1st, 2nd, 3rd etc.
 \usepackage[super]{nth}
@@ -405,10 +425,6 @@
 
 % enable nice references
 \usepackage{fancyref}
-
-% Enable indexes
-\usepackage{makeidx}
-\makeindex 
 
 % format appendix
 \usepackage{bookmark}
@@ -712,7 +728,7 @@
 	}
 }{0pt}{\fontsize{33}{40}\selectfont\color{head}#1}[\vskip10pt\Large***\vskip10pt\epigraph{\partepigraphtext}{\partepigraphauthor}\vskip10pt ]
 \titlespacing*{\part}
-{0pt}{50pt}{10pt}
+{5pt}{50pt}{10pt}
 
 
 \makeatletter
