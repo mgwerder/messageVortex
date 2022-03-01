@@ -605,7 +605,9 @@ To conclude, \MessageVortex{} may offer at least the same properties as a BCN or
 The following sections list recommendations using the \MessageVortex{} protocol. It is a summary of the previous sections.
 
 \section{Reuse of Routing Blocks\label{sec:reuseRB}}\index{MURB}
-Routing blocks should not be reused. The reuse of a routing block may leak some limited information to an adversary node, such as the approximate message size or message frequency of an unknown tupel using this network.
+Routing blocks should not be reused if avoidable. The reuse of a routing block may leak some limited information to an adversary node, such as the approximate message size or message frequency of an unknown tupel using this network.
+
+When using MURBS with a high replay count, a traffic pattern may be identifiable in the network used and thus allow an adversary to identify a message flow.
 
 \section{Use of Ephemeral Identities}\index{identity!ephemeral}
 Ephemeral identities should be used for a minimal number of messages. Using multiple identities with overlapping lifespans is considered a good practice. Using different ephemeral identities for the same message is acceptable and can be a good practice as long as operations do not leak the linking between those two identities.
@@ -633,7 +635,9 @@ Although it is possible to embed any content into a \VortexMessage, great care s
 Allowing a user to use more complex representations such as MIME offers many possibilities for the bugging of the content. A client displaying such messages should always handle them with great care. Taping messages by downloading external images or verifying the validity by OCSP, or even carrying out a reverse lookup on an IP address may leak valuable information.
 
 \subsection{Splitting Message Content}
-Message content should be split and distributed among routing nodes. Splitting should, however, not be done excessively to avoid failure due to too many failing nodes. It furthermore makes diagnostics complicated. 
+Message content may be split and distributed among routing nodes. Splitting should, however, not be done excessively to avoid failure due to too many failing nodes. It furthermore makes diagnostics complicated. 
+
+To split a message into multiple parts and add redundancy information simultaneously, the $addRedundancy$ operation should be used instead.
 
 \section{Routing}\index{message!routing}
 The basics of routing are described in \cref{sec:routingLayer}. We collect in the following sections the recommendations regarding the routing strategies.
