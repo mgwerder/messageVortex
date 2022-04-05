@@ -127,6 +127,7 @@ public class F5Blender extends Blender {
      * @param identity        the identity (receiver/sender address)
      * @param router          the router layer to be used
      * @param identityStore   the identity store to be used (for decryption of headers)
+     * @param blender         the blender generator used to blend messages
      * @throws IOException    if anything fails :-D
      */
     public F5Blender(String identity, BlendingReceiver router, IdentityStore identityStore, BlenderGenerator blender)
