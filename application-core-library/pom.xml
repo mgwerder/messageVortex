@@ -591,7 +591,7 @@
                 </executions>
             </plugin>
 
-            <plugin>
+            <!-- <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
                 <version>1.7.25</version>
@@ -622,11 +622,11 @@
                                 <lib>${izpack.staging}/resources/launch4j/w32api/libshell32.a</lib>
                             </libs>
                             <icon>${izpack.staging}/resources/MessageVortexLogo_128.ico</icon>
-                            <!--<classPath>
+                            <classPath>
                                 <mainClass>net.messagevortex.MessageVortex</mainClass>
                                 <addDependencies>true</addDependencies>
                                 <preCp>anything</preCp>
-                            </classPath>-->
+                            </classPath>
                             <jre>
                                 <path>${java.home}</path>
                                 <bundledJre64Bit>false</bundledJre64Bit>
@@ -649,7 +649,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
 
             <plugin>
                 <groupId>com.jolira</groupId>
