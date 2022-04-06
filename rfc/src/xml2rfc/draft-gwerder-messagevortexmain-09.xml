@@ -971,10 +971,10 @@ function incomming_message(VortexMessage blendedMessage) {
       <t>Additional encryption algorithms, paddings, modes, blending layers or puzzles MUST be added by writing an extension to this or a subsequent RFC. For testing purposes, IDs above 1,000,000 should be used.</t>
     </section>
 
-    <section anchor="security" title="Security Considerations">
+    <section anchor="seccons" title="Security Considerations">
       <t>The MessageVortex protocol should be understood as a toolset instead of a fixed product. Depending on the usage of the toolset, anonymity and security are affected. For a detailed analysis, see <xref target="MVAnalysis"/>.</t>
 
-      <t>The primary goals for security within this protocol rely on the following focus areas.</t>
+      <t>The primary goals for security within this protocol rely on the following focus areas:</t>
 
       <t><list style="symbols">
           <t>Confidentiality</t>
@@ -984,45 +984,78 @@ function incomming_message(VortexMessage blendedMessage) {
           <t>Availability</t>
 
           <t>Anonymity <list style="symbols">
-              <t>Third-party anonymity</t>
+              <t>Third-party anonymity (unobservability)</t>
 
-              <t>Sender anonymity</t>
+              <t>Sender anonymity (sender is not known to the recipient if not disclosed)</t>
 
-              <t>Receiver anonymity</t>
+              <t>Receiver anonymity (recipient is not known to the sender if using a reply block for routing)</t>
             </list></t>
+          <t>Detectability</t>
         </list></t>
+    
+	    <t> The first three are known as the CIA triad.</t> 
 
-      <t>These aspects are affected by the usage of the protocol, and the following sections provide additional information on how they impact the primary goals.</t>
+	    <t>All of these aspects are affected by the usage of the protocol, and the following sections provide additional information on how they impact the primary goals.</t>
 
-      <t>The Vortex protocol does not rely on any encryption of the transport layer since Vortex messages are already encrypted. In addition, confidentiality is not affected by the protection mechanisms of the transport layer.</t>
+		<section anchor="seccons_cia" title="CIA Triad">
 
-      <t>If a transport layer supports encryption, then a Vortex node SHOULD use it to improve the privacy of the message.</t>
+	      <t>
+	      	The Vortex protocol does not rely on any encryption of the transport layer for confidentiality since Vortex messages are already encrypted. However - Additional transport layer encryption may help to make it harder to identify blended messages on the transport layer when not crafted individually. 
+	      </t>
+          <t>
+	      	All authentification, integrity and encryption schemes are already part of the MessageVortex protocol and do not rely on any other mechanism except for the mechanism of reliable transport. However, even an unreliable transport may be used to a certain extent by offering redundant paths in the built routing block. This will not introduce a general retry mechanism but may counter outages in the routing nodes or temporary outages in the connectivity of MessageVortex nodes.
+          </t>
+        </section>
+	    <section anchor="seccons_anon" title="Anonymity and Detectability">  
+	      <t>
+    	  	Anonymity is affected by the inner workings of the blending layer and routing block outline in many ways. In general, A Vortex message cannot be read by anyone except the peer nodes and routing block builder. The presence of a Vortex message may be detected through the typical high entropy of an encrypted file, broken structures of a carrier file, meaningless content of a carrier file, or the contextless communication of the transport layer with its peer partner. A blending layer SHOULD minimize the possibility of simple detection by minimizing these effects.
+      	  </t>
+        
+          <t>
+          	Proposing a general scheme is useless, as such a scheme would allow identification of blending layer. Instead a list of DOs and DON'Ts is provided as an excerpt from<xref target="MVAnalysis"/>.
+          </t>
 
-      <t>Anonymity is affected by the inner workings of the blending layer in many ways. A Vortex message cannot be read by anyone except the peer nodes and routing block builder. The presence of a Vortex node message may be detected through the typical high entropy of an encrypted file, broken structures of a carrier file, meaningless content of a carrier file, or the contextless communication of the transport layer with its peer partner. A blending layer SHOULD minimize the possibility of simple detection by minimizing these effects.</t>
+		  <section anchor="seccons_blending" title="Blending Layer Considerations">
+		  	
+		  	<t>
+		      A Blending layer should have one or more message types to send. The content of these message highly affect the detecatbility of a protocol. The messages should be clearly machine generatet (e.g., statistics, password recovery requests, event notifications) that contain attachments or images (carrier content) in an generated manner (no static imagery). The size of this carrier content should be chosen statically and should contain continuously changing content. This requirement has massive effects on implementations of Vortex nodes. A context of the content (e.g., in a timely context) should be maintained. In general cantent with high compression (e.g., jpeg imagery) is used in the context of the internet. If not indicated otherwise this rule should be followed.
+		    </t>
+	    	<t>
+	    	  Ideally, carrier files SHOULD NOT have inner structures such that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use jpeg and F5 instead of PLAIN blending. This approach however, increases the protocol overhead by approximately tenfold.
+    	    </t>
+          </section>
+		  <section anchor="seccons_routing" title="Routing and Accounting Layer Considerations">
 
-      <t>A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures such that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 instead of PLAIN blending. This approach however, increases the protocol overhead by approximately tenfold.</t>
+      	    <t>
+      	      The two layers of 'routing' and 'accounting' have the deepest insight into a Vortex message's inner workings. Each is aware of the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations, a node can never know if a malfunction (e.g., during a recovery calculation) was intended. Therefore, a node is unable to distinguish a failed transaction from a terminated transaction as well as content from decoy traffic.
+            </t>
 
-      <t>The two layers of 'routing' and 'accounting' have the deepest insight into a Vortex message's inner workings. Each is aware of the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations, a node can never know if a malfunction (e.g., during a recovery calculation) was intended. Therefore, a node is unable to distinguish a failed transaction from a terminated transaction as well as content from decoy traffic.</t>
+            <t>A routing block builder SHOULD follow the following rules not to compromise a Vortex message's anonymity.</t>
 
-      <t>A routing block builder SHOULD follow the following rules not to compromise a Vortex message's anonymity.</t>
+            <t><list style="symbols">
+              <t>All operations applied SHOULD be credibly involved in a message transfer. The combined knowledge of multiple subsequent routing nodes should not allow judgement of wheather it is real or decoy traffic.</t>
+              
+              <t>A sufficient subset of the result of an addRedundancy operation should always be sent to peers to allow recovery of the data built.</t>
 
-      <t><list style="symbols">
-          <t>All operations applied SHOULD be credibly involved in a message transfer.</t>
+              <t>The anonymity set of a message should be sufficiently large to avoid legal prosecution of all jurisdictional entities involved, even if a certain amount of the anonymity set cooperates with an adversary.</t>
 
-          <t>A sufficient subset of the result of an addRedundancy operation should always be sent to peers to allow recovery of the data built.</t>
+              <t>Encryption and decryption SHOULD follow normal usage whenever possible by avoiding the encryption of a block on a node with one key and decrypting it with a different key on the same or adjacent node.</t>
 
-          <t>The anonymity set of a message should be sufficiently large to avoid legal prosecution of all jurisdictional entities involved, even if a certain amount of the anonymity set cooperates with an adversary.</t>
+              <t>Traffic peaks SHOULD be uniformly distributed within the entire anonymity set. This restriction applies to all traffic as a whole. A single message may generate unbalanced traffic.</t>
 
-          <t>Encryption and decryption SHOULD follow normal usage whenever possible by avoiding the encryption of a block on a node with one key and decrypting it with a different key on the same or adjacent node.</t>
+              <t>A routing block SHOULD be used for a limited number of messages. If used as a message block for the node, then it should be used only once.</t>
+              
+              <t>A block builder SHOULD use the HeaderRequestReplaceIdentity block to update the reply to routing blocks regularly. Implementers should always remember that the same routing block is identifiable by its structure.</t>
+            </list></t>
+          </section>
+        </section>
+    
+        <section anchor="seccons_activeAdversaries" title"Active Adversaries">
+	      <t>An active adversary cannot use blocks from other routing block builders. While the adversary may falsify the result by injecting an incorrect message chunk or not sending a message, such message disruptions may be detected by intentionally routing information to the routing block builder (RBB) node. If the Vortex message does not carry the information expected, then the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate the reputation for involved nodes over time and MAY build redundancy paths into a routing block to withstand such malicious nodes.</t>
 
-          <t>Traffic peaks SHOULD be uniformly distributed within the entire anonymity set.</t>
-
-          <t>A routing block SHOULD be used for a limited number of messages. If used as a message block for the node, then it should be used only once. A block builder SHOULD use the HeaderRequestReplaceIdentity block to update the reply to routing blocks regularly. Implementers should always remember that the same routing block is identifiable by its structure.</t>
-        </list></t>
-
-      <t>An active adversary cannot use blocks from other routing block builders. While the adversary may falsify the result by injecting an incorrect message chunk or not sending a message, such message disruptions may be detected by intentionally routing information to the routing block builder (RBB) node. If the Vortex message does not carry the information expected, then the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate the reputation for involved nodes over time and MAY build redundancy paths into a routing block to withstand such malicious nodes.</t>
-
-      <t>Receiver anonymity is at risk if the handling of the message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM header) to de-anonymize a recipient. Careful attention is required when handling anything other than local references when processing, verifying or rendering a message.</t>
+		  <t>Receiver anonymity is at risk if the handling of the message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM header) to de-anonymize a recipient. Careful attention is required when handling anything other than local references when processing, verifying or rendering a message.</t>
+        </section>
+      </section>
     </section>
   </middle>
 
@@ -1387,6 +1420,10 @@ function incomming_message(VortexMessage blendedMessage) {
         <c>7</c>
         <c>04-2021</c>
         <c>Lectorate and improved rendering.</c>
+        
+        <c>9</c>
+		<c>04-2022</c>
+		<c>Rewrite of security considerations section.</c>
       </texttable>
 
       <t/>
