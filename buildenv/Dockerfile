@@ -18,7 +18,7 @@ RUN mkdir /var/tmp/messagevortex && \
                fig2dev \
                wget curl joe bc imagemagick rsync inkscape \
                python3-pip live-build \
-               python-cairo-dev libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info \
+               libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info \
                openjdk-8-jdk-headless  \
                genisoimage \
                maven libmaven-javadoc-plugin-java libmaven-archiver-java libmaven-clean-plugin-java libmaven-compiler-plugin-java libmaven-clean-plugin-java libmaven-common-artifact-filters-java libmaven-dependency-analyzer-java libmaven-dependency-tree-java libmaven-deploy-plugin-java libmaven-exec-plugin-java libmaven-invoker-java libmaven-jar-plugin-java libmaven-plugin-testing-java libmaven-plugin-tools-java libmaven-reporting-impl-java libmaven-repository-builder-java libmaven-resources-plugin-java libmaven-shared-jar-java libmaven-site-plugin-java libmaven-verifier-java libmaven3-core-java libproperties-maven-plugin-java maven-repo-helper \
