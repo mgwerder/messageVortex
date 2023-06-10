@@ -31,7 +31,8 @@ cp -u $dir/../rfc/src/xml2rfc/draft-gwerder-*.xml  ${WWWDIR}/devel/
 (cd ${WWWDIR}/devel/; mkdir apidoc 2>/dev/null; cd apidoc; unzip -qox ..//messageVortex_apidoc.zip)
 cp -u $dir/../rfc/target/xml2rfc/draft-gwerder-*.{xmlflat,pdf,ps,epub,mobi,txt,legacytxt,rawtxt,html} ${WWWDIR}/devel/
 cp -u $dir/../rfc/src/xml2rfc/rfc2629.xslt ${WWWDIR}/devel/
-cp -u $dir/../thesis/target/main/latex/messageVortex.pdf ${WWWDIR}/devel/
+#cp -u $dir/../thesis/target/main/latex/messageVortex.pdf ${WWWDIR}/devel/
+cp -u ${WWWDIR}/devel/repo/thesis/src/main/latex/messageVortex.pdf ${WWWDIR}/devel/
 (cd $dir/../application-core-library/src/main/asn/;zip -9 ${WWWDIR}/devel/MessageVortex_definition.zip MessageVortex-*.asn)
 for i in $dir/../application-core-library/src/main/asn/MessageVortex*.asn
 do
