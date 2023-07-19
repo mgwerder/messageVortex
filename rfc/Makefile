@@ -5,7 +5,7 @@ INTERDIR= target/tmp
 SRCDIR  = src/xml2rfc
 XML2RFC = /usr/local/bin/xml2rfc
 X2R_OPTS= -N --cache=/var/cache/xml2rfc
-ALLFILES= $(addprefix $(INTERDIR)/draft-gwerder-messagevortexmain-,00 01 02 03 04 05 06 07 08)
+ALLFILES= $(addprefix $(INTERDIR)/draft-gwerder-messagevortexmain-,00 01 02 03 04 05 06 07 08 09 10)
 ALLEXP  = $(addsuffix .xmlprep,$(ALLFILES)) $(addsuffix .uixml,$(ALLFILES)) $(addsuffix .nouixml,$(ALLFILES))
 EXTS    = .pdf .ps .xmlflat .html .mobi .epub .txt .rawtxt .legacytxt
 LEXTS   = .pdf .xmlflat .legacytxt
@@ -14,7 +14,7 @@ LEXTS   = .pdf .xmlflat .legacytxt
 
 .SECONDARY: $(ALLEXP)
 
-all: $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-08,$(EXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-07,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-05,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-04,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-03,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-02,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-01,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-00,$(LEXTS)) dirs 
+all: $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-10,$(EXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-09,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-08,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-07,$(LEXTS))  $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-06,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-05,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-04,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-03,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-02,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-01,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-00,$(LEXTS)) dirs 
 
 clean:
 	@-rm -r target 2>/dev/null; /bin/true

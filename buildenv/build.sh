@@ -62,7 +62,9 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 		if [[ "$tmpdir" != "" ]]
 		then
 			rm -r $dir/../target 
-			mv $tmpdir/target $dir/../target
+			mkdir -p $dir/../target/thesis/
+			mv $tmpdir/target/* $dir/../target
+			mv $tmpdir/thesis/target/* $dir/../target/thesis/
 			rm -rf $tmpdir
 		fi	
 	)

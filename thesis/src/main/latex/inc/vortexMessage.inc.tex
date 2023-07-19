@@ -3,6 +3,7 @@
 
 \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
 %uncomment if require: \path (0,995); %set diagram left start at 0, and has height of 995
+\definecolor{unrelatedcolor}{RGB}{254,254,254}
 
 \tikzset{
 	every picture/.style={line width=0.75pt},
@@ -20,16 +21,16 @@
 %innerMessage encryption
 \draw  [fill=peerkeycolor  ,fill opacity=1 ,boxstyle] (1527.64,453.61) -- (1527.64,534.21) -- (226.62,534.21) -- (226.62,453.61) -- (259.97,453.61) -- (259.97,484.03) -- (1494.56,484.03) -- (1494.56,453.61) -- (1527.64,453.61) -- cycle node  [pos=.5,font=\small,xscale=2,yscale=2,xshift=-275,yshift=-20 ]  {$E^{K_{peer_{o}}}( ...)$};
 %Payload 1
-\draw  [fill=payloadcolor  ,fill opacity=1,boxstyle  ] (1140.6,152.5) rectangle (1186.22,474.14)  node  [pos=.5,font=\small,rotate=-270,xscale=2,yscale=2]  {$payload_{0}$};
+\draw  [fill=payloadcolor  ,fill opacity=1,boxstyle  ] (1140.6,152.5) rectangle (1186.22,474.14)  node  [color=white,pos=.5,font=\small,rotate=-270,xscale=2,yscale=2]  {$payload_{0}$};
 %Payload 2
-\draw  [fill=payloadcolor  ,fill opacity=1 ,boxstyle] (1220.44,152.5) rectangle (1266.07,474.14) node  [pos=.5,font=\small,rotate=-270,xscale=2,yscale=2]  {$payload_{1}$};;
+\draw  [fill=payloadcolor  ,fill opacity=1 ,boxstyle] (1220.44,152.5) rectangle (1266.07,474.14) node  [color=white,pos=.5,font=\small,rotate=-270,xscale=2,yscale=2]  {$payload_{1}$};;
 %payload 3
-\draw  [fill=payloadcolor  ,fill opacity=1,boxstyle ] (1424.23,152.5) rectangle  (1469.85,474.14)  node  [pos=.5,font=\small,rotate=-270,xscale=2,yscale=2]  {$payload_{p-1}$};;
+\draw  [fill=payloadcolor  ,fill opacity=1,boxstyle ] (1424.23,152.5) rectangle  (1469.85,474.14)  node  [color=white,pos=.5,font=\small,rotate=-270,xscale=2,yscale=2]  {$payload_{p-1}$};;
 %HEADER
-\draw[boxstyle,fill=white]   (506.44,319.53) rectangle (736.84,413.82) node  [font=\small,xscale=2,yscale=2,pos=.5]  {$\mathbf{HEADER}_{o}$};
+\draw[boxstyle,fill=white ,fill opacity=1]   (506.44,319.53) rectangle (736.84,413.82) node  [font=\small,xscale=2,yscale=2,pos=.5]  {$\mathbf{HEADER}_{o}$};
 %ROUTING
 \draw[boxstyle,fill=white]    (833.35,152.5) rectangle (1059.44,414.07)  node  [pos=.5,font=\small,xscale=2,yscale=2,yshift=-32 ]  {$\mathbf{ROUTING}_o$}; ;
-%Routing_1_enc
+%Routing_1_enc 
 \draw  [boxstyle, fill=senderkeycolor] (940.37,240.83) -- (940.37,263.01) -- (840.25,263.01) -- (840.25,240.83) -- (849.88,240.83) -- (849.88,255.41) -- (930.74,255.41) -- (930.74,240.83) -- (940.37,240.83) -- cycle ;
 \draw   [boxstyle, fill=white] (853.3,176.71) -- (927.31,176.71) -- (927.31,251.48) -- (853.3,251.48) -- cycle ;
 \draw   [boxstyle, fill=white] (888.41,182.79) -- (917.05,182.79) -- (917.05,209.66) -- (888.41,209.66) -- cycle ;
