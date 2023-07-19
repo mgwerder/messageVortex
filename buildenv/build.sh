@@ -63,8 +63,8 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 		then
 			rm -r $dir/../target 
 			mkdir -p $dir/../target/thesis/
-			mv $tmpdir/target/* $dir/../target
-			mv $tmpdir/thesis/target/* $dir/../target/thesis/
+			cp -R $tmpdir/target/* $dir/../target
+			cp -R $tmpdir/thesis/target/* $dir/../target/thesis/
 			rm -rf $tmpdir
 		fi	
 	)

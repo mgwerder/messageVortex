@@ -34,6 +34,7 @@ $(INTERDIR)/messageVortex.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVort
 	(cd $(INTERDIR); TEXINPUTS=$(INTERDIR):../../../$(SRCDIR):$${TEXINPUTS} pdflatex -shell-escape -output-directory=../../../$(INTERDIR) messageVortex.tex )
 	(cd $(INTERDIR)/; makeindex messageVortex )
 	(cd $(INTERDIR); TEXINPUTS=$(INTERDIR):../../../$(SRCDIR):$${TEXINPUTS} pdflatex -shell-escape -output-directory=../../../$(INTERDIR) messageVortex.tex )
+	(cp $(INTERDIR)/*.pdf $(OUTDIR))
 
 $(INTERDIR)/messageVortex_attachdocs.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVortex.bib $(INTERDIR)/messageVortex.pdf
 	cp $(INTERDIR)/messageVortex.bib $(INTERDIR)/messageVortex_attachdocs.bib
@@ -45,6 +46,7 @@ $(INTERDIR)/messageVortex_attachdocs.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/
 	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -shell-escape -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{extbook}\input{messageVortex.tex}")
 	(cd $(INTERDIR)/; makeindex messageVortex_attachdocs )
 	(cd $(INTERDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -shell-escape -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{extbook}\input{messageVortex.tex}")
+	(cp $(INTERDIR)/*.pdf $(OUTDIR))
         
 $(OUTDIR)/%.pdf: $(INTERDIR)/%.pdf
 	cp $< $@
