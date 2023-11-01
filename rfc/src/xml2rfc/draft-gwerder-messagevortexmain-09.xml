@@ -31,7 +31,7 @@
       </address>
     </author>
 
-    <date day="04" month="04" year="2022"/>
+    <date day="06" month="04" year="2022"/>
 
     <area>General</area>
 
@@ -487,7 +487,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
 
             <t>GCM (see <xref target="RFC5288"/>).</t>
 
-            <t>NONE (only used in special cases, see <xref target="security"/>).</t>
+            <t>NONE (only used in special cases, see <xref target="seccons"/>).</t>
           </list></t>
 
         <t>A node SHOULD NOT use the following modes.</t>
@@ -1050,13 +1050,12 @@ function incomming_message(VortexMessage blendedMessage) {
           </section>
         </section>
     
-        <section anchor="seccons_activeAdversaries" title"Active Adversaries">
+        <section anchor="seccons_activeAdversaries" title="Active Adversaries">
 	      <t>An active adversary cannot use blocks from other routing block builders. While the adversary may falsify the result by injecting an incorrect message chunk or not sending a message, such message disruptions may be detected by intentionally routing information to the routing block builder (RBB) node. If the Vortex message does not carry the information expected, then the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate the reputation for involved nodes over time and MAY build redundancy paths into a routing block to withstand such malicious nodes.</t>
 
 		  <t>Receiver anonymity is at risk if the handling of the message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM header) to de-anonymize a recipient. Careful attention is required when handling anything other than local references when processing, verifying or rendering a message.</t>
         </section>
       </section>
-    </section>
   </middle>
 
   <!--  *****BACK MATTER ***** -->
