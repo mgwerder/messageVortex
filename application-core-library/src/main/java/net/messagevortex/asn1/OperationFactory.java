@@ -8,7 +8,7 @@ import java.io.IOException;
 public class OperationFactory {
 
   /***
-   * <p>Gets the respective Operation by tag number.</p>
+   * <p>Gets the respective GraphOperation by tag number.</p>
    *
    * @param object the object to be parsed
    * @return the operation object
