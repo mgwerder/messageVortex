@@ -15,7 +15,7 @@ public class ZoomPanel extends JPanel implements MouseWheelListener {
     public void setZoomFactor(double zoomFactor) {
         this.zoomFactor = zoomFactor;
         if(this.zoomFactor > 5) this.zoomFactor = 5;
-        if(this.zoomFactor < 0.5) this.zoomFactor = 0.5;
+        if(this.zoomFactor < 0.02) this.zoomFactor = 0.02;
 
         this.revalidate();
         this.repaint();

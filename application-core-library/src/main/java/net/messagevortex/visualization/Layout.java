@@ -51,12 +51,13 @@ public class Layout {
         f.setVisible(true);
     }
 
-    public static void main(String[] args) throws IOException {
-        GenerateRB genRB = new GenerateRB();
-        ArrayList<RoutingCombo> rbList = new ArrayList<>();
-
-        rbList.add(genRB.generateRoutingBlock());
-
+    /**
+     * <p>Initializes a new GUI from a list of RoutingCombos</p>
+     *
+     * @param rbList ArrayList of RoutingCombos
+     * @throws IOException
+     */
+    public Layout (ArrayList<RoutingCombo> rbList) throws IOException {
         HirarchyData data = new HirarchyData();
         DefaultTreeModel treeModel = data.newTreeModel(rbList);
 

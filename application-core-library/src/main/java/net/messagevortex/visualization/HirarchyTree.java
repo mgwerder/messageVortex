@@ -54,7 +54,6 @@ public class HirarchyTree extends JTree {
                 ZoomPanel panel;
                 if(((HirarchyNode) lastTreeNode).getType() == HirarchyNode.NodeType.ROUTINGBLOCK) {
                     String data = ((HirarchyNode) lastTreeNode).getData().dumpValueNotation("", DumpType.INTERNAL);
-
                     infoList.updateList(data);
 
                     // Create Graph

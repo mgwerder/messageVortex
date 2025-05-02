@@ -13,10 +13,9 @@ import java.util.ArrayList;
 public class HirarchyData {
     public DefaultTreeModel newTreeModel(ArrayList<RoutingCombo> routingComboList) throws IOException {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
+        DefaultMutableTreeNode node = new DefaultMutableTreeNode("node");
 
         for (RoutingCombo rbElement : routingComboList) {
-            DefaultMutableTreeNode node = new DefaultMutableTreeNode("node");
-
             HirarchyNode wsNode = new HirarchyNode(rbElement, HirarchyNode.NodeType.WORKSPACE);
 
             HirarchyNode rbNode = new HirarchyNode(rbElement, HirarchyNode.NodeType.ROUTINGBLOCK);

@@ -12,7 +12,7 @@ public class Topbar extends JPanel {
      * <p>Creates a new Topbar element.</p>
      */
     public Topbar() {
-        this.zoomSlider = new JSlider(5, 50, 10);
+        this.zoomSlider = new JSlider(2, 50, 10);
         this.add(this.zoomSlider);
     }
 
