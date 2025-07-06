@@ -63,7 +63,7 @@ In this protocol, many encryption and hashing algorithms have to be used. In the
 We decided to define fixed key sizes for symmetric ciphers as we chose block ciphers. For asymmetric ciphers, we encode the key length in the asymmetric ciphers' parameters section. Due to their mathematical differences, they are frequently flexible in their parameters such as key or block sizes. 
 
 \begin{figure}[ht]
-	\lstinputlisting[linerange={18-84},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
+	\lstinputlisting[linerange={18-84},language=asn.1,multicols=2]{asn/MessageVortex-Ciphers.asn}
 	\caption{Definition of the structures related to ciphers.}
 	\label{fig:defCiphers}
 \end{figure}
@@ -125,7 +125,7 @@ This allows associating the used algorithms with a strength. This list, however,
 We evaluated the most common cipher modes for suitability. For \MessageVortex, we focused on modes with parallelizable, random access modes that do not authenticate. In addition to the characteristics mentioned before, the main focus was on whether there is a reasonably tested open implementation in Java.
 
 \begin{figure}[ht]
-	\lstinputlisting[linerange={86-95},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
+	\lstinputlisting[linerange={86-95},language=asn.1]{asn/MessageVortex-Ciphers.asn}
 	\caption{Enumeration definition of modes in ASN.1 with support requirements.}
 	\label{fig:defModes}
 \end{figure}
@@ -176,7 +176,7 @@ A plain textstream may have any length. Since we always encrypt in blocks of a f
 
 We have chosen the paddings outlined in \cref{fig:defPaddings} to be supported.
 \begin{figure}[ht]
-	\lstinputlisting[linerange={97-104},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
+	\lstinputlisting[linerange={97-104},language=asn.1]{asn/MessageVortex-Ciphers.asn}
 	\caption{Enumeration definition of paddings in ASN.1 with support requirements.}
 	\label{fig:defPaddings}
 \end{figure}
@@ -476,7 +476,7 @@ The blending layer may generate decoy messages analog to the messages generated 
 A distributed storage is advisable if it works as a reliable service. This is why we defined ASN.1 structures for all elements kept in memory as shown in listing~\ref{fig:defConfig}. Wisely applied, they may be used to store in a transport storage for access of a redundant set of devices, all maintaining the same set of data. 
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-NonProtocolBlocks.asn}
+	\lstinputlisting[language=asn.1,multicols=2]{asn/MessageVortex-NonProtocolBlocks.asn}
 	\caption{Definition of the structures related to a distributed storage.}
 	\label{fig:defConfig}
 \end{lstfloat}
@@ -509,7 +509,7 @@ The embedding supports some properties. A receiving host chooses the supported p
 Both specifications allow embedding of a \VortexMessage{} and are described in the following section. A byte stream is extracted in both cases consisting of a prefix block containing the peer key $K_{peer_o}$ immediately followed by the symmetrically encrypted InnerMessageBlock as described in listing~\ref{fig:defOuterBlocks}. The string is not necessarily correctly terminated. The presence of a valid PrefixBlock signals an existing \VortexMessage{} on the blending layer. That way, we ensure that the size of a potential message leaks its presence. To detect the presence of a \VortexMessage{}, the host's private key $K^{-1}_{host_o}$ for decoding the message is required. 
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={50-84},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
+	\lstinputlisting[linerange={50-84},language=asn.1,multicols=2]{asn/MessageVortex-Schema.asn}
 	\caption{Definition of the outer message blocks.}
 	\label{fig:defOuterBlocks}
 \end{lstfloat}
@@ -658,7 +658,7 @@ A message extracted by the blending layer is passed to the routing layer for fur
 The first step of processing is the extraction of the identity. The identity can be found in the header block (see listing~\ref{fig:defInnerBlocks} $identityKey$) and then verified with the signature $identitySignature$ (listing~\ref{fig:defOuterBlocks})
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={85-173},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
+	\lstinputlisting[linerange={85-173},language=asn.1,multicols=2]{asn/MessageVortex-Schema.asn}
 	\caption{Definition of the inner message blocks.}
 	\label{fig:defInnerBlocks}
 \end{lstfloat}
@@ -717,7 +717,7 @@ In general, any host may send a request to any other host. These requests normal
 The identified requests are shown in listing~\ref{fig:defRequest}. The tagging of the requests is necessary to identify the request provided.
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={9-18},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
+	\lstinputlisting[linerange={9-18},language=asn.1]{asn/MessageVortex-Requests.asn}
 	\caption{Definition of a request.}
 	\label{fig:defRequest}
 \end{lstfloat}
@@ -727,7 +727,7 @@ The routing blocks for replies must differentiate from normal routing blocks as 
 A reply is sent as a special message block and must be mapped to workspace ID 128. A \VortexNode{} may accept a special block delivered to ID 0, but such behavior should never be assumed. Figure~\ref{fig:defReply} shows the definition of a reply. A reply is expressed in a special block. This special block contains a status of the request, which is either a success or a failure and may provide additional information such as the request's outcome.
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={15-55},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Replies.asn}
+	\lstinputlisting[linerange={15-55},language=asn.1,multicols=2]{asn/MessageVortex-Replies.asn}
 	\caption{Definition of a request.}
 	\label{fig:defReply}
 \end{lstfloat}
@@ -736,7 +736,7 @@ A reply is sent as a special message block and must be mapped to workspace ID 12
 One of the main requests for the protocol is the request for generating a new ephemeral identity. The goal of this operation is to create a non-hijackable workspace on a node while remaining anonymous. If having multiple \defref{eID}s on the same host, they must be unlinkable. Furthermore, it should be difficult for an adversary to flood a \VortexNode{} with workspace requests to cause a denial-of-service (DoS) attack.
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={19-22},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
+	\lstinputlisting[linerange={19-22},language=asn.1]{asn/MessageVortex-Requests.asn}
 	\caption{Definition of an identity request.}
 	\label{fig:defCreateEID}
 \end{lstfloat}
@@ -753,7 +753,7 @@ The denial of a request does not necessarily lead to an error message. A \Vortex
 If a request is accepted, the \VortexNode{} replies either with an ``ok'' or a ``puzzle required'' status.
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={9-34},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Requirements.asn}
+	\lstinputlisting[linerange={9-34},language=asn.1,multicols=2]{asn/MessageVortex-Requirements.asn}
 	\caption{Definition of a requirement.}
 	\label{fig:defRequirements}
 \end{lstfloat}
@@ -779,7 +779,7 @@ The second approach has a great disadvantage: A DoS attack is feasible. Given th
 As users tend to change transport layer addresses, keys might become insecure, or transport services are no longer available, we need means of upgrading keys or replacing them with newer transport addresses. This may be achieved with a $HeaderRequestReplaceIdentity$ request as shown in listing~\ref{fig:reqReplaceIdentity}. This request allows in a cryptographically secured way to exchange keys and transport endpoints by the respective owners.
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={23-30},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
+	\lstinputlisting[linerange={23-30},language=asn.1]{asn/MessageVortex-Requests.asn}
 	\caption{Definition of an identity replace request.}
 	\label{fig:reqReplaceIdentity}
 \end{lstfloat}
@@ -894,14 +894,14 @@ In most mobile devices, storage is very limited. This applies to the disk storag
 The runtime portion of RAM required may be minimized as the concurrently required RAM is limited to the event-triggered routing blocks, respectively their trigger blocks. Listing~\ref{lst:defUsage} defines two type of windows. The absolute time (\texttt{AbsoluteUsagePeriod}) denominates the time interval the item is valid in an absolute UTC-based manner. The relative timing (\texttt{RelativeUsagePeriod}) furthermore limits the validity window measured relative to the time of arrival. The real validity time is formed as the intersection out of the two timings, whereas both may be omitted by definitions.
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={10-23},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Helpers.asn}
+	\lstinputlisting[linerange={10-23},language=asn.1]{asn/MessageVortex-Helpers.asn}
 	\caption{Definition of a timing trigger.}
 	\label{lst:defUsage}
 \end{lstfloat}
 
 The \texttt{ReplyCapability} as shown in listing~\ref{lst:defCapabilityReply} allows a \VortexNode{} to effectively limit the memory usage. 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={61-91},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Replies.asn}
+	\lstinputlisting[linerange={61-91},language=asn.1]{asn/MessageVortex-Replies.asn}
 	\caption{Definition of a capability reply block.}
 	\label{lst:defCapabilityReply}
 \end{lstfloat}
@@ -913,7 +913,7 @@ The ephemeral identity (\defref{eID}) is the overarching unit of user data. In a
 When an \defref{eID} is requested an absolute \texttt{UsagePeriod} (a timezone bound time) is specifies with an \texttt{AbsoluteUsagePeriod} is specified (see listing\ref{lst:defUsage}). Unless used for reply blocks (MURBs), \defref{eID} have a very limited lifespan of a couple hours. This minimizes any storage footprint associated with an \defref{eID}. 
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={85-114},language=asn.1,multicols=2,basicstyle=\tiny]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
+	\lstinputlisting[linerange={85-114},language=asn.1,multicols=2,basicstyle=\tiny]{asn/MessageVortex-Schema.asn}
 	\caption{Definition of a header block.}
 	\label{lst:defHeaderBlock}
 \end{lstfloat}
