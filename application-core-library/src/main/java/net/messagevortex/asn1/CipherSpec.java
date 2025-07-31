@@ -76,22 +76,22 @@ public class CipherSpec extends AbstractBlock implements Serializable {
     // parse optional fields sequence
     ASN1TaggedObject to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     if (to1.getTagNo() == ASYMMETRIC) {
-      asymmetricSpec = new AsymmetricAlgorithmSpec(to1.getObject());
+      asymmetricSpec = new AsymmetricAlgorithmSpec(to1.getBaseObject());
       to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     }
     if (to1.getTagNo() == SYMMETRIC) {
-      symmetricSpec = new SymmetricAlgorithmSpec(to1.getObject());
+      symmetricSpec = new SymmetricAlgorithmSpec(to1.getBaseObject());
       to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     }
     if (to1.getTagNo() == MAC) {
-      macSpec = new MacAlgorithmSpec(to1.getObject());
+      macSpec = new MacAlgorithmSpec(to1.getBaseObject());
       to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     }
     if (to1.getTagNo() != USAGE) {
       throw new IOException("expected USAGE (" + USAGE + ") but got " + to1.getTagNo()
               + " when parsing CipherSpec");
     }
-    cipherUsage = CipherUsage.getById(ASN1Enumerated.getInstance(to1.getObject()).getValue()
+    cipherUsage = CipherUsage.getById(ASN1Enumerated.getInstance(to1.getBaseObject()).getValue()
             .intValue());
 
   }

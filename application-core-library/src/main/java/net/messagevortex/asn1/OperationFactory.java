@@ -22,7 +22,7 @@ public class OperationFactory {
       throw new IOException("unknown tag for choice detected");
     }
     return opType.getFactory()
-        .getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
+        .getNewInstance(ASN1TaggedObject.getInstance(object).getBaseObject());
   }
 
 }

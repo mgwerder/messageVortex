@@ -202,9 +202,9 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
 
     ASN1TaggedObject dto = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     if (dto.getTagNo() == PayloadType.PAYLOAD.getId()) {
-      setPayload(ASN1OctetString.getInstance(dto.getObject()).getOctets());
+      setPayload(ASN1OctetString.getInstance(dto.getBaseObject()).getOctets());
     } else if (dto.getTagNo() == PayloadType.REPLY.getId()) {
-      setReplyBlock(ASN1OctetString.getInstance(dto.getObject()).getOctets());
+      setReplyBlock(ASN1OctetString.getInstance(dto.getBaseObject()).getOctets());
     } else {
       throw new IOException("got bad tag number (expected:" + PayloadType.REPLY.getId()
           + " or " + PayloadType.PAYLOAD.getId() + ";got:" + dto.getTagNo() + ")");

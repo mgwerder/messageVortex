@@ -146,7 +146,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
 
   protected final void parse(ASN1Encodable to) throws IOException {
     ASN1TaggedObject s1 = ASN1TaggedObject.getInstance(to);
-    ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObject());
+    ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getBaseObject());
     if (s1.getTagNo() == UsagePeriodType.ABSOLUTE.getId()) {
       // get absolute
       type = UsagePeriodType.ABSOLUTE;
@@ -154,13 +154,13 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
         ASN1TaggedObject tag = ASN1TaggedObject.getInstance(e);
         if (tag.getTagNo() == TAG_NOT_BEFORE && notBefore == -1) {
           try {
-            notBefore = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate().getTime();
+            notBefore = ASN1GeneralizedTime.getInstance(tag.getBaseObject()).getDate().getTime();
           } catch (ParseException pe) {
             throw new IOException("unable to parse notAfter", pe);
           }
         } else if (tag.getTagNo() == TAG_NOT_AFTER && notAfter == -1) {
           try {
-            notAfter = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate().getTime();
+            notAfter = ASN1GeneralizedTime.getInstance(tag.getBaseObject()).getDate().getTime();
           } catch (ParseException pe) {
             throw new IOException("unable to parse notAfter", pe);
           }
@@ -175,10 +175,10 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
       for (ASN1Encodable e : s2.toArray()) {
         ASN1TaggedObject tag = ASN1TaggedObject.getInstance(e);
         if (tag.getTagNo() == TAG_NOT_BEFORE && notBefore == -1) {
-          notBefore = ASN1Integer.getInstance(tag.getObject()).getValue().longValue() * 1000L
+          notBefore = ASN1Integer.getInstance(tag.getBaseObject()).getValue().longValue() * 1000L
                   + reference.getTime();
         } else if (tag.getTagNo() == TAG_NOT_AFTER && notAfter == -1) {
-          notAfter = ASN1Integer.getInstance(tag.getObject()).getValue().longValue() * 1000L
+          notAfter = ASN1Integer.getInstance(tag.getBaseObject()).getValue().longValue() * 1000L
                   + reference.getTime();
         } else {
           throw new IOException("Encountered unknown or repeated Tag number in Usage Period ("

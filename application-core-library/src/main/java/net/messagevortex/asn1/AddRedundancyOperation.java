@@ -49,7 +49,7 @@ public class AddRedundancyOperation extends AbstractRedundancyOperation
       return (AddRedundancyOperation) obj;
     } else if (obj instanceof ASN1TaggedObject) {
       ASN1TaggedObject to = ASN1TaggedObject.getInstance(obj);
-      return new AddRedundancyOperation(to.getObject());
+      return new AddRedundancyOperation(to.getBaseObject());
     }
 
     throw new IllegalArgumentException("unknown object in getInstance");

@@ -143,7 +143,7 @@ public class AlgorithmParameter extends AbstractBlock
       ASN1TaggedObject to = ASN1TaggedObject.getInstance(o);
       Parameter p = Parameter.getById(to.getTagNo());
       if (p.isEncodable()) {
-        parameter.put(to.getTagNo(), p.fromAsn1Object(to.getObject()));
+        parameter.put(to.getTagNo(), p.fromAsn1Object(to.getBaseObject()));
       } else {
         throw new IOException("unknown der tagged object when parsing parameter ("
                 + to.getTagNo() + ")");

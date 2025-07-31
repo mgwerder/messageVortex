@@ -2,7 +2,6 @@ package net.messagevortex.commandline;
 
 import net.messagevortex.asn1.AsymmetricKey;
 import picocli.CommandLine;
-import sun.misc.Signal;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
@@ -36,10 +35,10 @@ public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
     // just create an instance and wait for the Cache to fill
     new AsymmetricKey();
     
-    // install signal handler for HUP to abort pre-calculation
-    Signal.handle(new Signal("HUP"), signal -> {
+    // Add shutdown hook instead of signal handler
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       AsymmetricKey.setCacheFileName(null);
-    });
+    }));
     
     int i = 0;
     while ((i < seconds || i == -1) && AsymmetricKey.getCacheFileName() != null) {

@@ -100,7 +100,7 @@ public abstract class AbstractRedundancyOperation
     if (to.getTagNo() != KEYS) {
       throw new IOException("got unknown tag id (" + to.getTagNo() + ") when expecting keys");
     }
-    ASN1Sequence s = ASN1Sequence.getInstance(to.getObject());
+    ASN1Sequence s = ASN1Sequence.getInstance(to.getBaseObject());
     synchronized (stripeKeys) {
       stripeKeys.clear();
       for (ASN1Encodable o : s) {
@@ -120,7 +120,7 @@ public abstract class AbstractRedundancyOperation
     if (obj.getTagNo() != id) {
       throw new IOException("got unknown tag id (" + id + ") when expecting " + description);
     }
-    return ASN1Integer.getInstance(obj.getObject()).getValue().intValue();
+    return ASN1Integer.getInstance(obj.getBaseObject()).getValue().intValue();
   }
 
   @Override

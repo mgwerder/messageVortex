@@ -141,11 +141,11 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
     switch (ae.getTagNo()) {
       case PREFIX_PLAIN:
         LOGGER.log(Level.INFO, "parsing plain prefix");
-        prefix = getPrefix(ae.getObject().toASN1Primitive());
+        prefix = getPrefix(ae.getBaseObject().toASN1Primitive());
         break;
       case PREFIX_ENCRYPTED:
         LOGGER.log(Level.INFO, "parsing encrypted prefix");
-        prefix = getPrefix(ae.getObject().toASN1Primitive());
+        prefix = getPrefix(ae.getBaseObject().toASN1Primitive());
         break;
       default:
         throw new IOException("Error parsing prefix (expected: " + PREFIX_PLAIN + " or "
@@ -161,7 +161,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
       case ROUTING_PLAIN:
       case ROUTING_ENCRYPTED:
         // if it is encrypted we have no decryption key for it anyway
-        ASN1Sequence seq = ASN1Sequence.getInstance(ae.getObject());
+        ASN1Sequence seq = ASN1Sequence.getInstance(ae.getBaseObject());
         List<RoutingCombo> p2 = new ArrayList<>(seq.size());
         for (ASN1Encodable b : seq) {
           p2.add(new RoutingCombo(b));
@@ -183,7 +183,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
     // parse reply block
     ae = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     if (ae.getTagNo() == MURB) {
-      ASN1Sequence s2 = ASN1Sequence.getInstance(ae.getObject());
+      ASN1Sequence s2 = ASN1Sequence.getInstance(ae.getBaseObject());
       if (s2.size() != 3) {
         throw new IOException("invalid sequence size for reply block (got: " + s2.size()
                               + "; expected: 3)");
@@ -201,7 +201,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
     // parse operations
     ae = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     if (ae.getTagNo() == OPERATIONS) {
-      ASN1Sequence s2 = ASN1Sequence.getInstance(ae.getObject());
+      ASN1Sequence s2 = ASN1Sequence.getInstance(ae.getBaseObject());
       List<Operation> o = new ArrayList<>();
       if (s2.size() > 0) {
         for (ASN1Encodable obj : s2) {

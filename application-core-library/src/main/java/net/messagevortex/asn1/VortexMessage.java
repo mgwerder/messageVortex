@@ -252,11 +252,11 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     switch (to.getTagNo()) {
       case PREFIX_PLAIN:
         LOGGER.log(Level.INFO, "parsing unencrypted/plain prefix block");
-        prefix = new PrefixBlock(to.getObject(), null);
+        prefix = new PrefixBlock(to.getBaseObject().toASN1Primitive(), null);
         break;
       case PREFIX_ENCRYPTED:
         LOGGER.log(Level.INFO, "parsing encrypted prefix block");
-        prefix = new PrefixBlock(ASN1OctetString.getInstance(to.getObject()).getOctets(),
+        prefix = new PrefixBlock(ASN1OctetString.getInstance(to.getBaseObject()).getOctets(),
                 getDecryptionKey());
         break;
       default:
@@ -272,7 +272,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     i++;
     switch (to.getTagNo()) {
       case INNER_MESSAGE_PLAIN:
-        innerMessage = new InnerMessageBlock(toDer(to.getObject()), null);
+        innerMessage = new InnerMessageBlock(toDer(to.getBaseObject()), null);
         break;
       case INNER_MESSAGE_ENCRYPTED:
         if (prefix.getKey() == null) {
@@ -280,7 +280,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
         }
         byte[] stream = null;
         try {
-          byte[] derStream = ASN1OctetString.getInstance(to.getObject()).getOctets();
+          byte[] derStream = ASN1OctetString.getInstance(to.getBaseObject()).getOctets();
           stream = prefix.getKey().decrypt(derStream);
         } catch (IllegalArgumentException iae) {
           throw new IOException("unable to get decrypted byte stream (1)", iae);

@@ -111,10 +111,10 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
     }
     switch (bpc) {
       case OFFSET:
-        offset = ASN1Integer.getInstance(t.getObject()).getValue().intValue();
+        offset = ASN1Integer.getInstance(t.getBaseObject()).getValue().intValue();
         break;
       case F5:
-        symmetricKey = new SymmetricKey(t.getObject().getEncoded());
+        symmetricKey = new SymmetricKey(t.getBaseObject().getEncoded());
         break;
       default:
         throw new IOException("unknown blender parameter choice detected (" + t.getTagNo() + ")");

@@ -261,7 +261,7 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
       throw new IOException("encountered wrong tag number when parsing public key (expected: "
               + PUBLIC_KEY_TAG + "; got:" + tagged.getTagNo() + ")");
     }
-    publicKey = ASN1OctetString.getInstance(tagged.getObject()).getOctets();
+    publicKey = ASN1OctetString.getInstance(tagged.getBaseObject()).getOctets();
     
     // parse private key
     if (s1.size() > i) {
@@ -270,7 +270,7 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
         throw new IOException("encountered wrong tag number when parsing private key (expected: "
                 + PRIVATE_KEY_TAG + "; got:" + tagged.getTagNo() + ")");
       }
-      privateKey = ASN1OctetString.getInstance(tagged.getObject()).getOctets();
+      privateKey = ASN1OctetString.getInstance(tagged.getBaseObject()).getOctets();
     }
     
   }

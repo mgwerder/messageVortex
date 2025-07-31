@@ -83,7 +83,7 @@ public class SizeBlock extends AbstractBlock implements Serializable {
       throw new IOException("Unknown type in SizeType " + tag.getTagNo());
     }
 
-    ASN1Sequence s2 = ASN1Sequence.getInstance(tag.getObject());
+    ASN1Sequence s2 = ASN1Sequence.getInstance(tag.getBaseObject());
     int i2 = 0;
 
     this.from = ASN1Integer.getInstance(s2.getObjectAt(i2++)).getValue().intValue();

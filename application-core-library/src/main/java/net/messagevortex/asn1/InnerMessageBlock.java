@@ -117,10 +117,10 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     ASN1TaggedObject ato = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     switch (ato.getTagNo()) {
       case PREFIX_PLAIN:
-        prefix = new PrefixBlock(ato.getObject(), null);
+        prefix = new PrefixBlock(ato.getBaseObject().toASN1Primitive(), null);
         break;
       case PREFIX_ENCRYPTED:
-        prefix = new PrefixBlock(ASN1OctetString.getInstance(ato.getObject()).getOctets(),
+        prefix = new PrefixBlock(ASN1OctetString.getInstance(ato.getBaseObject()).getOctets(),
                 decryptionKey);
         break;
       default:
@@ -133,11 +133,11 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     byte[] identityEncoded;
     switch (ato.getTagNo()) {
       case IDENTITY_PLAIN:
-        identityEncoded = toDer(ato.getObject());
+        identityEncoded = toDer(ato.getBaseObject());
         identity = new IdentityBlock(identityEncoded);
         break;
       case IDENTITY_ENCRYPTED:
-        identityEncoded = ASN1OctetString.getInstance(ato.getObject()).getOctets();
+        identityEncoded = ASN1OctetString.getInstance(ato.getBaseObject()).getOctets();
         identity = new IdentityBlock(prefix.getKey().decrypt(identityEncoded));
         break;
       default:
@@ -156,12 +156,12 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     ASN1TaggedObject ae = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     switch (ae.getTagNo()) {
       case ROUTING_PLAIN:
-        routing = new RoutingCombo(ae.getObject());
+        routing = new RoutingCombo(ae.getBaseObject());
         break;
       case ROUTING_ENCRYPTED:
         try {
           routing = new RoutingCombo(ASN1Sequence.getInstance(prefix.getKey()
-                  .decrypt(ASN1OctetString.getInstance(ae.getObject()).getOctets())));
+                  .decrypt(ASN1OctetString.getInstance(ae.getBaseObject()).getOctets())));
         } catch (IOException ioe) {
           throw new IOException("error while decrypting router block", ioe);
         }

@@ -167,19 +167,19 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     ASN1TaggedObject to = ASN1TaggedObject.getInstance(s.getObjectAt(j++));
     if (to.getTagNo() == ENCRYPTED_HEADER_KEY) {
       if (ownIdentity == null) {
-        encryptedHeaderKey = toDer(to.getObject());
+        encryptedHeaderKey = toDer(to.getBaseObject());
         to = DERTaggedObject.getInstance(s.getObjectAt(j++));
       } else {
-        headerKey = new SymmetricKey(ownIdentity.decrypt(toDer(to.getObject())));
+        headerKey = new SymmetricKey(ownIdentity.decrypt(toDer(to.getBaseObject())));
         to = DERTaggedObject.getInstance(s.getObjectAt(j++));
       }
     }
-    byte[] signVerifyObject = toDer(to.getObject());
+    byte[] signVerifyObject = toDer(to.getBaseObject());
     if ((headerKey != null && to.getTagNo() == ENCRYPTED_HEADER) || to.getTagNo() == PLAIN_BLOCK) {
       if (headerKey != null && to.getTagNo() == ENCRYPTED_BLOCK) {
-        s1 = ASN1Sequence.getInstance(headerKey.decrypt(toDer(to.getObject())));
+        s1 = ASN1Sequence.getInstance(headerKey.decrypt(toDer(to.getBaseObject())));
       } else {
-        s1 = ASN1Sequence.getInstance(to.getObject());
+        s1 = ASN1Sequence.getInstance(to.getBaseObject());
       }
       int i = 0;
       ASN1Encodable s3 = s1.getObjectAt(i++);
@@ -197,13 +197,13 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
       while (s1.size() > i) {
         to = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
         if (to.getTagNo() == 1) {
-          identifier = ASN1Integer.getInstance(to.getObject()).getValue().longValue();
+          identifier = ASN1Integer.getInstance(to.getBaseObject()).getValue().longValue();
         } else if (to.getTagNo() == 2) {
           padding = ASN1OctetString.getInstance(s1.getObjectAt(i)).getOctets();
         }
       }
     } else {
-      encryptedIdentityBlock = toDer(to.getObject());
+      encryptedIdentityBlock = toDer(to.getBaseObject());
     }
 
     byte[] signature = ASN1OctetString.getInstance(s.getObjectAt(j++)).getOctets();
