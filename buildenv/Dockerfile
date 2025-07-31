@@ -8,15 +8,17 @@ RUN mkdir /var/tmp/messagevortex
 # Install system packages in layers for better caching
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common && \
-    add-apt-repository universe && \
-    apt-get update
+ printf '%s\n' \
+      "deb http://archive.ubuntu.com/ubuntu noble main restricted universe multiverse" \
+      "deb http://archive.ubuntu.com/ubuntu noble-updates main restricted universe multiverse" \
+      "deb http://archive.ubuntu.com/ubuntu noble-backports main restricted universe multiverse" \
+      "deb http://security.ubuntu.com/ubuntu noble-security main restricted universe multiverse" \
+      > /etc/apt/sources.list && apt-get update
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install zip unzip
 
 # Install build tools and basic dependencies
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-    build-essential curl file git sudo wget bc rsync \
-    openjdk-8-jdk-headless \
-    maven \
-    python3 python3-pip
+RUN set -eux && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends build-essential curl file git sudo wget bc rsync openjdk-8-jdk-headless maven python3 python3-pip
 
 # Install LaTeX packages (Ubuntu 24.04 versions)
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
