@@ -110,7 +110,7 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.SEVERE, "unable to determine BC version (got NULL value)");
       return false;
     }
-    Matcher m = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(beta(\\d*))?")
+    Matcher m = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(?:\\.(\\d+))?(beta(\\d*))?")
         .matcher(bcversion);
     if (!m.matches()) {
       LOGGER.log(Level.SEVERE, "unable to parse BC version (" + bcversion + ")");

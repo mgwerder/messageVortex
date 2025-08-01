@@ -15,8 +15,8 @@
         <jdk.version>17</jdk.version>
         <maven.compiler.release>17</maven.compiler.release>
         <junit.version>4.13.2</junit.version>
-        <jacoco.version>0.8.3</jacoco.version>
-        <surefire.version>2.22.0</surefire.version>
+        <jacoco.version>0.8.13</jacoco.version>
+        <surefire.version>3.5.3</surefire.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.3.1</version>
+            <version>5.11.4</version>
             <scope>test</scope>
         </dependency>
 
@@ -47,7 +47,7 @@
                 <plugin>
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
-                    <version>3.6.0.1398</version>
+                    <version>5.1.0.4751</version>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
@@ -62,14 +62,14 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.7.1</version>
+                    <version>3.20.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>

@@ -52,7 +52,7 @@
         <sonar.verbose>true</sonar.verbose>
         <sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
 
-        <izpack.version>5.1.3</izpack.version>
+        <izpack.version>5.2.2</izpack.version>
         <izpack.staging>${project.build.directory}/staging</izpack.staging>
         <izpack.src>${basedir}/src/main/izpack/</izpack.src>
 
@@ -116,7 +116,7 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
-            <version>2.2</version>
+            <version>3.0</version>
         </dependency>
 
         <dependency>
@@ -143,7 +143,7 @@
         <dependency>
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
-            <version>2.1.2</version>
+            <version>2.1.4</version>
             <scope>compile</scope>
         </dependency>
         
@@ -164,20 +164,22 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>2.0.17</version>
+            <version>2.0.16</version>
             <!--<scope>compile</scope>-->
         </dependency>
 
+        <!-- JRuby removed - not used anywhere in the codebase
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby-complete</artifactId>
             <version>9.4.8.0</version>
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15to18</artifactId>
-            <version>1.78.1</version>
+            <version>1.79</version>
         </dependency>
 
         <dependency>
@@ -189,7 +191,7 @@
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>3.8.0</version>
+            <version>3.9.0</version>
             <type>maven-plugin</type>
         </dependency>
     </dependencies>
@@ -206,7 +208,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>10.18.1</version>
+                            <version>10.21.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>
