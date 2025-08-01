@@ -19,9 +19,6 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common && \
  printf '%s\n' \
       "deb http://archive.ubuntu.com/ubuntu noble main restricted universe multiverse" \
-      "deb http://archive.ubuntu.com/ubuntu noble-updates main restricted universe multiverse" \
-      "deb http://archive.ubuntu.com/ubuntu noble-backports main restricted universe multiverse" \
-      "deb http://security.ubuntu.com/ubuntu noble-security main restricted universe multiverse" \
       > /etc/apt/sources.list && apt-get update
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install zip unzip
