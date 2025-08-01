@@ -309,11 +309,11 @@ public class ImapCommandTest {
                 props.put(Sasl.POLICY_NOPLAINTEXT, "true");
             }
             // required for server only
-            props.put("com.sun.security.sasl.digest.realm", "theRealm");
+            // Note: realm is now handled via serverName parameter in createSaslServer
 
             LOGGER.log(Level.INFO, "Getting client and server for SASL " + mech );
-            SaslClient sc = Sasl.createSaslClient(new String[]{mech.toString()}, "username", "IMAP", "FQHN", props, clientHandler);
-            SaslServer ss = Sasl.createSaslServer(mech.toString(), "IMAP", "FQHN", props, serverHandler);
+            SaslClient sc = Sasl.createSaslClient(new String[]{mech.toString()}, "username", "IMAP", "theRealm", props, clientHandler);
+            SaslServer ss = Sasl.createSaslServer(mech.toString(), "IMAP", "theRealm", props, serverHandler);
             Assertions.assertTrue(ss!=null, "No Sasl server found for "+mech);
             Assertions.assertTrue(sc!=null, "No Sasl client found for "+mech);
 

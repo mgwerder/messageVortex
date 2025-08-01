@@ -1,3 +1,12 @@
+# MessageVortex Build Environment
+# Base image: Ubuntu 24.04 LTS (Noble Numbat)
+# Key dependencies:
+#   - OpenJDK 17
+#   - Maven (Ubuntu package version)
+#   - Python 3 (Ubuntu package version)
+#   - TexLive 2023 (via tlmgr)
+#   - xml2rfc 3.15.3
+#   - weasyprint >=53.4,<54.0
 FROM ubuntu:24.04
 
 MAINTAINER Martin Gwerder
@@ -18,7 +27,7 @@ RUN apt-get update && \
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install zip unzip
 
 # Install build tools and basic dependencies
-RUN set -eux && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends build-essential curl file git sudo wget bc rsync openjdk-8-jdk-headless maven python3 python3-pip
+RUN set -eux && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends build-essential curl file git sudo wget bc rsync openjdk-17-jdk-headless maven python3 python3-pip
 
 # Install LaTeX packages (Ubuntu 24.04 versions)
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
@@ -49,7 +58,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
 # Clean up apt cache to reduce image size
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install Python packages with pinned versions (Ubuntu 24.04 requires --break-system-packages)
-RUN pip3 install --break-system-packages xml2rfc==3.15.3 'weasyprint>=0.53.1,<54.0'
+RUN pip3 install --break-system-packages xml2rfc==3.15.3 'weasyprint>=53.4,<54.0'
 
 # Configure ImageMagick policy for PDF processing
 RUN sed 's/domain="coder" rights="none"/domain="coder" rights="read|write"/' </etc/ImageMagick-6/policy.xml >/tmp/policy.xml && \
@@ -78,7 +87,9 @@ RUN unzip -c /tmp/AdobeICCProfilesWin_end-user.zip "Adobe ICC Profiles (end-user
 RUN cd /var/tmp/messagevortex && \
     MAVEN_CONFIG=/var/lib/maven/ mvn dependency:go-offline dependency:resolve-plugins
 
-# Configure TexLive with pinned repository versions for reproducibility (2023 version for Ubuntu 24.04 compatibility)
+# Configure TexLive with pinned repository versions for reproducibility
+# Using TexLive 2023 historic repository to ensure stable, reproducible builds
+# This prevents breaking changes from newer TexLive versions
 RUN mkdir -p /root && \
     rm -rf /root/texmf 2>/dev/null || true && \
     tlmgr --repository https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2023/tlnet-final init-usertree && \

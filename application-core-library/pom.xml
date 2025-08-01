@@ -9,7 +9,8 @@
     <!-- Output to jar format -->
     <packaging>jar</packaging>
     <properties>
-        <jdk.version>1.8</jdk.version>
+        <jdk.version>17</jdk.version>
+        <maven.compiler.release>17</maven.compiler.release>
         <junit.version>5.13.4</junit.version>
         <jacoco.version>0.8.13</jacoco.version>
         <surefire.version>3.5.3</surefire.version>
@@ -135,15 +136,29 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>4.2.8</version>
+            <version>5.5.0</version>
         </dependency>
 
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
         <dependency>
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
-            <version>1.6.14</version>
+            <version>2.1.2</version>
             <scope>compile</scope>
+        </dependency>
+        
+        <!-- Jakarta Mail API -->
+        <dependency>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <version>2.1.3</version>
+        </dependency>
+        
+        <!-- Jakarta Activation -->
+        <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <version>2.1.3</version>
         </dependency>
 
         <dependency>
@@ -221,8 +236,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.0</version>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <release>${maven.compiler.release}</release>
                 </configuration>
                 <executions>
                     <execution>
@@ -440,15 +454,16 @@
                 </executions>
             </plugin>
 
+            <!-- Temporarily disabled due to version compatibility issues
             <plugin>
                 <groupId>org.apache.maven.doxia</groupId>
                 <artifactId>doxia-maven-plugin</artifactId>
-                <version>1.12.0</version>
+                <version>1.2</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.doxia</groupId>
                         <artifactId>doxia-module-markdown</artifactId>
-                        <version>1.12.0</version>
+                        <version>1.3</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -476,6 +491,7 @@
                     </books>
                 </configuration>
             </plugin>
+            -->
 
             <plugin>
                 <groupId>org.codehaus.izpack</groupId>

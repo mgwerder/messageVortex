@@ -124,7 +124,7 @@ public class ImapClient extends ClientConnection {
       String tag = ImapLine.getNextTag();
       writeln(tag + " AUTHENTICATE " + mech);
       SaslClient sc = Sasl.createSaslClient(new String[]{mech.toString()}, "username", "IMAP",
-              "FQHN", props, clientHandler);
+              creds.getRealm() != null ? creds.getRealm() : "localhost", props, clientHandler);
       if (sc == null) {
         LOGGER.log(Level.WARNING, "requested unsupported sasl mech (" + mech + ")");
         return false;
