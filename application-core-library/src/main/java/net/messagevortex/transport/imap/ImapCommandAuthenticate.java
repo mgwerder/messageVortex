@@ -112,9 +112,10 @@ public class ImapCommandAuthenticate extends ImapCommand {
       if (!line.getConnection().isTls()) {
         props.put(Sasl.POLICY_NOPLAINTEXT, "true");
       }
-      // FIXME add possibility to add realm
-      props.put("com.sun.security.sasl.digest.realm", "theRealm");
-      ss = Sasl.createSaslServer(mech, "IMAP", "FQHN", props, serverHandler);
+      // Set server name to include realm for DIGEST-MD5
+      // In Java 17, the realm is handled via the serverName parameter
+      String serverName = "theRealm"; // Default realm
+      ss = Sasl.createSaslServer(mech, "IMAP", serverName, props, serverHandler);
     } catch (SaslException e) {
       LOGGER.log(Level.WARNING, "unsuported sasl mech " + mech + " requested by client (2)", e);
       return new String[]{line.getTag() + " BAD server configuration error\r\n"};

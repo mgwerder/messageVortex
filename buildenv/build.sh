@@ -24,7 +24,7 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 		echo "got new tarfile due to $reb"
 		maketar
 	fi
-	sudo docker build -t messagevortexbuild . && \
+	sudo DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 docker build -t messagevortexbuild . && \
 	tmpdir=$(mktemp -d -p $dir/..) && \
 	(
 		echo "temp directory for build is $tmpdir"
@@ -44,7 +44,7 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 	trap "rm -rf $tmpdir" EXIT && \
 	(mkdir /var/tmp/dockermavencache 2>/dev/null;/bin/true) && \
 	( cd $tmpdir; tar -xvf $dir/mavenfiles.tar ) && \
-	id=$(sudo docker create -t \
+	id=$(sudo DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 docker create -t \
 	     --mount type=bind,source="$tmpdir/",target=/var/tmp/messagevortex/ \
 	     --mount type=bind,readonly,source="$dir/../.git/",target=/var/tmp/messagevortex/.git/ \
 	     --mount type=bind,readonly,source="$dir/../thesis/src/",target=/var/tmp/messagevortex/thesis/src/ \
