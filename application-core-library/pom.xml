@@ -378,6 +378,8 @@
                     <archive>
                         <manifest>
                             <mainClass>net.messagevortex.MessageVortex</mainClass>
+                            <!-- provides Implementation-Version, used by Version -->
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                     </archive>
                 </configuration>

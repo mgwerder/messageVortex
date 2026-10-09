@@ -116,13 +116,16 @@ public class Version implements CommandLine.IVersionProvider {
 
             if (version != null) {
                 intVersion = version;
-                Pattern versionPat = Pattern.compile("^\\s*([0-9]+)\\.([0-9]+)\\.([0-9]+)\\s*$");
+                // optional suffix for pre-releases (e.g. 0.5.0-rc.1)
+                Pattern versionPat = Pattern.compile(
+                        "^\\s*([0-9]+)\\.([0-9]+)\\.([0-9]+)(-[0-9A-Za-z.-]+)?\\s*$");
                 Matcher m = versionPat.matcher(intVersion);
                 if (m.matches()) {
                     MAJOR = Integer.parseInt(m.group(1));
                     MINOR = Integer.parseInt(m.group(2));
                     REVISION = Integer.parseInt(m.group(3));
-                    VERSION_STRING = MAJOR + "." + MINOR + "." + REVISION;
+                    VERSION_STRING = MAJOR + "." + MINOR + "." + REVISION
+                            + (m.group(4) == null ? "" : m.group(4));
                     BUILDVER = VERSION_STRING + " (" + BUILD + ")";
                 } else {
                     LOGGER.log(Level.SEVERE, "Version " + intVersion
