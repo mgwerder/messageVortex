@@ -62,7 +62,7 @@ public class CommandLineHandlerIdentityStoreGenerate implements Callable<Integer
     IdentityStoreBlock isb = new IdentityStoreBlock();
 
     // set validity to one year
-    isb.setValid(new UsagePeriod(new Date(), new Date(new Date().getTime() * 3600 * 24 * 365)));
+    isb.setValid(new UsagePeriod(new Date(), new Date(new Date().getTime() + 1000L * 3600 * 24 * 365)));
 
     // maximum transfer quota
     isb.setTransferQuota(ExtendedSecureRandom.nextInt(Integer.MAX_VALUE));

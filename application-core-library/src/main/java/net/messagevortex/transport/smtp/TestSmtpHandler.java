@@ -10,10 +10,10 @@ import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.internet.MimeMessage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -147,13 +147,13 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
       props.put("mail.smtp.port",
           "" + Config.getDefault().getNumericValue(section, "smtp_outgoing_port"));
 
-      Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+      Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
         protected PasswordAuthentication getPasswordAuthentication() {
           return new PasswordAuthentication(username, password);
         }
       });
       msg = new MimeMessage(session, os);
-      javax.mail.Transport.send(msg);
+      jakarta.mail.Transport.send(msg);
     } catch (MessagingException me) {
       throw new IOException("exception while creating MimeMessage", me);
     }

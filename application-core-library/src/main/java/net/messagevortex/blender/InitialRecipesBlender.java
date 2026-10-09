@@ -17,19 +17,19 @@ import net.messagevortex.blender.recipes.BlenderRecipe;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 
-import javax.activation.DataHandler;
-import javax.mail.Address;
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
+import jakarta.activation.DataHandler;
+import jakarta.mail.Address;
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
+import jakarta.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -134,7 +134,7 @@ public class InitialRecipesBlender extends Blender {
     // encode message in clear readable and send it
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
-      Authenticator a = new javax.mail.Authenticator() {
+      Authenticator a = new jakarta.mail.Authenticator() {
         protected PasswordAuthentication getPasswordAuthentication() {
           return new PasswordAuthentication("username", "password");
         }
@@ -194,7 +194,7 @@ public class InitialRecipesBlender extends Blender {
   @Override
   public boolean gotMessage(final InputStream is) {
     try {
-      Authenticator a = new javax.mail.Authenticator() {
+      Authenticator a = new jakarta.mail.Authenticator() {
         protected PasswordAuthentication getPasswordAuthentication() {
           return new PasswordAuthentication("username", "password");
         }

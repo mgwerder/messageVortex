@@ -9,18 +9,18 @@
     <!-- Output to jar format -->
     <packaging>jar</packaging>
     <properties>
-        <jdk.version>1.8</jdk.version>
-        <junit.version>5.9.3</junit.version>
-        <jacoco.version>0.8.10</jacoco.version>
-        <surefire.version>3.1.2</surefire.version>
-        <checkstyle.version>3.3.0</checkstyle.version>
+        <jdk.version>17</jdk.version>
+        <junit.version>6.1.3</junit.version>
+        <jacoco.version>0.8.15</jacoco.version>
+        <surefire.version>3.6.0</surefire.version>
+        <checkstyle.version>3.6.0</checkstyle.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-ea</argLine>
         <jacoco.ArgLine/>
 
-        <git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>10.0.1</git-commit-id-plugin.version>
         <git.commit.id>none</git.commit.id>
 
         <!-- sonar properties -->
@@ -51,7 +51,7 @@
         <sonar.verbose>true</sonar.verbose>
         <sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
 
-        <izpack.version>5.1.3</izpack.version>
+        <izpack.version>5.2.7</izpack.version>
         <izpack.staging>${project.build.directory}/staging</izpack.staging>
         <izpack.src>${basedir}/src/main/izpack/</izpack.src>
 
@@ -111,17 +111,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version>2.2</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
-            <version>3.3.9</version>
+            <version>3.9.16</version>
         </dependency>
 
         <!--<dependency>
@@ -135,53 +131,54 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>5.3.0</version>
+            <version>5.7.0</version>
         </dependency>
 
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
         <dependency>
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
-            <version>1.6.3</version>
+            <version>2.1.14</version>
             <scope>compile</scope>
+            <exclusions>
+                <!-- only needed for greenmail's JUnit 4 rule, which is not used -->
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
+        <!-- Jakarta Mail implementation used by the blenders -->
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>angus-mail</artifactId>
+            <version>2.0.5</version>
+        </dependency>
+
+        <!-- pin the API to the binding's version (greenmail/hazelcast pull in 1.7.x) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.20</version>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.30</version>
+            <version>2.0.20</version>
             <!--<scope>compile</scope>-->
         </dependency>
 
         <dependency>
-            <groupId>org.jruby</groupId>
-            <artifactId>jruby-complete</artifactId>
-            <version>9.2.17.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15to18</artifactId>
-            <version>1.74</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.68</version>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>1.86</version>
         </dependency>
 
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.6.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>3.1.2</version>
-            <type>maven-plugin</type>
+            <version>4.7.7</version>
         </dependency>
     </dependencies>
 
@@ -197,7 +194,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>8.40</version>
+                            <version>12.3.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -205,8 +202,8 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
                 <version>${git-commit-id-plugin.version}</version>
                 <executions>
                     <execution>
@@ -225,16 +222,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.16.0</version>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <release>${jdk.version}</release>
                 </configuration>
                 <executions>
                     <execution>
                         <id>default-compile</id>
                         <configuration>
-                            <compilerArgument>-proc:none</compilerArgument>
+                            <proc>none</proc>
                             <includes>
                                 <include>net/messagevortex/asn1/annotator/*.java</include>
                                 <!--include all dependencies required  -->
@@ -278,7 +274,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -350,7 +346,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -374,7 +370,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.8.0</version>
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -398,13 +394,13 @@
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.6.0.1398</version>
+                <version>5.8.0.7211</version>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.22.0</version>
                 <!--<dependencies>
                     <dependency>
                         <groupId>lt.velykis.maven.skins</groupId>
@@ -423,7 +419,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.12.0</version>
                 <configuration>
                     <failOnError>true</failOnError>
                     <failOnWarnings>false</failOnWarnings>
@@ -446,40 +442,35 @@
                 </executions>
             </plugin>
 
+            <!-- renders the admin guide (markdown) to PDF -->
             <plugin>
-                <groupId>org.apache.maven.doxia</groupId>
-                <artifactId>doxia-maven-plugin</artifactId>
-                <version>1.1.4</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pdf-plugin</artifactId>
+                <version>1.6.2</version>
                 <dependencies>
+                    <!-- markdown parser matching the plugin's doxia version -->
                     <dependency>
                         <groupId>org.apache.maven.doxia</groupId>
                         <artifactId>doxia-module-markdown</artifactId>
-                        <version>1.3</version>
+                        <version>1.12.0</version>
                     </dependency>
                 </dependencies>
                 <executions>
                     <execution>
+                        <id>admin-guide</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>render-books</goal>
+                            <goal>pdf</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <books>
-                        <book>
-                            <directory>src/books/adminGuide</directory>
-                            <descriptor>src/books/adminGuide.xml</descriptor>
-                            <formats>
-                                <format>
-                                    <id>pdf</id>
-                                </format>
-                                <format>
-                                    <id>rtf</id>
-                                </format>
-                            </formats>
-                        </book>
-                    </books>
+                    <siteDirectory>${basedir}/src/books/adminGuide</siteDirectory>
+                    <docDescriptor>${basedir}/src/books/adminGuide.xml</docDescriptor>
+                    <outputDirectory>${project.build.directory}/books</outputDirectory>
+                    <workingDirectory>${project.build.directory}/books-work</workingDirectory>
+                    <includeReports>false</includeReports>
+                    <generateTOC>start</generateTOC>
                 </configuration>
             </plugin>
 
@@ -517,7 +508,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.11.0</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies-izpack</id>
@@ -553,7 +544,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>default-cli</id>
@@ -689,7 +680,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>${jacoco.version}</version>
                 <configuration>
                     <propertyName>jacoco.ArgLine</propertyName>
                 </configuration>
@@ -751,12 +742,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.9.0</version>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.22.0</version>
             </plugin>
 
             <plugin>

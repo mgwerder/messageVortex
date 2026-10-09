@@ -319,13 +319,13 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
       ASN1TaggedObject to = ASN1TaggedObject.getInstance(s1.getObjectAt(i));
       switch (to.getTagNo()) {
         case 1001:
-          identityKey = new AsymmetricKey(toDer(to.getObject()));
+          identityKey = new AsymmetricKey(toDer(to.getBaseObject().toASN1Primitive()));
           break;
         case 1002:
-          nodeAddress = ((ASN1String) (to.getObject())).getString();
+          nodeAddress = ((ASN1String) (to.getBaseObject().toASN1Primitive())).getString();
           break;
         case 1003:
-          nodeKey = new AsymmetricKey(toDer(to.getObject()));
+          nodeKey = new AsymmetricKey(toDer(to.getBaseObject().toASN1Primitive()));
           break;
         default:
           throw new IOException("unknown tag encountered");

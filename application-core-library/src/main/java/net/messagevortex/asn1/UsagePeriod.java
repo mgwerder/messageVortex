@@ -49,6 +49,17 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
 
   protected UsagePeriodType type;
 
+  /* latest point in time representable as GeneralizedTime (9999-12-31T23:59:59Z) */
+  private static final long MAX_TIME = 253402300799000L;
+
+  private static long addSecondsSaturated(long millis, long seconds) {
+    try {
+      return Math.min(Math.addExact(millis, Math.multiplyExact(seconds, 1000L)), MAX_TIME);
+    } catch (ArithmeticException e) {
+      return seconds > 0 ? MAX_TIME : 0;
+    }
+  }
+
   /***
    * <p>Creates a new object valid from this point in time for a duration of the specified amount
    * of seconds.</p>
@@ -82,8 +93,8 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
    * @param reference        the date reference
    */
   public UsagePeriod(long startSeconds, long durationSeconds, Date reference) {
-    notBefore = reference.getTime() + startSeconds * 1000L;
-    notAfter = notBefore + durationSeconds * 1000L;
+    notBefore = addSecondsSaturated(reference.getTime(), startSeconds);
+    notAfter = addSecondsSaturated(notBefore, durationSeconds);
     this.reference = new Date(reference.getTime());
     type = UsagePeriodType.RELATIVE;
   }
@@ -146,7 +157,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
 
   protected final void parse(ASN1Encodable to) throws IOException {
     ASN1TaggedObject s1 = ASN1TaggedObject.getInstance(to);
-    ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObject());
+    ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getBaseObject().toASN1Primitive());
     if (s1.getTagNo() == UsagePeriodType.ABSOLUTE.getId()) {
       // get absolute
       type = UsagePeriodType.ABSOLUTE;
@@ -154,13 +165,13 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
         ASN1TaggedObject tag = ASN1TaggedObject.getInstance(e);
         if (tag.getTagNo() == TAG_NOT_BEFORE && notBefore == -1) {
           try {
-            notBefore = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate().getTime();
+            notBefore = ASN1GeneralizedTime.getInstance(tag.getBaseObject().toASN1Primitive()).getDate().getTime();
           } catch (ParseException pe) {
             throw new IOException("unable to parse notAfter", pe);
           }
         } else if (tag.getTagNo() == TAG_NOT_AFTER && notAfter == -1) {
           try {
-            notAfter = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate().getTime();
+            notAfter = ASN1GeneralizedTime.getInstance(tag.getBaseObject().toASN1Primitive()).getDate().getTime();
           } catch (ParseException pe) {
             throw new IOException("unable to parse notAfter", pe);
           }
@@ -175,10 +186,10 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
       for (ASN1Encodable e : s2.toArray()) {
         ASN1TaggedObject tag = ASN1TaggedObject.getInstance(e);
         if (tag.getTagNo() == TAG_NOT_BEFORE && notBefore == -1) {
-          notBefore = ASN1Integer.getInstance(tag.getObject()).getValue().longValue() * 1000L
+          notBefore = ASN1Integer.getInstance(tag.getBaseObject().toASN1Primitive()).getValue().longValue() * 1000L
                   + reference.getTime();
         } else if (tag.getTagNo() == TAG_NOT_AFTER && notAfter == -1) {
-          notAfter = ASN1Integer.getInstance(tag.getObject()).getValue().longValue() * 1000L
+          notAfter = ASN1Integer.getInstance(tag.getBaseObject().toASN1Primitive()).getValue().longValue() * 1000L
                   + reference.getTime();
         } else {
           throw new IOException("Encountered unknown or repeated Tag number in Usage Period ("

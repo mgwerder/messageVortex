@@ -101,16 +101,13 @@ public class MessageVortex implements Callable<Integer> {
 
   private boolean verifyPrerequisites() {
     LOGGER.log(Level.INFO, "Checking bouncycastle version...");
-    String bcversion = org.bouncycastle.jce.provider.BouncyCastleProvider
-        .class
-        .getPackage()
-        .getImplementationVersion();
+    String bcversion = new org.bouncycastle.jce.provider.BouncyCastleProvider().getVersionStr();
     LOGGER.log(Level.INFO, "Detected BouncyCastle version is " + bcversion);
     if (bcversion == null) {
       LOGGER.log(Level.SEVERE, "unable to determine BC version (got NULL value)");
       return false;
     }
-    Matcher m = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(beta(\\d*))?")
+    Matcher m = Pattern.compile("(\\d+)\\.(\\d+)(\\.\\d+)*(beta(\\d*))?")
         .matcher(bcversion);
     if (!m.matches()) {
       LOGGER.log(Level.SEVERE, "unable to parse BC version (" + bcversion + ")");
@@ -174,7 +171,15 @@ public class MessageVortex implements Callable<Integer> {
     LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
     CommandLine c = new CommandLine(new MessageVortex());
     c.execute(args == null ? new String[0] : args);
-    Integer i = c.getExecutionResult();
+    // the result is stored at the (sub)command which has actually been executed
+    Integer i = null;
+    CommandLine.ParseResult pr = c.getParseResult();
+    if (pr != null) {
+      while (pr.hasSubcommand()) {
+        pr = pr.subcommand();
+      }
+      i = pr.commandSpec().commandLine().getExecutionResult();
+    }
     return i != null ? i : ARGUMENT_FAIL;
   }
 
@@ -277,7 +282,7 @@ public class MessageVortex implements Callable<Integer> {
       return SETUP_FAIL;
     }
 
-    // enable thread dumper
+    // enable thread dumpe
     if (threadDumpInterval > 0) {
       LOGGER.log(Level.INFO, "starting thread dumper with interval " + threadDumpInterval);
       new ThreadDumper(threadDumpInterval);

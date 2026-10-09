@@ -1,17 +1,12 @@
-<book xmlns="http://maven.apache.org/BOOK/1.0.0"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://maven.apache.org/BOOK/1.0.0 http://maven.apache.org/xsd/book-1.0.0.xsd">
-    <id>adminGuide</id>
-    <title>MessageVortex Admin Guide</title>
-    <chapters>
-        <chapter>
-            <id>prerequisites</id>
-            <title>Prerequisites</title>
-            <sections>
-                <section>
-                    <id>prerequisites</id>
-                </section>
-            </sections>
-        </chapter>
-    </chapters>
-</book>
+<document xmlns="http://maven.apache.org/DOCUMENT/1.0.1"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/DOCUMENT/1.0.1 http://maven.apache.org/xsd/document-1.0.1.xsd"
+          outputName="adminGuide">
+    <meta>
+        <title>MessageVortex Admin Guide</title>
+        <author>Martin Gwerder</author>
+    </meta>
+    <toc name="Table of Contents">
+        <item name="Prerequisites" ref="prerequisites.md"/>
+    </toc>
+</document>

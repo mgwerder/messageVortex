@@ -15,7 +15,7 @@ import java.text.ParseException;
  * Created by Martin on 13.04.2018.
  */
 @ExtendWith(GlobalJunitExtension.class)
-public class ImapURLParser {
+public class ImapURLParserTest {
 
     private static final java.util.logging.Logger LOGGER;
     private static final ExtendedSecureRandom esr = new ExtendedSecureRandom();

@@ -22,6 +22,7 @@ import org.bouncycastle.asn1.DERTaggedObject;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECParameterSpec;
+import org.bouncycastle.jce.spec.IESParameterSpec;
 import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
 
 import javax.crypto.BadPaddingException;
@@ -261,7 +262,7 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
       throw new IOException("encountered wrong tag number when parsing public key (expected: "
               + PUBLIC_KEY_TAG + "; got:" + tagged.getTagNo() + ")");
     }
-    publicKey = ASN1OctetString.getInstance(tagged.getObject()).getOctets();
+    publicKey = ASN1OctetString.getInstance(tagged.getBaseObject().toASN1Primitive()).getOctets();
     
     // parse private key
     if (s1.size() > i) {
@@ -270,7 +271,7 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
         throw new IOException("encountered wrong tag number when parsing private key (expected: "
                 + PRIVATE_KEY_TAG + "; got:" + tagged.getTagNo() + ")");
       }
-      privateKey = ASN1OctetString.getInstance(tagged.getObject()).getOctets();
+      privateKey = ASN1OctetString.getInstance(tagged.getBaseObject().toASN1Primitive()).getOctets();
     }
     
   }
@@ -389,14 +390,14 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
       KeyPair key = getKeyPair();
       Cipher cipher = getCipher();
       java.security.Key k = key.getPublic();
-      cipher.init(Cipher.ENCRYPT_MODE, k);
+      initCipher(cipher, Cipher.ENCRYPT_MODE, k);
       return cipher.doFinal(b);
     } catch (InvalidKeySpecException e) {
       throw new IOException("Exception while getting key pair", e);
     } catch (NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException
             | IllegalBlockSizeException | BadPaddingException e) {
       throw new IOException("Exception while encrypting (len: " + b.length + ")", e);
-    } catch (InvalidKeyException e) {
+    } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
       throw new IOException("Exception while init of cipher ", e);
     }
   }
@@ -413,11 +414,11 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
       KeyPair key = getKeyPair();
       Cipher cipher = getCipher();
       java.security.Key k = key.getPrivate();
-      cipher.init(Cipher.DECRYPT_MODE, k);
+      initCipher(cipher, Cipher.DECRYPT_MODE, k);
       return cipher.doFinal(b);
     } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException
             | NoSuchProviderException | InvalidKeyException | IllegalBlockSizeException
-            | BadPaddingException e) {
+            | BadPaddingException | InvalidAlgorithmParameterException e) {
       throw new IOException("Exception while decrypting (len: " + b.length + ")", e);
     }
     
@@ -541,6 +542,17 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
     return new KeyPair(localPublicKey, localPrivateKey);
   }
   
+  private void initCipher(Cipher cipher, int mode, java.security.Key k)
+          throws InvalidKeyException, InvalidAlgorithmParameterException {
+    if (getAlgorithm() == Algorithm.EC) {
+      // BouncyCastle >= 1.69 no longer guesses IES parameters; these are the former defaults
+      // (no derivation/encoding vector, 128 bit MAC key) to stay compatible with existing data
+      cipher.init(mode, k, new IESParameterSpec(null, null, 128));
+    } else {
+      cipher.init(mode, k);
+    }
+  }
+
   private Cipher getCipher() throws NoSuchPaddingException, NoSuchAlgorithmException,
           NoSuchProviderException {
     Algorithm alg = getAlgorithm();

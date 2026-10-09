@@ -15,7 +15,7 @@ import static net.messagevortex.MessageVortex.ARGUMENT_FAIL;
 
 
 @ExtendWith(GlobalJunitExtension.class)
-public class GeneralCommandline {
+public class GeneralCommandlineTest {
 
   private static final Logger LOGGER;
 
@@ -56,7 +56,7 @@ public class GeneralCommandline {
       System.setOut(out);
       System.setErr(err);
     }
-    return new Object[]{new Integer(i), bos.toString(), boe.toString(), e};
+    return new Object[]{Integer.valueOf(i), bos.toString(), boe.toString(), e};
   }
 
   @Test

@@ -134,7 +134,7 @@ public class MatrixTest {
             for (int k = 0; k < 10; k++) {
                 LOGGER.log(Level.INFO, "testing redundancy matrix for GF(2^" + galois + ") run " + k);
                 // generate random data vector
-                Matrix data = new Matrix(sr.nextInt(4096), sr.nextInt((int) Math.min((Math.pow(2, galois) - 8), 500)), mm);
+                Matrix data = new Matrix(1 + sr.nextInt(4096), 1 + sr.nextInt((int) Math.min((Math.pow(2, galois) - 8), 500)), mm);
                 for (int x = 0; x < data.getX(); x++) {
                     for (int y = 0; y < data.getY(); y++) {
                         data.setField(x, y, (int) (Math.random() * Math.pow(2, galois)));
