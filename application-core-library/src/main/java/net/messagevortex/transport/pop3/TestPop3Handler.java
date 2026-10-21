@@ -9,8 +9,8 @@ import net.messagevortex.MessageVortexRepository;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;

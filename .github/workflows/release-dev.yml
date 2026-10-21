@@ -1,0 +1,171 @@
+# Builds core library, thesis and RFC drafts for every version tag (v<major>.<minor>.<patch>[-suffix])
+# whose commit is part of the development branch, and publishes them as a GitHub pre-release.
+# A manual run (workflow_dispatch) builds everything without publishing a release.
+
+name: Dev release build
+
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-dev-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Check tag and branch
+    runs-on: ubuntu-latest
+    outputs:
+      build: ${{ steps.check.outputs.build }}
+      version: ${{ steps.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: check
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            if [[ ! "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+              echo "::error::Tag '$GITHUB_REF_NAME' is not a version tag (expected v<major>.<minor>.<patch>[-suffix])"
+              exit 1
+            fi
+            version="${GITHUB_REF_NAME#v}"
+          else
+            version="0.0.0-ci.${GITHUB_RUN_NUMBER}"
+          fi
+          if git merge-base --is-ancestor "$GITHUB_SHA" origin/development; then
+            build=true
+          else
+            build=false
+            echo "::notice::Commit $GITHUB_SHA is not part of the development branch - nothing to build"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+          echo "Version: \`$version\`, on development: \`$build\`" >> "$GITHUB_STEP_SUMMARY"
+
+  core:
+    name: Core library
+    needs: check
+    if: needs.check.outputs.build == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      VERSION: ${{ needs.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Set version from tag
+        working-directory: application-core-library
+        run: >
+          mvn -B -ntp org.codehaus.mojo:versions-maven-plugin:2.18.0:set
+          -DnewVersion="$VERSION" -DgenerateBackupPoms=false
+
+      - name: Build and test
+        run: mvn -B -ntp -pl application-core-library clean package
+
+      - name: Collect artifacts
+        run: |
+          t=application-core-library/target
+          mkdir -p dist
+          cp "$t/MessageVortex-core.jar"                  "dist/MessageVortex-$VERSION.jar"
+          cp "$t/MessageVortex-jar-with-dependencies.jar" "dist/MessageVortex-$VERSION-all.jar"
+          cp "$t/MessageVortex-javadoc.jar"               "dist/MessageVortex-$VERSION-javadoc.jar"
+          cp "$t/MessageVortex-package.jar"               "dist/MessageVortex-$VERSION-installer.jar"
+          cp "$t/books/adminGuide.pdf"                    "dist/MessageVortex-$VERSION-adminGuide.pdf"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: core
+          path: dist/
+          if-no-files-found: error
+
+  rfc:
+    name: RFC drafts
+    needs: check
+    if: needs.check.outputs.build == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            calibre ghostscript libpango-1.0-0 libpangoft2-1.0-0 fonts-noto-core fonts-noto-mono
+          # same versions as buildenv/Dockerfile; weasyprint 53 needs pydyf < 0.10
+          python3 -m venv "$RUNNER_TEMP/x2r"
+          "$RUNNER_TEMP/x2r/bin/pip" install 'xml2rfc==3.15.3' 'weasyprint>=53.4,<54.0' 'pydyf<0.10'
+
+      - name: Build RFC drafts
+        run: |
+          mkdir -p "$RUNNER_TEMP/x2r-cache"
+          make -C rfc XML2RFC="$RUNNER_TEMP/x2r/bin/xml2rfc" X2R_OPTS="-N --cache=$RUNNER_TEMP/x2r-cache"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rfc
+          path: rfc/target/xml2rfc/
+          if-no-files-found: error
+
+  thesis:
+    name: Thesis
+    needs: check
+    if: needs.check.outputs.build == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install TeX Live
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            make texlive-latex-base texlive-latex-recommended texlive-extra-utils texlive-latex-extra \
+            texlive-publishers texlive-fonts-recommended texlive-fonts-extra texlive-bibtex-extra \
+            texlive-luatex texlive-lang-german texlive-lang-english texlive-science cm-super biber
+
+      - name: Build thesis
+        run: make -C thesis
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: thesis
+          path: thesis/target/main/latex/*.pdf
+          if-no-files-found: error
+
+  release:
+    name: Publish pre-release
+    needs: [ check, core, rfc, thesis ]
+    if: github.ref_type == 'tag' && needs.check.outputs.build == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create GitHub pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -la dist
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease --generate-notes \
+            --title "MessageVortex ${GITHUB_REF_NAME} (development)"
