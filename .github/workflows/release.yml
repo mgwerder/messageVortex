@@ -22,7 +22,7 @@ concurrency:
 jobs:
   check:
     name: Check tag and branch
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       build: ${{ steps.check.outputs.build }}
       version: ${{ steps.check.outputs.version }}
@@ -67,7 +67,7 @@ jobs:
     name: Core library
     needs: check
     if: needs.check.outputs.build == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 60
     env:
       VERSION: ${{ needs.check.outputs.version }}
@@ -109,7 +109,7 @@ jobs:
     name: RFC drafts
     needs: check
     if: needs.check.outputs.build == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 60
     env:
       QT_QPA_PLATFORM: offscreen
@@ -120,10 +120,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            calibre ghostscript libpango-1.0-0 libpangoft2-1.0-0 fonts-noto-core fonts-noto-mono
-          # same versions as buildenv/Dockerfile; weasyprint 53 needs pydyf < 0.10
+            python3-venv calibre ghostscript libpango-1.0-0 libpangoft2-1.0-0 fonts-noto-core fonts-noto-mono
+          # the pdf extra pins the matching weasyprint version
           python3 -m venv "$RUNNER_TEMP/x2r"
-          "$RUNNER_TEMP/x2r/bin/pip" install 'xml2rfc==3.15.3' 'weasyprint>=53.4,<54.0' 'pydyf<0.10'
+          "$RUNNER_TEMP/x2r/bin/pip" install 'xml2rfc[pdf]==3.35.0'
 
       - name: Build RFC drafts
         run: |
@@ -140,7 +140,7 @@ jobs:
     name: Thesis
     needs: check
     if: needs.check.outputs.build == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
@@ -166,7 +166,7 @@ jobs:
     name: Publish release
     needs: [ check, core, rfc, thesis ]
     if: github.ref_type == 'tag' && needs.check.outputs.build == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: write
     steps:
