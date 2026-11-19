@@ -1,0 +1,24 @@
+title=Getting Started
+date=2020-01-14
+type=page
+status=published
+~~~~~~
+<h1>Introduction</h1>
+<p>
+	MessageVortex is an academic research project aimed to get maximum of unobservability when communicating over
+	today's networks. We achieve this by hiding within other protocols. This special feature allows us to work without
+	a MessageVortex specific infrastructure. Instead, we can hide our traffic within normal internet services.
+</p>
+<p>MessageVortex has a stack of four layers:</p>
+<ul>
+	<li>The transport layer is a connector module to an internet service, which allows us to transport our VortexMessages.</li>
+	<li>The blending layer hides the VortexMessage within our specified transport protocol.</li>
+	<li>The routing layer handles the routing of VortexMessages.</li>
+	<li>The accounting layer handles all the housekeeping of the routing layer and guarantees that the system as a whole
+		remains unaffected by MessageVortex.</li>
+</ul>
+<p>
+	Concepts, configuration and all available options are described in the admin guide, which is part of every
+	<a href="https://github.com/mgwerder/messageVortex/releases">release</a>
+	(<code>MessageVortex-&lt;version&gt;-adminGuide.pdf</code>).
+</p>
