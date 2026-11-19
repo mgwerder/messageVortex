@@ -1,4 +1,6 @@
 package net.messagevortex.test.transport.imap;
+
+import net.messagevortex.test.TestHelper;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -26,7 +28,6 @@ import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.test.transport.SMTPTransportSenderTest;
-import net.messagevortex.transport.AllTrustManager;
 import net.messagevortex.transport.CustomKeyManager;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
@@ -180,7 +181,7 @@ public class ImapSSLTest {
       String ks = "keystore.jks";
       InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
       Assertions.assertTrue((stream != null), "Keystore check");
-      context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, new TrustManager[]{new AllTrustManager()}, esr.getSecureRandom());
+      context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, TestHelper.keystoreTrustManagers(), esr.getSecureRandom());
       SSLContext.setDefault(context);
 
       SecurityContext secContext = new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS);
@@ -226,7 +227,7 @@ public class ImapSSLTest {
       String ks = "keystore.jks";
       InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
       Assertions.assertTrue((stream != null), "Keystore check");
-      context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, new TrustManager[]{new AllTrustManager()}, esr.getSecureRandom());
+      context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, TestHelper.keystoreTrustManagers(), esr.getSecureRandom());
       ImapServer is = new ImapServer(new InetSocketAddress("0.0.0.0", 0), new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS));
       is.setTimeout(10000);
       ImapClient ic = new ImapClient(new InetSocketAddress("localhost", is.getPort()), new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS));

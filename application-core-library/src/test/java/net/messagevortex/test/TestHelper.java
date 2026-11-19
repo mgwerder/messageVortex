@@ -1,9 +1,31 @@
 package net.messagevortex.test;
 
+import java.io.InputStream;
+import java.security.KeyStore;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+
 /**
  * Created by Martin on 10.05.2017.
  */
 public class TestHelper {
+
+    /**
+     * <p>Trust managers trusting exactly the certificates of the test keystore (keystore.jks).</p>
+     */
+    public static TrustManager[] keystoreTrustManagers() {
+        try {
+            KeyStore ks = KeyStore.getInstance("JKS");
+            try (InputStream is = TestHelper.class.getClassLoader().getResourceAsStream("keystore.jks")) {
+                ks.load(is, "changeme".toCharArray());
+            }
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(ks);
+            return tmf.getTrustManagers();
+        } catch (Exception e) {
+            throw new IllegalStateException("unable to load test keystore", e);
+        }
+    }
 
     private static String compareStrings(String s1,String s2) {
         int line = 1;

@@ -85,7 +85,7 @@ public class SecurityContext {
         context.init(
                 new KeyManager[]{new CustomKeyManager("keystore.jks", "changeme", "mykey3")},
                 trustManagerFactory.getTrustManagers(),
-                new SecureRandom()); //new TrustManager[]{new AllTrustManager()}
+                new SecureRandom());
       }
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "Exception while creating SecurityContext", e);

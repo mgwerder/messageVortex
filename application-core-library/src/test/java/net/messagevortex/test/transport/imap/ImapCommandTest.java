@@ -1,5 +1,7 @@
 package net.messagevortex.test.transport.imap;
 
+import net.messagevortex.test.TestHelper;
+
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.test.GlobalJunitExtension;
@@ -235,7 +237,7 @@ public class ImapCommandTest {
                 String ks="keystore.jks";
                 InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
                 Assertions.assertTrue((stream != null), "Keystore check");
-                context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+                context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, TestHelper.keystoreTrustManagers(), esr.getSecureRandom() );
                 ImapServer s=new ImapServer( new InetSocketAddress( "0.0.0.0", 0 ), new SecurityContext( context, encrypted ? SSLTLS : PLAIN ) );
                 LOGGER.log(Level.INFO,"************************************************************************");
                 LOGGER.log(Level.INFO,"Check full Login Logout ("+encrypted+")");
@@ -362,7 +364,7 @@ public class ImapCommandTest {
             String ks="keystore.jks";
             InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
             Assertions.assertTrue((stream != null), "Keystore check");
-            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, TestHelper.keystoreTrustManagers(), esr.getSecureRandom() );
             ImapServer s=new ImapServer(new InetSocketAddress("localhost",0),new SecurityContext(context,UNTRUSTED_SSLTLS));
             AuthenticationProxy ap=new AuthenticationProxy();
             ap.addUser("USER","password");

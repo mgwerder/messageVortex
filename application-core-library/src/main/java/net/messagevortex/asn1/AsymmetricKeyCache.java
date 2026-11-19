@@ -620,8 +620,8 @@ public class AsymmetricKeyCache implements Serializable {
             LOGGER.log(Level.INFO, sepLine);
             LOGGER.log(Level.INFO, "| cache stats ");
             LOGGER.log(Level.INFO, sepLine);
-            int sum = 0;
-            int tot = 0;
+            long sum = 0;
+            long tot = 0;
             int i = 0;
             for (Map.Entry<AlgorithmParameter, CacheElement> e : cache.entrySet()) {
                 i++;
