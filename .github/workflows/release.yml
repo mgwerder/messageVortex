@@ -98,6 +98,7 @@ jobs:
           cp "$t/MessageVortex-javadoc.jar"               "dist/MessageVortex-$VERSION-javadoc.jar"
           cp "$t/MessageVortex-package.jar"               "dist/MessageVortex-$VERSION-installer.jar"
           cp "$t/books/adminGuide.pdf"                    "dist/MessageVortex-$VERSION-adminGuide.pdf"
+          for f in application-core-library/src/main/asn/MessageVortex-*.asn; do cat "$f"; echo; echo; done > "dist/MessageVortex-$VERSION-definition.asn"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -129,6 +130,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/x2r-cache"
           make -C rfc XML2RFC="$RUNNER_TEMP/x2r/bin/xml2rfc" X2R_OPTS="-N --cache=$RUNNER_TEMP/x2r-cache"
+          cp rfc/src/xml2rfc/draft-gwerder-*.xml rfc/target/xml2rfc/
 
       - uses: actions/upload-artifact@v4
         with:
