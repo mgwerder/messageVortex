@@ -122,7 +122,10 @@ fi
 log "building website from main ${main:0:8}"
 w="$BASE/main"
 checkout "$w" "$main"
-run_in "$MVN_IMAGE" "$w" mvn -B -ntp -q -f website/pom.xml org.jbake:jbake-maven-plugin:0.3.5:generate
+if ! run_in "$MVN_IMAGE" "$w" mvn -B -ntp -q -f website/pom.xml org.jbake:jbake-maven-plugin:0.3.5:generate > "$BASE/site.log" 2>&1; then
+  log "website build failed, see $BASE/site.log"
+  exit 1
+fi
 
 stage="$BASE/stage"
 rm -rf "$stage"; mkdir -p "$stage/devel"
