@@ -1,9 +1,10 @@
 package net.messagevortex.test.transport.imap;
 
+import net.messagevortex.test.TestHelper;
+
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.test.GlobalJunitExtension;
-import net.messagevortex.transport.AllTrustManager;
 import net.messagevortex.transport.CustomKeyManager;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
@@ -145,7 +146,7 @@ public class ImapClientTest {
         String ks = "keystore.jks";
         InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
         Assertions.assertTrue((stream != null), "Keystore check");
-        context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, new TrustManager[]{new AllTrustManager()}, esr.getSecureRandom());
+        context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, TestHelper.keystoreTrustManagers(), esr.getSecureRandom());
         ImapServer is = new ImapServer(new InetSocketAddress("0.0.0.0", 0), new SecurityContext(context, UNTRUSTED_SSLTLS));
         LOGGER.log(Level.INFO, "creating imap client");
         ImapClient ic = new ImapClient(new InetSocketAddress("localhost", is.getPort()), new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS));

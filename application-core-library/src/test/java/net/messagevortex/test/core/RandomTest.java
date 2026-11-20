@@ -131,7 +131,7 @@ public class RandomTest {
     long maxY = 0;
     double interval = (double) (classes.length) / X;
     for (int i = 0; i < X; i++) {
-      int avg = 0;
+      long avg = 0;
       int cnt = 0;
       int start = (int) (i * interval);
       for (int j = start; j < start + interval; j++) {
@@ -143,7 +143,7 @@ public class RandomTest {
     }
 
     for (int i = 0; i < X; i++) {
-      int avg = 0;
+      long avg = 0;
       int cnt = 0;
       int start = (int) (i * interval);
       for (int j = start; j < start + interval; j++) {

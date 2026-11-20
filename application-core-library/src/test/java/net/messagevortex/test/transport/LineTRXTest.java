@@ -1,10 +1,11 @@
 package net.messagevortex.test.transport;
 
+import net.messagevortex.test.TestHelper;
+
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.test.GlobalJunitExtension;
 import net.messagevortex.test.transport.imap.ImapSSLTest;
-import net.messagevortex.transport.AllTrustManager;
 import net.messagevortex.transport.ClientConnection;
 import net.messagevortex.transport.CustomKeyManager;
 import net.messagevortex.transport.ListeningSocketChannel;
@@ -330,7 +331,7 @@ public class LineTRXTest {
             trustFactory.init(trustStore);
 
             SSLContext trustContext = SSLContext.getInstance("TLS");
-            trustContext.init( kmf.getKeyManagers(), new TrustManager[] { new AllTrustManager() }, new SecureRandom() );
+            trustContext.init( kmf.getKeyManagers(), TestHelper.keystoreTrustManagers(), new SecureRandom() );
 
             SecurityContext sc = new SecurityContext();
             sc.setContext(trustContext);
@@ -379,7 +380,7 @@ public class LineTRXTest {
                 String ks="keystore.jks";
                 InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
                 Assertions.assertTrue((stream != null), "Keystore check");
-                c.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+                c.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, TestHelper.keystoreTrustManagers(), esr.getSecureRandom() );
 
                 SecurityContext sc = new SecurityContext();
                 sc.setContext(c);
@@ -424,7 +425,7 @@ public class LineTRXTest {
             Listener l=new Listener();
             ListeningSocketChannel listener = new ListeningSocketChannel( new InetSocketAddress( InetAddress.getLoopbackAddress(),0 ),l);
             SSLContext trustContext = SSLContext.getInstance("TLS");
-            trustContext.init(null, new TrustManager[]{new AllTrustManager()}, new SecureRandom());
+            trustContext.init(null, TestHelper.keystoreTrustManagers(), new SecureRandom());
             SecurityContext context = new SecurityContext();
             context.setContext(trustContext);
             ClientConnection t = new ClientConnection(new InetSocketAddress("127.0.0.1", listener.getPort()), context );
